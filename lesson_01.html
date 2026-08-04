@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Value & Large Numbers in Business</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="window.katexReady=true;"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;--bg2:#151b25;--card:#1a2332;--card2:#1f2b3d;
+  --fg:#e2e8f0;--fg2:#cbd5e1;--muted:#64748b;
+  --accent:#f59e0b;--accent2:#d97706;--teal:#14b8a6;--teal2:#0d9488;
+  --err:#ef4444;--ok:#22c55e;--border:#2a3a4a;--border2:#334155;
+  --sidebar-w:280px;--radius:12px;--radius2:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);height:100vh;display:flex;overflow:hidden}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+#sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;position:relative;z-index:100;transition:transform .3s}
+.sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-size:14px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
+.sidebar-header .topic{font-size:11px;color:var(--muted);line-height:1.4}
+.sidebar-header .topic b{color:var(--fg2);display:block;margin-top:4px;font-size:12px}
+.sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:all .2s;border-left:3px solid transparent;position:relative}
+.nav-item:hover{background:rgba(245,158,11,.06)}
+.nav-item.active{background:rgba(245,158,11,.1);border-left-color:var(--accent)}
+.nav-item .nav-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;background:var(--card);color:var(--muted);flex-shrink:0;transition:all .2s}
+.nav-item.active .nav-icon{background:var(--accent);color:var(--bg)}
+.nav-item.completed .nav-icon{background:var(--teal);color:#fff}
+.nav-item .nav-text{flex:1;min-width:0}
+.nav-item .nav-title{font-size:12.5px;color:var(--fg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.nav-item.active .nav-title{color:var(--fg);font-weight:600}
+.nav-item .nav-time{font-size:10px;color:var(--muted);margin-top:1px}
+.nav-item .nav-prog{position:absolute;bottom:2px;left:16px;right:16px;height:2px;background:var(--border);border-radius:1px}
+.nav-item .nav-prog-fill{height:100%;background:var(--teal);border-radius:1px;transition:width .4s}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border)}
+.btn-reset-all{width:100%;padding:8px;border:1px solid var(--err);background:transparent;color:var(--err);border-radius:var(--radius2);cursor:pointer;font-size:11px;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-reset-all:hover{background:var(--err);color:#fff}
+#main-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+#topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0}
+#topbar .burger{display:none;background:none;border:none;color:var(--fg);font-size:18px;cursor:pointer}
+.topbar-title{font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--fg);font-weight:600}
+.topbar-progress{flex:1;max-width:300px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.topbar-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--teal));border-radius:3px;transition:width .5s}
+.topbar-pct{font-size:12px;color:var(--muted);font-weight:500}
+#main-content{flex:1;overflow-y:auto;padding:32px 40px 80px;min-height:0}
+.content-section{max-width:820px;margin:0 auto}
+.section-header{margin-bottom:32px;animation:fadeUp .5s ease}
+.section-header .sec-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;margin-bottom:16px}
+.section-header h2{font-size:28px;color:var(--fg);margin-bottom:4px}
+.section-header .sec-time{font-size:13px;color:var(--accent);font-weight:500}
+.theory-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px;animation:fadeUp .5s ease;position:relative;overflow:hidden}
+.theory-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--teal))}
+.theory-card .th-icon{float:right;width:40px;height:40px;border-radius:8px;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;margin-left:16px;margin-bottom:8px}
+.theory-card h3{font-size:17px;color:var(--fg);margin-bottom:8px}
+.theory-card .th-id{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:8px;margin-top:-4px}
+.theory-card .th-body{font-size:14px;line-height:1.75;color:var(--fg2)}
+.theory-card .th-body-id{font-size:11.5px;line-height:1.6;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px dashed var(--border)}
+.theory-card .th-body p{margin-bottom:8px}
+.theory-card .th-body ul{margin:8px 0 8px 20px}
+.theory-card .th-body li{margin-bottom:4px}
+.exercise-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;animation:fadeUp .5s ease}
+.exercise-card.correct{border-color:var(--ok)}
+.exercise-card.incorrect{border-color:var(--err)}
+.ex-card-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ex-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.ex-label{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.ex-question{font-size:15px;line-height:1.7;color:var(--fg);margin-bottom:6px}
+.ex-question-id{font-size:11.5px;line-height:1.5;color:var(--muted);margin-bottom:14px}
+.ex-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.ex-opt{padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);cursor:pointer;font-size:13.5px;color:var(--fg2);transition:all .2s;display:flex;align-items:center;gap:10px}
+.ex-opt:hover{border-color:var(--accent);background:rgba(245,158,11,.05)}
+.ex-opt.selected{border-color:var(--accent);background:rgba(245,158,11,.1);color:var(--fg)}
+.ex-opt.correct-answer{border-color:var(--ok);background:rgba(34,197,94,.1);color:var(--ok)}
+.ex-opt.wrong-answer{border-color:var(--err);background:rgba(239,68,68,.1);color:var(--err)}
+.ex-opt .opt-letter{width:22px;height:22px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;transition:all .2s}
+.ex-opt.selected .opt-letter{background:var(--accent);color:var(--bg)}
+.ex-opt.correct-answer .opt-letter{background:var(--ok);color:#fff}
+.ex-opt.wrong-answer .opt-letter{background:var(--err);color:#fff}
+.ex-fill-wrap{margin-bottom:16px}
+.ex-fill{width:100%;max-width:320px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);color:var(--fg);font-size:14px;font-family:inherit;transition:border-color .2s}
+.ex-fill:focus{outline:none;border-color:var(--accent)}
+.ex-fill.correct{border-color:var(--ok)}
+.ex-fill.wrong{border-color:var(--err)}
+.ex-tf-wrap{display:flex;gap:10px;margin-bottom:16px}
+.ex-tf-btn{padding:10px 24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);cursor:pointer;font-size:13px;color:var(--fg2);font-family:inherit;transition:all .2s;font-weight:500}
+.ex-tf-btn:hover{border-color:var(--accent)}
+.ex-tf-btn.selected{border-color:var(--accent);background:rgba(245,158,11,.1);color:var(--fg)}
+.ex-tf-btn.correct-answer{border-color:var(--ok);background:rgba(34,197,94,.1);color:var(--ok)}
+.ex-tf-btn.wrong-answer{border-color:var(--err);background:rgba(239,68,68,.1);color:var(--err)}
+.ex-check-wrap{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.btn-check{padding:10px 28px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius2);cursor:pointer;font-size:13px;font-family:inherit;font-weight:600;transition:all .2s;box-shadow:0 2px 8px rgba(245,158,11,.25)}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(245,158,11,.35)}
+.btn-check:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.ex-result{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;opacity:0}
+.ex-result.show{opacity:1}
+.ex-result.correct{color:var(--ok)}
+.ex-result.incorrect{color:var(--err)}
+.ex-explanation{margin-top:12px;overflow:hidden;max-height:0;opacity:0}
+.ex-explanation.open{max-height:500px;opacity:1}
+.ex-explanation-inner{background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.2);border-radius:var(--radius2);padding:14px 16px;font-size:13px;line-height:1.7;color:var(--teal)}
+.ex-explanation-inner .exp-id{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic}
+.nav-buttons{display:flex;justify-content:space-between;align-items:center;padding:20px 0;margin-top:12px;border-top:1px solid var(--border)}
+.btn-nav{padding:10px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);cursor:pointer;font-size:12px;font-family:inherit;color:var(--fg2);font-weight:500;transition:all .2s;display:flex;align-items:center;gap:6px}
+.btn-nav:hover{border-color:var(--accent);color:var(--fg)}
+.btn-nav:disabled{opacity:.3;cursor:not-allowed}
+.home-section{text-align:center;animation:fadeUp .6s ease}
+.home-logo{width:80px;height:80px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--teal));display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;margin:0 auto 24px;box-shadow:0 8px 32px rgba(245,158,11,.2)}
+.home-section h2{font-size:32px;margin-bottom:4px;background:linear-gradient(135deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.home-section .home-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+.home-section .home-topic{font-size:18px;color:var(--fg);font-weight:600;margin-bottom:4px}
+.home-section .home-topic-id{font-size:12px;color:var(--muted);margin-bottom:32px}
+.home-rules{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:left;max-width:480px;margin:0 auto 32px}
+.home-rules h4{font-size:14px;color:var(--accent);margin-bottom:12px}
+.home-rules li{font-size:13px;color:var(--fg2);margin-bottom:8px;line-height:1.6}
+.home-rules li i{color:var(--teal);margin-right:6px;width:16px;text-align:center}
+.btn-start{padding:14px 48px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-size:15px;font-family:inherit;font-weight:700;transition:all .3s;box-shadow:0 4px 16px rgba(245,158,11,.3)}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.4)}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:var(--radius2);font-size:13px;font-weight:500;z-index:9999;animation:fadeUp .3s ease;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.toast.success{background:var(--ok);color:#fff}
+.toast.error{background:var(--err);color:#fff}
+.illust-svg{text-align:center;margin:16px 0}
+.illust-svg svg{max-width:100%;height:auto}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .3s ease}
+@media(max-width:768px){
+  #sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);z-index:200}
+  #sidebar.open{transform:translateX(0)}
+  #topbar .burger{display:block}
+  #main-content{padding:20px 16px 80px}
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
+  .sidebar-overlay.show{display:block}
+}
+.katex{font-size:1em!important}
+.exercise-card .katex{font-size:1.05em!important}
+
+.btn-ex-reset{
+  padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);
+  cursor:pointer;font-size:12px;font-family:inherit;color:var(--fg2);font-weight:500;
+  transition:all .2s;display:inline-flex;align-items:center;gap:5px;
+}
+.btn-ex-reset:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<nav id="sidebar"></nav>
+<div id="main-wrap">
+<div id="topbar">
+<button class="burger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+<span class="topbar-title" id="topbarTitle">Place Value & Large Numbers</span>
+<div class="topbar-progress"><div class="topbar-progress-fill" id="topbarProgFill"></div></div>
+<span class="topbar-pct" id="topbarPct">0%</span>
+</div>
+<div id="main-content"></div>
+</div>
+<script>
+// ===================== SECTION DATA =====================
+const SECTIONS = [
+  {
+    id:'home', title:'Home', icon:'fa-house', type:'home'
+  },
+  {
+    id:'spiral', title:'Spiral Review Warm-up', time:'00:00–00:10', icon:'fa-rotate', type:'lesson',
+    content:[
+      {type:'theory', icon:'fa-percent', title:'Quick Percentage Calculations in Business', titleId:'Perhitungan Persentase Cepat dalam Bisnis',
+        body:'<p>In business, percentages appear everywhere: profit margins, discounts, tax rates, and investment returns. Being able to calculate them quickly is an essential skill for any CEO.</p><p>The key formula: \\(\\text{Percentage} = \\frac{\\text{Rate}}{100} \\times \\text{Base}\\)</p><p>For example, 15% of 200,000 = \\(\\frac{15}{100} \\times 200{,}000 = 0.15 \\times 200{,}000 = 30{,}000\\).</p>',
+        bodyId:'<p>Di bisnis, persentase ada di mana-mana: margin keuntungan, diskon, tarif pajak, dan pengembalian investasi. Mampu menghitungnya dengan cepat adalah keterampilan penting bagi setiap CEO.</p><p>Rumus kunci: Persentase = (Tarif / 100) × Dasar</p>'},
+      {type:'ex', qType:'mc', q:'What is 15% of $200,000?', qId:'Berapa 15% dari $200.000?',
+        opts:['$30,000','$3,000','$300,000','$15,000'], ans:0,
+        exp:'Using the formula: 0.15 × 200,000 = 30,000. Move the decimal two places left (divide by 100), then multiply by 15.',
+        expId:'Menggunakan rumus: 0,15 × 200.000 = 30.000. Pindahkan koma dua tempat ke kiri (bagi 100), lalu kalikan 15.'},
+      {type:'ex', qType:'mc', q:'A store offers a 25% discount on an $80,000 product. How much is the discount?', qId:'Sebuah toko memberikan diskon 25% untuk produk $80.000. Berapa besar diskonnya?',
+        opts:['$20,000','$2,000','$8,000','$25,000'], ans:0,
+        exp:'25% of 80,000 = 0.25 × 80,000 = 20,000. Remember: 25% = 1/4, so you can also divide 80,000 by 4.',
+        expId:'25% dari 80.000 = 0,25 × 80.000 = 20.000. Ingat: 25% = 1/4, jadi Anda juga bisa membagi 80.000 dengan 4.'},
+      {type:'ex', qType:'fill', q:'A company\'s revenue is $500,000. If 12% is profit, the profit amount is $____.', qId:'Pendapatan perusahaan $500.000. Jika 12% adalah keuntungan, jumlah keuntungannya adalah $____.',
+        ans:'60000',
+        exp:'12% of 500,000 = 0.12 × 500,000 = 60,000. Tip: 10% = 50,000 and 2% = 10,000, so 12% = 60,000.',
+        expId:'12% dari 500.000 = 0,12 × 500.000 = 60.000. Tip: 10% = 50.000 dan 2% = 10.000, jadi 12% = 60.000.'},
+
+      {type:'theory', icon:'fa-cart-shopping', title:'Multiplication for Total Costs', titleId:'Perkalian untuk Total Biaya',
+        body:'<p>When ordering supplies or calculating total revenue, multiplication is key. The fundamental formula:</p><p>\\(\\text{Total Cost} = \\text{Unit Price} \\times \\text{Quantity}\\)</p><p>For instance, 3 units at $45,000 each = \\(3 \\times 45{,}000 = 135{,}000\\).</p>',
+        bodyId:'<p>Saat memesan perlengkapan atau menghitung total pendapatan, perkalian adalah kunci. Rumus dasar: Total Biaya = Harga Satuan × Jumlah</p>'},
+      {type:'ex', qType:'mc', q:'If a product costs $45,000 per unit and you buy 3 units, what is the total?', qId:'Jika produk berharga $45.000 per unit dan Anda membeli 3 unit, berapa totalnya?',
+        opts:['$135,000','$145,000','$125,000','$90,000'], ans:0,
+        exp:'45,000 × 3 = 135,000. Break it down: 40,000 × 3 = 120,000 and 5,000 × 3 = 15,000. Total = 135,000.',
+        expId:'45.000 × 3 = 135.000. Uraian: 40.000 × 3 = 120.000 dan 5.000 × 3 = 15.000. Total = 135.000.'},
+      {type:'ex', qType:'fill', q:'A company orders 12 laptops at $8,500 each. The total cost is $____.', qId:'Perusahaan memesan 12 laptop masing-masing $8.500. Total biayanya adalah $____.',
+        ans:'102000',
+        exp:'8,500 × 12 = 8,500 × 10 + 8,500 × 2 = 85,000 + 17,000 = 102,000.',
+        expId:'8.500 × 12 = 8.500 × 10 + 8.500 × 2 = 85.000 + 17.000 = 102.000.'},
+      {type:'ex', qType:'mc', q:'Which expression correctly calculates the total for 5 items at $23,000 each?', qId:'Ekspresi mana yang benar menghitung total 5 item masing-masing $23.000?',
+        opts:['\\(5 \\times 23{,}000\\)','\\(5 + 23{,}000\\)','\\(23{,}000 \\div 5\\)','\\(23{,}000 - 5\\)'], ans:0,
+        exp:'Total = quantity × unit price = 5 × 23,000 = 115,000. Addition, division, and subtraction do not give the correct total cost.',
+        expId:'Total = jumlah × harga satuan = 5 × 23.000 = 115.000. Penjumlahan, pembagian, dan pengurangan tidak memberikan total biaya yang benar.'},
+
+      {type:'theory', icon:'fa-piggy-bank', title:'Simple Equations & Savings in Business', titleId:'Persamaan Sederhana & Tabungan dalam Bisnis',
+        body:'<p>Business planning often involves solving equations and projecting savings over time.</p><p>For example, to solve \\(2x + 500 = 1{,}500\\):</p><ul><li>Subtract 500 from both sides: \\(2x = 1{,}000\\)</li><li>Divide by 2: \\(x = 500\\)</li></ul><p>For savings: \\(\\text{Total Savings} = \\text{Daily Amount} \\times \\text{Number of Days}\\)</p>',
+        bodyId:'<p>Perencanaan bisnis sering melibatkan penyelesaian persamaan dan proyeksi tabungan dari waktu ke waktu.</p>'},
+      {type:'ex', qType:'fill', q:'Solve for \\(x\\): \\(2x + 500 = 1{,}500\\). \\(x =\\) ____', qId:'Selesaikan untuk x: 2x + 500 = 1.500. x = ____',
+        ans:'500',
+        exp:'Step 1: 2x + 500 = 1,500 → 2x = 1,000 (subtract 500). Step 2: x = 500 (divide by 2).',
+        expId:'Langkah 1: 2x + 500 = 1.500 → 2x = 1.000 (kurangi 500). Langkah 2: x = 500 (bagi 2).'},
+      {type:'ex', qType:'fill', q:'If you save $1,500 every day for 7 days, your total savings = $____.', qId:'Jika Anda menabung $1.500 setiap hari selama 7 hari, total tabungan = $____.',
+        ans:'10500',
+        exp:'1,500 × 7 = 10,500. Multiply: 1,000 × 7 = 7,000 and 500 × 7 = 3,500. Total = 10,500.',
+        expId:'1.500 × 7 = 10.500. Perkalian: 1.000 × 7 = 7.000 dan 500 × 7 = 3.500. Total = 10.500.'},
+      {type:'ex', qType:'mc', q:'A company saves $5,000 per month. How much do they save in one year?', qId:'Perusahaan menabung $5.000 per bulan. Berapa tabungan mereka dalam setahun?',
+        opts:['$60,000','$50,000','$55,000','$65,000'], ans:0,
+        exp:'5,000 × 12 = 60,000. There are 12 months in a year, so multiply the monthly savings by 12.',
+        expId:'5.000 × 12 = 60.000. Ada 12 bulan dalam setahun, jadi kalikan tabungan bulanan dengan 12.'},
+      {type:'ex', qType:'mc', q:'If \\(3x = 90{,}000\\), what is \\(x\\)?', qId:'Jika 3x = 90.000, berapa nilai x?',
+        opts:['30,000','27,000','33,000','9,000'], ans:0,
+        exp:'Divide both sides by 3: x = 90,000 ÷ 3 = 30,000.',
+        expId:'Bagi kedua ruas dengan 3: x = 90.000 ÷ 3 = 30.000.'}
+    ]
+  },
+  {
+    id:'intro', title:'Introduction & Real-World Connection', time:'00:10–00:15', icon:'fa-handshake', type:'lesson',
+    content:[
+      {type:'theory', icon:'fa-building', title:'Why Large Numbers Matter in Business', titleId:'Mengapa Bilangan Besar Penting dalam Bisnis',
+        body:'<p>As a CEO, you deal with millions — investments, revenue, market capitalization. Understanding large numbers prevents costly mistakes.</p><p>A single digit in the wrong place can change a value by \\(10\\times\\), \\(100\\times\\), or even \\(1{,}000\\times\\).</p>',
+        bodyId:'<p>Sebagai CEO, Anda berurusan dengan jutaan — investasi, pendapatan, kapitalisasi pasar. Memahami bilangan besar mencegah kesalahan mahal.</p><p>Satu digit di tempat yang salah bisa mengubah nilai 10×, 100×, atau bahkan 1.000×.</p>',
+        svg:'business'},
+      {type:'ex', qType:'mc', q:'Which of these is a typical company annual revenue figure?', qId:'Manakah yang merupakan angka pendapatan tahunan perusahaan yang tipikal?',
+        opts:['$5,000,000','$50','$500','$5'], ans:0,
+        exp:'A typical company earns millions in revenue. $5,000,000 (five million) is a realistic annual revenue, while the others are far too small.',
+        expId:'Perusahaan tipikal memperoleh jutaan dalam pendapatan. $5.000.000 (lima juta) adalah pendapatan tahunan realistis, sementara lainnya terlalu kecil.'},
+      {type:'ex', qType:'mc', q:'A startup received $2,500,000 in funding. How many millions is this?', qId:'Startup menerima pendanaan $2.500.000. Berapa juta ini?',
+        opts:['2.5 million','25 million','250 million','0.25 million'], ans:0,
+        exp:'2,500,000 ÷ 1,000,000 = 2.5 million. Move the decimal 6 places left to convert to millions.',
+        expId:'2.500.000 ÷ 1.000.000 = 2,5 juta. Pindahkan koma 6 tempat ke kiri untuk konversi ke juta.'},
+      {type:'ex', qType:'tf', q:'In business, misreading a single digit on a contract could cost millions of dollars.', qId:'Dalam bisnis, salah membaca satu digit pada kontrak bisa merugikan jutaan dolar.',
+        ans:true,
+        exp:'True! For example, reading $5,000,000 as $500,000 loses $4,500,000. A single zero makes a 10× difference.',
+        expId:'Benar! Misalnya, membaca $5.000.000 sebagai $500.000 merugikan $4.500.000. Satu nol membuat perbedaan 10×.'},
+
+      {type:'theory', icon:'fa-triangle-exclamation', title:'The Cost of Misreading Digits', titleId:'Biaya Salah Membaca Digit',
+        body:'<p>A digit in the wrong place value changes a number by a factor of 10, 100, or more. This is called a <strong>place value error</strong>.</p><p>Example: Writing $500,000 instead of $50,000 means you overpaid by \\(10\\times\\) — a $450,000 mistake!</p>',
+        bodyId:'<p>Digit di nilai tempat yang salah mengubah angka dengan faktor 10, 100, atau lebih. Ini disebut <strong>kesalahan nilai tempat</strong>.</p>'},
+      {type:'ex', qType:'mc', q:'Writing $500,000 instead of $50,000 makes the value how many times larger?', qId:'Menulis $500.000 bukan $50.000 membuat nilainya berapa kali lebih besar?',
+        opts:['10 times','5 times','100 times','2 times'], ans:0,
+        exp:'500,000 ÷ 50,000 = 10. The digit 5 moved from the ten-thousands to the hundred-thousands place — one place to the left means 10× larger.',
+        expId:'500.000 ÷ 50.000 = 10. Digit 5 berpindah dari tempat puluh ribu ke tempat ratusan ribu — satu tempat ke kiri berarti 10× lebih besar.'},
+      {type:'ex', qType:'mc', q:'A contract states $1,200,000 but you read it as $1,200. Which place value was missed?', qId:'Kontrak menyatakan $1.200.000 tetapi Anda membacanya sebagai $1.200. Nilai tempat mana yang terlewat?',
+        opts:['Thousands','Millions','Hundreds','Tens'], ans:0,
+        exp:'The difference is in the thousands period. You missed three digits (200 thousand), dropping from millions to just hundreds.',
+        expId:'Perbedaannya ada pada periode ribuan. Anda melewatkan tiga digit (200 ribu), turun dari jutaan ke ratusan saja.'},
+      {type:'ex', qType:'mc', q:'Writing $3,000,000 instead of $300,000 is an error of what magnitude?', qId:'Menulis $3.000.000 bukan $300.000 adalah kesalahan dengan magnitudo berapa?',
+        opts:['10×','100×','1,000×','3×'], ans:0,
+        exp:'3,000,000 ÷ 300,000 = 10. The digit 3 shifted one place to the left, creating a 10× error.',
+        expId:'3.000.000 ÷ 300.000 = 10. Digit 3 bergeser satu tempat ke kiri, menciptakan kesalahan 10×.'},
+
+      {type:'theory', icon:'fa-book-open', title:'Reading and Interpreting Millions', titleId:'Membaca dan Menafsirkan Jutaan',
+        body:'<p>Seven-digit numbers represent millions. The comma system groups digits into periods: <strong>millions</strong>, <strong>thousands</strong>, <strong>ones</strong>.</p><p>Example: \\(8{,}405{,}020\\) is read as "eight million, four hundred five thousand, twenty."</p><ul><li>First comma: thousands separator</li><li>Second comma: millions separator</li></ul>',
+        bodyId:'<p>Bilangan tujuh digit mewakili jutaan. Sistem koma mengelompokkan digit ke dalam periode: <strong>jutaan</strong>, <strong>ribuan</strong>, <strong>satuan</strong>.</p>'},
+      {type:'ex', qType:'mc', q:'How do you read the number 4,000,000?', qId:'Bagaimana Anda membaca angka 4.000.000?',
+        opts:['Four million','Four hundred thousand','Forty million','Four thousand'], ans:0,
+        exp:'4,000,000 has a 4 in the millions place and zeros elsewhere. It reads: "four million."',
+        expId:'4.000.000 memiliki 4 di tempat jutaan dan nol di tempat lain. Dibaca: "empat juta."'},
+      {type:'ex', qType:'mc', q:'In the number 6,234,000, what does the 6 represent?', qId:'Pada angka 6.234.000, apa yang diwakili angka 6?',
+        opts:['6 million','6 thousand','6 hundred','6 hundred thousand'], ans:0,
+        exp:'The 6 is in the millions place (leftmost digit of a 7-digit number), so it represents 6 × 1,000,000 = 6,000,000.',
+        expId:'Angka 6 berada di tempat jutaan (digit paling kiri dari bilangan 7 digit), jadi mewakili 6 × 1.000.000 = 6.000.000.'},
+      {type:'ex', qType:'mc', q:'Which is larger: $1,500,000 or $1,050,000?', qId:'Mana yang lebih besar: $1.500.000 atau $1.050.000?',
+        opts:['$1,500,000','$1,050,000','They are equal'], ans:0,
+        exp:'Compare digit by digit from the left. Both have 1 million, but 500 thousand > 50 thousand. So $1,500,000 is larger.',
+        expId:'Bandingkan digit per digit dari kiri. Keduanya memiliki 1 juta, tetapi 500 ribu > 50 ribu. Jadi $1.500.000 lebih besar.'},
+      {type:'ex', qType:'mc', q:'The number 9,000,000 is read as:', qId:'Angka 9.000.000 dibaca sebagai:',
+        opts:['Nine million','Nine hundred thousand','Ninety million','Nine thousand'], ans:0,
+        exp:'9 in the millions place with all zeros = nine million.',
+        expId:'9 di tempat jutaan dengan semua nol = sembilan juta.'}
+    ]
+  },
+  {
+    id:'prior', title:'Review of Prior Knowledge', time:'00:15–00:20', icon:'fa-clock-rotate-left', type:'lesson',
+    content:[
+      {type:'theory', icon:'fa-table-cells', title:'Place Value in Six-Digit Numbers', titleId:'Nilai Tempat pada Bilangan Enam Digit',
+        body:'<p>Each digit in a number has a specific place and value:</p><ul><li><strong>Ones</strong> (1), <strong>Tens</strong> (10), <strong>Hundreds</strong> (100)</li><li><strong>Thousands</strong> (1,000), <strong>Ten Thousands</strong> (10,000), <strong>Hundred Thousands</strong> (100,000)</li></ul><p>Example: In \\(543{,}210\\), the 4 is in the <strong>ten thousands</strong> place, so its value is \\(4 \\times 10{,}000 = 40{,}000\\).</p>',
+        bodyId:'<p>Setiap digit dalam angka memiliki tempat dan nilai tertentu: Satuan (1), Puluhan (10), Ratusan (100), Ribuan (1.000), Puluh Ribu (10.000), Ratus Ribu (100.000).</p>',
+        svg:'placevalue'},
+      {type:'ex', qType:'mc', q:'In 543,210, what is the place value of the digit 4?', qId:'Pada 543.210, apa nilai tempat digit 4?',
+        opts:['Ten thousands','Thousands','Hundred thousands','Hundreds'], ans:0,
+        exp:'Reading right to left: 0=ones, 1=tens, 2=hundreds, 3=thousands, 4=ten thousands, 5=hundred thousands. So 4 is in the ten thousands place.',
+        expId:'Membaca kanan ke kiri: 0=satuan, 1=puluhan, 2=ratusan, 3=ribuan, 4=puluh ribu, 5=ratus ribu. Jadi 4 di tempat puluh ribu.'},
+      {type:'ex', qType:'mc', q:'In 382,765, what is the value of the digit 3?', qId:'Pada 382.765, berapa nilai digit 3?',
+        opts:['300,000','30,000','3,000','3'], ans:0,
+        exp:'The 3 is in the hundred thousands place: 3 × 100,000 = 300,000.',
+        expId:'Angka 3 berada di tempat ratusan ribu: 3 × 100.000 = 300.000.'},
+      {type:'ex', qType:'fill', q:'In 910,405, which digit is in the hundreds place? ____', qId:'Pada 910.405, digit mana yang berada di tempat ratusan? ____',
+        ans:'4',
+        exp:'910,405: 5=ones, 0=tens, 4=hundreds. The digit in the hundreds place is 4.',
+        expId:'910.405: 5=satuan, 0=puluhan, 4=ratusan. Digit di tempat ratusan adalah 4.'},
+
+      {type:'theory', icon:'fa-arrows-left-right', title:'The Base-10 Relationship', titleId:'Hubungan Basis-10',
+        body:'<p>Our number system is <strong>base-10</strong>: each place value is 10 times the place to its right.</p><p>\\(\\cdots \\xrightarrow{\\times 10} \\text{Hundred Thousands} \\xrightarrow{\\times 10} \\text{Ten Thousands} \\xrightarrow{\\times 10} \\text{Thousands} \\xrightarrow{\\times 10} \\text{Hundreds} \\xrightarrow{\\times 10} \\cdots\\)</p><p>This is called the <strong>Power of 10</strong> rule. Moving a digit one place left multiplies its value by 10.</p>',
+        bodyId:'<p>Sistem bilangan kita adalah basis-10: setiap nilai tempat adalah 10 kali tempat di sebelah kanannya. Ini disebut aturan Pangkat 10. Memindahkan digit satu tempat ke kiri mengalikan nilainya dengan 10.</p>'},
+      {type:'ex', qType:'mc', q:'Moving a digit one place to the left makes it how many times larger?', qId:'Memindahkan digit satu tempat ke kiri membuatnya berapa kali lebih besar?',
+        opts:['10 times','100 times','5 times','2 times'], ans:0,
+        exp:'Each place to the left is worth 10× more. This is the fundamental base-10 rule.',
+        expId:'Setiap tempat ke kiri bernilai 10× lebih banyak. Ini adalah aturan basis-10 fundamental.'},
+      {type:'ex', qType:'fill', q:'700 is how many times greater than 70? ____', qId:'700 berapa kali lebih besar dari 70? ____',
+        ans:'10',
+        exp:'700 ÷ 70 = 10. The 7 moved one place to the left (from tens to hundreds), so it became 10× larger.',
+        expId:'700 ÷ 70 = 10. Angka 7 berpindah satu tempat ke kiri (dari puluhan ke ratusan), jadi menjadi 10× lebih besar.'},
+      {type:'ex', qType:'mc', q:'If you move the digit 5 from the hundreds place to the thousands place, its value changes from 500 to:', qId:'Jika Anda memindahkan digit 5 dari tempat ratusan ke tempat ribuan, nilainya berubah dari 500 menjadi:',
+        opts:['5,000','50','500,000','5'], ans:0,
+        exp:'Moving one place left = ×10. So 500 × 10 = 5,000.',
+        expId:'Memindahkan satu tempat ke kiri = ×10. Jadi 500 × 10 = 5.000.'},
+
+      {type:'theory', icon:'fa-arrow-right-arrow-left', title:'Moving Digits and Value Changes', titleId:'Memindahkan Digit dan Perubahan Nilai',
+        body:'<p>Understanding how digit position affects value is key to reading large numbers correctly.</p><p>Rules:</p><ul><li>Move <strong>left</strong> 1 place → value becomes \\(10\\times\\) larger</li><li>Move <strong>right</strong> 1 place → value becomes \\(\\frac{1}{10}\\) as large</li><li>Move <strong>left</strong> 2 places → value becomes \\(100\\times\\) larger</li></ul>',
+        bodyId:'<p>Memahami bagaimana posisi digit mempengaruhi nilai adalah kunci membaca bilangan besar dengan benar. Pindah kiri 1 tempat = 10× lebih besar. Pindah kanan 1 tempat = 1/10 dari nilai.</p>'},
+      {type:'ex', qType:'mc', q:'In 724,000, the digit 7 is in which place?', qId:'Pada 724.000, digit 7 berada di tempat apa?',
+        opts:['Hundred thousands','Ten thousands','Millions','Thousands'], ans:0,
+        exp:'724,000: 7 is the leftmost digit of a 6-digit number → hundred thousands place (7 × 100,000 = 700,000).',
+        expId:'724.000: 7 adalah digit paling kiri dari bilangan 6 digit → tempat ratusan ribu (7 × 100.000 = 700.000).'},
+      {type:'ex', qType:'fill', q:'50,000 is 10 times greater than ____.', qId:'50.000 adalah 10 kali lebih besar dari ____.',
+        ans:'5000',
+        exp:'50,000 ÷ 10 = 5,000. Moving one place to the right divides by 10.',
+        expId:'50.000 ÷ 10 = 5.000. Memindahkan satu tempat ke kanan membagi dengan 10.'},
+      {type:'ex', qType:'fill', q:'300 is one-tenth of what number? ____', qId:'300 adalah sepertiga dari angka berapa? ____',
+        ans:'3000',
+        exp:'If 300 is 1/10 of a number, then that number = 300 × 10 = 3,000.',
+        expId:'Jika 300 adalah 1/10 dari suatu angka, maka angka itu = 300 × 10 = 3.000.'},
+      {type:'ex', qType:'mc', q:'If the digit 8 in 890,000 moves to the ten-thousands place, its new value is:', qId:'Jika digit 8 pada 890.000 berpindah ke tempat puluh ribu, nilai barunya adalah:',
+        opts:['80,000','800,000','8,000','800'], ans:0,
+        exp:'Moving 8 from hundred-thousands to ten-thousands = one place right → value ÷10. So 800,000 ÷ 10 = 80,000.',
+        expId:'Memindahkan 8 dari ratusan ribu ke puluh ribu = satu tempat ke kanan → nilai ÷10. Jadi 800.000 ÷ 10 = 80.000.'}
+    ]
+  },
+  {
+    id:'problem', title:'Problem Introduction', time:'00:20–00:30', icon:'fa-file-invoice', type:'lesson',
+    content:[
+      {type:'theory', icon:'fa-spell-check', title:'Writing Large Numbers in Words', titleId:'Menulis Bilangan Besar dengan Kata-kata',
+        body:'<p>To write numbers in words, read each <strong>period</strong> (millions, thousands, ones) separately, then combine them.</p><p>Example: \\(8{,}405{,}020\\)</p><ul><li>Millions period: 8 → "eight million"</li><li>Thousands period: 405 → "four hundred five thousand"</li><li>Ones period: 020 → "twenty"</li></ul><p>Result: "Eight million, four hundred five thousand, twenty."</p>',
+        bodyId:'<p>Untuk menulis angka dengan kata-kata, baca setiap periode (jutaan, ribuan, satuan) secara terpisah, lalu gabungkan.</p>'},
+      {type:'ex', qType:'mc', q:'How do you write 8,405,020 in words?', qId:'Bagaimana Anda menulis 8.405.020 dengan kata-kata?',
+        opts:['Eight million, four hundred five thousand, twenty','Eight million, four hundred thousand, twenty','Eight million, forty-five thousand, twenty','Eight hundred four million, five thousand, twenty'], ans:0,
+        exp:'8=eight million, 405=four hundred five thousand, 020=twenty. Combine: "Eight million, four hundred five thousand, twenty."',
+        expId:'8=delapan juta, 405=empat ratus lima ribu, 020=dua puluh. Gabungan: "Delapan juta empat ratus lima ribu dua puluh."'},
+      {type:'ex', qType:'mc', q:'Which number equals "Three million, two hundred thousand, five hundred"?', qId:'Angka mana yang sama dengan "Tiga juta dua ratus ribu lima ratus"?',
+        opts:['3,200,500','3,020,500','3,200,050','32,000,500'], ans:0,
+        exp:'3 million = 3,000,000; 200 thousand = 200,000; 5 hundred = 500. Total: 3,000,000 + 200,000 + 500 = 3,200,500.',
+        expId:'3 juta = 3.000.000; 200 ribu = 200.000; 5 ratus = 500. Total: 3.200.500.'},
+      {type:'ex', qType:'mc', q:'Write 5,001,300 in words. What goes in the blank? "Five million, ____ thousand, three hundred."', qId:'Tulis 5.001.300 dengan kata-kata. Apa yang mengisi bagian kosong? "Lima juta, ____ ribu, tiga ratus."',
+        opts:['one','ten','one hundred','one thousand'], ans:0,
+        exp:'5,001,300: The thousands period is 001 = one thousand. So "Five million, one thousand, three hundred."',
+        expId:'5.001.300: Periode ribuan adalah 001 = satu ribu. Jadi "Lima juta satu ribu tiga ratus."'} ,
+
+      {type:'theory', icon:'fa-plus', title:'Expanded Form of Large Numbers', titleId:'Bentuk Uraian Bilangan Besar',
+        body:'<p>Expanded form breaks a number into the sum of each digit\'s place value.</p><p>Example: \\(8{,}405{,}020 = 8{,}000{,}000 + 400{,}000 + 5{,}000 + 20\\)</p><p>Each term shows the digit multiplied by its place value. Zeros are skipped because they add nothing.</p>',
+        bodyId:'<p>Bentuk uraian memecah angka menjadi jumlah dari nilai tempat setiap digit. Setiap suku menunjukkan digit dikalikan nilai tempatnya. Nol dilewati karena tidak menambah apa-apa.</p>'},
+      {type:'ex', qType:'mc', q:'What is the expanded form of 8,405,020?', qId:'Apa bentuk uraian dari 8.405.020?',
+        opts:['8,000,000 + 400,000 + 5,000 + 20','8,000,000 + 40,000 + 5,000 + 20','8,000,000 + 400,000 + 50,000 + 20','800,000 + 40,000 + 5,000 + 20'], ans:0,
+        exp:'8→8,000,000 (millions), 4→400,000 (hundred thousands), 0→skip, 5→5,000 (thousands), 0→skip, 2→20 (tens), 0→skip.',
+        expId:'8→8.000.000 (jutaan), 4→400.000 (ratusan ribu), 0→lewati, 5→5.000 (ribuan), 0→lewati, 2→20 (puluhan), 0→lewati.'},
+      {type:'ex', qType:'mc', q:'In the number 2,040,600, which expanded form is correct?', qId:'Pada angka 2.040.600, bentuk uraian mana yang benar?',
+        opts:['2,000,000 + 40,000 + 600','2,000,000 + 4,000 + 600','2,000,000 + 40,000 + 60','200,000 + 40,000 + 600'], ans:0,
+        exp:'2→2,000,000, 0→skip, 4→40,000 (ten thousands), 0→skip, 6→600 (hundreds), 0→skip, 0→skip. So: 2,000,000 + 40,000 + 600.',
+        expId:'2→2.000.000, 0→lewati, 4→40.000 (puluh ribu), 0→lewati, 6→600 (ratusan), 0→lewati, 0→lewati.'},
+      {type:'ex', qType:'fill', q:'4,000,000 + 500,000 + 2,000 + 80 = ____', qId:'4.000.000 + 500.000 + 2.000 + 80 = ____',
+        ans:'4502080',
+        exp:'Combine: millions=4, hundred thousands=5, thousands=2, tens=8, all others=0. Result: 4,502,080.',
+        expId:'Gabungkan: jutaan=4, ratusan ribu=5, ribuan=2, puluhan=8, lainnya=0. Hasil: 4.502.080.'},
+
+      {type:'theory', icon:'fa-0', title:'The Role of Zeros as Placeholders', titleId:'Peran Nol sebagai Penahan Tempat',
+        body:'<p>Zeros may have no value themselves, but they <strong>hold places</strong> so other digits keep their correct values.</p><p>Without zeros: \\(8{,}405{,}020\\) would become \\(8452\\) — completely wrong!</p><p>Think of zeros as "empty shelves" — they take up space so everything stays in the right spot.</p>',
+        bodyId:'<p>Nol mungkin tidak memiliki nilai, tetapi mereka <strong>menahan tempat</strong> agar digit lain tetap pada nilai yang benar. Tanpa nol: 8.405.020 akan menjadi 8452 — sepenuhnya salah!</p>',
+        svg:'zeros'},
+      {type:'ex', qType:'mc', q:'In 8,405,020, the zero in the ten-thousands place means:', qId:'Pada 8.405.020, nol di tempat puluh ribu berarti:',
+        opts:['There are no ten-thousands, but it keeps 5 in the thousands place','The number is invalid','The 5 next to it is worth 50,000','We can remove it without changing the number'], ans:0,
+        exp:'The zero holds the ten-thousands place so that the 5 stays in the thousands place (not the hundred-thousands). Without it, the digits would shift.',
+        expId:'Nol menahan tempat puluh ribu agar 5 tetap di tempat ribuan (bukan ratusan ribu). Tanpa itu, digit akan bergeser.'},
+      {type:'ex', qType:'mc', q:'What happens if we remove the zeros from 8,405,020?', qId:'Apa yang terjadi jika kita menghapus nol dari 8.405.020?',
+        opts:['It becomes 8,452, which is completely different','It stays the same','It becomes 84,050','It becomes 845,020'], ans:0,
+        exp:'Removing zeros changes all place values. 8,405,020 → 8,452. The number shrinks dramatically because digits lose their correct positions.',
+        expId:'Menghapus nol mengubah semua nilai tempat. 8.405.020 → 8.452. Angka menyusut drastis karena digit kehilangan posisi yang benar.'},
+      {type:'ex', qType:'mc', q:'In 5,003,001, how many zeros are acting as placeholders?', qId:'Pada 5.003.001, berapa nol yang berfungsi sebagai penahan tempat?',
+        opts:['4','3','2','5'], ans:0,
+        exp:'5,003,001 has digits: 5,0,0,3,0,0,1. The zeros at hundred-thousands, ten-thousands, hundreds, and tens are placeholders = 4 zeros.',
+        expId:'5.003.001 memiliki digit: 5,0,0,3,0,0,1. Nol di ratusan ribu, puluh ribu, ratusan, dan puluhan adalah penahan tempat = 4 nol.'},
+      {type:'ex', qType:'mc', q:'Why can\'t we simply remove all zeros from 4,050,000?', qId:'Mengapa kita tidak bisa menghapus semua nol dari 4.050.000?',
+        opts:['Because the number would become 45, which is wrong','Because zeros add value','Because zeros make the number bigger','Because the number would become 4,050'], ans:0,
+        exp:'Removing all zeros: 4,050,000 → 45. The 4 changes from 4 million to 4 tens, and the 5 from 50 thousand to 5 ones. Completely different value!',
+        expId:'Menghapus semua nol: 4.050.000 → 45. Angka 4 berubah dari 4 juta menjadi 4 puluhan, dan 5 dari 50 ribu menjadi 5 satuan. Nilai sepenuhnya berbeda!'}
+    ]
+  },
+  {
+    id:'guided', title:'Guided Practice', time:'00:30–00:45', icon:'fa-compass-drafting', type:'lesson',
+    content:[
+      {type:'theory', icon:'fa-scale-balanced', title:'Comparing Large Numbers', titleId:'Membandingkan Bilangan Besar',
+        body:'<p>To compare large numbers, start from the <strong>largest place value</strong> and work right until you find a difference.</p><p>Example: Compare \\(4{,}560{,}000\\) and \\(4{,}506{,}000\\):</p><ul><li>Millions: both 4 → same</li><li>Hundred thousands: both 5 → same</li><li>Ten thousands: 6 vs 0 → <strong>6 wins!</strong></li></ul><p>So \\(4{,}560{,}000 > 4{,}506{,}000\\).</p>',
+        bodyId:'<p>Untuk membandingkan bilangan besar, mulai dari nilai tempat terbesar dan bergerak ke kanan sampai menemukan perbedaan.</p>'},
+      {type:'ex', qType:'mc', q:'Which is greater: $4,560,000 or $4,506,000?', qId:'Mana yang lebih besar: $4.560.000 atau $4.506.000?',
+        opts:['$4,560,000','$4,506,000','They are equal'], ans:0,
+        exp:'Both have 4 million and 5 hundred thousand. At ten thousands: 6 > 0. So 4,560,000 > 4,506,000.',
+        expId:'Keduanya memiliki 4 juta dan 5 ratus ribu. Di puluh ribu: 6 > 0. Jadi 4.560.000 > 4.506.000.'},
+      {type:'ex', qType:'mc', q:'Compare using >, <, or =: 7,230,000 ___ 7,203,000', qId:'Bandingkan menggunakan >, <, atau =: 7.230.000 ___ 7.203.000',
+        opts:['>','<','='], ans:0,
+        exp:'Millions: both 7. Hundred thousands: both 2. Ten thousands: 3 > 0. So 7,230,000 > 7,203,000.',
+        expId:'Jutaan: keduanya 7. Ratusan ribu: keduanya 2. Puluh ribu: 3 > 0. Jadi 7.230.000 > 7.203.000.'},
+      {type:'ex', qType:'mc', q:'Which is smaller: 3,100,000 or 3,010,000?', qId:'Mana yang lebih kecil: 3.100.000 atau 3.010.000?',
+        opts:['3,010,000','3,100,000','They are equal'], ans:0,
+        exp:'At hundred thousands: 1 > 0. So 3,010,000 < 3,100,000, making 3,010,000 the smaller number.',
+        expId:'Di ratusan ribu: 1 > 0. Jadi 3.010.000 < 3.100.000, menjadikan 3.010.000 lebih kecil.'},
+
+      {type:'theory', icon:'fa-magnifying-glass-dollar', title:'Determining the Value of Specific Digits', titleId:'Menentukan Nilai Digit Tertentu',
+        body:'<p>In a business context, each digit\'s value tells us about a specific part of the figure.</p><p>In \\(9{,}723{,}150\\):</p><ul><li>The 7 is in the <strong>hundred-thousands</strong> place → value = \\(700{,}000\\)</li><li>The 2 is in the <strong>ten-thousands</strong> place → value = \\(20{,}000\\)</li></ul><p>This helps identify which department or category a cost belongs to.</p>',
+        bodyId:'<p>Dalam konteks bisnis, nilai setiap digit memberi tahu kita tentang bagian tertentu dari angka tersebut. Ini membantu mengidentifikasi departemen atau kategori biaya.</p>'},
+      {type:'ex', qType:'mc', q:'In 9,723,150, what is the value of the digit 7?', qId:'Pada 9.723.150, berapa nilai digit 7?',
+        opts:['700,000','7,000','70,000','7'], ans:0,
+        exp:'Counting from right: 7 is the 6th digit → hundred-thousands place. Value = 7 × 100,000 = 700,000.',
+        expId:'Menghitung dari kanan: 7 adalah digit ke-6 → tempat ratusan ribu. Nilai = 7 × 100.000 = 700.000.'},
+      {type:'ex', qType:'mc', q:'In 5,482,000, the digit 4 represents:', qId:'Pada 5.482.000, digit 4 mewakili:',
+        opts:['400,000','4,000','40,000','4,000,000'], ans:0,
+        exp:'5,482,000: 4 is in the hundred-thousands place (5th from right). Value = 4 × 100,000 = 400,000.',
+        expId:'5.482.000: 4 berada di tempat ratusan ribu (ke-5 dari kanan). Nilai = 4 × 100.000 = 400.000.'},
+      {type:'ex', qType:'fill', q:'In 2,350,600, the value of the digit 5 is ____.', qId:'Pada 2.350.600, nilai digit 5 adalah ____.',
+        ans:'50000',
+        exp:'2,350,600: 5 is in the ten-thousands place. Value = 5 × 10,000 = 50,000.',
+        expId:'2.350.600: 5 berada di tempat puluh ribu. Nilai = 5 × 10.000 = 50.000.'},
+
+      {type:'theory', icon:'fa-arrow-down-wide-short', title:'Ordering Financial Data', titleId:'Mengurutkan Data Keuangan',
+        body:'<p>To rank numbers from <strong>greatest to least</strong>, compare digit by digit from the left. The number with the larger digit at the first point of difference ranks higher.</p><p>For <strong>least to greatest</strong>, the opposite applies.</p><p>Example: \\(2{,}500{,}000 > 2{,}050{,}000 > 2{,}005{,}000\\)</p>',
+        bodyId:'<p>Untuk mengurutkan dari terbesar ke terkecil, bandingkan digit per digit dari kiri. Angka dengan digit lebih besar pada titik perbedaan pertama menempati peringkat lebih tinggi.</p>'},
+      {type:'ex', qType:'mc', q:'Arrange from greatest to least: 2,500,000; 2,050,000; 2,005,000', qId:'Urutkan dari terbesar ke terkecil: 2.500.000; 2.050.000; 2.005.000',
+        opts:['2,500,000 > 2,050,000 > 2,005,000','2,050,000 > 2,500,000 > 2,005,000','2,005,000 > 2,050,000 > 2,500,000','2,500,000 > 2,005,000 > 2,050,000'], ans:0,
+        exp:'At hundred thousands: 5 > 0, so 2,500,000 is greatest. Between the remaining two, at ten thousands: 5 > 0, so 2,050,000 > 2,005,000.',
+        expId:'Di ratusan ribu: 5 > 0, jadi 2.500.000 terbesar. Dari dua sisanya, di puluh ribu: 5 > 0, jadi 2.050.000 > 2.005.000.'},
+      {type:'ex', qType:'mc', q:'A company has three quarters: Q1=$1,200,000, Q2=$1,020,000, Q3=$1,200,000. Which quarter earned the most?', qId:'Perusahaan memiliki tiga kuartal: Q1=$1.200.000, Q2=$1.020.000, Q3=$1.200.000. Kuartal mana yang paling banyak?',
+        opts:['Q1 and Q3 tied','Q2','Q1 only','Q3 only'], ans:0,
+        exp:'Q1=1,200,000 and Q3=1,200,000 are equal and both greater than Q2=1,020,000. So Q1 and Q3 are tied for highest.',
+        expId:'Q1=1.200.000 dan Q3=1.200.000 sama dan keduanya lebih besar dari Q2=1.020.000. Jadi Q1 dan Q3 imbang untuk tertinggi.'},
+      {type:'ex', qType:'mc', q:'Order from least to greatest: 5,600,000; 5,060,000; 5,006,000', qId:'Urutkan dari terkecil ke terbesar: 5,600,000; 5,060,000; 5,006,000',
+        opts:['5,006,000 < 5,060,000 < 5,600,000','5,600,000 < 5,060,000 < 5,006,000','5,060,000 < 5,006,000 < 5,600,000','5,006,000 < 5,600,000 < 5,060,000'], ans:0,
+        exp:'At hundred thousands: 0<6 so 5,006,000 and 5,060,000 both < 5,600,000. Between the two smaller: at ten thousands 0<6, so 5,006,000 < 5,060,000.',
+        expId:'Di ratusan ribu: 0<6 jadi 5.006.000 dan 5.060.000 keduanya < 5.600.000. Dari dua yang lebih kecil: di puluh ribu 0<6, jadi 5.006.000 < 5.060.000.'},
+      {type:'ex', qType:'mc', q:'If Report A = $3,450,000 and Report B = $3,405,000, which statement is correct?', qId:'Jika Laporan A = $3.450.000 dan Laporan B = $3.405.000, pernyataan mana yang benar?',
+        opts:['Report A > Report B','Report A < Report B','Report A = Report B'], ans:0,
+        exp:'At ten thousands: 5 > 0. So 3,450,000 > 3,405,000. Report A is greater.',
+        expId:'Di puluh ribu: 5 > 0. Jadi 3.450.000 > 3.405.000. Laporan A lebih besar.'}
+    ]
+  },
+  {
+    id:'independent', title:'Independent Practice', time:'00:45–01:00', icon:'fa-pen-ruler', type:'lesson',
+    content:[
+      {type:'theory', icon:'fa-keyboard', title:'Converting Words to Digits', titleId:'Mengubah Kata-kata ke Digit',
+        body:'<p>When financial records are written in words, you need to convert them to standard form. Process:</p><ul><li>Identify each period (millions, thousands, ones)</li><li>Write the digits for each period</li><li>Combine with proper zero padding</li></ul><p>Example: "Two million, three hundred thousand, four hundred" → \\(2{,}300{,}400\\)</p>',
+        bodyId:'<p>Ketika catatan keuangan ditulis dengan kata-kata, Anda perlu mengubahnya ke bentuk standar. Identifikasi setiap periode, tulis digit untuk setiap periode, gabungkan dengan padding nol yang tepat.</p>'},
+      {type:'ex', qType:'mc', q:'"Two million, three hundred thousand, four hundred" equals:', qId:'"Dua juta tiga ratus ribu empat ratus" sama dengan:',
+        opts:['2,300,400','2,030,400','23,000,400','2,300,040'], ans:0,
+        exp:'2 million=2,000,000 + 300 thousand=300,000 + 4 hundred=400 = 2,300,400.',
+        expId:'2 juta=2.000.000 + 300 ribu=300.000 + 4 ratus=400 = 2.300.400.'},
+      {type:'ex', qType:'fill', q:'Convert to digits: Five million, forty thousand, six hundred = ____', qId:'Ubah ke digit: Lima juta empat puluh ribu enam ratus = ____',
+        ans:'5040600',
+        exp:'5 million=5,000,000 + 40 thousand=40,000 + 6 hundred=600 = 5,040,600.',
+        expId:'5 juta=5.000.000 + 40 ribu=40.000 + 6 ratus=600 = 5.040.600.'},
+      {type:'ex', qType:'mc', q:'"Seven million, eight hundred five thousand, two" equals:', qId:'"Tujuh juta delapan ratus lima ribu dua" sama dengan:',
+        opts:['7,805,002','7,850,002','7,805,200','7,085,002'], ans:0,
+        exp:'7 million + 805 thousand + 2 = 7,000,000 + 805,000 + 2 = 7,805,002.',
+        expId:'7 juta + 805 ribu + 2 = 7.000.000 + 805.000 + 2 = 7.805.002.'},
+
+      {type:'theory', icon:'fa-list-ol', title:'Converting Expanded Form to Standard Form', titleId:'Mengubah Bentuk Uraian ke Bentuk Standar',
+        body:'<p>Add all terms of the expanded form to get the standard number. Each term tells you which digit goes in which place.</p><p>Example: \\(3{,}000{,}000 + 50{,}000 + 400 + 7\\)</p><ul><li>3 → millions place</li><li>5 → ten-thousands place</li><li>4 → hundreds place</li><li>7 → ones place</li></ul><p>Result: \\(3{,}050{,}407\\)</p>',
+        bodyId:'<p>Jumlahkan semua suku bentuk uraian untuk mendapatkan bilangan standar. Setiap suku memberi tahu digit mana yang ditempatkan di mana.</p>'},
+      {type:'ex', qType:'fill', q:'3,000,000 + 50,000 + 400 + 7 = ____', qId:'3.000.000 + 50.000 + 400 + 7 = ____',
+        ans:'3050407',
+        exp:'Millions=3, hundred-thousands=0, ten-thousands=5, thousands=0, hundreds=4, tens=0, ones=7 → 3,050,407.',
+        expId:'Jutaan=3, ratusan ribu=0, puluh ribu=5, ribuan=0, ratusan=4, puluhan=0, satuan=7 → 3.050.407.'},
+      {type:'ex', qType:'mc', q:'Which standard form matches: 6,000,000 + 200,000 + 1,000 + 50?', qId:'Bentuk standar mana yang cocok: 6.000.000 + 200.000 + 1.000 + 50?',
+        opts:['6,201,050','6,201,500','6,200,150','62,001,050'], ans:0,
+        exp:'6M + 200K + 1K + 50 = 6,000,000 + 200,000 + 1,000 + 50 = 6,201,050.',
+        expId:'6 juta + 200 ribu + 1 ribu + 50 = 6.201.050.'},
+      {type:'ex', qType:'fill', q:'9,000,000 + 40,000 + 800 = ____', qId:'9.000.000 + 40.000 + 800 = ____',
+        ans:'9040800',
+        exp:'9M + 40K + 800 = 9,000,000 + 40,000 + 800 = 9,040,800.',
+        expId:'9 juta + 40 ribu + 800 = 9.040.800.'},
+
+      {type:'theory', icon:'fa-ranking-star', title:'Standardizing Mixed Formats and Ranking', titleId:'Menstandarkan Format Campuran dan Mengurutkan',
+        body:'<p>Real business records come in various formats — words, expanded form, and digits. You must <strong>standardize them all to digits first</strong>, then compare and rank.</p><p>This is a critical skill for auditing financial reports from different departments.</p>',
+        bodyId:'<p>Catatan bisnis nyata datang dalam berbagai format — kata-kata, bentuk uraian, dan digit. Anda harus <strong>menstandarkan semuanya ke digit terlebih dahulu</strong>, lalu membandingkan dan mengurutkan.</p>'},
+      {type:'ex', qType:'mc', q:'Which is larger: "Four million, five hundred thousand" or 4,050,000?', qId:'Mana yang lebih besar: "Empat juta lima ratus ribu" atau 4.050.000?',
+        opts:['Four million, five hundred thousand','4,050,000','They are equal'], ans:0,
+        exp:'"Four million, five hundred thousand" = 4,500,000. Since 4,500,000 > 4,050,000, the word form is larger.',
+        expId:'"Empat juta lima ratus ribu" = 4.500.000. Karena 4.500.000 > 4.050.000, bentuk kata lebih besar.'},
+      {type:'ex', qType:'mc', q:'Rank from highest to lowest: A=1,250,000; B=1,025,000; C=1,502,000', qId:'Urutkan dari tertinggi ke terendah: A=1.250.000; B=1.025.000; C=1.502.000',
+        opts:['C > A > B','A > B > C','B > A > C','C > B > A'], ans:0,
+        exp:'C=1,502,000 is largest (5 hundred-thousands). A=1,250,000 next (2 hundred-thousands). B=1,025,000 smallest (0 hundred-thousands). So C > A > B.',
+        expId:'C=1.502.000 terbesar (5 ratus ribu). A=1.250.000 berikutnya (2 ratus ribu). B=1.025.000 terkecil (0 ratus ribu). Jadi C > A > B.'},
+      {type:'ex', qType:'fill', q:'1,000,000 + 900,000 + 20 = ____', qId:'1.000.000 + 900.000 + 20 = ____',
+        ans:'1900020',
+        exp:'1M + 900K + 20 = 1,000,000 + 900,000 + 20 = 1,900,020.',
+        expId:'1 juta + 900 ribu + 20 = 1.900.020.'},
+      {type:'ex', qType:'mc', q:'A record shows "Three million, two thousand, five." In digits, this is:', qId:'Catatan menunjukkan "Tiga juta dua ribu lima." Dalam digit, ini adalah:',
+        opts:['3,002,005','3,200,005','3,020,005','32,005'], ans:0,
+        exp:'3 million + 2 thousand + 5 = 3,000,000 + 2,000 + 5 = 3,002,005.',
+        expId:'3 juta + 2 ribu + 5 = 3.000.000 + 2.000 + 5 = 3.002.005.'}
+    ]
+  },
+
+  {
+    id:'assign1', title:'Assignment 1', time:'10 items', icon:'fa-clipboard-check', type:'assignment',
+    assignGroup:'Place Value Identification',
+    content:[
+      {type:'ex', qType:'mc', q:'What is the place value of the digit 5 in 5,230,000?', qId:'Berapa nilai tempat digit 5 pada 5.230.000?',
+        opts:['Millions','Hundred thousands','Thousands','Hundred millions'], ans:0,
+        exp:'5,230,000 is a 7-digit number. The 5 is the leftmost digit, in the millions place. Value = 5 × 1,000,000 = 5,000,000.',
+        expId:'5.230.000 adalah bilangan 7 digit. Digit 5 paling kiri berada di tempat jutaan. Nilai = 5 × 1.000.000 = 5.000.000.'},
+      {type:'ex', qType:'mc', q:'In 4,782,013, what is the value of the digit 8?', qId:'Pada 4.782.013, berapa nilai digit 8?',
+        opts:['80,000','8,000','800','800,000'], ans:0,
+        exp:'4,782,013: counting from right, 8 is the 5th digit → ten-thousands place. Value = 8 × 10,000 = 80,000.',
+        expId:'4.782.013: menghitung dari kanan, 8 adalah digit ke-5 → tempat puluh ribu. Nilai = 8 × 10.000 = 80.000.'},
+      {type:'ex', qType:'fill', q:'The digit in the hundred-thousands place of 9,345,678 is: ____', qId:'Digit di tempat ratusan ribu pada 9.345.678 adalah: ____',
+        ans:'3',
+        exp:'9,345,678: positions from left — 9=millions, 3=hundred-thousands, 4=ten-thousands, 5=thousands, 6=hundreds, 7=tens, 8=ones. Answer: 3.',
+        expId:'9.345.678: posisi dari kiri — 9=jutaan, 3=ratusan ribu, 4=puluh ribu, 5=ribuan, 6=ratusan, 7=puluhan, 8=satuan. Jawaban: 3.'},
+      {type:'ex', qType:'mc', q:'What is the place value of the digit 0 in 2,054,000?', qId:'Berapa nilai tempat digit 0 pada 2.054.000?',
+        opts:['Ten thousands','Hundred thousands','Thousands','Hundreds'], ans:1,
+        exp:'2,054,000: positions — 2=millions, 0=hundred-thousands, 5=ten-thousands, 4=thousands... Wait, let me recount. 2,054,000 → 2(millions), 0(hundred-thousands), 5(ten-thousands), 4(thousands), 0(hundreds), 0(tens), 0(ones). The 0 is in the hundred-thousands place.',
+        expId:'2.054.000 → 2(jutaan), 0(ratusan ribu), 5(puluh ribu), 4(ribuan), 0(ratusan), 0(puluhan), 0(satuan). Jawaban: ratusan ribu.'},
+      {type:'ex', qType:'mc', q:'In 7,621,000, which digit has the greatest value?', qId:'Pada 7.621.000, digit mana yang memiliki nilai terbesar?',
+        opts:['7','6','2','1'], ans:0,
+        exp:'The digit 7 is in the millions place (7,000,000), which is the largest value. The others: 6=600,000, 2=20,000, 1=1,000.',
+        expId:'Digit 7 berada di tempat jutaan (7.000.000), yang merupakan nilai terbesar. Lainnya: 6=600.000, 2=20.000, 1=1.000.'},
+      {type:'ex', qType:'fill', q:'The value of 2 in 2,000,000 is how many times greater than the value of 2 in 200,000? ____', qId:'Nilai 2 pada 2.000.000 berapa kali lebih besar dari nilai 2 pada 200.000? ____',
+        ans:'10',
+        exp:'2,000,000 ÷ 200,000 = 10. The 2 moved one place to the left, making it 10× greater.',
+        expId:'2.000.000 ÷ 200.000 = 10. Angka 2 bergeser satu tempat ke kiri, menjadikannya 10× lebih besar.'},
+      {type:'ex', qType:'mc', q:'Which number has the digit 4 in the millions place?', qId:'Angka mana memiliki digit 4 di tempat jutaan?',
+        opts:['4,350,000','3,450,000','5,430,000','3,540,000'], ans:0,
+        exp:'Only 4,350,000 has 4 as the leftmost digit of a 7-digit number, placing it in the millions position.',
+        expId:'Hanya 4.350.000 memiliki 4 sebagai digit paling kiri dari bilangan 7 digit, menempatkannya di posisi jutaan.'},
+      {type:'ex', qType:'fill', q:'In the number 8,090,100, how many zeros appear in the digit sequence? ____', qId:'Pada angka 8.090.100, berapa nol yang muncul dalam deret digit? ____',
+        ans:'4',
+        exp:'8,090,100 → digits: 8,0,9,0,1,0,0. There are 4 zeros.',
+        expId:'8.090.100 → digit: 8,0,9,0,1,0,0. Ada 4 nol.'},
+      {type:'ex', qType:'mc', q:'What is the value of the digit 1 in 6,001,500?', qId:'Berapa nilai digit 1 pada 6.001.500?',
+        opts:['1,000','100','10','1'], ans:0,
+        exp:'6,001,500: the 1 is in the thousands place. Value = 1 × 1,000 = 1,000.',
+        expId:'6.001.500: angka 1 berada di tempat ribuan. Nilai = 1 × 1.000 = 1.000.'},
+      {type:'ex', qType:'mc', q:'The place value of 9 in 9,876,543 is:', qId:'Nilai tempat 9 pada 9.876.543 adalah:',
+        opts:['Millions','Hundred thousands','Ten millions','Thousands'], ans:0,
+        exp:'9,876,543: 9 is the first digit of a 7-digit number → millions place.',
+        expId:'9.876.543: 9 adalah digit pertama dari bilangan 7 digit → tempat jutaan.'}
+    ]
+  },
+  {
+    id:'assign2', title:'Assignment 2', time:'10 items', icon:'fa-clipboard-check', type:'assignment',
+    assignGroup:'Words & Expanded Form',
+    content:[
+      {type:'ex', qType:'mc', q:'Write 4,502,080 in words:', qId:'Tulis 4.502.080 dengan kata-kata:',
+        opts:['Four million, five hundred two thousand, eighty','Four million, five hundred twenty thousand, eighty','Four million, five hundred two thousand, eight','Four million, fifty-two thousand, eighty'], ans:0,
+        exp:'4=million, 502=five hundred two thousand, 080=eighty. Combined: "Four million, five hundred two thousand, eighty."',
+        expId:'4=juta, 502=lima ratus dua ribu, 080=delapan puluh. Gabungan: "Four million, five hundred two thousand, eighty."'},
+      {type:'ex', qType:'mc', q:'Which expanded form is correct for 2,040,600?', qId:'Bentuk uraian mana yang benar untuk 2.040.600?',
+        opts:['2,000,000 + 40,000 + 600','2,000,000 + 4,000 + 600','2,000,000 + 40,000 + 60','200,000 + 40,000 + 600'], ans:0,
+        exp:'2→2,000,000 (millions), 0→skip, 4→40,000 (ten-thousands), 0→skip, 6→600 (hundreds), 0→skip, 0→skip.',
+        expId:'2→2.000.000 (jutaan), 0→lewati, 4→40.000 (puluh ribu), 0→lewati, 6→600 (ratusan), 0→lewati, 0→lewati.'},
+      {type:'ex', qType:'fill', q:'"Six million, seven hundred thousand, three hundred" in digits = ____', qId:'"Enam juta tujuh ratus ribu tiga ratus" dalam digit = ____',
+        ans:'6700300',
+        exp:'6 million + 700 thousand + 300 = 6,000,000 + 700,000 + 300 = 6,700,300.',
+        expId:'6 juta + 700 ribu + 300 = 6.000.000 + 700.000 + 300 = 6.700.300.'},
+      {type:'ex', qType:'fill', q:'5,000,000 + 300,000 + 2,000 + 10 = ____', qId:'5.000.000 + 300.000 + 2.000 + 10 = ____',
+        ans:'5302010',
+        exp:'Millions=5, hundred-thousands=3, thousands=2, tens=1, all others=0 → 5,302,010.',
+        expId:'Jutaan=5, ratusan ribu=3, ribuan=2, puluhan=1, lainnya=0 → 5.302.010.'},
+      {type:'ex', qType:'mc', q:'In words, 1,005,020 is:', qId:'Dalam kata-kata, 1.005.020 adalah:',
+        opts:['One million, five thousand, twenty','One million, fifty thousand, twenty','One million, five hundred thousand, twenty','One million, five thousand, two hundred'], ans:0,
+        exp:'1=million, 005=five thousand, 020=twenty → "One million, five thousand, twenty."',
+        expId:'1=juta, 005=lima ribu, 020=dua puluh → "One million, five thousand, twenty."'},
+      {type:'ex', qType:'mc', q:'Which expanded form is correct for 7,080,500?', qId:'Bentuk uraian mana yang benar untuk 7.080.500?',
+        opts:['7,000,000 + 80,000 + 500','7,000,000 + 8,000 + 500','7,000,000 + 800,000 + 500','700,000 + 80,000 + 500'], ans:0,
+        exp:'7→7,000,000, 0→skip, 8→80,000 (ten-thousands), 0→skip, 5→500 (hundreds), 0→skip, 0→skip.',
+        expId:'7→7.000.000, 0→lewati, 8→80.000 (puluh ribu), 0→lewati, 5→500 (ratusan), 0→lewati, 0→lewati.'},
+      {type:'ex', qType:'mc', q:'3,000,000 + 4,000 + 5 equals which number?', qId:'3.000.000 + 4.000 + 5 sama dengan angka berapa?',
+        opts:['3,004,005','3,400,005','3,040,005','3,004,050'], ans:0,
+        exp:'3,000,000 + 4,000 + 5 = 3,004,005. The zeros in hundred-thousands and ten-thousands keep 3 in the millions place.',
+        expId:'3.000.000 + 4.000 + 5 = 3.004.005. Nol di ratusan ribu dan puluh ribu menjaga 3 di tempat jutaan.'},
+      {type:'ex', qType:'fill', q:'"Eight million, forty thousand" in digits = ____', qId:'"Delapan juta empat puluh ribu" dalam digit = ____',
+        ans:'8040000',
+        exp:'8 million + 40 thousand = 8,000,000 + 40,000 = 8,040,000.',
+        expId:'8 juta + 40 ribu = 8.000.000 + 40.000 = 8.040.000.'},
+      {type:'ex', qType:'fill', q:'In the equation 5,600,000 = 5,000,000 + ____, the missing term is ____', qId:'Pada persamaan 5.600.000 = 5.000.000 + ____, suku yang hilang adalah ____',
+        ans:'600000',
+        exp:'5,600,000 − 5,000,000 = 600,000. The missing term is 600,000 (six hundred thousand).',
+        expId:'5.600.000 − 5.000.000 = 600.000. Suku yang hilang adalah 600.000 (enam ratus ribu).'},
+      {type:'ex', qType:'mc', q:'Which number equals "Two million, two thousand, two"?', qId:'Angka mana yang sama dengan "Dua juta dua ribu dua"?',
+        opts:['2,002,002','2,200,002','2,020,002','2,002,200'], ans:0,
+        exp:'2 million + 2 thousand + 2 = 2,000,000 + 2,000 + 2 = 2,002,002.',
+        expId:'2 juta + 2 ribu + 2 = 2.000.000 + 2.000 + 2 = 2.002.002.'}
+    ]
+  },
+  {
+    id:'assign3', title:'Assignment 3', time:'10 items', icon:'fa-clipboard-check', type:'assignment',
+    assignGroup:'Comparing & Ordering',
+    content:[
+      {type:'ex', qType:'mc', q:'Compare using >, <, or =: 5,670,000 ___ 5,607,000', qId:'Bandingkan menggunakan >, <, atau =: 5.670.000 ___ 5.607.000',
+        opts:['>','<','='], ans:0,
+        exp:'At ten-thousands: 7 > 0. So 5,670,000 > 5,607,000.',
+        expId:'Di puluh ribu: 7 > 0. Jadi 5.670.000 > 5.607.000.'},
+      {type:'ex', qType:'mc', q:'Which is greater: 8,900,000 or 8,090,000?', qId:'Mana yang lebih besar: 8.900.000 atau 8.090.000?',
+        opts:['8,900,000','8,090,000','They are equal'], ans:0,
+        exp:'At hundred-thousands: 9 > 0. So 8,900,000 > 8,090,000.',
+        expId:'Di ratusan ribu: 9 > 0. Jadi 8.900.000 > 8.090.000.'},
+      {type:'ex', qType:'mc', q:'Arrange from greatest to least: 3,400,000; 3,040,000; 3,004,000', qId:'Urutkan dari terbesar ke terkecil: 3.400.000; 3.040.000; 3.004.000',
+        opts:['3,400,000 > 3,040,000 > 3,004,000','3,004,000 > 3,040,000 > 3,400,000','3,040,000 > 3,400,000 > 3,004,000','3,400,000 > 3,004,000 > 3,040,000'], ans:0,
+        exp:'At hundred-thousands: 4>0, so 3,400,000 is greatest. Between remaining: at ten-thousands 4>0, so 3,040,000 > 3,004,000.',
+        expId:'Di ratusan ribu: 4>0, jadi 3.400.000 terbesar. Dari sisanya: di puluh ribu 4>0, jadi 3.040.000 > 3.004.000.'},
+      {type:'ex', qType:'mc', q:'Compare: 1,230,000 ___ 1,203,000', qId:'Bandingkan: 1.230.000 ___ 1.203.000',
+        opts:['>','<','='], ans:0,
+        exp:'Millions: both 1. Hundred-thousands: both 2. At ten-thousands: 3 > 0. So 1,230,000 > 1,203,000.',
+		expId:'Jutaan: keduanya 1. Ratusan ribu: keduanya 2. Di puluh ribu: 3 > 0. Jadi 1.230.000 > 1.203.000.'},
+      {type:'ex', qType:'mc', q:'Which is the smallest: 7,700,000; 7,070,000; 7,007,000?', qId:'Mana yang terkecil: 7.700.000; 7.070.000; 7.007.000?',
+        opts:['7,007,000','7,070,000','7,700,000'], ans:0,
+        exp:'At hundred-thousands: 7>0, so 7,700,000 is largest. Between remaining: at ten-thousands 7>0, so 7,070,000 > 7,007,000. Smallest = 7,007,000.',
+        expId:'Di ratusan ribu: 7>0, jadi 7.700.000 terbesar. Dari sisanya: di puluh ribu 7>0, jadi 7.070.000 > 7.007.000. Terkecil = 7.007.000.'},
+      {type:'ex', qType:'mc', q:'Order from least to greatest: 6,100,000; 6,010,000; 6,001,000', qId:'Urutkan dari terkecil ke terbesar: 6.100.000; 6.010.000; 6.001.000',
+        opts:['6,001,000 < 6,010,000 < 6,100,000','6,100,000 < 6,010,000 < 6,001,000','6,010,000 < 6,001,000 < 6,100,000','6,001,000 < 6,100,000 < 6,010,000'], ans:0,
+        exp:'Compare digit by digit: 6,001,000 has the smallest sub-digits (001), then 6,010,000 (010), then 6,100,000 (100).',
+        expId:'Bandingkan digit per digit: 6.001.000 memiliki sub-digit terkecil (001), lalu 6.010.000 (010), lalu 6.100.000 (100).'},
+      {type:'ex', qType:'mc', q:'If A=4,500,000, B=4,050,000, C=4,005,000, which is the median (middle value)?', qId:'Jika A=4.500.000, B=4.050.000, C=4.005.000, mana yang merupakan median?',
+        opts:['B (4,050,000)','A (4,500,000)','C (4,005,000)'], ans:0,
+        exp:'Ordered: 4,005,000 < 4,050,000 < 4,500,000. The middle value is B = 4,050,000.',
+        expId:'Urutan: 4.005.000 < 4.050.000 < 4.500.000. Nilai tengah adalah B = 4.050.000.'},
+      {type:'ex', qType:'mc', q:'Compare: 9,999,999 ___ 10,000,000', qId:'Bandingkan: 9.999.999 ___ 10.000.000',
+        opts:['<','>','='], ans:0,
+        exp:'9,999,999 has 7 digits starting with 9. 10,000,000 has 8 digits. Any 8-digit number is larger than any 7-digit number. So 9,999,999 < 10,000,000.',
+        expId:'9.999.999 memiliki 7 digit dimulai dengan 9. 10.000.000 memiliki 8 digit. Bilangan 8 digit selalu lebih besar dari 7 digit.'},
+      {type:'ex', qType:'mc', q:'Which comparison is NOT correct?', qId:'Perbandingan mana yang TIDAK benar?',
+        opts:['5,006,000 > 5,060,000','5,060,000 > 5,006,000','5,600,000 > 5,060,000','5,600,000 > 5,006,000'], ans:0,
+        exp:'5,006,000 < 5,060,000 (at ten-thousands: 0 < 6). So "5,006,000 > 5,060,000" is false — this is the NOT correct one.',
+        expId:'5.006.000 < 5.060.000 (di puluh ribu: 0 < 6). Jadi "5.006.000 > 5.060.000" adalah salah — ini yang TIDAK benar.'},
+      {type:'ex', qType:'mc', q:'Arrange 2,200,000; 2,020,000; 2,002,000 from least to greatest:', qId:'Urutkan 2.200.000; 2.020.000; 2.002.000 dari terkecil ke terbesar:',
+        opts:['2,002,000 < 2,020,000 < 2,200,000','2,200,000 < 2,020,000 < 2,002,000','2,020,000 < 2,002,000 < 2,200,000','2,002,000 < 2,200,000 < 2,020,000'], ans:0,
+        exp:'Sub-digits: 002 < 020 < 200. So 2,002,000 < 2,020,000 < 2,200,000.',
+        expId:'Sub-digit: 002 < 020 < 200. Jadi 2.002.000 < 2.020.000 < 2.200.000.'}
+    ]
+  },
+  {
+    id:'assign4', title:'Assignment 4', time:'10 items', icon:'fa-clipboard-check', type:'assignment',
+    assignGroup:'Business Context Applications',
+    content:[
+      {type:'ex', qType:'mc', q:'A company\'s revenue is $5,230,000. The digit 5 represents:', qId:'Pendapatan perusahaan $5.230.000. Digit 5 mewakili:',
+        opts:['$5,000,000','$500,000','$50,000','$5'], ans:0,
+        exp:'5 is in the millions place: 5 × 1,000,000 = 5,000,000.',
+        expId:'5 berada di tempat jutaan: 5 × 1.000.000 = 5.000.000.'},
+      {type:'ex', qType:'mc', q:'Investment A = $3,450,000, Investment B = $3,405,000. The difference is:', qId:'Investasi A = $3.450.000, Investasi B = $3.405.000. Selisihnya adalah:',
+        opts:['$45,000','$4,500','$450,000','$450'], ans:0,
+        exp:'3,450,000 − 3,405,000 = 45,000. The difference is in the ten-thousands place (5 vs 0).',
+        expId:'3.450.000 − 3.405.000 = 45.000. Perbedaannya ada di tempat puluh ribu (5 vs 0).'},
+      {type:'ex', qType:'fill', q:'If you increase the digit in the ten-thousands place of 4,567,000 by 3, the new number is: ____', qId:'Jika Anda menaikkan digit di tempat puluh ribu pada 4.567.000 sebesar 3, angka baru adalah: ____',
+        ans:'4597000',
+        exp:'In 4,567,000, the ten-thousands digit is 6. Increasing by 3: 6+3=9. New number: 4,597,000.',
+        expId:'Pada 4.567.000, digit puluh ribu adalah 6. Naikkan 3: 6+3=9. Angka baru: 4.597.000.'},
+      {type:'ex', qType:'mc', q:'A budget of $2,005,000 is written in expanded form as:', qId:'Anggaran $2.005.000 ditulis dalam bentuk uraian sebagai:',
+        opts:['2,000,000 + 5,000','2,000,000 + 50,000','200,000 + 5,000','2,000,000 + 5,000,000'], ans:0,
+        exp:'2,005,000 = 2,000,000 (millions) + 5,000 (thousands) + 0 for all other places.',
+        expId:'2.005.000 = 2.000.000 (jutaan) + 5.000 (ribuan) + 0 untuk semua tempat lain.'},
+      {type:'ex', qType:'fill', q:'Two companies report: X=$7,800,000, Y=$7,080,000. Company X earns more by: $____', qId:'Dua perusahaan melaporkan: X=$7.800.000, Y=$7.080.000. Perusahaan X lebih banyak menghasilkan: $____',
+        ans:'720000',
+        exp:'7,800,000 − 7,080,000 = 720,000.',
+        expId:'7.800.000 − 7.080.000 = 720.000.'},
+      {type:'ex', qType:'fill', q:'A 7-digit number where the millions digit is 9, the thousands digit is 4, and all other digits are 0: ____', qId:'Bilangan 7 digit di mana digit jutaan adalah 9, digit ribuan adalah 4, dan semua digit lainnya 0: ____',
+        ans:'9004000',
+        exp:'9 in millions, 4 in thousands, zeros elsewhere: 9,004,000.',
+        expId:'9 di jutaan, 4 di ribuan, nol di tempat lain: 9.004.000.'},
+      {type:'ex', qType:'mc', q:'Misreading $200,000 as $20,000 causes a loss of:', qId:'Salah membaca $200.000 sebagai $20.000 menyebabkan kerugian:',
+        opts:['$180,000','$20,000','$200,000','$2,000'], ans:0,
+        exp:'200,000 − 20,000 = 180,000. You underpaid by $180,000 — a 10× place value error.',
+        expId:'200.000 − 20.000 = 180.000. Anda kurang bayar $180.000 — kesalahan nilai tempat 10×.'},
+      {type:'ex', qType:'mc', q:'Revenue: $4,502,080. The digit 5 represents:', qId:'Pendapatan: $4.502.080. Digit 5 mewakili:',
+        opts:['$500,000','$5,000','$50,000','$5,000,000'], ans:0,
+        exp:'4,502,080: 5 is in the hundred-thousands place. Value = 5 × 100,000 = 500,000.',
+        expId:'4.502.080: 5 berada di tempat ratusan ribu. Nilai = 5 × 100.000 = 500.000.'},
+      {type:'ex', qType:'fill', q:'If the hundred-thousands digit of 1,234,567 changes from 2 to 5, the new number is: ____', qId:'Jika digit ratusan ribu pada 1.234.567 berubah dari 2 menjadi 5, angka baru adalah: ____',
+        ans:'1534567',
+        exp:'Replace the 2 (hundred-thousands) with 5: 1,534,567. Difference: 500,000 − 200,000 = 300,000.',
+        expId:'Ganti 2 (ratusan ribu) dengan 5: 1.534.567. Selisih: 500.000 − 200.000 = 300.000.'},
+      {type:'ex', qType:'fill', q:'A contract states "Five million, three hundred thousand." In digits: ____', qId:'Kontrak menyatakan "Lima juta tiga ratus ribu." Dalam digit: ____',
+        ans:'5300000',
+        exp:'5 million + 300 thousand = 5,000,000 + 300,000 = 5,300,000.',
+        expId:'5 juta + 300 ribu = 5.000.000 + 300.000 = 5.300.000.'}
+    ]
+  },
+  {
+    id:'assign5', title:'Assignment 5', time:'10 items', icon:'fa-clipboard-check', type:'assignment',
+    assignGroup:'Mixed Challenge',
+    content:[
+      {type:'ex', qType:'fill', q:'What is 20% of $3,000,000? $____', qId:'Berapa 20% dari $3.000.000? $____',
+        ans:'600000',
+        exp:'0.20 × 3,000,000 = 600,000. Tip: 10% = 300,000, so 20% = 600,000.',
+        expId:'0,20 × 3.000.000 = 600.000. Tip: 10% = 300.000, jadi 20% = 600.000.'},
+      {type:'ex', qType:'mc', q:'The value of the digit 6 in 6,789,012 is:', qId:'Nilai digit 6 pada 6.789.012 adalah:',
+        opts:['6,000,000','600,000','60,000','6'], ans:0,
+        exp:'6 is in the millions place: 6 × 1,000,000 = 6,000,000.',
+        expId:'6 berada di tempat jutaan: 6 × 1.000.000 = 6.000.000.'},
+      {type:'ex', qType:'mc', q:'Write 1,004,007 in expanded form:', qId:'Tulis 1.004.007 dalam bentuk uraian:',
+        opts:['1,000,000 + 4,000 + 7','1,000,000 + 40,000 + 7','1,000,000 + 4,000 + 70','100,000 + 4,000 + 7'], ans:0,
+        exp:'1→1,000,000 (millions), 0→skip, 0→skip, 4→4,000 (thousands), 0→skip, 0→skip, 7→7 (ones).',
+        expId:'1→1.000.000 (jutaan), 0→lewati, 0→lewati, 4→4.000 (ribuan), 0→lewati, 0→lewati, 7→7 (satuan).'},
+      {type:'ex', qType:'mc', q:'Compare: 8,888,888 ___ 8,888,880', qId:'Bandingkan: 8.888.888 ___ 8.888.880',
+        opts:['>','<','='], ans:0,
+        exp:'All digits match until the ones place: 8 > 0. So 8,888,888 > 8,888,880.',
+        expId:'Semua digit cocok sampai satuan: 8 > 0. Jadi 8.888.888 > 8.888.880.'},
+      {type:'ex', qType:'mc', q:'A company grows from $2,000,000 to $2,500,000. The growth amount is:', qId:'Perusahaan tumbuh dari $2.000.000 ke $2.500.000. Jumlah pertumbuhannya adalah:',
+        opts:['$500,000','$50,000','$5,000','$5,000,000'], ans:0,
+        exp:'2,500,000 − 2,000,000 = 500,000. The company grew by $500,000.',
+        expId:'2.500.000 − 2.000.000 = 500.000. Perusahaan tumbuh $500.000.'},
+      {type:'ex', qType:'mc', q:'Arrange from greatest to least: 4,100,000; 4,010,000; 4,001,000', qId:'Urutkan dari terbesar ke terkecil: 4.100.000; 4.010.000; 4.001.000',
+        opts:['4,100,000 > 4,010,000 > 4,001,000','4,001,000 > 4,010,000 > 4,100,000','4,010,000 > 4,100,000 > 4,001,000','4,100,000 > 4,001,000 > 4,010,000'], ans:0,
+        exp:'Sub-digits: 100 > 010 > 001. So 4,100,000 > 4,010,000 > 4,001,000.',
+        expId:'Sub-digit: 100 > 010 > 001. Jadi 4.100.000 > 4.010.000 > 4.001.000.'},
+      {type:'ex', qType:'fill', q:'If you decrease the millions digit of 9,345,000 by 4, the new number is: ____', qId:'Jika Anda menurunkan digit jutaan pada 9.345.000 sebesar 4, angka baru adalah: ____',
+        ans:'5345000',
+        exp:'Millions digit: 9 − 4 = 5. New number: 5,345,000.',
+        expId:'Digit jutaan: 9 − 4 = 5. Angka baru: 5.345.000.'},
+      {type:'ex', qType:'fill', q:'"Three million, three hundred thousand, three hundred" in digits = ____', qId:'"Tiga juta tiga ratus ribu tiga ratus" dalam digit = ____',
+        ans:'3300300',
+        exp:'3,000,000 + 300,000 + 300 = 3,300,300.',
+        expId:'3.000.000 + 300.000 + 300 = 3.300.300.'},
+      {type:'ex', qType:'mc', q:'The difference between 7,000,000 and 700,000 is:', qId:'Selisih antara 7.000.000 dan 700.000 adalah:',
+        opts:['6,300,000','630,000','63,000','600,000'], ans:0,
+        exp:'7,000,000 − 700,000 = 6,300,000.',
+        expId:'7.000.000 − 700.000 = 6.300.000.'},
+      {type:'ex', qType:'fill', q:'A 7-digit number starts with 1 and ends with 9, with all other digits 0. The number is: ____', qId:'Bilangan 7 digit dimulai dengan 1 dan diakhiri dengan 9, semua digit lainnya 0. Angkanya: ____',
+        ans:'1000009',
+        exp:'1 in millions, 9 in ones, zeros in between: 1,000,009.',
+        expId:'1 di jutaan, 9 di satuan, nol di antaranya: 1.000.009.'}
+    ]
+  },
+
+  {
+    id:'consolidation', title:'Consolidation & Reflection', time:'01:00–01:05', icon:'fa-flag-checkered', type:'consolidation',
+    content:[]
+  }
+];
+
+// ===================== STATE =====================
+let state = {
+  currentSection: 'home',
+  answers: {},
+  progress: {}
+};
+
+function loadState(){
+  try{
+    const s = localStorage.getItem('pvln_state');
+    if(s) state = JSON.parse(s);
+  }catch(e){}
+}
+function saveState(){
+  try{ localStorage.setItem('pvln_state', JSON.stringify(state)); }catch(e){}
+}
+function resetAllState(){
+  if(!confirm('Reset all progress? This cannot be undone.')) return;
+  state = { currentSection:'home', answers:{}, progress:{} };
+  saveState();
+  renderSidebar();
+  navigateTo('home');
+  showToast('All progress reset','error');
+}
+
+// ===================== UTILS =====================
+function shuffleArray(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function normalizeAnswer(s){
+  return String(s).replace(/[,\s\$]/g,'').toLowerCase().trim();
+}
+function showToast(msg, type='success'){
+  const t=document.createElement('div');
+  t.className='toast '+type;
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2500);
+}
+function renderMath(el){
+  if(typeof renderMathInElement==='function'){
+    renderMathInElement(el,{
+      delimiters:[
+        {left:'\\[',right:'\\]',display:true},
+        {left:'\\(',right:'\\)',display:false}
+      ],
+      throwOnError:false
+    });
+  }
+}
+function getSvg(name){
+  const svgs = {
+    business: `<svg viewBox="0 0 200 120" width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="20" width="80" height="90" rx="4" fill="#1f2b3d" stroke="#f59e0b" stroke-width="1.5"/>
+      <rect x="70" y="30" width="20" height="15" rx="2" fill="#f59e0b" opacity="0.7"/>
+      <rect x="95" y="30" width="20" height="15" rx="2" fill="#f59e0b" opacity="0.5"/>
+      <rect x="120" y="30" width="12" height="15" rx="2" fill="#f59e0b" opacity="0.3"/>
+      <rect x="70" y="52" width="20" height="15" rx="2" fill="#14b8a6" opacity="0.5"/>
+      <rect x="95" y="52" width="20" height="15" rx="2" fill="#14b8a6" opacity="0.7"/>
+      <rect x="120" y="52" width="12" height="15" rx="2" fill="#14b8a6" opacity="0.4"/>
+      <rect x="70" y="74" width="20" height="15" rx="2" fill="#64748b" opacity="0.4"/>
+      <rect x="95" y="74" width="20" height="15" rx="2" fill="#64748b" opacity="0.3"/>
+      <rect x="120" y="74" width="12" height="15" rx="2" fill="#64748b" opacity="0.5"/>
+      <text x="100" y="115" text-anchor="middle" fill="#64748b" font-size="8" font-family="DM Sans">$ MILLIONS</text>
+    </svg>`,
+    placevalue: `<svg viewBox="0 0 280 70" width="280" height="70" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="10" width="36" height="40" rx="4" fill="#1f2b3d" stroke="#f59e0b" stroke-width="1"/>
+      <text x="18" y="35" text-anchor="middle" fill="#f59e0b" font-size="16" font-weight="700" font-family="Space Grotesk">5</text>
+      <text x="18" y="60" text-anchor="middle" fill="#64748b" font-size="6" font-family="DM Sans">HTh</text>
+      <rect x="40" y="10" width="36" height="40" rx="4" fill="#1f2b3d" stroke="#14b8a6" stroke-width="1"/>
+      <text x="58" y="35" text-anchor="middle" fill="#14b8a6" font-size="16" font-weight="700" font-family="Space Grotesk">4</text>
+      <text x="58" y="60" text-anchor="middle" fill="#64748b" font-size="6" font-family="DM Sans">TTh</text>
+      <rect x="80" y="10" width="36" height="40" rx="4" fill="#1f2b3d" stroke="#f59e0b" stroke-width="1"/>
+      <text x="98" y="35" text-anchor="middle" fill="#f59e0b" font-size="16" font-weight="700" font-family="Space Grotesk">3</text>
+      <text x="98" y="60" text-anchor="middle" fill="#64748b" font-size="6" font-family="DM Sans">Th</text>
+      <text x="122" y="35" text-anchor="middle" fill="#64748b" font-size="14" font-family="DM Sans">,</text>
+      <rect x="128" y="10" width="36" height="40" rx="4" fill="#1f2b3d" stroke="#14b8a6" stroke-width="1"/>
+      <text x="146" y="35" text-anchor="middle" fill="#14b8a6" font-size="16" font-weight="700" font-family="Space Grotesk">2</text>
+      <text x="146" y="60" text-anchor="middle" fill="#64748b" font-size="6" font-family="DM Sans">H</text>
+      <rect x="168" y="10" width="36" height="40" rx="4" fill="#1f2b3d" stroke="#f59e0b" stroke-width="1"/>
+      <text x="186" y="35" text-anchor="middle" fill="#f59e0b" font-size="16" font-weight="700" font-family="Space Grotesk">1</text>
+      <text x="186" y="60" text-anchor="middle" fill="#64748b" font-size="6" font-family="DM Sans">T</text>
+      <rect x="208" y="10" width="36" height="40" rx="4" fill="#1f2b3d" stroke="#14b8a6" stroke-width="1"/>
+      <text x="226" y="35" text-anchor="middle" fill="#14b8a6" font-size="16" font-weight="700" font-family="Space Grotesk">0</text>
+      <text x="226" y="60" text-anchor="middle" fill="#64748b" font-size="6" font-family="DM Sans">O</text>
+    </svg>`,
+    zeros: `<svg viewBox="0 0 200 80" width="200" height="80" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="30" fill="#f59e0b" font-size="14" font-weight="700" font-family="Space Grotesk">8,405,020</text>
+      <line x1="10" y1="38" x2="170" y2="38" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="10" y="55" fill="#ef4444" font-size="11" font-family="DM Sans">Without zeros → 8452</text>
+      <text x="10" y="72" fill="#64748b" font-size="9" font-family="DM Sans">Zeros hold places for other digits!</text>
+      <circle cx="185" cy="25" r="12" fill="none" stroke="#ef4444" stroke-width="2"/>
+      <line x1="177" y1="17" x2="193" y2="33" stroke="#ef4444" stroke-width="2"/>
+    </svg>`
+  };
+  return svgs[name]||'';
+}
+
+// ===================== PROGRESS HELPERS =====================
+function getSectionExCount(sec){
+  if(!sec.content) return 0;
+  return sec.content.filter(c=>c.type==='ex').length;
+}
+function getSectionAnswered(secId){
+  const sec = SECTIONS.find(s=>s.id===secId);
+  if(!sec || !sec.content) return 0;   // ← tambahkan cek content
+  let count=0;
+  sec.content.forEach((c,i)=>{
+    const key=secId+'_'+i;
+    if(state.answers[key]!==undefined) count++;
+  });
+  return count;
+}
+function getTotalExCount(){
+  return SECTIONS.filter(s=>s.type==='lesson'||s.type==='assignment').reduce((sum,s)=>sum+getSectionExCount(s),0);
+}
+function getTotalAnswered(){
+  return SECTIONS.filter(s=>s.type==='lesson'||s.type==='assignment').reduce((sum,s)=>sum+getSectionAnswered(s.id),0);
+}
+function isSectionComplete(secId){
+  const sec = SECTIONS.find(s=>s.id===secId);
+  return sec && getSectionAnswered(secId)===getSectionExCount(sec) && getSectionExCount(sec)>0;
+}
+
+// ===================== RENDER SIDEBAR =====================
+function renderSidebar(){
+  const nav = document.querySelector('.sidebar-nav') || document.createElement('div');
+  nav.className='sidebar-nav';
+  nav.innerHTML='';
+  SECTIONS.forEach(sec=>{
+    const item = document.createElement('div');
+    item.className='nav-item'+(state.currentSection===sec.id?' active':'')+(isSectionComplete(sec.id)?' completed':'');
+    item.onclick=()=>navigateTo(sec.id);
+    const exCount = getSectionExCount(sec);
+    const answered = getSectionAnswered(sec.id);
+    const pct = exCount>0?Math.round(answered/exCount*100):0;
+    item.innerHTML=`
+      <div class="nav-icon"><i class="fas ${sec.icon}"></i></div>
+      <div class="nav-text">
+        <div class="nav-title">${sec.title}</div>
+        ${sec.time?'<div class="nav-time">'+sec.time+'</div>':''}
+      </div>
+      ${exCount>0?'<div class="nav-prog"><div class="nav-prog-fill" style="width:'+pct+'%"></div></div>':''}
+    `;
+    nav.appendChild(item);
+  });
+  const sb = document.getElementById('sidebar');
+  if(!sb.querySelector('.sidebar-nav')){
+    sb.innerHTML=`
+      <div class="sidebar-header">
+        <h1>MATH TUTORING by Deni</h1>
+        <div class="topic">
+          <b>Place Value & Large Numbers</b>
+          (Konteks: Bisnis)
+        </div>
+      </div>
+    `;
+    sb.appendChild(nav);
+    const ft=document.createElement('div');
+    ft.className='sidebar-footer';
+    ft.innerHTML='<button class="btn-reset-all" onclick="resetAllState()"><i class="fas fa-rotate-left"></i> Reset All Progress</button>';
+    sb.appendChild(ft);
+  }
+  // topbar
+  const totalEx=getTotalExCount(), totalAns=getTotalAnswered();
+  const pct=totalEx>0?Math.round(totalAns/totalEx*100):0;
+  document.getElementById('topbarProgFill').style.width=pct+'%';
+  document.getElementById('topbarPct').textContent=pct+'%';
+}
+
+// ===================== NAVIGATE =====================
+function navigateTo(secId){
+  state.currentSection=secId;
+  saveState();
+  renderSidebar();
+  const mc=document.getElementById('main-content');
+  mc.scrollTop=0;
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(!sec) return;
+  if(sec.type==='home') renderHome(mc,sec);
+  else if(sec.type==='consolidation') renderConsolidation(mc,sec);
+  else renderLesson(mc,sec);
+  // close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+// ===================== RENDER HOME =====================
+function renderHome(mc){
+  document.getElementById('topbarTitle').textContent='Home';
+  mc.innerHTML=`
+  <div class="content-section">
+    <div class="home-section">
+      <div class="home-logo"><i class="fas fa-building-columns"></i></div>
+      <h2>MATH TUTORING by Deni</h2>
+      <div class="home-sub">Interactive Lesson Material</div>
+      <div class="home-topic">Place Value & Large Numbers</div>
+      <div class="home-topic-id">(Nilai Tempat & Bilangan Besar)</div>
+      <div class="home-topic" style="font-size:14px;color:var(--accent);margin-bottom:4px;">Context: Business</div>
+      <div class="home-topic-id">(Konteks: Bisnis)</div>
+      <div class="home-rules">
+        <h4><i class="fas fa-clipboard-list"></i> Class Guidelines</h4>
+        <ol>
+          <li><i class="fas fa-comments"></i> Take turns speaking during the session <br><span style="color:var(--muted);font-size:11px">(Berbicara secara bergantian)</span></li>
+          <li><i class="fas fa-hand"></i> Ask permission before leaving the class <br><span style="color:var(--muted);font-size:11px">(Meminta izin jika ingin meninggalkan kelas)</span></li>
+          <li><i class="fas fa-video"></i> Turn on camera and microphone when needed <br><span style="color:var(--muted);font-size:11px">(Menyalakan kamera dan mikrofon jika diperlukan)</span></li>
+          <li><i class="fas fa-pencil"></i> Complete all exercises before moving on <br><span style="color:var(--muted);font-size:11px">(Selesaikan semua latihan sebelum melanjutkan)</span></li>
+        </ol>
+      </div>
+      <button class="btn-start" onclick="navigateTo('spiral')"><i class="fas fa-rocket"></i> &nbsp;Start Lesson</button>
+    </div>
+  </div>`;
+  renderMath(mc);
+}
+
+// ===================== RENDER LESSON =====================
+function renderLesson(mc, sec){
+  document.getElementById('topbarTitle').textContent=sec.title;
+  let html='<div class="content-section">';
+  html+=`<div class="section-header">
+    <div class="sec-icon"><i class="fas ${sec.icon}"></i></div>
+    <h2>${sec.title}</h2>
+    ${sec.time?'<div class="sec-time"><i class="far fa-clock"></i> '+sec.time+'</div>':''}
+  </div>`;
+  let exNum=0;
+  sec.content.forEach((item,idx)=>{
+    if(item.type==='theory'){
+      html+=`<div class="theory-card" style="animation-delay:${idx*0.05}s">
+        <div class="th-icon"><i class="fas ${item.icon||'fa-lightbulb'}"></i></div>
+        <h3>${item.title}</h3>
+        <div class="th-id">${item.titleId||''}</div>
+        <div class="th-body">${item.body}</div>
+        ${item.bodyId?'<div class="th-body-id">'+item.bodyId+'</div>':''}
+        ${item.svg?'<div class="illust-svg">'+getSvg(item.svg)+'</div>':''}
+      </div>`;
+    } else {
+      exNum++;
+      const key=sec.id+'_'+idx;
+      const answered=state.answers[key]!==undefined;
+      html+=renderExerciseHTML(sec.id,idx,item,exNum,key,answered);
+    }
+  });
+  html+=renderNavButtons(sec.id);
+  html+='</div>';
+  mc.innerHTML=html;
+  renderMath(mc);
+  bindExerciseEvents(mc,sec);
+}
+
+function renderExerciseHTML(secId,idx,item,exNum,key,answered){
+  const userAns=state.answers[key];
+  const isCorrect=answered && userAns?.correct;
+  const isWrong=answered && !userAns?.correct;
+  let h=`<div class="exercise-card${isCorrect?' correct':''}${isWrong?' incorrect':''}" id="ex_${key}" data-key="${key}" data-sec="${secId}" data-idx="${idx}">`;
+  h+=`<div class="ex-card-header">
+    <div class="ex-num">${exNum}</div>
+    <div class="ex-label">Exercise</div>
+  </div>`;
+  h+=`<div class="ex-question">${item.q}</div>`;
+  if(item.qId) h+=`<div class="ex-question-id">${item.qId}</div>`;
+
+  // shuffle options for MC
+  let shuffledOpts=null, shuffledMap=null;
+  if(item.qType==='mc'){
+    const origOpts=item.opts.map((o,i)=>({text:o,origIdx:i}));
+    // use seeded shuffle based on key for consistency
+    const seed=[...key].reduce((a,c)=>a+c.charCodeAt(0),0);
+    const seeded=[...origOpts];
+    for(let i=seeded.length-1;i>0;i--){
+      const j=(seed+i*7)%((i+1));
+      [seeded[i],seeded[j]]=[seeded[j],seeded[i]];
+    }
+    shuffledOpts=seeded.map(o=>o.text);
+    shuffledMap=seeded.map(o=>o.origIdx);
+  }
+
+  // store shuffle map
+  if(shuffledMap) h+=`<div class="shuffle-map" style="display:none" data-map="${shuffledMap.join(',')}"></div>`;
+
+  if(item.qType==='mc'){
+    h+=`<div class="ex-options">`;
+    const letters='ABCD';
+    shuffledOpts.forEach((opt,oi)=>{
+      const isSelected=answered && userAns?.selected===oi;
+      const isCorrectOpt=shuffledMap[oi]===item.ans;
+      let cls='ex-opt';
+      if(isSelected && isCorrectOpt) cls+=' correct-answer selected';
+      else if(isSelected && !isCorrectOpt) cls+=' wrong-answer selected';
+      else if(answered && isCorrectOpt) cls+=' correct-answer';
+      h+=`<div class="${cls}" data-oi="${oi}">
+        <span class="opt-letter">${letters[oi]}</span>
+        <span class="opt-text">${opt}</span>
+      </div>`;
+    });
+    h+=`</div>`;
+  } else if(item.qType==='fill'){
+    let cls='ex-fill';
+    if(answered && isCorrect) cls+=' correct';
+    if(answered && isWrong) cls+=' wrong';
+    h+=`<div class="ex-fill-wrap">
+      <input type="text" class="${cls}" placeholder="Type your answer..." value="${answered?(userAns?.typed||''):''}" ${answered?'disabled':''}/>
+    </div>`;
+  } else if(item.qType==='tf'){
+    h+=`<div class="ex-tf-wrap">`;
+    [true,false].forEach(v=>{
+      const label=v?'True':'False';
+      const isSelected=answered && userAns?.selected===v;
+      const isCorrectOpt=item.ans===v;
+      let cls='ex-tf-btn';
+      if(isSelected && isCorrectOpt) cls+=' correct-answer selected';
+      else if(isSelected && !isCorrectOpt) cls+=' wrong-answer selected';
+      else if(answered && isCorrectOpt) cls+=' correct-answer';
+      h+=`<button class="${cls}" data-val="${v}" ${answered?'disabled':''}>${label}</button>`;
+    });
+    h+=`</div>`;
+  }
+
+  h+=`<div class="ex-check-wrap">
+    <button class="btn-check" ${answered?'disabled':''} onclick="checkExercise('${key}')">Check Answer</button>
+    <button class="btn-ex-reset" onclick="resetExercise('${key}')"><i class="fas fa-rotate-left"></i> Reset</button>
+    <div class="ex-result${answered?' show':''}${isCorrect?' correct':''}${isWrong?' incorrect':''}">
+      ${answered?(isCorrect?'<i class="fas fa-check-circle"></i> Correct':'<i class="fas fa-times-circle"></i> Incorrect'):''}
+    </div>
+  </div>`;
+
+  if(answered){
+    h+=`<div class="ex-explanation open"><div class="ex-explanation-inner">
+      <strong><i class="fas fa-lightbulb"></i> Explanation:</strong> ${item.exp}
+      ${item.expId?'<div class="exp-id">'+item.expId+'</div>':''}
+    </div></div>`;
+  } else {
+    h+=`<div class="ex-explanation"><div class="ex-explanation-inner">
+      <strong><i class="fas fa-lightbulb"></i> Explanation:</strong> ${item.exp}
+      ${item.expId?'<div class="exp-id">'+item.expId+'</div>':''}
+    </div></div>`;
+  }
+
+  h+=`</div>`;
+  return h;
+}
+
+// ===================== BIND EXERCISE EVENTS =====================
+function bindExerciseEvents(mc, sec){
+  // MC option clicks
+  mc.querySelectorAll('.ex-opt').forEach(opt=>{
+    opt.addEventListener('click',function(){
+      const card=this.closest('.exercise-card');
+      if(card.querySelector('.btn-check:disabled')) return;
+      card.querySelectorAll('.ex-opt').forEach(o=>o.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+  // TF button clicks
+  mc.querySelectorAll('.ex-tf-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const card=this.closest('.exercise-card');
+      if(card.querySelector('.btn-check:disabled')) return;
+      card.querySelectorAll('.ex-tf-btn').forEach(b=>b.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+}
+
+// ===================== CHECK EXERCISE =====================
+function checkExercise(key){
+  const card=document.getElementById('ex_'+key);
+  if(!card) return;
+  const secId=card.dataset.sec;
+  const idx=parseInt(card.dataset.idx);
+  const sec=SECTIONS.find(s=>s.id===secId);
+  const item=sec.content[idx];
+  let userAnswer={};
+  let correct=false;
+
+  if(item.qType==='mc'){
+    const selected=card.querySelector('.ex-opt.selected');
+    if(!selected){ showToast('Please select an answer','error'); return; }
+    const oi=parseInt(selected.dataset.oi);
+    const mapEl=card.querySelector('.shuffle-map');
+    const map=mapEl?mapEl.dataset.map.split(',').map(Number):[];
+    const origIdx=map[oi];
+    correct=origIdx===item.ans;
+    userAnswer={selected:oi,origIdx,correct};
+    // highlight
+    card.querySelectorAll('.ex-opt').forEach((opt,i)=>{
+      if(map[i]===item.ans) opt.classList.add('correct-answer');
+      else if(i===oi && !correct) opt.classList.add('wrong-answer');
+    });
+  } else if(item.qType==='fill'){
+    const input=card.querySelector('.ex-fill');
+    const typed=input.value.trim();
+    if(!typed){ showToast('Please type an answer','error'); return; }
+    correct=normalizeAnswer(typed)===normalizeAnswer(item.ans);
+    userAnswer={typed,correct};
+    input.classList.add(correct?'correct':'wrong');
+    input.disabled=true;
+    if(!correct){
+      input.value=item.ans;
+    }
+  } else if(item.qType==='tf'){
+    const selected=card.querySelector('.ex-tf-btn.selected');
+    if(!selected){ showToast('Please select True or False','error'); return; }
+    const val=selected.dataset.val==='true';
+    correct=val===item.ans;
+    userAnswer={selected:val,correct};
+    card.querySelectorAll('.ex-tf-btn').forEach(btn=>{
+      const bv=btn.dataset.val==='true';
+      if(bv===item.ans) btn.classList.add('correct-answer');
+      else if(bv===val && !correct) btn.classList.add('wrong-answer');
+      btn.disabled=true;
+    });
+  }
+
+  // store
+  state.answers[key]=userAnswer;
+  saveState();
+
+  // UI updates
+  card.classList.add(correct?'correct':'incorrect');
+  if(!correct) card.classList.add('shake');
+  setTimeout(()=>card.classList.remove('shake'),300);
+
+  const checkBtn=card.querySelector('.btn-check');
+  checkBtn.disabled=true;
+
+  const result=card.querySelector('.ex-result');
+  result.className='ex-result show '+(correct?'correct':'incorrect');
+  result.innerHTML=correct?'<i class="fas fa-check-circle"></i> Correct':'<i class="fas fa-times-circle"></i> Incorrect';
+
+  const expl=card.querySelector('.ex-explanation');
+  expl.classList.add('open');
+
+  renderMath(card);
+  renderSidebar();
+
+  if(correct) showToast('Well done!','success');
+  else showToast('Not quite — see explanation','error');
+}
+
+function resetExercise(key){
+  delete state.answers[key];
+  saveState();
+  const card=document.getElementById('ex_'+key);
+  if(!card) return;
+  const secId=card.dataset.sec;
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(sec) renderLesson(document.getElementById('main-content'),sec);
+  showToast('Exercise reset','error');
+}
+
+// ===================== NAV BUTTONS =====================
+function renderNavButtons(secId){
+  const secIdx=SECTIONS.findIndex(s=>s.id===secId);
+  const prevSec=secIdx>0?SECTIONS[secIdx-1]:null;
+  const nextSec=secIdx<SECTIONS.length-1?SECTIONS[secIdx+1]:null;
+  return `<div class="nav-buttons">
+    <button class="btn-nav" ${!prevSec?'disabled':''} onclick="navigateTo('${prevSec?prevSec.id:''}')">
+      <i class="fas fa-arrow-left"></i> Previous
+    </button>
+    <button class="btn-nav" onclick="resetSection('${secId}')" style="color:var(--accent);border-color:var(--accent)">
+      <i class="fas fa-rotate-left"></i> Reset Section
+    </button>
+    <button class="btn-nav" ${!nextSec?'disabled':''} onclick="navigateTo('${nextSec?nextSec.id:''}')">
+      Next <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>`;
+}
+
+function resetSection(secId){
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(!sec) return;
+  sec.content.forEach((item,idx)=>{
+    const key=secId+'_'+idx;
+    delete state.answers[key];
+  });
+  saveState();
+  navigateTo(secId);
+  showToast('Section reset','error');
+}
+
+// ===================== RENDER CONSOLIDATION =====================
+function renderConsolidation(mc, sec){
+  document.getElementById('topbarTitle').textContent=sec.title;
+  const totalEx=getTotalExCount();
+  const totalAns=getTotalAnswered();
+  const pct=totalEx>0?Math.round(totalAns/totalEx*100):0;
+  let h=`<div class="content-section">
+    <div class="section-header">
+      <div class="sec-icon"><i class="fas fa-flag-checkered"></i></div>
+      <h2>Consolidation & Reflection</h2>
+      <div class="sec-time"><i class="far fa-clock"></i> 01:00–01:05</div>
+    </div>
+    <div class="theory-card">
+      <div class="th-icon"><i class="fas fa-trophy"></i></div>
+      <h3>Lesson Complete!</h3>
+      <div class="th-id">Pelajaran Selesai!</div>
+      <div class="th-body">
+        <p>Great work today! You managed millions without breaking a sweat.</p>
+        <p>The most important thing to remember: <strong>place value tells us the weight of a digit</strong>.</p>
+        <p>Your overall progress: <strong>${pct}%</strong> (${totalAns}/${totalEx} exercises completed)</p>
+      </div>
+      <div class="th-body-id">
+        <p>Kerja bagus hari ini! Hal terpenting untuk diingat: nilai tempat memberi tahu kita bobot dari sebuah digit.</p>
+      </div>
+    </div>
+    <div class="theory-card" style="text-align:center">
+      <h3>Continue Learning</h3>
+      <p style="color:var(--muted);font-size:13px;margin:12px 0">Access your CEO dashboard and complete your audit homework:</p>
+      <a href="https://learn.algonova.id/login" target="_blank" class="btn-start" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;padding:12px 32px">
+        <i class="fas fa-external-link-alt"></i> Open learn.algonova.id
+      </a>
+    </div>
+  </div>`;
+  mc.innerHTML=h;
+  renderMath(mc);
+}
+
+// ===================== INIT =====================
+loadState();
+renderSidebar();
+navigateTo(state.currentSection||'home');
+
+// re-render math when katex loads
+const katexCheck=setInterval(()=>{
+  if(typeof renderMathInElement==='function'){
+    clearInterval(katexCheck);
+    renderMath(document.getElementById('main-content'));
+  }
+},200);
+</script>
+
+<script>
+// ===================== ASSIGNMENT PRINT & EXTENSIONS =====================
+
+// Override renderLesson to add print button for assignments
+const _origRenderLesson = renderLesson;
+renderLesson = function(mc, sec){
+  _origRenderLesson(mc, sec);
+  if(sec.type==='assignment'){
+    const sectionEl = mc.querySelector('.content-section');
+    if(sectionEl && !sectionEl.querySelector('.btn-print-result')){
+      // Add assignment group title
+      const header = sectionEl.querySelector('.section-header');
+      if(header && sec.assignGroup){
+        const ag = document.createElement('div');
+        ag.style.cssText='font-size:13px;color:var(--teal);margin-top:4px;font-weight:500;';
+        ag.innerHTML='<i class="fas fa-tag"></i> '+sec.assignGroup+' <span style="color:var(--muted);font-size:11px">('+sec.assignGroup.replace(/[^\w]/g,' ').trim()+')</span>';
+        header.appendChild(ag);
+      }
+      // Add print button at bottom
+      const printWrap = document.createElement('div');
+      printWrap.style.cssText='text-align:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);';
+      printWrap.innerHTML=`
+        <button class="btn-start" style="font-size:13px;padding:10px 28px;background:linear-gradient(135deg,var(--teal),var(--teal2))" onclick="printAssignmentResult('${sec.id}')">
+          <i class="fas fa-print"></i> &nbsp;Print Result
+        </button>
+      `;
+      sectionEl.appendChild(printWrap);
+    }
+  }
+};
+
+// Print assignment result function
+function printAssignmentResult(secId){
+  const sec = SECTIONS.find(s=>s.id===secId);
+  if(!sec) return;
+
+  let exItems = [];
+  let exNum = 0;
+  sec.content.forEach((item,idx)=>{
+    if(item.type==='ex'){
+      exNum++;
+      const key = secId+'_'+idx;
+      const userAns = state.answers[key];
+      const answered = userAns !== undefined;
+      const isCorrect = answered && userAns?.correct;
+
+      let questionText = item.q.replace(/<[^>]*>/g,'').replace(/\\\(/g,'').replace(/\\\)/g,'');
+      let correctAnswer = '';
+      let studentAnswer = '';
+
+      if(item.qType==='mc'){
+        correctAnswer = item.opts[item.ans];
+        if(answered && userAns?.origIdx!==undefined){
+          studentAnswer = item.opts[userAns.origIdx];
+        }
+      } else if(item.qType==='fill'){
+        correctAnswer = item.ans;
+        if(answered){
+          studentAnswer = userAns?.typed || '';
+        }
+      } else if(item.qType==='tf'){
+        correctAnswer = item.ans ? 'True' : 'False';
+        if(answered){
+          studentAnswer = userAns?.selected ? 'True' : 'False';
+        }
+      }
+
+      exItems.push({
+        num: exNum,
+        question: questionText,
+        studentAnswer: studentAnswer || '—',
+        correctAnswer: correctAnswer,
+        note: answered ? (isCorrect ? '✓' : '✗') : '—'
+      });
+    }
+  });
+
+  const score = exItems.filter(e=>e.note==='✓').length;
+  const total = exItems.length;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let rows = '';
+  exItems.forEach(e=>{
+    rows += `<tr>
+      <td style="text-align:center;border:1px solid #ccc;padding:4px 6px;font-size:10px">${e.num}</td>
+      <td style="border:1px solid #ccc;padding:4px 6px;font-size:9px;max-width:180px;word-wrap:break-word">${e.question}</td>
+      <td style="border:1px solid #ccc;padding:4px 6px;font-size:10px;text-align:center">${e.studentAnswer}</td>
+      <td style="border:1px solid #ccc;padding:4px 6px;font-size:10px;text-align:center">${e.correctAnswer}</td>
+      <td style="border:1px solid #ccc;padding:4px 6px;text-align:center;font-size:14px;color:${e.note==='✓'?'#16a34a':e.note==='✗'?'#dc2626':'#999'}">${e.note}</td>
+    </tr>`;
+  });
+
+  const printHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Assignment Result - ${sec.assignGroup||sec.title}</title>
+<style>
+@page{size:A4;margin:12mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:11px;color:#222;padding:8mm}
+h1{font-size:14px;text-transform:uppercase;letter-spacing:1px;color:#d97706;margin-bottom:4px}
+h2{font-size:12px;color:#333;margin-bottom:12px}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:10px;font-size:10px}
+.info b{color:#555}
+.score-box{display:inline-block;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:6px 14px;margin-bottom:10px;font-size:12px;font-weight:700;color:#16a34a}
+table{width:100%;border-collapse:collapse;margin-bottom:12px}
+th{background:#f8f9fa;border:1px solid #ccc;padding:5px 6px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#555}
+.sig{margin-top:20px;font-size:10px;color:#555}
+.sig-line{display:inline-block;width:150px;border-bottom:1px solid #999;margin-left:6px}
+</style>
+</head>
+<body>
+<h1>MATH TUTORING by Deni</h1>
+<h2>${sec.title} — ${sec.assignGroup||''}</h2>
+<div class="info">
+  <div><b>Name:</b> ___________________________</div>
+  <div><b>Date:</b> ${dateStr} ${timeStr}</div>
+  <div><b>Topic:</b> Place Value & Large Numbers (Business)</div>
+  <div><b>Assignment Group:</b> ${sec.assignGroup||sec.title}</div>
+</div>
+<div class="score-box">Score: ${score} / ${total}</div>
+<table>
+<thead>
+<tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>Note</th></tr>
+</thead>
+<tbody>${rows}</tbody>
+</table>
+<div class="sig">Checked by, <span class="sig-line"></span></div>
+<div class="sig" style="margin-top:4px;font-weight:600">Deni</div>
+</body>
+</html>`;
+
+  const win = window.open('','_blank','width=800,height=600');
+  if(win){
+    win.document.write(printHtml);
+    win.document.close();
+    setTimeout(()=>{
+      win.print();
+    },500);
+  }
+}
+
+// Re-render current section to apply overrides
+if(SECTIONS.find(s=>s.id===state.currentSection)?.type==='assignment'){
+  navigateTo(state.currentSection);
+}
+</script>
+
+</body>
+</html>
