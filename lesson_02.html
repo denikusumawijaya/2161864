@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni — Systems of Linear Equations</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --green:#58cc02;--green-d:#4cad02;--green-l:#d7ffb8;
+  --blue:#1cb0f6;--blue-l:#d8f3ff;
+  --purple:#ce82ff;--purple-l:#f3ddff;
+  --red:#ff4b4b;--red-l:#ffdfe0;
+  --yellow:#ffc800;--yellow-l:#fff4cc;
+  --bg:#f7f7f7;--card:#fff;--text:#3c3c3c;--gray:#afafaf;
+  --border:#e5e5e5;--shadow:rgba(0,0,0,.08);
+  --sidebar-w:300px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+.katex{font-size:1.05em}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+  background:#fff;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;
+  overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.sidebar-header{padding:20px 18px 14px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-size:18px;font-weight:900;color:var(--green);display:flex;align-items:center;gap:8px}
+.sidebar-header .subtitle{font-size:11px;color:var(--gray);font-weight:600;margin-top:2px}
+.sidebar-header .topic-tag{display:inline-block;margin-top:8px;padding:3px 10px;background:var(--blue-l);color:var(--blue);border-radius:8px;font-size:11px;font-weight:700}
+.reset-all-btn{
+  margin:12px 18px;padding:8px 12px;background:var(--red-l);color:var(--red);
+  border:2px solid var(--red);border-radius:10px;font-weight:700;font-size:12px;
+  cursor:pointer;transition:.2s;font-family:inherit;
+}
+.reset-all-btn:hover{background:var(--red);color:#fff}
+.nav-section-label{padding:10px 18px 4px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray)}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;
+  border-left:4px solid transparent;transition:.2s;font-weight:700;font-size:13px;
+  color:var(--text);position:relative;
+}
+.nav-item:hover{background:var(--bg);border-left-color:var(--green)}
+.nav-item.active{background:var(--green-l);border-left-color:var(--green);color:var(--green-d)}
+.nav-item .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nav-item .nav-time{font-size:10px;color:var(--gray);font-weight:600;margin-left:auto}
+.nav-item .nav-check{
+  width:18px;height:18px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:10px;
+  flex-shrink:0;transition:.3s;
+}
+.nav-item.completed .nav-check{background:var(--green);border-color:var(--green);color:#fff}
+.nav-item .nav-num{
+  width:22px;height:22px;border-radius:6px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;
+  flex-shrink:0;
+}
+.nav-item.active .nav-num{background:var(--green);color:#fff}
+.nav-item.assignment .nav-num{background:var(--purple-l);color:var(--purple)}
+.nav-item.assignment.active .nav-num{background:var(--purple);color:#fff}
+
+/* ===== MAIN ===== */
+.main{margin-left:var(--sidebar-w);min-height:100vh}
+.top-bar{
+  position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);padding:12px 30px;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.top-bar h2{font-size:16px;font-weight:800}
+.top-bar .progress-wrap{display:flex;align-items:center;gap:10px}
+.progress-bar{width:180px;height:10px;background:var(--border);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:5px;transition:.5s;width:0}
+.progress-text{font-size:12px;font-weight:700;color:var(--gray)}
+
+.section{display:none;padding:30px;max-width:900px;margin:0 auto;animation:fadeUp .4s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+.section-header{margin-bottom:24px}
+.section-header .badge{display:inline-block;padding:4px 12px;background:var(--blue-l);color:var(--blue);border-radius:20px;font-size:11px;font-weight:800;margin-bottom:8px}
+.section-header h2{font-size:26px;font-weight:900;margin-bottom:4px}
+.section-header .time{font-size:13px;color:var(--gray);font-weight:600}
+
+/* ===== THEORY BLOCK ===== */
+.theory-card{
+  background:var(--card);border-radius:16px;padding:24px;margin-bottom:20px;
+  box-shadow:0 2px 12px var(--shadow);border:1px solid var(--border);
+  border-left:5px solid var(--blue);position:relative;overflow:hidden;
+}
+.theory-card .theory-num{
+  position:absolute;top:-8px;right:16px;font-size:60px;font-weight:900;
+  color:var(--bg);z-index:0;line-height:1;
+}
+.theory-card .theory-body{position:relative;z-index:1}
+.theory-card h3{font-size:18px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.theory-card h3 .icon-box{
+  width:32px;height:32px;border-radius:8px;background:var(--blue-l);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.en-text{font-size:14px;line-height:1.7}
+.id-text{font-size:12px;color:var(--gray);font-style:italic;margin-top:2px;line-height:1.6}
+.theory-card .example-box{
+  margin-top:12px;padding:12px 14px;background:var(--yellow-l);
+  border-radius:10px;border-left:3px solid var(--yellow);
+}
+.theory-card .example-box .label{font-size:11px;font-weight:800;color:var(--yellow);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.illust{margin:14px 0;text-align:center}
+.illust svg{max-width:100%;height:auto}
+
+/* ===== EXERCISE BLOCK ===== */
+.exercise-card{
+  background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px;
+  box-shadow:0 2px 10px var(--shadow);border:1px solid var(--border);
+  transition:.3s;scroll-margin-top:80px;
+}
+.exercise-card.correct{border-color:var(--green);box-shadow:0 2px 12px rgba(88,204,2,.2)}
+.exercise-card.incorrect{border-color:var(--red);box-shadow:0 2px 12px rgba(255,75,75,.15)}
+.ex-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ex-header .ex-label{font-size:12px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:.5px}
+.ex-header .ex-status{font-size:20px}
+.ex-question{margin-bottom:14px}
+.ex-question .en-text{font-weight:600;font-size:15px}
+.options{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.option-btn{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border:2px solid var(--border);border-radius:12px;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:600;background:#fff;
+  transition:.2s;text-align:left;
+}
+.option-btn:hover{border-color:var(--blue);background:var(--blue-l)}
+.option-btn.selected{border-color:var(--blue);background:var(--blue-l)}
+.option-btn.correct-answer{border-color:var(--green);background:var(--green-l)}
+.option-btn.wrong-answer{border-color:var(--red);background:var(--red-l)}
+.option-letter{
+  width:26px;height:26px;border-radius:8px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;
+  flex-shrink:0;
+}
+.option-btn.selected .option-letter{background:var(--blue);color:#fff}
+.option-btn.correct-answer .option-letter{background:var(--green);color:#fff}
+.option-btn.wrong-answer .option-letter{background:var(--red);color:#fff}
+
+.text-input-wrap{margin-bottom:14px}
+.text-input{
+  width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:12px;
+  font-family:inherit;font-size:14px;font-weight:600;transition:.2s;
+}
+.text-input:focus{outline:none;border-color:var(--blue)}
+
+.feedback{
+  padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;
+  margin-bottom:10px;display:none;animation:fadeUp .3s ease;
+}
+.feedback.show{display:block}
+.feedback.correct{background:var(--green-l);color:var(--green-d)}
+.feedback.incorrect{background:var(--red-l);color:var(--red)}
+
+details.explanation{
+  margin-bottom:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden;
+}
+details.explanation summary{
+  padding:10px 14px;background:var(--bg);cursor:pointer;font-weight:700;font-size:13px;
+  display:flex;align-items:center;gap:6px;list-style:none;
+}
+details.explanation summary::-webkit-details-marker{display:none}
+details.explanation[open] summary{border-bottom:1px solid var(--border)}
+details.explanation .explanation-body{padding:10px 14px;font-size:13px}
+details.explanation .explanation-body .id-text{margin-top:4px}
+
+.ex-controls{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ===== BUTTONS ===== */
+.btn{
+  padding:8px 16px;border:none;border-radius:10px;font-family:inherit;
+  font-weight:700;font-size:13px;cursor:pointer;transition:.15s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.btn:active{transform:translateY(2px)}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 3px 0 var(--green-d)}
+.btn-primary:active{box-shadow:0 1px 0 var(--green-d)}
+.btn-secondary{background:#e5e5e5;color:var(--text);box-shadow:0 3px 0 #c4c4c4}
+.btn-secondary:active{box-shadow:0 1px 0 #c4c4c4}
+.btn-warning{background:var(--yellow);color:#fff;box-shadow:0 3px 0 #d4a600}
+.btn-warning:active{box-shadow:0 1px 0 #d4a600}
+.btn-purple{background:var(--purple);color:#fff;box-shadow:0 3px 0 #a855d9}
+.btn-purple:active{box-shadow:0 1px 0 #a855d9}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 3px 0 #1899d6}
+.btn-blue:active{box-shadow:0 1px 0 #1899d6}
+.btn-lg{padding:12px 28px;font-size:15px}
+
+/* ===== HOME ===== */
+.home-hero{text-align:center;padding:30px 0}
+.home-hero .logo-svg{margin-bottom:16px}
+.home-hero h1{font-size:32px;font-weight:900;color:var(--green);margin-bottom:6px}
+.home-hero .tagline{font-size:14px;color:var(--gray);font-weight:600}
+.home-hero .id-text{font-size:13px}
+.topic-banner{
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border-radius:16px;padding:24px;margin:20px 0;color:#fff;text-align:center;
+}
+.topic-banner h2{font-size:22px;font-weight:900;margin-bottom:4px}
+.topic-banner .id-text{color:rgba(255,255,255,.85)}
+.rules-card{
+  background:#fff;border-radius:16px;padding:20px;margin:16px 0;
+  box-shadow:0 2px 12px var(--shadow);border:1px solid var(--border);
+}
+.rules-card h3{font-size:16px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.rules-list{list-style:none}
+.rules-list li{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 0;
+  border-bottom:1px dashed var(--border);font-size:14px;
+}
+.rules-list li:last-child{border-bottom:none}
+.rules-list .rule-num{
+  width:24px;height:24px;border-radius:50%;background:var(--green);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;flex-shrink:0;
+}
+.rules-list .rule-id{font-size:12px;color:var(--gray);font-style:italic}
+
+.start-btn-wrap{text-align:center;margin:20px 0}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.info-card{background:#fff;border-radius:12px;padding:14px;border:1px solid var(--border);text-align:center}
+.info-card .icon{font-size:28px;margin-bottom:4px}
+.info-card .label{font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase}
+.info-card .value{font-size:14px;font-weight:700}
+
+/* ===== ASSIGNMENT ===== */
+.assignment-header{background:var(--purple-l);border-radius:16px;padding:20px;margin-bottom:20px;border-left:5px solid var(--purple)}
+.assignment-header h2{font-size:22px;font-weight:900;color:var(--purple)}
+.assignment-header .desc{font-size:13px;color:var(--text);margin-top:4px}
+.assignment-header .id-text{font-size:12px}
+.print-btn-wrap{text-align:center;margin:20px 0;padding:16px;background:#fff;border-radius:12px;border:2px dashed var(--purple)}
+.score-display{font-size:18px;font-weight:900;color:var(--purple)}
+
+/* ===== CONSOLIDATION ===== */
+.reflection-card{background:#fff;border-radius:16px;padding:24px;margin:16px 0;box-shadow:0 2px 12px var(--shadow);border:1px solid var(--border)}
+.reflection-card h3{font-size:16px;font-weight:800;margin-bottom:8px}
+.reflection-card textarea{width:100%;min-height:80px;padding:10px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:13px;resize:vertical}
+.reflection-card textarea:focus{outline:none;border-color:var(--blue)}
+
+.final-cta{text-align:center;padding:30px;background:linear-gradient(135deg,var(--green),var(--blue));border-radius:16px;color:#fff;margin:20px 0}
+.final-cta h2{font-size:22px;font-weight:900;margin-bottom:8px}
+.final-cta p{font-size:14px;margin-bottom:16px;opacity:.9}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  :root{--sidebar-w:0px}
+  .sidebar{transform:translateX(-100%);width:280px;transition:.3s}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .mobile-toggle{display:block!important}
+  .info-grid{grid-template-columns:1fr}
+}
+.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:101;background:#fff;border:2px solid var(--border);border-radius:10px;padding:6px 10px;font-size:18px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <h1>📐 Math Tutoring</h1>
+    <div class="subtitle">by Deni</div>
+    <span class="topic-tag">Systems of Linear Equations</span>
+  </div>
+  <button class="reset-all-btn" onclick="resetAllProgress()">↻ Reset All Progress</button>
+
+  <div class="nav-section-label">Lesson</div>
+  <div class="nav-item active" data-target="home" onclick="showSection('home')">
+    <span class="nav-icon">🏠</span>
+    <span>Home</span>
+  </div>
+  <div class="nav-item" data-target="section1" onclick="showSection('section1')">
+    <span class="nav-num">1</span>
+    <span>Spiral Review</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item" data-target="section2" onclick="showSection('section2')">
+    <span class="nav-num">2</span>
+    <span>Introduction</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item" data-target="section3" onclick="showSection('section3')">
+    <span class="nav-num">3</span>
+    <span>Prior Knowledge</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item" data-target="section4" onclick="showSection('section4')">
+    <span class="nav-num">4</span>
+    <span>Problem Intro</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item" data-target="section5" onclick="showSection('section5')">
+    <span class="nav-num">5</span>
+    <span>Guided Practice</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item" data-target="section6" onclick="showSection('section6')">
+    <span class="nav-num">6</span>
+    <span>Independent Practice</span>
+    <span class="nav-check"></span>
+  </div>
+
+  <div class="nav-section-label">Assignments</div>
+  <div class="nav-item assignment" data-target="assignment1" onclick="showSection('assignment1')">
+    <span class="nav-num">A1</span>
+    <span>Assignment 1</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item assignment" data-target="assignment2" onclick="showSection('assignment2')">
+    <span class="nav-num">A2</span>
+    <span>Assignment 2</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item assignment" data-target="assignment3" onclick="showSection('assignment3')">
+    <span class="nav-num">A3</span>
+    <span>Assignment 3</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item assignment" data-target="assignment4" onclick="showSection('assignment4')">
+    <span class="nav-num">A4</span>
+    <span>Assignment 4</span>
+    <span class="nav-check"></span>
+  </div>
+  <div class="nav-item assignment" data-target="assignment5" onclick="showSection('assignment5')">
+    <span class="nav-num">A5</span>
+    <span>Assignment 5</span>
+    <span class="nav-check"></span>
+  </div>
+
+  <div class="nav-section-label">Final</div>
+  <div class="nav-item" data-target="consolidation" onclick="showSection('consolidation')">
+    <span class="nav-icon">🎯</span>
+    <span>Consolidation</span>
+    <span class="nav-check"></span>
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+  <div class="top-bar">
+    <h2 id="topbar-title">Home</h2>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-text" id="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <section id="home" class="section active">
+    <div class="home-hero">
+      <div class="logo-svg">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="55" fill="#d7ffb8"/>
+          <circle cx="60" cy="60" r="45" fill="#58cc02"/>
+          <text x="60" y="50" text-anchor="middle" font-size="28" fill="#fff" font-weight="900" font-family="Nunito">f(x)</text>
+          <text x="60" y="78" text-anchor="middle" font-size="20" fill="#fff" font-weight="700" font-family="Nunito">= mx+b</text>
+          <path d="M30 90 L50 70 L65 80 L90 50" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="90" cy="50" r="4" fill="#ffc800"/>
+        </svg>
+      </div>
+      <h1>MATH TUTORING by Deni</h1>
+      <p class="tagline">Welcome to today's learning journey!</p>
+      <p class="id-text">Selamat datang dalam perjalanan belajar hari ini!</p>
+    </div>
+
+    <div class="topic-banner">
+      <h2>Topic: Systems of Linear Equations</h2>
+      <p class="id-text">Topik: Sistem Persamaan Linear</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="icon">⏱️</div>
+        <div class="label">Duration</div>
+        <div class="value">60 Minutes</div>
+      </div>
+      <div class="info-card">
+        <div class="icon">📝</div>
+        <div class="label">Exercises</div>
+        <div class="value">110 Total</div>
+      </div>
+      <div class="info-card">
+        <div class="icon">📚</div>
+        <div class="label">Sections</div>
+        <div class="value">6 + 5 Assignments</div>
+      </div>
+      <div class="info-card">
+        <div class="icon">🎯</div>
+        <div class="label">Level</div>
+        <div class="value">Intermediate</div>
+      </div>
+    </div>
+
+    <div class="rules-card">
+      <h3>📋 Class Rules</h3>
+      <ul class="rules-list">
+        <li>
+          <span class="rule-num">1</span>
+          <div>
+            <div>Take turns speaking during discussions.</div>
+            <div class="rule-id">Berbicara secara bergantian selama diskusi.</div>
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">2</span>
+          <div>
+            <div>Ask permission if you need to leave the class.</div>
+            <div class="rule-id">Meminta izin jika ingin meninggalkan kelas.</div>
+          </div>
+        </li>
+        <li>
+          <span class="rule-num">3</span>
+          <div>
+            <div>Turn on your camera and microphone when needed.</div>
+            <div class="rule-id">Menyalakan kamera dan mikrofon jika diperlukan.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="start-btn-wrap">
+      <button class="btn btn-primary btn-lg" onclick="showSection('section1')">Start Lesson →</button>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 1: SPIRAL REVIEW ===== -->
+  <section id="section1" class="section"></section>
+
+  <!-- ===== PLACEHOLDERS (filled in subsequent chats) ===== -->
+  <section id="section2" class="section"></section>
+  <section id="section3" class="section"></section>
+  <section id="section4" class="section"></section>
+  <section id="section5" class="section"></section>
+  <section id="section6" class="section"></section>
+  <section id="assignment1" class="section"></section>
+  <section id="assignment2" class="section"></section>
+  <section id="assignment3" class="section"></section>
+  <section id="assignment4" class="section"></section>
+  <section id="assignment5" class="section"></section>
+  <section id="consolidation" class="section"></section>
+
+</main>
+
+<script>
+/* ========================================================
+   GLOBAL FRAMEWORK
+   ======================================================== */
+const STORAGE_KEY = 'math_tutor_progress';
+let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+/* --- Section registry --- */
+const SECTIONS = [
+  {id:'section1', title:'Spiral Review Warm-up', time:'00:00–00:10', type:'lesson'},
+  {id:'section2', title:'Introduction & Real-World Connection', time:'00:10–00:15', type:'lesson'},
+  {id:'section3', title:'Review of Prior Knowledge', time:'00:15–00:20', type:'lesson'},
+  {id:'section4', title:'Problem Introduction', time:'00:20–00:30', type:'lesson'},
+  {id:'section5', title:'Guided Practice', time:'00:30–00:45', type:'lesson'},
+  {id:'section6', title:'Independent Practice', time:'00:50–01:00', type:'lesson'},
+  {id:'assignment1', title:'Assignment 1', time:'—', type:'assignment'},
+  {id:'assignment2', title:'Assignment 2', time:'—', type:'assignment'},
+  {id:'assignment3', title:'Assignment 3', time:'—', type:'assignment'},
+  {id:'assignment4', title:'Assignment 4', time:'—', type:'assignment'},
+  {id:'assignment5', title:'Assignment 5', time:'—', type:'assignment'},
+  {id:'consolidation', title:'Consolidation & Reflection', time:'01:00–01:05', type:'final'},
+];
+
+/* --- Lesson data (extended in subsequent chats) --- */
+const LESSON_DATA = {};
+
+/* --- Register a section's content --- */
+function registerSection(id, config){
+  LESSON_DATA[id] = config;
+  renderSection(id);
+}
+
+/* --- Shuffle utility --- */
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* --- KaTeX render helper --- */
+function renderMath(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el,{
+      delimiters:[
+        {left:'$$',right:'$$',display:true},
+        {left:'\\(',right:'\\)',display:false},
+        {left:'\\[',right:'\\]',display:true}
+      ],
+      throwOnError:false
+    });
+  }
+}
+
+/* ========================================================
+   SECTION RENDERING
+   ======================================================== */
+function renderSection(id){
+  const data = LESSON_DATA[id];
+  if(!data) return;
+  const container = document.getElementById(id);
+  if(!container) return;
+
+  const secInfo = SECTIONS.find(s=>s.id===id) || {};
+  let html = `
+    <div class="section-header">
+      <span class="badge">${secInfo.type==='assignment'?'📋 Assignment':'📖 Lesson Section'}</span>
+      <h2>${data.title}</h2>
+      <div class="time">⏱️ ${secInfo.time||''}</div>
+    </div>
+  `;
+
+  if(data.intro){
+    html += `<div class="theory-card" style="border-left-color:var(--purple)">
+      <div class="theory-body">
+        <p class="en-text">${data.intro.en}</p>
+        <p class="id-text">${data.intro.id}</p>
+      </div>
+    </div>`;
+  }
+
+  data.content.forEach((item,idx)=>{
+    if(item.type==='theory'){
+      html += renderTheory(item);
+    } else if(item.type==='exercise'){
+      html += renderExercise(item,id,idx);
+    }
+  });
+
+  if(secInfo.type==='assignment'){
+    html += `
+      <div class="print-btn-wrap" id="print-wrap-${id}">
+        <p class="score-display" id="score-display-${id}">Score: 0 / 10</p>
+        <p style="font-size:13px;color:var(--gray);margin:4px 0 12px">You can print your result at any time.</p>
+        <button class="btn btn-purple btn-lg" onclick="printAssignment('${id}')">🖨️ Print Result</button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+  renderMath(container);
+  container.querySelectorAll('.exercise-card').forEach(card=>{
+    const exId = card.dataset.exId;
+    if(progress[exId]){
+      restoreExercise(exId);
+    }
+  });
+  updateAssignmentPrintState(id);
+}
+
+function renderTheory(item){
+  let html = `
+    <div class="theory-card">
+      <div class="theory-num">${item.number||''}</div>
+      <div class="theory-body">
+        <h3><span class="icon-box">${item.icon||'📘'}</span> ${item.title.en}</h3>
+        <p class="id-text" style="margin-bottom:10px">${item.title.id}</p>
+  `;
+  item.paragraphs.forEach(p=>{
+    html += `<p class="en-text">${p.en}</p><p class="id-text">${p.id}</p>`;
+  });
+  if(item.example){
+    html += `<div class="example-box">
+      <div class="label">✏️ Example / Contoh</div>
+      <p class="en-text">${item.example.en}</p>
+      <p class="id-text">${item.example.id}</p>
+    </div>`;
+  }
+  if(item.illustration){
+    html += `<div class="illust">${item.illustration}</div>`;
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+function renderExercise(item,sectionId,idx){
+  const exId = item.id || `${sectionId}-ex${idx+1}`;
+  const number = item.number || (idx+1);
+  let html = `
+    <div class="exercise-card" id="card-${exId}" data-ex-id="${exId}" data-section="${sectionId}" data-type="${item.qtype}">
+      <div class="ex-header">
+        <span class="ex-label">Exercise ${number}</span>
+        <span class="ex-status" id="status-${exId}">⬤</span>
+      </div>
+      <div class="ex-question">
+        <p class="en-text">${item.question.en}</p>
+        <p class="id-text">${item.question.id}</p>
+      </div>
+  `;
+
+  if(item.qtype==='mcq' || item.qtype==='checkbox'){
+    const opts = shuffle(item.options);
+    // store shuffled correct mapping
+    html += `<div class="options" id="options-${exId}" data-shuffled='${JSON.stringify(opts.map(o=>o.correct))}'>`;
+    opts.forEach((opt,i)=>{
+      html += `<button class="option-btn" data-idx="${i}" onclick="selectOption('${exId}',${i},'${item.qtype}')">
+        <span class="option-letter">${String.fromCharCode(65+i)}</span>
+        <span class="option-text">${opt.text}</span>
+      </button>`;
+    });
+    html += `</div>`;
+  } else if(item.qtype==='text'){
+    html += `<div class="text-input-wrap">
+      <input type="text" class="text-input" id="input-${exId}" placeholder="Type your answer..." onkeypress="if(event.key==='Enter')checkExercise('${exId}')">
+    </div>`;
+  }
+
+  html += `
+      <div class="feedback" id="feedback-${exId}"></div>
+      <details class="explanation" id="explanation-${exId}">
+        <summary>📖 Show Explanation / Tampilkan Penjelasan</summary>
+        <div class="explanation-body">
+          <p class="en-text">${item.explanation.en}</p>
+          <p class="id-text">${item.explanation.id}</p>
+        </div>
+      </details>
+      <div class="ex-controls">
+        <button class="btn btn-secondary" onclick="prevExercise('${exId}','${sectionId}')">← Previous</button>
+        <button class="btn btn-warning" onclick="resetExercise('${exId}')">↻ Reset</button>
+        <button class="btn btn-primary" onclick="checkExercise('${exId}')">✓ Check</button>
+        <button class="btn btn-secondary" onclick="nextExercise('${exId}','${sectionId}')">Next →</button>
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+/* ========================================================
+   EXERCISE INTERACTION
+   ======================================================== */
+function selectOption(exId,idx,qtype){
+  const optsContainer = document.getElementById(`options-${exId}`);
+  if(!optsContainer) return;
+  const btns = optsContainer.querySelectorAll('.option-btn');
+  if(qtype==='mcq'){
+    btns.forEach(b=>b.classList.remove('selected'));
+    btns[idx].classList.add('selected');
+  } else if(qtype==='checkbox'){
+    btns[idx].classList.toggle('selected');
+  }
+}
+
+function checkExercise(exId){
+  const card = document.getElementById(`card-${exId}`);
+  if(!card) return;
+  const qtype = card.dataset.type;
+  const feedback = document.getElementById(`feedback-${exId}`);
+  const explanation = document.getElementById(`explanation-${exId}`);
+  let isCorrect = false;
+  let studentAnswer = '';
+
+  if(qtype==='mcq'){
+    const optsContainer = document.getElementById(`options-${exId}`);
+    const correctMap = JSON.parse(optsContainer.dataset.shuffled);
+    const selected = optsContainer.querySelectorAll('.option-btn.selected');
+    if(selected.length===0){
+      feedback.className='feedback incorrect show';
+      feedback.textContent='⚠️ Please select an answer. / Silakan pilih jawaban.';
+      return;
+    }
+    const selIdx = parseInt(selected[0].dataset.idx);
+    isCorrect = correctMap[selIdx];
+    studentAnswer = selected[0].querySelector('.option-text').textContent;
+    // Highlight
+    optsContainer.querySelectorAll('.option-btn').forEach((b,i)=>{
+      if(correctMap[i]) b.classList.add('correct-answer');
+      else if(i===selIdx) b.classList.add('wrong-answer');
+      b.style.pointerEvents='none';
+    });
+  } else if(qtype==='checkbox'){
+    const optsContainer = document.getElementById(`options-${exId}`);
+    const correctMap = JSON.parse(optsContainer.dataset.shuffled);
+    const selected = optsContainer.querySelectorAll('.option-btn.selected');
+    if(selected.length===0){
+      feedback.className='feedback incorrect show';
+      feedback.textContent='⚠️ Please select at least one answer. / Silakan pilih minimal satu jawaban.';
+      return;
+    }
+    const selIndices = Array.from(selected).map(b=>parseInt(b.dataset.idx));
+    const correctIndices = correctMap.map((c,i)=>c?i:null).filter(i=>i!==null);
+    isCorrect = selIndices.length===correctIndices.length && selIndices.every(i=>correctIndices.includes(i));
+    studentAnswer = Array.from(selected).map(b=>b.querySelector('.option-text').textContent).join(', ');
+    optsContainer.querySelectorAll('.option-btn').forEach((b,i)=>{
+      if(correctMap[i]) b.classList.add('correct-answer');
+      else if(b.classList.contains('selected')) b.classList.add('wrong-answer');
+      b.style.pointerEvents='none';
+    });
+  } else if(qtype==='text'){
+    const input = document.getElementById(`input-${exId}`);
+    const data = findExercise(exId);
+    studentAnswer = input.value.trim();
+    if(!studentAnswer){
+      feedback.className='feedback incorrect show';
+      feedback.textContent='⚠️ Please type your answer. / Silakan ketik jawaban.';
+      return;
+    }
+    // Check against acceptable answers
+    isCorrect = data.accept.some(a=>studentAnswer.toLowerCase().replace(/\s/g, '')===String(a).toLowerCase().replace(/\s/g, ''));
+    input.disabled = true;
+  }
+
+  card.classList.remove('correct','incorrect');
+  card.classList.add(isCorrect?'correct':'incorrect');
+  feedback.className = `feedback ${isCorrect?'correct':'incorrect'} show`;
+  feedback.innerHTML = isCorrect
+    ? '✅ Correct! / Benar!'
+    : '❌ Not quite. See the explanation below. / Belum tepat. Lihat penjelasan di bawah.';
+  explanation.setAttribute('open','');
+  document.getElementById(`status-${exId}`).textContent = isCorrect?'✅':'❌';
+
+  // Save progress
+  progress[exId] = { answered:true, correct:isCorrect, studentAnswer };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  updateProgress();
+  updateAssignmentPrintState(card.dataset.section);
+  updateNavChecks();
+}
+
+function findExercise(exId){
+  for(const secId in LESSON_DATA){
+    const found = (LESSON_DATA[secId].content||[]).find((item,idx)=>{
+      const id = item.id || `${secId}-ex${idx+1}`;
+      return id===exId;
+    });
+    if(found) return found;
+  }
+  return null;
+}
+
+function restoreExercise(exId){
+  const saved = progress[exId];
+  if(!saved || !saved.answered) return;
+  const card = document.getElementById(`card-${exId}`);
+  if(!card) return;
+  const qtype = card.dataset.type;
+  const feedback = document.getElementById(`feedback-${exId}`);
+
+  if(qtype==='mcq'||qtype==='checkbox'){
+    const optsContainer = document.getElementById(`options-${exId}`);
+    const correctMap = JSON.parse(optsContainer.dataset.shuffled);
+    optsContainer.querySelectorAll('.option-btn').forEach((b,i)=>{
+      if(correctMap[i]) b.classList.add('correct-answer');
+      b.style.pointerEvents='none';
+    });
+  } else if(qtype==='text'){
+    const input = document.getElementById(`input-${exId}`);
+    if(input) input.disabled = true;
+  }
+  card.classList.add(saved.correct?'correct':'incorrect');
+  feedback.className = `feedback ${saved.correct?'correct':'incorrect'} show`;
+  feedback.innerHTML = saved.correct
+    ? '✅ Correct! / Benar!'
+    : '❌ Not quite. See the explanation below. / Belum tepat. Lihat penjelasan di bawah.';
+  document.getElementById(`status-${exId}`).textContent = saved.correct?'✅':'❌';
+}
+
+function resetExercise(exId){
+  const card = document.getElementById(`card-${exId}`);
+  if(!card) return;
+  const qtype = card.dataset.type;
+  card.classList.remove('correct','incorrect');
+  const feedback = document.getElementById(`feedback-${exId}`);
+  feedback.className='feedback';
+  feedback.textContent='';
+  document.getElementById(`status-${exId}`).textContent='⬤';
+  const explanation = document.getElementById(`explanation-${exId}`);
+  explanation.removeAttribute('open');
+
+  if(qtype==='mcq'||qtype==='checkbox'){
+    // Re-render with new shuffle
+    const secId = card.dataset.section;
+    const idx = Array.from(card.parentNode.children).filter(c=>c.classList&&c.classList.contains('exercise-card')).indexOf(card);
+    const data = LESSON_DATA[secId];
+    if(data){
+      const item = data.content.filter(it=>it.type==='exercise')[idx] || data.content[idx];
+      if(item){
+        const opts = shuffle(item.options);
+        const optsContainer = document.getElementById(`options-${exId}`);
+        optsContainer.dataset.shuffled = JSON.stringify(opts.map(o=>o.correct));
+        optsContainer.innerHTML = opts.map((opt,i)=>`
+          <button class="option-btn" data-idx="${i}" onclick="selectOption('${exId}',${i},'${qtype}')">
+            <span class="option-letter">${String.fromCharCode(65+i)}</span>
+            <span class="option-text">${opt.text}</span>
+          </button>
+        `).join('');
+        renderMath(optsContainer);
+      }
+    }
+  } else if(qtype==='text'){
+    const input = document.getElementById(`input-${exId}`);
+    if(input){input.value='';input.disabled=false}
+  }
+
+  delete progress[exId];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  updateProgress();
+  updateAssignmentPrintState(card.dataset.section);
+  updateNavChecks();
+}
+
+function prevExercise(exId,sectionId){
+  const cards = document.querySelectorAll(`#${sectionId} .exercise-card`);
+  const current = document.getElementById(`card-${exId}`);
+  const idx = Array.from(cards).indexOf(current);
+  if(idx>0){
+    cards[idx-1].scrollIntoView({behavior:'smooth',block:'center'});
+    cards[idx-1].style.transition='background .3s';
+    cards[idx-1].style.boxShadow='0 0 0 3px var(--blue)';
+    setTimeout(()=>cards[idx-1].style.boxShadow='',1000);
+  }
+}
+
+function nextExercise(exId,sectionId){
+  const cards = document.querySelectorAll(`#${sectionId} .exercise-card`);
+  const current = document.getElementById(`card-${exId}`);
+  const idx = Array.from(cards).indexOf(current);
+  if(idx<cards.length-1){
+    cards[idx+1].scrollIntoView({behavior:'smooth',block:'center'});
+    cards[idx+1].style.transition='background .3s';
+    cards[idx+1].style.boxShadow='0 0 0 3px var(--blue)';
+    setTimeout(()=>cards[idx+1].style.boxShadow='',1000);
+  } else {
+    // Last exercise — suggest next section
+    const secIdx = SECTIONS.findIndex(s=>s.id===sectionId);
+    if(secIdx<SECTIONS.length-1){
+      if(confirm('Great job! Move to the next section? / Kerja bagus! Lanjut ke bagian berikutnya?')){
+        showSection(SECTIONS[secIdx+1].id);
+      }
+    }
+  }
+}
+
+/* ========================================================
+   NAVIGATION
+   ======================================================== */
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById(id);
+  if(target){
+    target.classList.add('active');
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const navItem = document.querySelector(`.nav-item[data-target="${id}"]`);
+  if(navItem) navItem.classList.add('active');
+  const sec = SECTIONS.find(s=>s.id===id);
+  document.getElementById('topbar-title').textContent = sec?sec.title:'Home';
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+/* ========================================================
+   PROGRESS
+   ======================================================== */
+function countExercises(sectionId){
+  const data = LESSON_DATA[sectionId];
+  if(!data) return 0;
+  return (data.content||[]).filter(i=>i.type==='exercise').length;
+}
+
+function updateProgress(){
+  let total=0, done=0;
+  SECTIONS.forEach(s=>{
+    const n = countExercises(s.id);
+    total += n;
+    const container = document.getElementById(s.id);
+    if(container){
+      done += container.querySelectorAll('.exercise-card.correct,.exercise-card.incorrect').length;
+    }
+  });
+  const pct = total>0?Math.round(done/total*100):0;
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-text').textContent = pct+'%';
+}
+
+function updateNavChecks(){
+  SECTIONS.forEach(s=>{
+    const container = document.getElementById(s.id);
+    const navItem = document.querySelector(`.nav-item[data-target="${s.id}"]`);
+    if(!container||!navItem) return;
+    const cards = container.querySelectorAll('.exercise-card');
+    if(cards.length===0) return;
+    const answered = container.querySelectorAll('.exercise-card.correct,.exercise-card.incorrect');
+    const allCorrect = Array.from(cards).every(c=>c.classList.contains('correct'));
+    if(answered.length===cards.length && allCorrect){
+      navItem.classList.add('completed');
+      const check = navItem.querySelector('.nav-check');
+      if(check) check.innerHTML='✓';
+    } else {
+      navItem.classList.remove('completed');
+      const check = navItem.querySelector('.nav-check');
+      if(check){
+        check.innerHTML = answered.length>0?`${answered.length}/${cards.length}`:'';
+      }
+    }
+  });
+}
+
+/* ========================================================
+   ASSIGNMENT PRINT
+   ======================================================== */
+function updateAssignmentPrintState(sectionId){
+  const sec = SECTIONS.find(s=>s.id===sectionId);
+  if(!sec || sec.type!=='assignment') return;
+  const container = document.getElementById(sectionId);
+  if(!container) return;
+  const cards = container.querySelectorAll('.exercise-card');
+  if(cards.length===0) return;
+  
+  const correct = container.querySelectorAll('.exercise-card.correct').length;
+  const scoreDisplay = document.getElementById(`score-display-${sectionId}`);
+  if(scoreDisplay){
+    const answered = container.querySelectorAll('.exercise-card.correct,.exercise-card.incorrect').length;
+    const status = answered < cards.length ? ' (Incomplete)' : ' (Completed)';
+    scoreDisplay.textContent = `Score: ${correct} / ${cards.length} ${status}`;
+  }
+}
+
+function printAssignment(sectionId){
+  const sec = SECTIONS.find(s=>s.id===sectionId);
+  const data = LESSON_DATA[sectionId];
+  if(!data) return;
+  const container = document.getElementById(sectionId);
+  const cards = container.querySelectorAll('.exercise-card');
+  let rows='';
+  let correctCount=0;
+  let answeredCount=0;
+  
+  cards.forEach((card,i)=>{
+    const exId = card.dataset.exId;
+    const qtype = card.dataset.type;
+    const exItem = findExercise(exId);
+    const saved = progress[exId]||{};
+    const isCorrect = card.classList.contains('correct');
+    
+    if(saved.answered) answeredCount++;
+    if(isCorrect) correctCount++;
+    
+    let studentAns = saved.studentAnswer || '—';
+    let correctAns = '';
+    if(qtype==='mcq'||qtype==='checkbox'){
+      correctAns = exItem.options.filter(o=>o.correct).map(o=>o.text).join(', ');
+    } else if(qtype==='text'){
+      correctAns = exItem.accept.join(' or ');
+    }
+    const cleanQ = exItem.question.en;
+    const cleanSA = String(studentAns);
+    const cleanCA = String(correctAns);
+    rows += `<tr>
+      <td style="text-align:center">${i+1}</td>
+      <td>${cleanQ}</td>
+      <td>${cleanSA}</td>
+      <td>${cleanCA}</td>
+      <td style="text-align:center">${isCorrect?'✓':(saved.answered?'✗':'-')}</td>
+    </tr>`;
+  });
+
+  const isComplete = answeredCount === cards.length;
+  const printWin = window.open('','_blank');
+  printWin.document.write(`
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>${data.title} — Result</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<style>
+@page{size:A4;margin:12mm}
+*{font-family:Arial,Helvetica,sans-serif;font-size:10pt;color:#222}
+.header{text-align:center;border-bottom:2px solid #58cc02;padding-bottom:8px;margin-bottom:10px}
+.header h1{font-size:16pt;color:#58cc02;font-weight:900}
+.header p{font-size:9pt;color:#666}
+.info-table{width:100%;border-collapse:collapse;margin-bottom:10px}
+.info-table td{padding:3px 6px;border:1px solid #ddd;font-size:10pt}
+.info-table .label{background:#f5f5f5;font-weight:700;width:120px}
+.score-box{text-align:center;background:#f0f0f0;border-radius:6px;padding:6px;margin-bottom:10px;font-weight:700}
+.score-box span{color:#58cc02;font-size:13pt}
+.score-box .incomplete{color:#ff4b4b;font-size:9pt;margin-left:8px}
+table.results{width:100%;border-collapse:collapse;margin-bottom:12px}
+table.results th{background:#58cc02;color:#fff;padding:5px;font-size:9pt;border:1px solid #4cad02}
+table.results td{padding:4px 6px;border:1px solid #ddd;font-size:9pt;vertical-align:top}
+table.results tr:nth-child(even){background:#fafafa}
+.sign{text-align:right;margin-top:20px;font-size:10pt}
+.sign .line{margin-top:30px;border-top:1px solid #333;width:200px;margin-left:auto}
+</style>
+</head><body>
+<div class="header">
+  <h1>MATH TUTORING by Deni</h1>
+  <p>Systems of Linear Equations</p>
+</div>
+<table class="info-table">
+  <tr><td class="label">Name:</td><td>__________________________</td><td class="label">Date:</td><td>________________</td></tr>
+  <tr><td class="label">Topic:</td><td>Systems of Linear Equations</td><td class="label">Assignment:</td><td>${data.title}</td></tr>
+</table>
+<div class="score-box">Score: <span>${correctCount} / ${cards.length}</span> ${isComplete ? '' : '<span class="incomplete">(Incomplete)</span>'}</div>
+<table class="results">
+  <thead><tr><th style="width:30px">No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th style="width:40px">Note</th></tr></thead>
+  <tbody>${rows}</tbody>
+</table>
+<div class="sign">
+  Checked by,<br>
+  <div class="line"></div>
+  Deni
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>
+<script>
+  renderMathInElement(document.body,{delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false});
+  setTimeout(()=>window.print(),500);
+<\/script>
+</body></html>`);
+  printWin.document.close();
+}
+
+/* ========================================================
+   RESET ALL
+   ======================================================== */
+function resetAllProgress(){
+  if(confirm('⚠️ This will reset ALL progress across all sections. Are you sure?\n\nIni akan mereset SEMUA kemajuan di semua bagian. Yakin?')){
+    localStorage.removeItem(STORAGE_KEY);
+    progress = {};
+    location.reload();
+  }
+}
+
+/* ========================================================
+   INIT
+   ======================================================== */
+window.addEventListener('load',()=>{
+  // Render all registered sections
+  Object.keys(LESSON_DATA).forEach(id=>renderSection(id));
+  updateProgress();
+  updateNavChecks();
+});
+
+</script>
+
+<!-- ========================================================
+     SECTION 1: SPIRAL REVIEW WARM-UP
+     ======================================================== -->
+<script>
+registerSection('section1', {
+  title: 'Spiral Review Warm-up',
+  intro: {
+    en: "Welcome! Before we dive into today's new topic, let's warm up by reviewing some foundational algebra skills. These skills will be essential for understanding Systems of Linear Equations.",
+    id: "Selamat datang! Sebelum kita masuk ke topik baru hari ini, mari kita pemanasan dengan mengulas keterampilan aljabar dasar. Keterampilan ini akan sangat penting untuk memahami Sistem Persamaan Linear."
+  },
+  content: [
+    /* ---- THEORY 1 ---- */
+    {
+      type:'theory', number:'1', icon:'🔤',
+      title:{en:'Variables and Algebraic Expressions', id:'Variabel dan Ekspresi Aljabar'},
+      paragraphs:[
+        {en:'A <strong>variable</strong> is a symbol (usually a letter like \\(x\\) or \\(y\\)) that represents an unknown number. An <strong>algebraic expression</strong> combines variables, numbers, and operations.',
+         id:'<strong>Variabel</strong> adalah simbol (biasanya huruf seperti \\(x\\) atau \\(y\\)) yang mewakili bilangan yang tidak diketahui. <strong>Ekspresi aljabar</strong> menggabungkan variabel, bilangan, dan operasi.'},
+        {en:'In the expression \\(3x + 5\\), the number \\(3\\) is the <strong>coefficient</strong> (the number multiplied by the variable), and \\(5\\) is the <strong>constant</strong> term.',
+         id:'Pada ekspresi \\(3x + 5\\), bilangan \\(3\\) adalah <strong>koefisien</strong> (bilangan yang dikalikan dengan variabel), dan \\(5\\) adalah suku <strong>konstanta</strong>.'},
+        {en:'To <strong>evaluate</strong> an expression means to substitute a value for the variable and calculate the result.',
+         id:'Untuk <strong>mengevaluasi</strong> ekspresi berarti mengganti nilai variabel dan menghitung hasilnya.'}
+      ],
+      example:{
+        en:'Evaluate \\(2x + 7\\) when \\(x = 3\\):  \\(\\quad 2(3) + 7 = 6 + 7 = 13\\)',
+        id:'Evaluasi \\(2x + 7\\) ketika \\(x = 3\\):  \\(\\quad 2(3) + 7 = 6 + 7 = 13\\)'
+      },
+      illustration:`<svg width="280" height="100" viewBox="0 0 280 100">
+        <rect x="10" y="20" width="60" height="60" rx="10" fill="#d8f3ff" stroke="#1cb0f6" stroke-width="2"/>
+        <text x="40" y="58" text-anchor="middle" font-size="24" font-weight="900" fill="#1cb0f6" font-family="Nunito">x</text>
+        <text x="80" y="58" font-size="16" fill="#888" font-family="Nunito">=?</text>
+        <rect x="110" y="20" width="60" height="60" rx="10" fill="#fff4cc" stroke="#ffc800" stroke-width="2"/>
+        <text x="140" y="58" text-anchor="middle" font-size="22" font-weight="900" fill="#d4a600" font-family="Nunito">5</text>
+        <text x="180" y="55" font-size="18" fill="#58cc02" font-weight="900" font-family="Nunito">+</text>
+        <rect x="200" y="20" width="60" height="60" rx="10" fill="#d7ffb8" stroke="#58cc02" stroke-width="2"/>
+        <text x="230" y="58" text-anchor="middle" font-size="20" font-weight="900" fill="#58cc02" font-family="Nunito">3x</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 1 ---- */
+    {
+      type:'exercise', qtype:'text',
+      question:{en:'Evaluate \\(2x + 7\\) when \\(x = 3\\).', id:'Evaluasi \\(2x + 7\\) ketika \\(x = 3\\).'},
+      accept:['13'],
+      explanation:{en:'Substitute \\(x = 3\\): \\(2(3) + 7 = 6 + 7 = 13\\).', id:'Substitusi \\(x = 3\\): \\(2(3) + 7 = 6 + 7 = 13\\).'}
+    },
+    /* ---- EXERCISE 2 ---- */
+    {
+      type:'exercise', qtype:'mcq',
+      question:{en:'Which of the following is an algebraic expression (not an equation)?', id:'Manakah dari berikut ini yang merupakan ekspresi aljabar (bukan persamaan)?'},
+      options:[
+        {text:'\\(5x - 3\\)', correct:true},
+        {text:'\\(2 + 3 = 5\\)', correct:false},
+        {text:'\\(x = 4\\)', correct:false},
+        {text:'\\(7\\)', correct:false}
+      ],
+      explanation:{en:'An algebraic expression contains variables and operations but no equals sign. \\(5x - 3\\) fits this definition. \\(2+3=5\\) and \\(x=4\\) are equations (they have an = sign).', id:'Ekspresi aljabar berisi variabel dan operasi tetapi tidak ada tanda sama dengan. \\(5x-3\\) sesuai dengan definisi ini. \\(2+3=5\\) dan \\(x=4\\) adalah persamaan (memiliki tanda =).'}
+    },
+    /* ---- EXERCISE 3 ---- */
+    {
+      type:'exercise', qtype:'text',
+      question:{en:'If \\(y = 4x - 2\\), find \\(y\\) when \\(x = 5\\).', id:'Jika \\(y = 4x - 2\\), carilah \\(y\\) ketika \\(x = 5\\).'},
+      accept:['18'],
+      explanation:{en:'Substitute \\(x = 5\\): \\(y = 4(5) - 2 = 20 - 2 = 18\\).', id:'Substitusi \\(x = 5\\): \\(y = 4(5) - 2 = 20 - 2 = 18\\).'}
+    },
+
+    /* ---- THEORY 2 ---- */
+    {
+      type:'theory', number:'2', icon:'🔀',
+      title:{en:'Simplifying Algebraic Expressions', id:'Menyederhanakan Ekspresi Aljabar'},
+      paragraphs:[
+        {en:'<strong>Like terms</strong> are terms that have the same variable raised to the same power. We can combine like terms by adding or subtracting their coefficients.',
+         id:'<strong>Suku sejenis</strong> adalah suku yang memiliki variabel yang sama dengan pangkat yang sama. Kita dapat menggabungkan suku sejenis dengan menjumlahkan atau mengurangkan koefisiennya.'},
+        {en:'The <strong>distributive property</strong> states that \\(a(b + c) = ab + ac\\). This allows us to remove parentheses by multiplying the term outside to each term inside.',
+         id:'<strong>Sifat distributif</strong> menyatakan bahwa \\(a(b + c) = ab + ac\\). Ini memungkinkan kita menghilangkan tanda kurung dengan mengalikan suku di luar ke setiap suku di dalam.'}
+      ],
+      example:{
+        en:'Simplify \\(3x + 7 + 2x - 3\\):  \\(\\quad (3x + 2x) + (7 - 3) = 5x + 4\\)',
+        id:'Sederhanakan \\(3x + 7 + 2x - 3\\):  \\(\\quad (3x + 2x) + (7 - 3) = 5x + 4\\)'
+      },
+      illustration:`<svg width="280" height="90" viewBox="0 0 280 90">
+        <text x="140" y="35" text-anchor="middle" font-size="18" font-weight="700" fill="#3c3c3c" font-family="Nunito">a(b + c) = ab + ac</text>
+        <rect x="20" y="50" width="50" height="30" rx="6" fill="#d8f3ff" stroke="#1cb0f6"/>
+        <text x="45" y="70" text-anchor="middle" font-size="14" fill="#1cb0f6" font-weight="700" font-family="Nunito">a</text>
+        <text x="80" y="70" font-size="14" fill="#888" font-family="Nunito">×</text>
+        <rect x="100" y="50" width="80" height="30" rx="6" fill="#fff4cc" stroke="#ffc800"/>
+        <text x="140" y="70" text-anchor="middle" font-size="14" fill="#d4a600" font-weight="700" font-family="Nunito">(b + c)</text>
+        <text x="195" y="70" font-size="16" fill="#58cc02" font-weight="900" font-family="Nunito">=</text>
+        <rect x="210" y="50" width="50" height="30" rx="6" fill="#d7ffb8" stroke="#58cc02"/>
+        <text x="235" y="70" text-anchor="middle" font-size="14" fill="#58cc02" font-weight="700" font-family="Nunito">ab+ac</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 4 ---- */
+    {
+      type:'exercise', qtype:'text',
+      question:{en:'Simplify by combining like terms: \\(5x + 3x - 2 + 7\\)', id:'Sederhanakan dengan menggabungkan suku sejenis: \\(5x + 3x - 2 + 7\\)'},
+      accept:['8x+5','5+8x'],
+      explanation:{en:'Combine the \\(x\\)-terms: \\(5x + 3x = 8x\\). Combine the constants: \\(-2 + 7 = 5\\). Result: \\(8x + 5\\).', id:'Gabungkan suku \\(x\\): \\(5x + 3x = 8x\\). Gabungkan konstanta: \\(-2 + 7 = 5\\). Hasil: \\(8x + 5\\).'}
+    },
+    /* ---- EXERCISE 5 ---- */
+    {
+      type:'exercise', qtype:'mcq',
+      question:{en:'Distribute and simplify: \\(3(x + 4) + 2x\\)', id:'Distribusikan dan sederhanakan: \\(3(x + 4) + 2x\\)'},
+      options:[
+        {text:'\\(5x + 12\\)', correct:true},
+        {text:'\\(3x + 12\\)', correct:false},
+        {text:'\\(5x + 4\\)', correct:false},
+        {text:'\\(3x + 14\\)', correct:false}
+      ],
+      explanation:{en:'First distribute: \\(3(x+4) = 3x + 12\\). Then combine with \\(2x\\): \\(3x + 12 + 2x = 5x + 12\\).', id:'Pertama distribusikan: \\(3(x+4) = 3x + 12\\). Lalu gabungkan dengan \\(2x\\): \\(3x + 12 + 2x = 5x + 12\\).'}
+    },
+    /* ---- EXERCISE 6 ---- */
+    {
+      type:'exercise', qtype:'checkbox',
+      question:{en:'Which expressions are equivalent to \\(4(2x + 3)\\)? (Select ALL that apply)', id:'Ekspresi mana yang ekuivalen dengan \\(4(2x + 3)\\)? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'\\(8x + 12\\)', correct:true},
+        {text:'\\(8x + 3\\)', correct:false},
+        {text:'\\(2(4x + 6)\\)', correct:true},
+        {text:'\\(8x + 7\\)', correct:false}
+      ],
+      explanation:{en:'\\(4(2x+3) = 8x + 12\\). The expression \\(2(4x+6)\\) also equals \\(8x + 12\\), so it is equivalent. The others do not match.', id:'\\(4(2x+3) = 8x + 12\\). Ekspresi \\(2(4x+6)\\) juga sama dengan \\(8x + 12\\), jadi ekuivalen. Lainnya tidak cocok.'}
+    },
+
+    /* ---- THEORY 3 ---- */
+    {
+      type:'theory', number:'3', icon:'⚖️',
+      title:{en:'Solving Linear Equations in One Variable', id:'Menyelesaikan Persamaan Linear Satu Variabel'},
+      paragraphs:[
+        {en:'A <strong>linear equation in one variable</strong> is an equation that can be written in the form \\(ax + b = c\\), where \\(a \\neq 0\\). The goal is to find the value of \\(x\\) that makes the equation true.',
+         id:'<strong>Persamaan linear satu variabel</strong> adalah persamaan yang dapat ditulis dalam bentuk \\(ax + b = c\\), di mana \\(a \\neq 0\\). Tujuannya adalah mencari nilai \\(x\\) yang membuat persamaan menjadi benar.'},
+        {en:'To solve, we use <strong>inverse operations</strong> to isolate the variable: first add/subtract to move constants, then multiply/divide to get the coefficient to 1. Whatever you do to one side, you must do to the other.',
+         id:'Untuk menyelesaikan, kita menggunakan <strong>operasi invers</strong> untuk mengisolasi variabel: pertama jumlah/kurangi untuk memindahkan konstanta, lalu kalikan/bagi untuk membuat koefisien menjadi 1. Apa pun yang Anda lakukan pada satu sisi, harus dilakukan juga pada sisi lain.'},
+        {en:'Always <strong>check</strong> your answer by substituting it back into the original equation.',
+         id:'Selalu <strong>periksa</strong> jawaban Anda dengan menggantikannya kembali ke persamaan asli.'}
+      ],
+      example:{
+        en:'Solve \\(2x + 5 = 11\\):  \\(\\quad 2x = 6 \\quad\\Rightarrow\\quad x = 3\\).  Check: \\(2(3)+5 = 11\\) ✓',
+        id:'Selesaikan \\(2x + 5 = 11\\):  \\(\\quad 2x = 6 \\quad\\Rightarrow\\quad x = 3\\).  Periksa: \\(2(3)+5 = 11\\) ✓'
+      },
+      illustration:`<svg width="200" height="110" viewBox="0 0 200 110">
+        <line x1="100" y1="15" x2="100" y2="95" stroke="#888" stroke-width="3"/>
+        <rect x="30" y="30" width="50" height="40" rx="6" fill="#d7ffb8" stroke="#58cc02" stroke-width="2"/>
+        <text x="55" y="56" text-anchor="middle" font-size="16" fill="#58cc02" font-weight="800" font-family="Nunito">2x+5</text>
+        <rect x="120" y="30" width="50" height="40" rx="6" fill="#d8f3ff" stroke="#1cb0f6" stroke-width="2"/>
+        <text x="145" y="56" text-anchor="middle" font-size="16" fill="#1cb0f6" font-weight="800" font-family="Nunito">11</text>
+        <text x="100" y="105" text-anchor="middle" font-size="11" fill="#888" font-family="Nunito">Balance / Seimbang</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 7 ---- */
+    {
+      type:'exercise', qtype:'text',
+      question:{en:'Solve for \\(x\\):  \\(x + 8 = 15\\)', id:'Selesaikan untuk \\(x\\):  \\(x + 8 = 15\\)'},
+      accept:['7'],
+      explanation:{en:'Subtract 8 from both sides: \\(x = 15 - 8 = 7\\). Check: \\(7 + 8 = 15\\) ✓', id:'Kurangi 8 dari kedua sisi: \\(x = 15 - 8 = 7\\). Periksa: \\(7 + 8 = 15\\) ✓'}
+    },
+    /* ---- EXERCISE 8 ---- */
+    {
+      type:'exercise', qtype:'text',
+      question:{en:'Solve for \\(x\\):  \\(3x - 4 = 14\\)', id:'Selesaikan untuk \\(x\\):  \\(3x - 4 = 14\\)'},
+      accept:['6'],
+      explanation:{en:'Add 4: \\(3x = 18\\). Divide by 3: \\(x = 6\\). Check: \\(3(6)-4 = 14\\) ✓', id:'Tambah 4: \\(3x = 18\\). Bagi 3: \\(x = 6\\). Periksa: \\(3(6)-4 = 14\\) ✓'}
+    },
+    /* ---- EXERCISE 9 ---- */
+    {
+      type:'exercise', qtype:'text',
+      question:{en:'Solve for \\(x\\):  \\(2(x + 3) = 16\\)', id:'Selesaikan untuk \\(x\\):  \\(2(x + 3) = 16\\)'},
+      accept:['5'],
+      explanation:{en:'Method 1 — Distribute first: \\(2x + 6 = 16 \\Rightarrow 2x = 10 \\Rightarrow x = 5\\). Method 2 — Divide first: \\(x + 3 = 8 \\Rightarrow x = 5\\).', id:'Cara 1 — Distribusi dulu: \\(2x + 6 = 16 \\Rightarrow 2x = 10 \\Rightarrow x = 5\\). Cara 2 — Bagi dulu: \\(x + 3 = 8 \\Rightarrow x = 5\\).'}
+    },
+    /* ---- EXERCISE 10 ---- */
+    {
+      type:'exercise', qtype:'mcq',
+      question:{en:'A number plus 5 equals twice the number minus 4. What is the number?', id:'Suatu bilangan ditambah 5 sama dengan dua kali bilangan tersebut dikurangi 4. Berapakah bilangan itu?'},
+      options:[
+        {text:'\\(7\\)', correct:false},
+        {text:'\\(9\\)', correct:true},
+        {text:'\\(11\\)', correct:false},
+        {text:'\\(13\\)', correct:false}
+      ],
+      explanation:{en:'Let \\(n\\) = the number. The equation is \\(n + 5 = 2n - 4\\). Subtract \\(n\\) from both sides: \\(5 = n - 4\\). Add 4: \\(n = 9\\). Check: \\(9+5=14\\) and \\(2(9)-4=14\\) ✓', id:'Misal \\(n\\) = bilangan tersebut. Persamaannya \\(n + 5 = 2n - 4\\). Kurangi \\(n\\) dari kedua sisi: \\(5 = n - 4\\). Tambah 4: \\(n = 9\\). Periksa: \\(9+5=14\\) dan \\(2(9)-4=14\\) ✓'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION
+     ======================================================== -->
+<script>
+registerSection('section2', {
+  title: 'Introduction & Real-World Connection',
+  intro: {
+    en: "Now let's explore what systems of linear equations are and how they connect to real-world situations we encounter every day.",
+    id: "Sekarang mari kita jelajahi apa itu sistem persamaan linear dan bagaimana kaitannya dengan situasi dunia nyata yang kita temui setiap hari."
+  },
+  content: [
+    /* ---- THEORY 1 ---- */
+    {
+      type:'theory', number:'1', icon:'🔗',
+      title:{en:'What is a System of Linear Equations?', id:'Apa itu Sistem Persamaan Linear?'},
+      paragraphs:[
+        {en:'A <strong>system of linear equations</strong> is a collection of two or more linear equations that share the same variables. The equations work together to describe relationships between those variables.',
+         id:'<strong>Sistem persamaan linear</strong> adalah kumpulan dua atau lebih persamaan linear yang memiliki variabel yang sama. Persamaan-persamaan ini bekerja sama untuk menggambarkan hubungan antara variabel-variabel tersebut.'},
+        {en:'We write a system using a curly brace. For example: $$\\begin{cases} x + y = 5 \\\\ 2x - y = 1 \\end{cases}$$ This system has two equations and two variables (\\(x\\) and \\(y\\)).',
+         id:'Kita menulis sistem menggunakan tanda kurung kurawal. Contohnya: $$\\begin{cases} x + y = 5 \\\\ 2x - y = 1 \\end{cases}$$ Sistem ini memiliki dua persamaan dan dua variabel (\\(x\\) dan \\(y\\)).'},
+        {en:'The <strong>goal</strong> is to find values of \\(x\\) and \\(y\\) that make <em>both</em> equations true at the same time.',
+         id:'<strong>Tujuannya</strong> adalah mencari nilai \\(x\\) dan \\(y\\) yang membuat <em>kedua</em> persamaan menjadi benar secara bersamaan.'}
+      ],
+      example:{
+        en:'In the system above, \\(x = 2\\) and \\(y = 3\\) is a solution because: \\(2 + 3 = 5\\) ✓ and \\(2(2) - 3 = 1\\) ✓',
+        id:'Pada sistem di atas, \\(x = 2\\) dan \\(y = 3\\) adalah solusi karena: \\(2 + 3 = 5\\) ✓ dan \\(2(2) - 3 = 1\\) ✓'
+      },
+      illustration:`<svg width="300" height="180" viewBox="0 0 300 180">
+        <defs><pattern id="g1" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e5e5" stroke-width="1"/></pattern></defs>
+        <rect x="50" y="15" width="200" height="140" fill="url(#g1)"/>
+        <line x1="50" y1="155" x2="260" y2="155" stroke="#888" stroke-width="2"/>
+        <line x1="150" y1="10" x2="150" y2="155" stroke="#888" stroke-width="2"/>
+        <polygon points="260,155 254,152 254,158" fill="#888"/>
+        <polygon points="150,10 147,16 153,16" fill="#888"/>
+        <line x1="70" y1="135" x2="230" y2="35" stroke="#1cb0f6" stroke-width="3"/>
+        <line x1="70" y1="35" x2="230" y2="135" stroke="#58cc02" stroke-width="3"/>
+        <circle cx="150" cy="85" r="5" fill="#ff4b4b"/>
+        <text x="156" y="80" font-size="11" fill="#ff4b4b" font-weight="700" font-family="Nunito">(2, 3)</text>
+        <text x="195" y="32" font-size="10" fill="#1cb0f6" font-weight="700" font-family="Nunito">x + y = 5</text>
+        <text x="180" y="138" font-size="10" fill="#58cc02" font-weight="700" font-family="Nunito">2x − y = 1</text>
+        <text x="265" y="155" font-size="10" fill="#888" font-family="Nunito">x</text>
+        <text x="155" y="14" font-size="10" fill="#888" font-family="Nunito">y</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 1 ---- */
+    {
+      type:'exercise', number:'1', qtype:'mcq',
+      question:{en:'Which of the following is a system of linear equations?', id:'Manakah dari berikut ini yang merupakan sistem persamaan linear?'},
+      options:[
+        {text:'$$\\begin{cases} x + y = 3 \\\\ 2x - y = 0 \\end{cases}$$', correct:true},
+        {text:'$$x^2 + y = 4$$', correct:false},
+        {text:'$$3x - 7$$', correct:false},
+        {text:'$$\\begin{cases} xy = 6 \\\\ x + y = 5 \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'A system of linear equations must have: (1) two or more equations, (2) all equations must be linear (no squared terms like \\(x^2\\), no variables multiplied together like \\(xy\\)), and (3) shared variables. Only the first option meets all criteria.', id:'Sistem persamaan linear harus memiliki: (1) dua atau lebih persamaan, (2) semua persamaan harus linear (tidak ada suku kuadrat seperti \\(x^2\\), tidak ada variabel dikalikan seperti \\(xy\\)), dan (3) variabel yang sama. Hanya pilihan pertama yang memenuhi semua kriteria.'}
+    },
+    /* ---- EXERCISE 2 ---- */
+    {
+      type:'exercise', number:'2', qtype:'text',
+      question:{en:'How many variables are in the system $$\\begin{cases} 3x + 2y = 12 \\\\ x - y = 1 \\end{cases}$$?', id:'Berapa banyak variabel dalam sistem $$\\begin{cases} 3x + 2y = 12 \\\\ x - y = 1 \\end{cases}$$?'},
+      accept:['2'],
+      explanation:{en:'The system has two variables: \\(x\\) and \\(y\\). Each equation contains both variables.', id:'Sistem tersebut memiliki dua variabel: \\(x\\) dan \\(y\\). Setiap persamaan mengandung kedua variabel tersebut.'}
+    },
+    /* ---- EXERCISE 3 ---- */
+    {
+      type:'exercise', number:'3', qtype:'checkbox',
+      question:{en:'Which of the following are systems of linear equations in two variables? (Select ALL that apply)', id:'Manakah dari berikut ini yang merupakan sistem persamaan linear dua variabel? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'$$\\begin{cases} y = 2x + 1 \\\\ y = -x + 4 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} x^2 + y = 5 \\\\ x + y = 3 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} 2x + 3y = 7 \\\\ x - y = 2 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} xy = 6 \\\\ x + y = 5 \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'Options 1 and 3 are linear systems because all equations contain variables only to the first power and no \\(xy\\) terms. Option 2 has \\(x^2\\) (not linear). Option 4 has \\(xy\\) (variables multiplied, not linear).', id:'Pilihan 1 dan 3 adalah sistem linear karena semua persamaan hanya berisi variabel berpangkat satu dan tidak ada suku \\(xy\\). Pilihan 2 memiliki \\(x^2\\) (tidak linear). Pilihan 4 memiliki \\(xy\\) (variabel dikalikan, tidak linear).'}
+    },
+
+    /* ---- THEORY 2 ---- */
+    {
+      type:'theory', number:'2', icon:'🌍',
+      title:{en:'Real-World Connection', id:'Koneksi Dunia Nyata'},
+      paragraphs:[
+        {en:'Systems of equations appear in many real-life situations: comparing phone plans, determining the break-even point in business, mixing solutions of different concentrations, and analyzing speed and distance problems.',
+         id:'Sistem persamaan muncul dalam banyak situasi kehidupan nyata: membandingkan paket telepon, menentukan titik impas dalam bisnis, mencampur larutan dengan konsentrasi berbeda, dan menganalisis masalah kecepatan dan jarak.'},
+        {en:'<strong>Example:</strong> Plan A costs $20/month plus $0.10 per minute. Plan B costs $15/month plus $0.15 per minute. We can write: $$\\begin{cases} C_A = 20 + 0.10m \\\\ C_B = 15 + 0.15m \\end{cases}$$ where \\(m\\) = minutes used and \\(C\\) = total cost.',
+         id:'<strong>Contoh:</strong> Paket A berbiaya $20/bulan ditambah $0,10 per menit. Paket B berbiaya $15/bulan ditambah $0,15 per menit. Kita dapat menulis: $$\\begin{cases} C_A = 20 + 0.10m \\\\ C_B = 15 + 0.15m \\end{cases}$$ di mana \\(m\\) = menit yang digunakan dan \\(C\\) = total biaya.'},
+        {en:'The <strong>intersection point</strong> tells us the number of minutes where both plans cost the same. Before that point, one plan is cheaper; after it, the other is cheaper.',
+         id:'<strong>Titik perpotongan</strong> memberi tahu kita jumlah menit di mana kedua paket berbiaya sama. Sebelum titik itu, satu paket lebih murah; setelahnya, paket lain lebih murah.'}
+      ],
+      example:{
+        en:'At \\(m = 100\\) minutes: Plan A = \\(20 + 0.10(100) = \\$30\\), Plan B = \\(15 + 0.15(100) = \\$30\\). Both plans cost $30 at 100 minutes!',
+        id:'Pada \\(m = 100\\) menit: Paket A = \\(20 + 0,10(100) = \\$30\\), Paket B = \\(15 + 0,15(100) = \\$30\\). Kedua paket berbiaya $30 pada 100 menit!'
+      },
+      illustration:`<svg width="320" height="180" viewBox="0 0 320 180">
+        <line x1="40" y1="160" x2="300" y2="160" stroke="#888" stroke-width="2"/>
+        <line x1="40" y1="20" x2="40" y2="160" stroke="#888" stroke-width="2"/>
+        <polygon points="300,160 294,157 294,163" fill="#888"/>
+        <polygon points="40,20 37,26 43,26" fill="#888"/>
+        <text x="170" y="178" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito">Minutes (m)</text>
+        <text x="18" y="90" text-anchor="middle" font-size="10" fill="#888" font-family="Nunito" transform="rotate(-90 18 90)">Cost ($)</text>
+        <line x1="40" y1="125" x2="280" y2="55" stroke="#1cb0f6" stroke-width="3"/>
+        <line x1="40" y1="135" x2="280" y2="35" stroke="#58cc02" stroke-width="3"/>
+        <circle cx="180" cy="95" r="5" fill="#ff4b4b"/>
+        <text x="186" y="91" font-size="10" fill="#ff4b4b" font-weight="700" font-family="Nunito">(100, $30)</text>
+        <text x="245" y="50" font-size="11" fill="#1cb0f6" font-weight="700" font-family="Nunito">Plan A</text>
+        <text x="245" y="30" font-size="11" fill="#58cc02" font-weight="700" font-family="Nunito">Plan B</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 4 ---- */
+    {
+      type:'exercise', number:'4', qtype:'mcq',
+      question:{en:'A bakery sells cookies for $2 each and cakes for $10 each. They sold 50 items total for $230. If \\(c\\) = cookies and \\(k\\) = cakes, which system represents this?', id:'Sebuah toko roti menjual kukis seharga $2 per buah dan kue seharga $10 per buah. Mereka menjual 50 item total seharga $230. Jika \\(c\\) = kukis dan \\(k\\) = kue, sistem mana yang sesuai?'},
+      options:[
+        {text:'$$\\begin{cases} c + k = 50 \\\\ 2c + 10k = 230 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} c + k = 50 \\\\ 10c + 2k = 230 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} c + k = 230 \\\\ 2c + 10k = 50 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} c \\cdot k = 50 \\\\ 2c + 10k = 230 \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'The total number of items is \\(c + k = 50\\). The total revenue is \\(2c + 10k = 230\\) (cookies at $2 each, cakes at $10 each). The first option correctly represents both conditions.', id:'Jumlah total item adalah \\(c + k = 50\\). Total pendapatan adalah \\(2c + 10k = 230\\) (kukis $2 per buah, kue $10 per buah). Pilihan pertama benar mewakili kedua kondisi.'}
+    },
+    /* ---- EXERCISE 5 ---- */
+    {
+      type:'exercise', number:'5', qtype:'text',
+      question:{en:'Using the phone plan example (Plan A: $20 + $0.10/min, Plan B: $15 + $0.15/min), how much does Plan B cost if you talk for 60 minutes? (Enter the number in dollars)', id:'Menggunakan contoh paket telepon (Paket A: $20 + $0,10/menit, Paket B: $15 + $0,15/menit), berapa biaya Paket B jika Anda menelepon selama 60 menit? (Masukkan angka dalam dolar)'},
+      accept:['24'],
+      explanation:{en:'Plan B cost = \\(15 + 0.15(60) = 15 + 9 = 24\\) dollars. At 60 minutes, Plan B costs $24.', id:'Biaya Paket B = \\(15 + 0,15(60) = 15 + 9 = 24\\) dolar. Pada 60 menit, Paket B berbiaya $24.'}
+    },
+    /* ---- EXERCISE 6 ---- */
+    {
+      type:'exercise', number:'6', qtype:'mcq',
+      question:{en:'Two cost lines intersect at the point \\((100, 30)\\). What does this mean in context?', id:'Dua garis biaya berpotongan di titik \\((100, 30)\\). Apa artinya dalam konteks ini?'},
+      options:[
+        {text:'At 100 items/minutes, both options cost $30.', correct:true},
+        {text:'At 30 items/minutes, both options cost $100.', correct:false},
+        {text:'One option always costs $30 more than the other.', correct:false},
+        {text:'The total cost for both options is $130.', correct:false}
+      ],
+      explanation:{en:'In a cost-vs-quantity graph, the \\(x\\)-value represents the quantity (items or minutes) and the \\(y\\)-value represents the cost. The intersection point \\((100, 30)\\) means at 100 units, both options cost $30.', id:'Pada grafik biaya terhadap kuantitas, nilai \\(x\\) mewakili kuantitas (item atau menit) dan nilai \\(y\\) mewakili biaya. Titik potong \\((100, 30)\\) berarti pada 100 unit, kedua opsi berbiaya $30.'}
+    },
+
+    /* ---- THEORY 3 ---- */
+    {
+      type:'theory', number:'3', icon:'✅',
+      title:{en:'What is a Solution to a System?', id:'Apa itu Solusi dari sebuah Sistem?'},
+      paragraphs:[
+        {en:'A <strong>solution</strong> to a system of linear equations is an ordered pair \\((x, y)\\) that makes <em>all</em> equations in the system true simultaneously.',
+         id:'<strong>Solusi</strong> dari sistem persamaan linear adalah pasangan berurutan \\((x, y)\\) yang membuat <em>semua</em> persamaan dalam sistem menjadi benar secara bersamaan.'},
+        {en:'<strong>Graphically</strong>, the solution is the point where the lines intersect (cross each other). If the lines don\'t intersect, there is no solution.',
+         id:'<strong>Secara grafis</strong>, solusi adalah titik di mana garis-garis berpotongan (saling memotong). Jika garis tidak berpotongan, tidak ada solusi.'},
+        {en:'A system can have: <strong>exactly one solution</strong> (lines intersect at one point), <strong>no solution</strong> (parallel lines never intersect), or <strong>infinitely many solutions</strong> (the lines are the same — they overlap completely).',
+         id:'Sebuah sistem dapat memiliki: <strong>tepat satu solusi</strong> (garis berpotongan di satu titik), <strong>tidak ada solusi</strong> (garis sejajar tidak pernah berpotongan), atau <strong>tak hingga banyaknya solusi</strong> (garisnya sama — tumpang tindih sepenuhnya).'}
+      ],
+      example:{
+        en:'Check if \\((2, 1)\\) is a solution to $$\\begin{cases} x + y = 3 \\\\ 2x - y = 3 \\end{cases}$$ Eq 1: \\(2 + 1 = 3\\) ✓  Eq 2: \\(2(2) - 1 = 3\\) ✓  Yes, \\((2, 1)\\) is a solution!',
+        id:'Periksa apakah \\((2, 1)\\) adalah solusi dari $$\\begin{cases} x + y = 3 \\\\ 2x - y = 3 \\end{cases}$$ Pers. 1: \\(2 + 1 = 3\\) ✓  Pers. 2: \\(2(2) - 1 = 3\\) ✓  Ya, \\((2, 1)\\) adalah solusi!'
+      },
+      illustration:`<svg width="340" height="130" viewBox="0 0 340 130">
+        <text x="55" y="15" text-anchor="middle" font-size="10" font-weight="800" fill="#58cc02" font-family="Nunito">One Solution</text>
+        <line x1="20" y1="95" x2="95" y2="30" stroke="#1cb0f6" stroke-width="2.5"/>
+        <line x1="20" y1="45" x2="95" y2="85" stroke="#ce82ff" stroke-width="2.5"/>
+        <circle cx="55" cy="65" r="4" fill="#ff4b4b"/>
+        <text x="55" y="118" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito">Lines intersect</text>
+        <text x="170" y="15" text-anchor="middle" font-size="10" font-weight="800" fill="#ff4b4b" font-family="Nunito">No Solution</text>
+        <line x1="135" y1="50" x2="210" y2="30" stroke="#1cb0f6" stroke-width="2.5"/>
+        <line x1="135" y1="80" x2="210" y2="60" stroke="#ce82ff" stroke-width="2.5"/>
+        <text x="170" y="118" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito">Parallel lines</text>
+        <text x="285" y="15" text-anchor="middle" font-size="9" font-weight="800" fill="#ffc800" font-family="Nunito">Infinite Solutions</text>
+        <line x1="250" y1="90" x2="325" y2="30" stroke="#1cb0f6" stroke-width="7" opacity="0.4"/>
+        <line x1="250" y1="90" x2="325" y2="30" stroke="#ce82ff" stroke-width="2.5"/>
+        <text x="285" y="118" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito">Same line</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 7 ---- */
+    {
+      type:'exercise', number:'7', qtype:'mcq',
+      question:{en:'Is the point \\((1, 3)\\) a solution to the system $$\\begin{cases} y = 2x + 1 \\\\ y = x + 2 \\end{cases}$$?', id:'Apakah titik \\((1, 3)\\) adalah solusi dari sistem $$\\begin{cases} y = 2x + 1 \\\\ y = x + 2 \\end{cases}$$?'},
+      options:[
+        {text:'Yes — it satisfies both equations.', correct:true},
+        {text:'No — it only satisfies the first equation.', correct:false},
+        {text:'No — it only satisfies the second equation.', correct:false},
+        {text:'No — it satisfies neither equation.', correct:false}
+      ],
+      explanation:{en:'Check Eq 1: \\(3 = 2(1) + 1 = 3\\) ✓. Check Eq 2: \\(3 = 1 + 2 = 3\\) ✓. Since both are true, \\((1, 3)\\) is a solution.', id:'Periksa Pers. 1: \\(3 = 2(1) + 1 = 3\\) ✓. Periksa Pers. 2: \\(3 = 1 + 2 = 3\\) ✓. Karena keduanya benar, \\((1, 3)\\) adalah solusi.'}
+    },
+    /* ---- EXERCISE 8 ---- */
+    {
+      type:'exercise', number:'8', qtype:'text',
+      question:{en:'Is the point \\((2, 5)\\) a solution to the system $$\\begin{cases} y = 3x - 1 \\\\ y = 2x + 1 \\end{cases}$$? Type "yes" or "no".', id:'Apakah titik \\((2, 5)\\) adalah solusi dari sistem $$\\begin{cases} y = 3x - 1 \\\\ y = 2x + 1 \\end{cases}$$? Ketik "yes" atau "no".'},
+      accept:['yes','ya'],
+      explanation:{en:'Eq 1: \\(5 = 3(2) - 1 = 5\\) ✓. Eq 2: \\(5 = 2(2) + 1 = 5\\) ✓. Both are true, so the answer is yes!', id:'Pers. 1: \\(5 = 3(2) - 1 = 5\\) ✓. Pers. 2: \\(5 = 2(2) + 1 = 5\\) ✓. Keduanya benar, jadi jawabannya ya!'}
+    },
+    /* ---- EXERCISE 9 ---- */
+    {
+      type:'exercise', number:'9', qtype:'mcq',
+      question:{en:'Two parallel lines are graphed on the same coordinate plane. How many solutions does this system have?', id:'Dua garis sejajar digambarkan pada bidang koordinat yang sama. Berapa banyak solusi yang dimiliki sistem ini?'},
+      options:[
+        {text:'0 (no solution)', correct:true},
+        {text:'1 (one solution)', correct:false},
+        {text:'2 (two solutions)', correct:false},
+        {text:'Infinitely many', correct:false}
+      ],
+      explanation:{en:'Parallel lines never intersect. Since a solution is the intersection point, a system of parallel lines has no solution.', id:'Garis sejajar tidak pernah berpotongan. Karena solusi adalah titik potong, sistem garis sejajar tidak memiliki solusi.'}
+    },
+    /* ---- EXERCISE 10 ---- */
+    {
+      type:'exercise', number:'10', qtype:'checkbox',
+      question:{en:'Which of the following describe a system with infinitely many solutions? (Select ALL that apply)', id:'Manakah dari berikut ini yang menggambarkan sistem dengan tak hingga banyaknya solusi? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'The two equations represent the same line.', correct:true},
+        {text:'The lines are parallel and distinct.', correct:false},
+        {text:'When you simplify, both equations become identical.', correct:true},
+        {text:'The lines overlap completely.', correct:true}
+      ],
+      explanation:{en:'Infinitely many solutions occur when the two equations describe the same line — every point on one line is also on the other. Parallel lines (option 2) have no solution, not infinitely many.', id:'Tak hingga solusi terjadi ketika kedua persamaan menggambarkan garis yang sama — setiap titik pada satu garis juga berada pada garis lainnya. Garis sejajar (pilihan 2) tidak memiliki solusi, bukan tak hingga.'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     SECTION 3: REVIEW OF PRIOR KNOWLEDGE
+     ======================================================== -->
+<script>
+registerSection('section3', {
+  title: 'Review of Prior Knowledge',
+  intro: {
+    en: "Before we solve systems, let's review the coordinate plane and graphing linear equations — essential skills for understanding how systems work visually.",
+    id: "Sebelum kita menyelesaikan sistem, mari kita ulas bidang koordinat dan grafik persamaan linear — keterampilan penting untuk memahami cara kerja sistem secara visual."
+  },
+  content: [
+    /* ---- THEORY 1 ---- */
+    {
+      type:'theory', number:'1', icon:'🗺️',
+      title:{en:'The Coordinate Plane', id:'Bidang Koordinat'},
+      paragraphs:[
+        {en:'The <strong>coordinate plane</strong> is formed by two perpendicular number lines: the horizontal <strong>\\(x\\)-axis</strong> and the vertical <strong>\\(y\\)-axis</strong>. They meet at the <strong>origin</strong> \\((0, 0)\\).',
+         id:'<strong>Bidang koordinat</strong> dibentuk oleh dua garis bilangan saling tegak lurus: <strong>sumbu \\(x\\)</strong> horizontal dan <strong>sumbu \\(y\\)</strong> vertikal. Keduanya bertemu di <strong>titik asal</strong> \\((0, 0)\\).'},
+        {en:'The axes divide the plane into four <strong>quadrants</strong> (I, II, III, IV), numbered counterclockwise starting from the upper right.',
+         id:'Sumbu-sumbu membagi bidang menjadi empat <strong>kuadran</strong> (I, II, III, IV), dinomori berlawanan arah jarum jam dimulai dari kanan atas.'},
+        {en:'Every point is described by an <strong>ordered pair</strong> \\((x, y)\\): the first number is the horizontal position, the second is the vertical position.',
+         id:'Setiap titik dijelaskan oleh <strong>pasangan berurutan</strong> \\((x, y)\\): bilangan pertama adalah posisi horizontal, bilangan kedua adalah posisi vertikal.'}
+      ],
+      example:{
+        en:'The point \\((3, 2)\\) is 3 units right and 2 units up from the origin. It lies in Quadrant I.',
+        id:'Titik \\((3, 2)\\) berada 3 unit ke kanan dan 2 unit ke atas dari titik asal. Titik ini berada di Kuadran I.'
+      },
+      illustration:`<svg width="280" height="220" viewBox="0 0 280 220">
+        <defs><pattern id="g2" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e5e5" stroke-width="1"/></pattern></defs>
+        <rect x="30" y="20" width="220" height="180" fill="url(#g2)"/>
+        <line x1="30" y1="110" x2="260" y2="110" stroke="#888" stroke-width="2"/>
+        <line x1="140" y1="15" x2="140" y2="205" stroke="#888" stroke-width="2"/>
+        <polygon points="260,110 254,107 254,113" fill="#888"/>
+        <polygon points="140,15 137,21 143,21" fill="#888"/>
+        <text x="252" y="125" font-size="11" fill="#888" font-family="Nunito">x</text>
+        <text x="148" y="22" font-size="11" fill="#888" font-family="Nunito">y</text>
+        <text x="128" y="105" font-size="9" fill="#888" font-family="Nunito">O</text>
+        <text x="205" y="50" font-size="13" fill="#d4d4d4" font-weight="800" font-family="Nunito">I</text>
+        <text x="70" y="50" font-size="13" fill="#d4d4d4" font-weight="800" font-family="Nunito">II</text>
+        <text x="70" y="180" font-size="13" fill="#d4d4d4" font-weight="800" font-family="Nunito">III</text>
+        <text x="205" y="180" font-size="13" fill="#d4d4d4" font-weight="800" font-family="Nunito">IV</text>
+        <circle cx="215" cy="60" r="5" fill="#ff4b4b"/>
+        <text x="222" y="55" font-size="11" fill="#ff4b4b" font-weight="700" font-family="Nunito">(3, 2)</text>
+        <line x1="215" y1="60" x2="215" y2="110" stroke="#ff4b4b" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="215" y1="60" x2="140" y2="60" stroke="#ff4b4b" stroke-width="1" stroke-dasharray="3,3"/>
+      </svg>`
+    },
+    /* ---- EXERCISE 1 ---- */
+    {
+      type:'exercise', number:'1', qtype:'mcq',
+      question:{en:'In which quadrant does the point \\((-3, 4)\\) lie?', id:'Di kuadran mana titik \\((-3, 4)\\) berada?'},
+      options:[
+        {text:'Quadrant I', correct:false},
+        {text:'Quadrant II', correct:true},
+        {text:'Quadrant III', correct:false},
+        {text:'Quadrant IV', correct:false}
+      ],
+      explanation:{en:'The \\(x\\)-coordinate is negative (left) and the \\(y\\)-coordinate is positive (up). This places the point in the upper-left section, which is Quadrant II.', id:'Koordinat \\(x\\) negatif (ke kiri) dan koordinat \\(y\\) positif (ke atas). Hal ini menempatkan titik di bagian kiri atas, yaitu Kuadran II.'}
+    },
+    /* ---- EXERCISE 2 ---- */
+    {
+      type:'exercise', number:'2', qtype:'text',
+      question:{en:'What are the coordinates of the origin?', id:'Apa koordinat dari titik asal?'},
+      accept:['(0,0)','0,0','(0, 0)'],
+      explanation:{en:'The origin is where the \\(x\\)-axis and \\(y\\)-axis intersect, which is at the point \\((0, 0)\\).', id:'Titik asal adalah tempat sumbu \\(x\\) dan sumbu \\(y\\) berpotongan, yaitu di titik \\((0, 0)\\).'}
+    },
+    /* ---- EXERCISE 3 ---- */
+    {
+      type:'exercise', number:'3', qtype:'checkbox',
+      question:{en:'Which of the following points lie on the \\(y\\)-axis? (Select ALL that apply)', id:'Manakah dari titik-titik berikut yang terletak pada sumbu \\(y\\)? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'\\((0, 5)\\)', correct:true},
+        {text:'\\((4, 0)\\)', correct:false},
+        {text:'\\((0, -2)\\)', correct:true},
+        {text:'\\((-3, 4)\\)', correct:false}
+      ],
+      explanation:{en:'Points on the \\(y\\)-axis have an \\(x\\)-coordinate of 0. Both \\((0, 5)\\) and \\((0, -2)\\) meet this condition. Points like \\((4, 0)\\) are on the \\(x\\)-axis, and \\((-3, 4)\\) is in Quadrant II.', id:'Titik-titik pada sumbu \\(y\\) memiliki koordinat \\(x\\) sebesar 0. Baik \\((0, 5)\\) maupun \\((0, -2)\\) memenuhi syarat ini. Titik seperti \\((4, 0)\\) berada pada sumbu \\(x\\), dan \\((-3, 4)\\) berada di Kuadran II.'}
+    },
+
+    /* ---- THEORY 2 ---- */
+    {
+      type:'theory', number:'2', icon:'📈',
+      title:{en:'Graphing Linear Equations (Slope-Intercept Form)', id:'Grafik Persamaan Linear (Bentuk Perpotongan-Gradien)'},
+      paragraphs:[
+        {en:'A linear equation can be written in <strong>slope-intercept form</strong>: \\(y = mx + b\\), where \\(m\\) represents the <strong>slope</strong> (steepness) and \\(b\\) represents the <strong>\\(y\\)-intercept</strong> (where the line crosses the \\(y\\)-axis).',
+         id:'Persamaan linear dapat ditulis dalam <strong>bentuk perpotongan-gradien</strong>: \\(y = mx + b\\), di mana \\(m\\) mewakili <strong>gradien</strong> (kemiringan) dan \\(b\\) mewakili <strong>perpotongan-\\(y\\)</strong> (tempat garis memotong sumbu \\(y\\)).'},
+        {en:'The <strong>slope</strong> \\(m\\) is calculated as the ratio of vertical change to horizontal change (rise over run): \\(m = \\frac{\\Delta y}{\\Delta x} = \\frac{y_2 - y_1}{x_2 - x_1}\\).',
+         id:'<strong>Gradien</strong> \\(m\\) dihitung sebagai rasio perubahan vertikal terhadap perubahan horizontal (naik dibagi lari): \\(m = \\frac{\\Delta y}{\\Delta x} = \\frac{y_2 - y_1}{x_2 - x_1}\\).'},
+        {en:'To graph a line in this form: (1) Plot the \\(y\\)-intercept \\((0, b)\\). (2) Use the slope \\(m\\) to find a second point (rise up/down, run left/right). (3) Draw a straight line through the points.',
+         id:'Untuk menggambar garis dalam bentuk ini: (1) Plot perpotongan-\\(y\\) \\((0, b)\\). (2) Gunakan gradien \\(m\\) untuk mencari titik kedua (naik/turun, lari kiri/kanan). (3) Tarik garis lurus melalui titik-titik tersebut.'}
+      ],
+      example:{
+        en:'For \\(y = 2x + 1\\): The \\(y\\)-intercept is \\(1\\) (plot \\((0,1)\\)). The slope is \\(2\\) (or \\(2/1\\)), so from \\((0,1)\\) rise 2 up and run 1 right to \\((1,3)\\). Draw the line.',
+        id:'Untuk \\(y = 2x + 1\\): Perpotongan-\\(y\\) adalah \\(1\\) (plot \\((0,1)\\)). Gradiennya \\(2\\) (atau \\(2/1\\)), jadi dari \\((0,1)\\) naik 2 ke atas dan lari 1 ke kanan menuju \\((1,3)\\). Tarik garisnya.'
+      },
+      illustration:`<svg width="280" height="220" viewBox="0 0 280 220">
+        <defs><pattern id="g3" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e5e5" stroke-width="1"/></pattern></defs>
+        <rect x="30" y="20" width="220" height="180" fill="url(#g3)"/>
+        <line x1="30" y1="110" x2="260" y2="110" stroke="#888" stroke-width="2"/>
+        <line x1="140" y1="15" x2="140" y2="205" stroke="#888" stroke-width="2"/>
+        <line x1="30" y1="185" x2="260" y2="35" stroke="#1cb0f6" stroke-width="3"/>
+        <circle cx="140" cy="85" r="5" fill="#ff4b4b"/>
+        <text x="146" y="80" font-size="11" fill="#ff4b4b" font-weight="700" font-family="Nunito">(0, 1)</text>
+        <circle cx="165" cy="35" r="5" fill="#58cc02"/>
+        <text x="172" y="30" font-size="11" fill="#58cc02" font-weight="700" font-family="Nunito">(1, 3)</text>
+        <path d="M 140 85 L 140 35 L 165 35" stroke="#ffc800" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+        <text x="118" y="65" font-size="10" fill="#ffc800" font-weight="700" font-family="Nunito">+2</text>
+        <text x="150" y="50" font-size="10" fill="#ffc800" font-weight="700" font-family="Nunito">+1</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 4 ---- */
+    {
+      type:'exercise', number:'4', qtype:'mcq',
+      question:{en:'What is the slope and \\(y\\)-intercept of the equation \\(y = -3x + 4\\)?', id:'Berapakah gradien dan perpotongan-\\(y\\) dari persamaan \\(y = -3x + 4\\)?'},
+      options:[
+        {text:'Slope: \\(-3\\), \\(y\\)-intercept: \\(4\\)', correct:true},
+        {text:'Slope: \\(4\\), \\(y\\)-intercept: \\(-3\\)', correct:false},
+        {text:'Slope: \\(3\\), \\(y\\)-intercept: \\(4\\)', correct:false},
+        {text:'Slope: \\(-3\\), \\(y\\)-intercept: \\(-4\\)', correct:false}
+      ],
+      explanation:{en:'In the form \\(y = mx + b\\), \\(m\\) is the coefficient of \\(x\\) (slope = -3) and \\(b\\) is the constant term (\\(y\\)-intercept = 4).', id:'Pada bentuk \\(y = mx + b\\), \\(m\\) adalah koefisien \\(x\\) (gradien = -3) dan \\(b\\) adalah suku konstanta (perpotongan-\\(y\\) = 4).'}
+    },
+    /* ---- EXERCISE 5 ---- */
+    {
+      type:'exercise', number:'5', qtype:'text',
+      question:{en:'Find the slope of the line passing through the points \\((1, 2)\\) and \\((3, 6)\\).', id:'Carilah gradien garis yang melalui titik \\((1, 2)\\) dan \\((3, 6)\\).'},
+      accept:['2'],
+      explanation:{en:'Using the formula \\(m = \\frac{y_2 - y_1}{x_2 - x_1}\\): \\(m = \\frac{6 - 2}{3 - 1} = \\frac{4}{2} = 2\\).', id:'Menggunakan rumus \\(m = \\frac{y_2 - y_1}{x_2 - x_1}\\): \\(m = \\frac{6 - 2}{3 - 1} = \\frac{4}{2} = 2\\).'}
+    },
+    /* ---- EXERCISE 6 ---- */
+    {
+      type:'exercise', number:'6', qtype:'checkbox',
+      question:{en:'Which of the following lines have a negative slope? (Select ALL that apply)', id:'Manakah dari garis berikut yang memiliki gradien negatif? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'\\(y = -2x + 5\\)', correct:true},
+        {text:'\\(y = 3x - 1\\)', correct:false},
+        {text:'A line going down from left to right.', correct:true},
+        {text:'A line going up from left to right.', correct:false}
+      ],
+      explanation:{en:'A negative slope means the line goes downward as you read from left to right. The equation \\(y = -2x + 5\\) has \\(m = -2\\), which is negative.', id:'Gradien negatif berarti garis turun saat dibaca dari kiri ke kanan. Persamaan \\(y = -2x + 5\\) memiliki \\(m = -2\\), yang bernilai negatif.'}
+    },
+
+    /* ---- THEORY 3 ---- */
+    {
+      type:'theory', number:'3', icon:'✏️',
+      title:{en:'Graphing Using Intercepts', id:'Grafik Menggunakan Perpotongan'},
+      paragraphs:[
+        {en:'Another way to graph a linear equation (especially in Standard Form \\(Ax + By = C\\)) is by finding the \\(x\\)-intercept and \\(y\\)-intercept.',
+         id:'Cara lain untuk menggambar persamaan linear (terutama dalam Bentuk Baku \\(Ax + By = C\\)) adalah dengan mencari perpotongan-\\(x\\) dan perpotongan-\\(y\\).'},
+        {en:'To find the <strong>\\(x\\)-intercept</strong>, set \\(y = 0\\) and solve for \\(x\\). This is where the line crosses the horizontal axis.',
+         id:'Untuk mencari <strong>perpotongan-\\(x\\)</strong>, set \\(y = 0\\) dan selesaikan untuk \\(x\\). Ini adalah tempat garis memotong sumbu horizontal.'},
+        {en:'To find the <strong>\\(y\\)-intercept</strong>, set \\(x = 0\\) and solve for \\(y\\). This is where the line crosses the vertical axis.',
+         id:'Untuk mencari <strong>perpotongan-\\(y\\)</strong>, set \\(x = 0\\) dan selesaikan untuk \\(y\\). Ini adalah tempat garis memotong sumbu vertikal.'},
+        {en:'Once you have both intercepts, plot them on the axes and draw a straight line connecting them.',
+         id:'Setelah Anda mendapatkan kedua perpotongan, plot di sumbu dan tarik garis lurus yang menghubungkan keduanya.'}
+      ],
+      example:{
+        en:'Graph \\(2x + 3y = 6\\):  \\(x\\)-int: set \\(y=0 \\Rightarrow 2x = 6 \\Rightarrow x = 3\\) → point \\((3, 0)\\).  \\(y\\)-int: set \\(x=0 \\Rightarrow 3y = 6 \\Rightarrow y = 2\\) → point \\((0, 2)\\). Plot and connect.',
+        id:'Grafik \\(2x + 3y = 6\\):  Perpotongan-\\(x\\): set \\(y=0 \\Rightarrow 2x = 6 \\Rightarrow x = 3\\) → titik \\((3, 0)\\).  Perpotongan-\\(y\\): set \\(x=0 \\Rightarrow 3y = 6 \\Rightarrow y = 2\\) → titik \\((0, 2)\\). Plot dan hubungkan.'
+      },
+      illustration:`<svg width="280" height="220" viewBox="0 0 280 220">
+        <defs><pattern id="g4" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e5e5" stroke-width="1"/></pattern></defs>
+        <rect x="30" y="20" width="220" height="180" fill="url(#g4)"/>
+        <line x1="30" y1="110" x2="260" y2="110" stroke="#888" stroke-width="2"/>
+        <line x1="140" y1="15" x2="140" y2="205" stroke="#888" stroke-width="2"/>
+        <line x1="30" y1="180" x2="260" y2="50" stroke="#1cb0f6" stroke-width="3"/>
+        <circle cx="215" cy="110" r="5" fill="#ff4b4b"/>
+        <text x="222" y="105" font-size="11" fill="#ff4b4b" font-weight="700" font-family="Nunito">(3, 0)</text>
+        <circle cx="140" cy="60" r="5" fill="#58cc02"/>
+        <text x="100" y="55" font-size="11" fill="#58cc02" font-weight="700" font-family="Nunito">(0, 2)</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 7 ---- */
+    {
+      type:'exercise', number:'7', qtype:'text',
+      question:{en:'Find the \\(x\\)-intercept of the equation \\(3x - 2y = 12\\). (Write your answer as just the \\(x\\)-value)', id:'Carilah perpotongan-\\(x\\) dari persamaan \\(3x - 2y = 12\\). (Tulis jawaban Anda hanya berupa nilai \\(x\\))'},
+      accept:['4'],
+      explanation:{en:'To find the \\(x\\)-intercept, set \\(y = 0\\): \\(3x - 2(0) = 12 \\Rightarrow 3x = 12 \\Rightarrow x = 4\\). The \\(x\\)-intercept is \\(4\\) (or the point \\((4, 0)\\)).', id:'Untuk mencari perpotongan-\\(x\\), set \\(y = 0\\): \\(3x - 2(0) = 12 \\Rightarrow 3x = 12 \\Rightarrow x = 4\\). Perpotongan-\\(x\\) adalah \\(4\\) (atau titik \\((4, 0)\\)).'}
+    },
+    /* ---- EXERCISE 8 ---- */
+    {
+      type:'exercise', number:'8', qtype:'mcq',
+      question:{en:'What is the \\(y\\)-intercept of the line \\(4x + 5y = 20\\)?', id:'Berapakah perpotongan-\\(y\\) dari garis \\(4x + 5y = 20\\)?'},
+      options:[
+        {text:'\\(4\\)', correct:true},
+        {text:'\\(5\\)', correct:false},
+        {text:'\\(20\\)', correct:false},
+        {text:'\\(-4\\)', correct:false}
+      ],
+      explanation:{en:'Set \\(x = 0\\): \\(4(0) + 5y = 20 \\Rightarrow 5y = 20 \\Rightarrow y = 4\\). The \\(y\\)-intercept is \\(4\\) (point \\((0, 4)\\)).', id:'Set \\(x = 0\\): \\(4(0) + 5y = 20 \\Rightarrow 5y = 20 \\Rightarrow y = 4\\). Perpotongan-\\(y\\) adalah \\(4\\) (titik \\((0, 4)\\)).'}
+    },
+    /* ---- EXERCISE 9 ---- */
+    {
+      type:'exercise', number:'9', qtype:'mcq',
+      question:{en:'If a line has an \\(x\\)-intercept of \\((5, 0)\\) and a \\(y\\)-intercept of \\((0, -5)\\), which equation could represent it?', id:'Jika sebuah garis memiliki perpotongan-\\(x\\) di \\((5, 0)\\) dan perpotongan-\\(y\\) di \\((0, -5)\\), persamaan manakah yang mungkin mewakilinya?'},
+      options:[
+        {text:'\\(x - y = 5\\)', correct:true},
+        {text:'\\(x + y = 5\\)', correct:false},
+        {text:'\\(5x - 5y = 0\\)', correct:false},
+        {text:'\\(x - y = -5\\)', correct:false}
+      ],
+      explanation:{en:'Test the points in the equations. For \\(x - y = 5\\): Point \\((5,0)\\) gives \\(5 - 0 = 5\\) ✓. Point \\((0, -5)\\) gives \\(0 - (-5) = 5\\) ✓. Both points satisfy the equation.', id:'Uji titik-titik pada persamaan. Untuk \\(x - y = 5\\): Titik \\((5,0)\\) menghasilkan \\(5 - 0 = 5\\) ✓. Titik \\((0, -5)\\) menghasilkan \\(0 - (-5) = 5\\) ✓. Kedua titik memenuhi persamaan.'}
+    },
+    /* ---- EXERCISE 10 ---- */
+    {
+      type:'exercise', number:'10', qtype:'text',
+      question:{en:'A line has an \\(x\\)-intercept of \\((4, 0)\\) and a \\(y\\)-intercept of \\((0, 6)\\). What is the value of \\(C\\) if the equation is written in standard form \\(Ax + By = C\\)? (Hint: Find \\(A\\) and \\(B\\) first by plugging in the points, or just find what both equal when scaled)', id:'Sebuah garis memiliki perpotongan-\\(x\\) di \\((4, 0)\\) dan perpotongan-\\(y\\) di \\((0, 6)\\). Berapakah nilai \\(C\\) jika persamaan ditulis dalam bentuk baku \\(Ax + By = C\\)? (Petunjuk: Cari \\(A\\) dan \\(B\\) terlebih dahulu dengan memasukkan titik-titiknya, atau cari nilai yang sama saat disesuaikan)'},
+      accept:['12'],
+      explanation:{en:'Using \\((4,0)\\): \\(4A = C\\). Using \\((0,6)\\): \\(6B = C\\). We need integer values. If \\(C=12\\), then \\(A=3\\) and \\(B=2\\). The equation is \\(3x + 2y = 12\\). Checking points: \\(3(4)+2(0)=12\\) ✓ and \\(3(0)+2(6)=12\\) ✓. So \\(C=12\\).', id:'Menggunakan \\((4,0)\\): \\(4A = C\\). Menggunakan \\((0,6)\\): \\(6B = C\\). Kita butuh nilai bilangan bulat. Jika \\(C=12\\), maka \\(A=3\\) dan \\(B=2\\). Persamaannya adalah \\(3x + 2y = 12\\). Memeriksa titik: \\(3(4)+2(0)=12\\) ✓ dan \\(3(0)+2(6)=12\\) ✓. Jadi \\(C=12\\).'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     SECTION 4: PROBLEM INTRODUCTION
+     ======================================================== -->
+<script>
+registerSection('section4', {
+  title: 'Problem Introduction',
+  intro: {
+    en: "Now that we understand what systems are, let's introduce the three main algebraic and graphical methods used to solve them: Graphing, Substitution, and Elimination.",
+    id: "Sekarang setelah kita memahami apa itu sistem, mari kita perkenalkan tiga metode utama aljabar dan grafik yang digunakan untuk menyelesaikannya: Grafik, Substitusi, dan Eliminasi."
+  },
+  content: [
+    /* ---- THEORY 1 ---- */
+    {
+      type:'theory', number:'1', icon:'📈',
+      title:{en:'Method 1: Solving by Graphing', id:'Metode 1: Penyelesaian dengan Grafik'},
+      paragraphs:[
+        {en:'To solve a system by graphing, you graph both equations on the same coordinate plane. The point where the two lines intersect is the solution.',
+         id:'Untuk menyelesaikan sistem dengan grafik, Anda menggambar kedua persamaan pada bidang koordinat yang sama. Titik di mana kedua garis berpotongan adalah solusinya.'},
+        {en:'The solution is written as an ordered pair \\((x, y)\\). If the lines are parallel, there is no solution. If they are the same line, there are infinitely many solutions.',
+         id:'Solusi ditulis sebagai pasangan berurutan \\((x, y)\\). Jika garisnya sejajar, tidak ada solusi. Jika garisnya sama, ada tak hingga banyaknya solusi.'},
+        {en:'While graphing gives a great visual understanding, it can be difficult to find the exact solution if the intersection point does not fall on integer coordinates.',
+         id:'Meskipun grafik memberikan pemahaman visual yang baik, mungkin sulit untuk menemukan solusi yang tepat jika titik potong tidak berada pada koordinat bilangan bulat.'}
+      ],
+      example:{
+        en:'Solve $$\\begin{cases} y = x + 2 \\\\ y = -x + 4 \\end{cases}$$ Graphing both lines shows they intersect exactly at \\((1, 3)\\). Check: \\(3 = 1 + 2\\) ✓ and \\(3 = -1 + 4\\) ✓.',
+        id:'Selesaikan $$\\begin{cases} y = x + 2 \\\\ y = -x + 4 \\end{cases}$$ Menggambar kedua garis menunjukkan mereka berpotongan tepat di \\((1, 3)\\). Periksa: \\(3 = 1 + 2\\) ✓ dan \\(3 = -1 + 4\\) ✓.'
+      },
+      illustration:`<svg width="280" height="220" viewBox="0 0 280 220">
+        <defs><pattern id="g4_1" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e5e5" stroke-width="1"/></pattern></defs>
+        <rect x="30" y="20" width="220" height="180" fill="url(#g4_1)"/>
+        <line x1="30" y1="110" x2="260" y2="110" stroke="#888" stroke-width="2"/>
+        <line x1="140" y1="15" x2="140" y2="205" stroke="#888" stroke-width="2"/>
+        <line x1="30" y1="135" x2="260" y2="35" stroke="#1cb0f6" stroke-width="3"/>
+        <line x1="30" y1="35" x2="260" y2="135" stroke="#58cc02" stroke-width="3"/>
+        <circle cx="165" cy="85" r="5" fill="#ff4b4b"/>
+        <text x="172" y="80" font-size="11" fill="#ff4b4b" font-weight="700" font-family="Nunito">(1, 3)</text>
+        <text x="220" y="30" font-size="10" fill="#1cb0f6" font-weight="700" font-family="Nunito">y = x + 2</text>
+        <text x="190" y="150" font-size="10" fill="#58cc02" font-weight="700" font-family="Nunito">y = -x + 4</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 1 ---- */
+    {
+      type:'exercise', number:'1', qtype:'mcq',
+      question:{en:'Look at the graph in the theory above. What is the solution to the system?', id:'Lihat grafik pada teori di atas. Apa solusi dari sistem tersebut?'},
+      options:[
+        {text:'\\((1, 3)\\)', correct:true},
+        {text:'\\((3, 1)\\)', correct:false},
+        {text:'\\((0, 2)\\)', correct:false},
+        {text:'\\((4, 0)\\)', correct:false}
+      ],
+      explanation:{en:'The solution is the point of intersection. The red dot is at \\(x = 1\\) and \\(y = 3\\), so the solution is \\((1, 3)\\).', id:'Solusi adalah titik potong. Titik merah berada di \\(x = 1\\) dan \\(y = 3\\), jadi solusinya adalah \\((1, 3)\\).'}
+    },
+    /* ---- EXERCISE 2 ---- */
+    {
+      type:'exercise', number:'2', qtype:'text',
+      question:{en:'If you graph two distinct parallel lines, how many intersection points will there be?', id:'Jika Anda menggambar dua garis sejajar yang berbeda, berapa banyak titik potong yang akan ada?'},
+      accept:['0','zero','nol'],
+      explanation:{en:'Parallel lines never cross. Therefore, there are 0 intersection points, meaning the system has no solution.', id:'Garis sejajar tidak pernah berpotongan. Oleh karena itu, ada 0 titik potong, yang berarti sistem tidak memiliki solusi.'}
+    },
+    /* ---- EXERCISE 3 ---- */
+    {
+      type:'exercise', number:'3', qtype:'checkbox',
+      question:{en:'What are the limitations of solving a system by graphing? (Select ALL that apply)', id:'Apa saja keterbatasan menyelesaikan sistem dengan grafik? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'It can be hard to find exact values if the intersection is not on an integer grid point.', correct:true},
+        {text:'It only works for equations with positive slopes.', correct:false},
+        {text:'It requires drawing accurately, which can lead to human error.', correct:true},
+        {text:'It cannot be used to find a solution at all.', correct:false}
+      ],
+      explanation:{en:'Graphing is a great visual tool but relies on drawing accuracy. If lines intersect at \\((1.25, 3.8)\\), it is very hard to guess that exactly from a hand-drawn graph.', id:'Grafik adalah alat visual yang bagus tetapi bergantung pada ketepatan menggambar. Jika garis berpotongan di \\((1.25, 3.8)\\), sangat sulit untuk menebaknya secara tepat dari grafik buatan tangan.'}
+    },
+
+    /* ---- THEORY 2 ---- */
+    {
+      type:'theory', number:'2', icon:'🔁',
+      title:{en:'Method 2: Solving by Substitution', id:'Metode 2: Penyelesaian dengan Substitusi'},
+      paragraphs:[
+        {en:'The <strong>substitution method</strong> is an algebraic approach where you solve one equation for one variable, and then substitute that expression into the other equation.',
+         id:'<strong>Metode substitusi</strong> adalah pendekatan aljabar di mana Anda menyelesaikan satu persamaan untuk satu variabel, lalu menggantikan ekspresi tersebut ke persamaan lainnya.'},
+        {en:'<strong>Steps:</strong><br>1. Isolate a variable (e.g., solve for \\(x\\) in terms of \\(y\\)).<br>2. Substitute the expression into the other equation.<br>3. Solve the resulting equation for the remaining variable.<br>4. Substitute the value back into the first equation to find the other variable.',
+         id:'<strong>Langkah-langkah:</strong><br>1. Isolasi variabel (mis. selesaikan \\(x\\) dalam bentuk \\(y\\)).<br>2. Substitusikan ekspresinya ke persamaan lain.<br>3. Selesaikan persamaan yang dihasilkan untuk variabel yang tersisa.<br>4. Substitusikan nilai tersebut kembali ke persamaan pertama untuk mencari variabel lainnya.'},
+        {en:'Substitution is highly effective when one variable already has a coefficient of 1 (e.g., \\(y = 2x\\) or \\(x + y = 5\\)).',
+         id:'Substitusi sangat efektif ketika satu variabel sudah memiliki koefisien 1 (mis. \\(y = 2x\\) atau \\(x + y = 5\\)).'}
+      ],
+      example:{
+        en:'Solve $$\\begin{cases} y = 2x \\\\ 3x + y = 10 \\end{cases}$$ Substitute \\(2x\\) for \\(y\\) in the second equation: \\(3x + 2x = 10 \\Rightarrow 5x = 10 \\Rightarrow x = 2\\). Then \\(y = 2(2) = 4\\). Solution: \\((2, 4)\\).',
+        id:'Selesaikan $$\\begin{cases} y = 2x \\\\ 3x + y = 10 \\end{cases}$$ Substitusi \\(2x\\) untuk \\(y\\) di persamaan kedua: \\(3x + 2x = 10 \\Rightarrow 5x = 10 \\Rightarrow x = 2\\). Lalu \\(y = 2(2) = 4\\). Solusi: \\((2, 4)\\).'
+      },
+      illustration:`<svg width="280" height="100" viewBox="0 0 280 100">
+        <rect x="10" y="30" width="120" height="40" rx="8" fill="#d8f3ff" stroke="#1cb0f6" stroke-width="2"/>
+        <text x="70" y="55" text-anchor="middle" font-size="14" fill="#1cb0f6" font-weight="800" font-family="Nunito">y = 2x</text>
+        <path d="M 140 50 L 165 50 L 160 45 M 165 50 L 160 55" stroke="#ff4b4b" stroke-width="2" fill="none"/>
+        <rect x="170" y="20" width="100" height="60" rx="8" fill="#d7ffb8" stroke="#58cc02" stroke-width="2"/>
+        <text x="220" y="48" text-anchor="middle" font-size="13" fill="#58cc02" font-weight="800" font-family="Nunito">3x + [y] = 10</text>
+        <text x="220" y="68" text-anchor="middle" font-size="12" fill="#58cc02" font-weight="700" font-family="Nunito">becomes 5x = 10</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 4 ---- */
+    {
+      type:'exercise', number:'4', qtype:'text',
+      question:{en:'Solve using substitution: $$\\begin{cases} x = y + 2 \\\\ x + y = 10 \\end{cases}$$ What is the value of \\(x\\)?', id:'Selesaikan dengan substitusi: $$\\begin{cases} x = y + 2 \\\\ x + y = 10 \\end{cases}$$ Berapakah nilai \\(x\\)?'},
+      accept:['6'],
+      explanation:{en:'Substitute \\(x\\) in the second equation: \\((y + 2) + y = 10 \\Rightarrow 2y + 2 = 10 \\Rightarrow 2y = 8 \\Rightarrow y = 4\\). Then \\(x = y + 2 = 4 + 2 = 6\\).', id:'Substitusi \\(x\\) di persamaan kedua: \\((y + 2) + y = 10 \\Rightarrow 2y + 2 = 10 \\Rightarrow 2y = 8 \\Rightarrow y = 4\\). Lalu \\(x = y + 2 = 4 + 2 = 6\\).'}
+    },
+    /* ---- EXERCISE 5 ---- */
+    {
+      type:'exercise', number:'5', qtype:'mcq',
+      question:{en:'Which first step is best for solving by substitution? $$\\begin{cases} 2x + y = 11 \\\\ 3x - 2y = 8 \\end{cases}$$', id:'Langkah pertama mana yang terbaik untuk penyelesaian dengan substitusi? $$\\begin{cases} 2x + y = 11 \\\\ 3x - 2y = 8 \\end{cases}$$'},
+      options:[
+        {text:'Solve the first equation for \\(y\\): \\(y = -2x + 11\\)', correct:true},
+        {text:'Solve the second equation for \\(x\\): \\(x = \\frac{2y + 8}{3}\\)', correct:false},
+        {text:'Multiply the first equation by 2.', correct:false},
+        {text:'Add the two equations together.', correct:false}
+      ],
+      explanation:{en:'Solving the first equation for \\(y\\) is easiest because \\(y\\) has a coefficient of 1. This avoids dealing with fractions immediately.', id:'Menyelesaikan persamaan pertama untuk \\(y\\) paling mudah karena \\(y\\) memiliki koefisien 1. Ini menghindari penanganan pecahan sejak awal.'}
+    },
+    /* ---- EXERCISE 6 ---- */
+    {
+      type:'exercise', number:'6', qtype:'text',
+      question:{en:'Using the substitution \\(y = x + 2\\), substitute it into \\(2x + 3y = 16\\). What is the value of \\(x\\)?', id:'Menggunakan substitusi \\(y = x + 2\\), substitusikan ke \\(2x + 3y = 16\\). Berapakah nilai \\(x\\)?'},
+      accept:['2'],
+      explanation:{en:'Substitute \\(y\\): \\(2x + 3(x + 2) = 16 \\Rightarrow 2x + 3x + 6 = 16 \\Rightarrow 5x = 10 \\Rightarrow x = 2\\).', id:'Substitusi \\(y\\): \\(2x + 3(x + 2) = 16 \\Rightarrow 2x + 3x + 6 = 16 \\Rightarrow 5x = 10 \\Rightarrow x = 2\\).'}
+    },
+
+    /* ---- THEORY 3 ---- */
+    {
+      type:'theory', number:'3', icon:'➕',
+      title:{en:'Method 3: Solving by Elimination', id:'Metode 3: Penyelesaian dengan Eliminasi'},
+      paragraphs:[
+        {en:'The <strong>elimination method</strong> involves adding or subtracting the equations to eliminate one of the variables. This allows you to solve for the remaining variable.',
+         id:'<strong>Metode eliminasi</strong> melibatkan penjumlahan atau pengurangan persamaan untuk menghilangkan salah satu variabel. Ini memungkinkan Anda untuk menyelesaikan variabel yang tersisa.'},
+        {en:'<strong>Steps:</strong><br>1. Align the equations vertically (Standard Form \\(Ax + By = C\\) is best).<br>2. Multiply one or both equations by constants so that the coefficients of one variable are opposites (e.g., \\(2x\\) and \\(-2x\\)).<br>3. Add the equations together to eliminate that variable.<br>4. Solve for the remaining variable, then substitute back to find the other.',
+         id:'<strong>Langkah-langkah:</strong><br>1. Sejajarkan persamaan secara vertikal (Bentuk Baku \\(Ax + By = C\\) adalah yang terbaik).<br>2. Kalikan satu atau kedua persamaan dengan konstanta sehingga koefisien satu variabel menjadi berlawanan (mis. \\(2x\\) dan \\(-2x\\)).<br>3. Jumlahkan persamaan untuk menghilangkan variabel tersebut.<br>4. Selesaikan variabel yang tersisa, lalu substitusi kembali untuk mencari yang lain.'}
+      ],
+      example:{
+        en:'Solve $$\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}$$ The \\(y\\) variables are \\(+y\\) and \\(-y\\). Add the equations: \\((2x + x) + (y - y) = 7 + 2 \\Rightarrow 3x = 9 \\Rightarrow x = 3\\). Substitute back: \\(3 - y = 2 \\Rightarrow y = 1\\). Solution: \\((3, 1)\\).',
+        id:'Selesaikan $$\\begin{cases} 2x + y = 7 \\\\ x - y = 2 \\end{cases}$$ Variabel \\(y\\) adalah \\(+y\\) dan \\(-y\\). Jumlahkan persamaannya: \\((2x + x) + (y - y) = 7 + 2 \\Rightarrow 3x = 9 \\Rightarrow x = 3\\). Substitusi kembali: \\(3 - y = 2 \\Rightarrow y = 1\\). Solusi: \\((3, 1)\\).'
+      },
+      illustration:`<svg width="300" height="110" viewBox="0 0 300 110">
+        <rect x="10" y="10" width="180" height="30" rx="6" fill="#d8f3ff" stroke="#1cb0f6"/>
+        <text x="100" y="30" text-anchor="middle" font-size="13" font-family="Nunito" font-weight="700" fill="#1cb0f6">2x + y = 7</text>
+        <rect x="10" y="40" width="180" height="30" rx="6" fill="#d7ffb8" stroke="#58cc02"/>
+        <text x="100" y="60" text-anchor="middle" font-size="13" font-family="Nunito" font-weight="700" fill="#58cc02">x  -  y = 2</text>
+        <text x="190" y="55" font-size="18" font-weight="900" fill="#ff4b4b">+</text>
+        <rect x="10" y="75" width="180" height="30" rx="6" fill="#fff4cc" stroke="#ffc800"/>
+        <text x="100" y="95" text-anchor="middle" font-size="13" font-family="Nunito" font-weight="700" fill="#d4a600">3x = 9 (y eliminated)</text>
+        <text x="220" y="55" font-size="11" font-family="Nunito" fill="#888">Add equations</text>
+        <path d="M 210 55 L 195 55 M 210 55 L 215 50 M 210 55 L 215 60" stroke="#888" stroke-width="2" fill="none"/>
+      </svg>`
+    },
+    /* ---- EXERCISE 7 ---- */
+    {
+      type:'exercise', number:'7', qtype:'mcq',
+      question:{en:'To eliminate \\(x\\) from the system $$\\begin{cases} 3x + 2y = 8 \\\\ 2x + y = 5 \\end{cases}$$ what should you do?', id:'Untuk mengeliminasi \\(x\\) dari sistem $$\\begin{cases} 3x + 2y = 8 \\\\ 2x + y = 5 \\end{cases}$$ apa yang harus Anda lakukan?'},
+      options:[
+        {text:'Multiply the top equation by 2 and the bottom by -3, then add.', correct:true},
+        {text:'Multiply the top equation by 2 and the bottom by 3, then add.', correct:false},
+        {text:'Multiply the bottom equation by 2, then subtract.', correct:false},
+        {text:'Add them exactly as they are.', correct:false}
+      ],
+      explanation:{en:'To eliminate \\(x\\), you need the coefficients of \\(x\\) to be opposites. If you multiply the top by 2, you get \\(6x\\). If you multiply the bottom by -3, you get \\(-6x\\). Adding them eliminates \\(x\\).', id:'Untuk mengeliminasi \\(x\\), Anda perlu koefisien \\(x\\) yang berlawanan. Jika atas dikali 2, dapat \\(6x\\). Jika bawah dikali -3, dapat \\(-6x\\). Menjumlahkannya akan mengeliminasi \\(x\\).'}
+    },
+    /* ---- EXERCISE 8 ---- */
+    {
+      type:'exercise', number:'8', qtype:'text',
+      question:{en:'Solve by elimination: $$\\begin{cases} x + y = 10 \\\\ x - y = 4 \\end{cases}$$ What is the value of \\(x\\)?', id:'Selesaikan dengan eliminasi: $$\\begin{cases} x + y = 10 \\\\ x - y = 4 \\end{cases}$$ Berapakah nilai \\(x\\)?'},
+      accept:['7'],
+      explanation:{en:'Add the two equations: \\((x + x) + (y - y) = 10 + 4 \\Rightarrow 2x = 14 \\Rightarrow x = 7\\). (You can then find \\(y = 3\\)).', id:'Jumlahkan kedua persamaan: \\((x + x) + (y - y) = 10 + 4 \\Rightarrow 2x = 14 \\Rightarrow x = 7\\). (Anda lalu bisa mencari \\(y = 3\\)).'}
+    },
+    /* ---- EXERCISE 9 ---- */
+    {
+      type:'exercise', number:'9', qtype:'text',
+      question:{en:'Using the value of \\(x = 7\\) from the previous question, what is the value of \\(y\\)?', id:'Menggunakan nilai \\(x = 7\\) dari pertanyaan sebelumnya, berapakah nilai \\(y\\)?'},
+      accept:['3'],
+      explanation:{en:'Substitute \\(x = 7\\) into the first equation: \\(7 + y = 10 \\Rightarrow y = 3\\).', id:'Substitusi \\(x = 7\\) ke persamaan pertama: \\(7 + y = 10 \\Rightarrow y = 3\\).'}
+    },
+    /* ---- EXERCISE 10 ---- */
+    {
+      type:'exercise', number:'10', qtype:'mcq',
+      question:{en:'Solve the system: $$\\begin{cases} 2x + 3y = 12 \\\\ 2x - y = 4 \\end{cases}$$', id:'Selesaikan sistem: $$\\begin{cases} 2x + 3y = 12 \\\\ 2x - y = 4 \\end{cases}$$'},
+      options:[
+        {text:'\\((3, 2)\\)', correct:true},
+        {text:'\\((2, 3)\\)', correct:false},
+        {text:'\\((1, 4)\\)', correct:false},
+        {text:'\\((0, 4)\\)', correct:false}
+      ],
+      explanation:{en:'Since the \\(x\\) coefficients are the same, subtract the bottom equation from the top: \\((2x-2x) + (3y - (-y)) = 12 - 4 \\Rightarrow 4y = 8 \\Rightarrow y = 2\\). Substitute \\(y=2\\): \\(2x - 2 = 4 \\Rightarrow 2x = 6 \\Rightarrow x = 3\\). Solution is \\((3, 2)\\).', id:'Karena koefisien \\(x\\) sama, kurangi persamaan bawah dari atas: \\((2x-2x) + (3y - (-y)) = 12 - 4 \\Rightarrow 4y = 8 \\Rightarrow y = 2\\). Substitusi \\(y=2\\): \\(2x - 2 = 4 \\Rightarrow 2x = 6 \\Rightarrow x = 3\\). Solusinya \\((3, 2)\\).'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     SECTION 5: GUIDED PRACTICE
+     ======================================================== -->
+<script>
+registerSection('section5', {
+  title: 'Guided Practice',
+  intro: {
+    en: "Let's practice choosing the right method, identifying special cases, and applying our knowledge to word problems with step-by-step guidance.",
+    id: "Mari kita berlatih memilih metode yang tepat, mengidentifikasi kasus khusus, dan menerapkan pengetahuan kita pada masalah kata dengan panduan langkah demi langkah."
+  },
+  content: [
+    /* ---- THEORY 1 ---- */
+    {
+      type:'theory', number:'1', icon:'🧠',
+      title:{en:'Choosing the Best Method', id:'Memilih Metode Terbaik'},
+      paragraphs:[
+        {en:'<strong>Graphing</strong> is great for visualizing the system, but it is only practical when the intersection points are integers.',
+         id:'<strong>Grafik</strong> bagus untuk memvisualisasikan sistem, tetapi hanya praktis ketika titik potongnya berupa bilangan bulat.'},
+        {en:'<strong>Substitution</strong> is best when one variable is already isolated (e.g., \\(y = 2x\\)) or has a coefficient of 1.',
+         id:'<strong>Substitusi</strong> paling baik ketika satu variabel sudah diisolasi (mis. \\(y = 2x\\)) atau memiliki koefisien 1.'},
+        {en:'<strong>Elimination</strong> is ideal when both equations are in Standard Form \\((Ax + By = C)\\) and especially when coefficients share common multiples.',
+         id:'<strong>Eliminasi</strong> ideal ketika kedua persamaan dalam Bentuk Baku \\((Ax + By = C)\\) dan terutama ketika koefisien memiliki kelipatan persekutuan.'}
+      ],
+      example:{
+        en:'For $$\\begin{cases} y = 3x - 2 \\\\ 5x + 2y = 15 \\end{cases}$$ Substitution is best because \\(y\\) is already isolated. For $$\\begin{cases} 3x + 4y = 10 \\\\ 3x - 2y = 4 \\end{cases}$$ Elimination is best (subtract them to eliminate \\(x\\)).',
+        id:'Untuk $$\\begin{cases} y = 3x - 2 \\\\ 5x + 2y = 15 \\end{cases}$$ Substitusi paling baik karena \\(y\\) sudah diisolasi. Untuk $$\\begin{cases} 3x + 4y = 10 \\\\ 3x - 2y = 4 \\end{cases}$$ Eliminasi paling baik (kurangi untuk mengeliminasi \\(x\\)).'
+      }
+    },
+    /* ---- EXERCISE 1 ---- */
+    {
+      type:'exercise', number:'1', qtype:'mcq',
+      question:{en:'Which method is MOST efficient for $$\\begin{cases} 4x + 5y = 20 \\\\ 4x - 3y = 4 \\end{cases}$$?', id:'Metode mana yang PALING efisien untuk $$\\begin{cases} 4x + 5y = 20 \\\\ 4x - 3y = 4 \\end{cases}$$?'},
+      options:[
+        {text:'Elimination (subtract the equations)', correct:true},
+        {text:'Substitution (solve for \\(x\\) first)', correct:false},
+        {text:'Graphing', correct:false},
+        {text:'Guess and check', correct:false}
+      ],
+      explanation:{en:'Since the \\(x\\) coefficients are exactly the same (4 and 4), subtracting the equations will immediately eliminate \\(x\\), leaving \\(8y = 16\\). This is the fastest route.', id:'Karena koefisien \\(x\\) persis sama (4 dan 4), mengurangkan persamaan akan langsung mengeliminasi \\(x\\), menyisakan \\(8y = 16\\). Ini adalah jalur tercepat.'}
+    },
+    /* ---- EXERCISE 2 ---- */
+    {
+      type:'exercise', number:'2', qtype:'mcq',
+      question:{en:'Which method is MOST efficient for $$\\begin{cases} y = -2x + 5 \\\\ 7x + 3y = 12 \\end{cases}$$?', id:'Metode mana yang PALING efisien untuk $$\\begin{cases} y = -2x + 5 \\\\ 7x + 3y = 12 \\end{cases}$$?'},
+      options:[
+        {text:'Substitution', correct:true},
+        {text:'Elimination', correct:false},
+        {text:'Graphing', correct:false},
+        {text:'None of the above', correct:false}
+      ],
+      explanation:{en:'The first equation already has \\(y\\) isolated. You can directly substitute \\(-2x + 5\\) for \\(y\\) in the second equation.', id:'Persamaan pertama sudah mengisolasi \\(y\\). Anda bisa langsung mengganti \\(-2x + 5\\) untuk \\(y\\) di persamaan kedua.'}
+    },
+    /* ---- EXERCISE 3 ---- */
+    {
+      type:'exercise', number:'3', qtype:'checkbox',
+      question:{en:'When is graphing a good choice? (Select ALL that apply)', id:'Kapan grafik menjadi pilihan yang baik? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'When you need a visual estimate of the solution.', correct:true},
+        {text:'When the intersection point has messy decimal coordinates.', correct:false},
+        {text:'When the equations have simple \\(y\\)-intercepts and slopes.', correct:true},
+        {text:'When solving for exact values in a financial report.', correct:false}
+      ],
+      explanation:{en:'Graphing is good for estimates and simple equations. For exact decimal values or financial reports, algebra (substitution/elimination) is required to avoid errors.', id:'Grafik bagus untuk estimasi dan persamaan sederhana. Untuk nilai desimal tepat atau laporan keuangan, aljabar (substitusi/eliminasi) diperlukan untuk menghindari kesalahan.'}
+    },
+
+    /* ---- THEORY 2 ---- */
+    {
+      type:'theory', number:'2', icon:'♾️',
+      title:{en:'Special Cases: No Solution & Infinite Solutions', id:'Kasus Khusus: Tanpa Solusi & Tak Hingga Solusi'},
+      paragraphs:[
+        {en:'When using elimination or substitution, you might encounter a situation where variables disappear completely.',
+         id:'Saat menggunakan eliminasi atau substitusi, Anda mungkin menemui situasi di mana variabel hilang sepenuhnya.'},
+        {en:'If you get a <strong>false statement</strong> (like \\(0 = 5\\)), the system has <strong>no solution</strong>. This happens when the lines are parallel.',
+         id:'Jika Anda mendapatkan <strong>pernyataan salah</strong> (seperti \\(0 = 5\\)), sistem tersebut <strong>tidak memiliki solusi</strong>. Ini terjadi ketika garisnya sejajar.'},
+        {en:'If you get a <strong>true statement</strong> (like \\(0 = 0\\) or \\(4 = 4\\)), the system has <strong>infinitely many solutions</strong>. This happens when the two equations represent the exact same line.',
+         id:'Jika Anda mendapatkan <strong>pernyataan benar</strong> (seperti \\(0 = 0\\) atau \\(4 = 4\\)), sistem memiliki <strong>tak hingga banyaknya solusi</strong>. Ini terjadi ketika kedua persamaan mewakili garis yang persis sama.'}
+      ],
+      example:{
+        en:'System: $$\\begin{cases} 2x + 3y = 10 \\\\ 2x + 3y = 15 \\end{cases}$$ Subtract top from bottom: \\(0 = 5\\). False! No solution (parallel lines).',
+        id:'Sistem: $$\\begin{cases} 2x + 3y = 10 \\\\ 2x + 3y = 15 \\end{cases}$$ Kurangi bawah dari atas: \\(0 = 5\\). Salah! Tidak ada solusi (garis sejajar).'
+      },
+      illustration:`<svg width="320" height="130" viewBox="0 0 320 130">
+        <text x="80" y="15" text-anchor="middle" font-size="10" font-weight="800" fill="#ff4b4b" font-family="Nunito">No Solution (0 = 5)</text>
+        <line x1="20" y1="50" x2="150" y2="30" stroke="#1cb0f6" stroke-width="3"/>
+        <line x1="20" y1="80" x2="150" y2="60" stroke="#ce82ff" stroke-width="3"/>
+        <text x="80" y="115" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito">Parallel lines, same slope, diff intercept</text>
+        <text x="240" y="15" text-anchor="middle" font-size="9" font-weight="800" fill="#58cc02" font-family="Nunito">Infinite Solutions (0 = 0)</text>
+        <line x1="180" y1="90" x2="310" y2="30" stroke="#1cb0f6" stroke-width="7" opacity="0.4"/>
+        <line x1="180" y1="90" x2="310" y2="30" stroke="#ce82ff" stroke-width="3"/>
+        <text x="240" y="115" text-anchor="middle" font-size="9" fill="#888" font-family="Nunito">Exact same line</text>
+      </svg>`
+    },
+    /* ---- EXERCISE 4 ---- */
+    {
+      type:'exercise', number:'4', qtype:'mcq',
+      question:{en:'When solving a system, you end up with the equation \\(0 = 0\\). What does this mean?', id:'Saat menyelesaikan sistem, Anda mendapatkan persamaan \\(0 = 0\\). Apa artinya ini?'},
+      options:[
+        {text:'The system has infinitely many solutions.', correct:true},
+        {text:'The system has no solution.', correct:false},
+        {text:'The solution is \\(x = 0\\) and \\(y = 0\\).', correct:false},
+        {text:'You made a math mistake.', correct:false}
+      ],
+      explanation:{en:'\\(0 = 0\\) is a true statement. It means the two equations are dependent (the same line), so every point on the line is a solution — infinitely many solutions.', id:'\\(0 = 0\\) adalah pernyataan yang benar. Ini berarti kedua persamaan bergantung (garis yang sama), sehingga setiap titik pada garis adalah solusi — tak hingga banyaknya solusi.'}
+    },
+    /* ---- EXERCISE 5 ---- */
+    {
+      type:'exercise', number:'5', qtype:'text',
+      question:{en:'How many solutions does the system $$\\begin{cases} y = 2x + 1 \\\\ y = 2x + 5 \\end{cases}$$ have?', id:'Berapa banyak solusi yang dimiliki sistem $$\\begin{cases} y = 2x + 1 \\\\ y = 2x + 5 \\end{cases}$$?'},
+      accept:['0','zero','nol'],
+      explanation:{en:'Both lines have a slope of 2, but different \\(y\\)-intercepts (1 and 5). They are parallel lines and will never intersect. Therefore, 0 solutions.', id:'Kedua garis memiliki gradien 2, tetapi perpotongan-\\(y\\) berbeda (1 dan 5). Mereka adalah garis sejajar dan tidak akan pernah berpotongan. Oleh karena itu, 0 solusi.'}
+    },
+    /* ---- EXERCISE 6 ---- */
+    {
+      type:'exercise', number:'6', qtype:'mcq',
+      question:{en:'Which system has infinitely many solutions?', id:'Sistem mana yang memiliki tak hingga banyaknya solusi?'},
+      options:[
+        {text:'$$\\begin{cases} 2x + 4y = 6 \\\\ x + 2y = 3 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} 2x + 4y = 6 \\\\ x + 2y = 4 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} 2x + 4y = 6 \\\\ 2x - 4y = 6 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} 2x + 4y = 6 \\\\ 3x + 4y = 7 \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'If you multiply the second equation in the first option by 2, you get \\(2x + 4y = 6\\), which is identical to the first equation. They are the same line!', id:'Jika Anda mengalikan persamaan kedua pada pilihan pertama dengan 2, Anda dapat \\(2x + 4y = 6\\), yang identik dengan persamaan pertama. Itu adalah garis yang sama!'}
+    },
+
+    /* ---- THEORY 3 ---- */
+    {
+      type:'theory', number:'3', icon:'📝',
+      title:{en:'Solving Word Problems with Systems', id:'Menyelesaikan Masalah Kata dengan Sistem'},
+      paragraphs:[
+        {en:'Systems of equations are perfect for solving word problems with two unknown quantities. <strong>Steps:</strong><br>1. Identify the two unknown variables and define them (e.g., Let \\(x\\) = price of adult ticket, \\(y\\) = price of child ticket).<br>2. Write two equations based on the information given.<br>3. Choose a method (substitution/elimination) to solve.<br>4. Check if your answer makes sense in the context of the problem.',
+         id:'Sistem persamaan sangat cocok untuk menyelesaikan masalah kata dengan dua kuantitas yang tidak diketahui. <strong>Langkah-langkah:</strong><br>1. Identifikasi dua variabel yang tidak diketahui dan definisikan (mis. Misal \\(x\\) = harga tiket dewasa, \\(y\\) = harga tiket anak).<br>2. Tulis dua persamaan berdasarkan informasi yang diberikan.<br>3. Pilih metode (substitusi/eliminasi) untuk menyelesaikan.<br>4. Periksa apakah jawaban Anda masuk akal dalam konteks masalah.'}
+      ],
+      example:{
+        en:'2 adult tickets and 1 child ticket cost $30. 1 adult ticket and 3 child tickets cost $40. Let \\(a\\) = adult, \\(c\\) = child. System: $$\\begin{cases} 2a + c = 30 \\\\ a + 3c = 40 \\end{cases}$$ From first: \\(c = 30 - 2a\\). Substitute: \\(a + 3(30 - 2a) = 40 \\Rightarrow a + 90 - 6a = 40 \\Rightarrow -5a = -50 \\Rightarrow a = 10\\). Then \\(c = 10\\).',
+        id:'2 tiket dewasa dan 1 tiket anak berharga $30. 1 tiket dewasa dan 3 tiket anak berharga $40. Misal \\(a\\) = dewasa, \\(c\\) = anak. Sistem: $$\\begin{cases} 2a + c = 30 \\\\ a + 3c = 40 \\end{cases}$$ Dari pertama: \\(c = 30 - 2a\\). Substitusi: \\(a + 3(30 - 2a) = 40 \\Rightarrow a + 90 - 6a = 40 \\Rightarrow -5a = -50 \\Rightarrow a = 10\\). Lalu \\(c = 10\\).'
+      }
+    },
+    /* ---- EXERCISE 7 ---- */
+    {
+      type:'exercise', number:'7', qtype:'mcq',
+      question:{en:'A farm has chickens (2 legs) and pigs (4 legs). There are 20 heads and 56 legs total. If \\(c\\) = chickens and \\(p\\) = pigs, which system represents this?', id:'Sebuah peternakan memiliki ayam (2 kaki) dan babi (4 kaki). Ada 20 kepala dan 56 kaki secara total. Jika \\(c\\) = ayam dan \\(p\\) = babi, sistem mana yang mewakili ini?'},
+      options:[
+        {text:'$$\\begin{cases} c + p = 20 \\\\ 2c + 4p = 56 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} c + p = 56 \\\\ 2c + 4p = 20 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} c + p = 20 \\\\ 4c + 2p = 56 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} c \\cdot p = 20 \\\\ 2c + 4p = 56 \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'Each animal has 1 head, so \\(c + p = 20\\). Chickens have 2 legs, pigs have 4, so total legs are \\(2c + 4p = 56\\).', id:'Setiap hewan memiliki 1 kepala, jadi \\(c + p = 20\\). Ayam punya 2 kaki, babi 4, jadi total kaki adalah \\(2c + 4p = 56\\).'}
+    },
+    /* ---- EXERCISE 8 ---- */
+    {
+      type:'exercise', number:'8', qtype:'text',
+      question:{en:'Using the system from the previous question, solve for the number of chickens \\((c)\\).', id:'Menggunakan sistem dari pertanyaan sebelumnya, selesaikan untuk jumlah ayam \\((c)\\).'},
+      accept:['12'],
+      explanation:{en:'From \\(c + p = 20\\), we get \\(c = 20 - p\\). Substitute: \\(2(20 - p) + 4p = 56 \\Rightarrow 40 - 2p + 4p = 56 \\Rightarrow 40 + 2p = 56 \\Rightarrow 2p = 16 \\Rightarrow p = 8\\). So \\(c = 20 - 8 = 12\\). There are 12 chickens.', id:'Dari \\(c + p = 20\\), kita dapat \\(c = 20 - p\\). Substitusi: \\(2(20 - p) + 4p = 56 \\Rightarrow 40 - 2p + 4p = 56 \\Rightarrow 40 + 2p = 56 \\Rightarrow 2p = 16 \\Rightarrow p = 8\\). Jadi \\(c = 20 - 8 = 12\\). Ada 12 ayam.'}
+    },
+    /* ---- EXERCISE 9 ---- */
+    {
+      type:'exercise', number:'9', qtype:'text',
+      question:{en:'A movie theater sold 200 tickets. Adult tickets were $8 and child tickets were $5. Total revenue was $1300. How many adult tickets \\((a)\\) were sold?', id:'Sebuah bioskop menjual 200 tiket. Tiket dewasa $8 dan tiket anak $5. Total pendapatan $1300. Berapa banyak tiket dewasa \\((a)\\) yang terjual?'},
+      accept:['100'],
+      explanation:{en:'System: \\(a + c = 200\\) and \\(8a + 5c = 1300\\). From the first, \\(c = 200 - a\\). Substitute: \\(8a + 5(200 - a) = 1300 \\Rightarrow 8a + 1000 - 5a = 1300 \\Rightarrow 3a = 300 \\Rightarrow a = 100\\).', id:'Sistem: \\(a + c = 200\\) dan \\(8a + 5c = 1300\\). Dari pertama, \\(c = 200 - a\\). Substitusi: \\(8a + 5(200 - a) = 1300 \\Rightarrow 8a + 1000 - 5a = 1300 \\Rightarrow 3a = 300 \\Rightarrow a = 100\\).'}
+    },
+    /* ---- EXERCISE 10 ---- */
+    {
+      type:'exercise', number:'10', qtype:'mcq',
+      question:{en:'Two numbers add up to 15. The larger number is 3 less than twice the smaller number. What are the two numbers?', id:'Dua bilangan berjumlah 15. Bilangan yang lebih besar adalah 3 kurangnya dari dua kali bilangan yang lebih kecil. Apakah dua bilangan tersebut?'},
+      options:[
+        {text:'6 and 9', correct:true},
+        {text:'5 and 10', correct:false},
+        {text:'7 and 8', correct:false},
+        {text:'4 and 11', correct:false}
+      ],
+      explanation:{en:'Let \\(x\\) = smaller, \\(y\\) = larger. \\(x + y = 15\\) and \\(y = 2x - 3\\). Substitute: \\(x + 2x - 3 = 15 \\Rightarrow 3x = 18 \\Rightarrow x = 6\\). Then \\(y = 2(6) - 3 = 9\\). The numbers are 6 and 9.', id:'Misal \\(x\\) = lebih kecil, \\(y\\) = lebih besar. \\(x + y = 15\\) dan \\(y = 2x - 3\\). Substitusi: \\(x + 2x - 3 = 15 \\Rightarrow 3x = 18 \\Rightarrow x = 6\\). Lalu \\(y = 2(6) - 3 = 9\\). Bilangan itu adalah 6 dan 9.'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     SECTION 6: INDEPENDENT PRACTICE
+     ======================================================== -->
+<script>
+registerSection('section6', {
+  title: 'Independent Practice',
+  intro: {
+    en: "It's time to practice on your own! Apply everything you've learned about graphing, substitution, and elimination to solve these problems.",
+    id: "Saatnya berlatih secara mandiri! Terapkan semua yang telah Anda pelajari tentang grafik, substitusi, dan eliminasi untuk menyelesaikan masalah-masalah ini."
+  },
+  content: [
+    /* ---- THEORY 1 ---- */
+    {
+      type:'theory', number:'1', icon:'🎯',
+      title:{en:'Tackling Complex Substitution', id:'Menangani Substitusi Kompleks'},
+      paragraphs:[
+        {en:'Sometimes, neither variable is isolated, but one has a coefficient of 1. You can quickly isolate it and substitute without creating messy fractions.',
+         id:'Terkadang, tidak ada variabel yang diisolasi, tetapi satu memiliki koefisien 1. Anda bisa dengan cepat mengisolasinya dan menggantikannya tanpa membuat pecahan yang rumit.'},
+        {en:'If both variables have coefficients greater than 1, substitution can lead to fractions. In these cases, elimination is often the better choice.',
+         id:'Jika kedua variabel memiliki koefisien lebih besar dari 1, substitusi dapat menyebabkan pecahan. Dalam kasus ini, eliminasi sering kali menjadi pilihan yang lebih baik.'}
+      ],
+      example:{
+        en:'Solve $$\\begin{cases} 3x + 2y = 16 \\\\ x - y = 2 \\end{cases}$$ From Eq 2: \\(x = y + 2\\). Substitute: \\(3(y + 2) + 2y = 16 \\Rightarrow 3y + 6 + 2y = 16 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\). Then \\(x = 4\\).',
+        id:'Selesaikan $$\\begin{cases} 3x + 2y = 16 \\\\ x - y = 2 \\end{cases}$$ Dari Pers 2: \\(x = y + 2\\). Substitusi: \\(3(y + 2) + 2y = 16 \\Rightarrow 3y + 6 + 2y = 16 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\). Lalu \\(x = 4\\).'
+      }
+    },
+    /* ---- EXERCISE 1 ---- */
+    {
+      type:'exercise', number:'1', qtype:'text',
+      question:{en:'Solve $$\\begin{cases} 3x + 2y = 16 \\\\ x - y = 2 \\end{cases}$$ What is the value of \\(y\\)?', id:'Selesaikan $$\\begin{cases} 3x + 2y = 16 \\\\ x - y = 2 \\end{cases}$$ Berapakah nilai \\(y\\)?'},
+      accept:['2'],
+      explanation:{en:'From Eq 2: \\(x = y + 2\\). Substitute into Eq 1: \\(3(y + 2) + 2y = 16 \\Rightarrow 3y + 6 + 2y = 16 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\).', id:'Dari Pers 2: \\(x = y + 2\\). Substitusi ke Pers 1: \\(3(y + 2) + 2y = 16 \\Rightarrow 3y + 6 + 2y = 16 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\).'}
+    },
+    /* ---- EXERCISE 2 ---- */
+    {
+      type:'exercise', number:'2', qtype:'mcq',
+      question:{en:'Solve $$\\begin{cases} y = 2x - 1 \\\\ 3x + 2y = 24 \\end{cases}$$ What is the value of \\(x\\)?', id:'Selesaikan $$\\begin{cases} y = 2x - 1 \\\\ 3x + 2y = 24 \\end{cases}$$ Berapakah nilai \\(x\\)?'},
+      options:[
+        {text:'\\(2\\)', correct:false},
+        {text:'\\(3\\)', correct:false},
+        {text:'\\(4\\)', correct:false},
+        {text:'\\(\\frac{26}{7}\\)', correct:true}
+      ],
+      explanation:{en:'Substitute \\(y\\): \\(3x + 2(2x - 1) = 24 \\Rightarrow 3x + 4x - 2 = 24 \\Rightarrow 7x = 26 \\Rightarrow x = \\frac{26}{7}\\). This shows substitution doesn\'t always yield integers!', id:'Substitusi \\(y\\): \\(3x + 2(2x - 1) = 24 \\Rightarrow 3x + 4x - 2 = 24 \\Rightarrow 7x = 26 \\Rightarrow x = \\frac{26}{7}\\). Ini menunjukkan substitusi tidak selalu menghasilkan bilangan bulat!'}
+    },
+    /* ---- EXERCISE 3 ---- */
+    {
+      type:'exercise', number:'3', qtype:'text',
+      question:{en:'Solve $$\\begin{cases} 4x - y = 18 \\\\ x + 2y = 0 \\end{cases}$$ What is the value of \\(y\\)?', id:'Selesaikan $$\\begin{cases} 4x - y = 18 \\\\ x + 2y = 0 \\end{cases}$$ Berapakah nilai \\(y\\)?'},
+      accept:['-2'],
+      explanation:{en:'From Eq 2: \\(x = -2y\\). Substitute into Eq 1: \\(4(-2y) - y = 18 \\Rightarrow -8y - y = 18 \\Rightarrow -9y = 18 \\Rightarrow y = -2\\).', id:'Dari Pers 2: \\(x = -2y\\). Substitusi ke Pers 1: \\(4(-2y) - y = 18 \\Rightarrow -8y - y = 18 \\Rightarrow -9y = 18 \\Rightarrow y = -2\\).'}
+    },
+
+    /* ---- THEORY 2 ---- */
+    {
+      type:'theory', number:'2', icon:'⚙️',
+      title:{en:'Mastering Elimination with Multiplication', id:'Menguasai Eliminasi dengan Perkalian'},
+      paragraphs:[
+        {en:'Sometimes, adding or subtracting equations won\'t eliminate a variable immediately because coefficients don\'t match. You must multiply one or both equations by a strategic number first.',
+         id:'Terkadang, penjumlahan atau pengurangan persamaan tidak akan langsung mengeliminasi variabel karena koefisien tidak cocok. Anda harus mengalikan satu atau kedua persamaan dengan angka strategis terlebih dahulu.'},
+        {en:'To eliminate a variable, multiply each equation by the coefficient of the variable you want to eliminate from the *other* equation.',
+         id:'Untuk mengeliminasi variabel, kalikan setiap persamaan dengan koefisien variabel yang ingin Anda eliminasi dari persamaan *lain*.'}
+      ],
+      example:{
+        en:'Solve $$\\begin{cases} 3x + 4y = 2 \\\\ 2x - 3y = 7 \\end{cases}$$ Multiply top by 2, bottom by -3 (or vice versa) to eliminate \\(x\\): $$\\begin{cases} 6x + 8y = 4 \\\\ -6x + 9y = -21 \\end{cases}$$ Add them: \\(17y = -17 \\Rightarrow y = -1\\). Then find \\(x = 2\\).',
+        id:'Selesaikan $$\\begin{cases} 3x + 4y = 2 \\\\ 2x - 3y = 7 \\end{cases}$$ Kalikan atas dengan 2, bawah dengan -3 (atau sebaliknya) untuk mengeliminasi \\(x\\): $$\\begin{cases} 6x + 8y = 4 \\\\ -6x + 9y = -21 \\end{cases}$$ Jumlahkan: \\(17y = -17 \\Rightarrow y = -1\\). Lalu cari \\(x = 2\\).'
+      }
+    },
+    /* ---- EXERCISE 4 ---- */
+    {
+      type:'exercise', number:'4', qtype:'text',
+      question:{en:'Solve $$\\begin{cases} 2x + 5y = 19 \\\\ 3x + 2y = 12 \\end{cases}$$ What is the value of \\(x\\)?', id:'Selesaikan $$\\begin{cases} 2x + 5y = 19 \\\\ 3x + 2y = 12 \\end{cases}$$ Berapakah nilai \\(x\\)?'},
+      accept:['2'],
+      explanation:{en:'Multiply top by 3, bottom by -2 to eliminate \\(x\\): $$\\begin{cases} 6x + 15y = 57 \\\\ -6x - 4y = -24 \\end{cases}$$ Add: \\(11y = 33 \\Rightarrow y = 3\\). Substitute \\(y=3\\) into original: \\(2x + 15 = 19 \\Rightarrow 2x = 4 \\Rightarrow x = 2\\).', id:'Kalikan atas dengan 3, bawah dengan -2 untuk mengeliminasi \\(x\\): $$\\begin{cases} 6x + 15y = 57 \\\\ -6x - 4y = -24 \\end{cases}$$ Jumlahkan: \\(11y = 33 \\Rightarrow y = 3\\). Substitusi \\(y=3\\) ke aslinya: \\(2x + 15 = 19 \\Rightarrow 2x = 4 \\Rightarrow x = 2\\).'}
+    },
+    /* ---- EXERCISE 5 ---- */
+    {
+      type:'exercise', number:'5', qtype:'mcq',
+      question:{en:'Solve $$\\begin{cases} 4x - 3y = 11 \\\\ 2x + 5y = -1 \\end{cases}$$ What is the value of \\(y\\)?', id:'Selesaikan $$\\begin{cases} 4x - 3y = 11 \\\\ 2x + 5y = -1 \\end{cases}$$ Berapakah nilai \\(y\\)?'},
+      options:[
+        {text:'\\(-1\\)', correct:true},
+        {text:'\\(1\\)', correct:false},
+        {text:'\\(2\\)', correct:false},
+        {text:'\\(-2\\)', correct:false}
+      ],
+      explanation:{en:'Multiply bottom equation by -2: \\(-4x - 10y = 2\\). Add to top: \\((4x - 3y) + (-4x - 10y) = 11 + 2 \\Rightarrow -13y = 13 \\Rightarrow y = -1\\).', id:'Kalikan persamaan bawah dengan -2: \\(-4x - 10y = 2\\). Jumlahkan ke atas: \\((4x - 3y) + (-4x - 10y) = 11 + 2 \\Rightarrow -13y = 13 \\Rightarrow y = -1\\).'}
+    },
+    /* ---- EXERCISE 6 ---- */
+    {
+      type:'exercise', number:'6', qtype:'checkbox',
+      question:{en:'Which of the following steps correctly eliminates \\(y\\) from $$\\begin{cases} 5x + 2y = 12 \\\\ 3x - 4y = 10 \\end{cases}$$? (Select ALL that apply)', id:'Langkah mana yang benar mengeliminasi \\(y\\) dari $$\\begin{cases} 5x + 2y = 12 \\\\ 3x - 4y = 10 \\end{cases}$$? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'Multiply top by 2, bottom by 1, then add.', correct:true},
+        {text:'Multiply top by 4, bottom by -2, then add.', correct:false},
+        {text:'Multiply top by -2, bottom by 1, then add.', correct:false},
+        {text:'Multiply top by 2, bottom by 1, then subtract top from bottom.', correct:false}
+      ],
+      explanation:{en:'Multiplying the top equation by 2 gives \\(10x + 4y = 24\\). Adding this to the bottom equation \\(3x - 4y = 10\\) results in \\(13x = 34\\), successfully eliminating \\(y\\).', id:'Mengalikan persamaan atas dengan 2 menghasilkan \\(10x + 4y = 24\\). Menambahkannya ke persamaan bawah \\(3x - 4y = 10\\) menghasilkan \\(13x = 34\\), yang berhasil mengeliminasi \\(y\\).'}
+    },
+
+    /* ---- THEORY 3 ---- */
+    {
+      type:'theory', number:'3', icon:'🚗',
+      title:{en:'Distance-Rate-Time & Mixture Problems', id:'Masalah Jarak-Kecepatan-Waktu & Campuran'},
+      paragraphs:[
+        {en:'Systems are great for distance problems (two vehicles traveling) and mixture problems (combining solutions of different concentrations).',
+         id:'Sistem sangat berguna untuk masalah jarak (dua kendaraan berjalan) dan masalah campuran (menggabungkan larutan dengan konsentrasi berbeda).'},
+        {en:'<strong>Distance formula:</strong> \\(d = r \\times t\\). If two objects travel for the same time, \\(t\\) is the same. If they travel the same distance, \\(d\\) is the same.',
+         id:'<strong>Rumus jarak:</strong> \\(d = r \\times t\\). Jika dua objek bergerak dengan waktu yang sama, \\(t\\) sama. Jika mereka menempuh jarak yang sama, \\(d\\) sama.'},
+        {en:'<strong>Mixture formula:</strong> (Amount of Solution 1) × (Concentration 1) + (Amount of Solution 2) × (Concentration 2) = (Total Amount) × (Final Concentration).',
+         id:'<strong>Rumus campuran:</strong> (Jumlah Larutan 1) × (Konsentrasi 1) + (Jumlah Larutan 2) × (Konsentrasi 2) = (Total Jumlah) × (Konsentrasi Akhir).'}
+      ],
+      example:{
+        en:'A car travels for 2 hours at a certain speed. A truck travels the same distance but takes 3 hours at 40 km/h. Let \\(r_c\\) = car speed. Distances are equal: \\(2r_c = 3(40) = 120\\). So \\(r_c = 60\\) km/h.',
+        id:'Sebuah mobil berjalan selama 2 jam dengan kecepatan tertentu. Sebuah truk berjalan dengan jarak yang sama tetapi memakan waktu 3 jam pada 40 km/j. Misal \\(r_m\\) = kecepatan mobil. Jaraknya sama: \\(2r_m = 3(40) = 120\\). Jadi \\(r_m = 60\\) km/j.'
+      }
+    },
+    /* ---- EXERCISE 7 ---- */
+    {
+      type:'exercise', number:'7', qtype:'text',
+      question:{en:'A boat travels 30 km downstream in 2 hours. The speed of the current is 5 km/h. What is the speed of the boat in still water (\\(b\\))? (Hint: \\(Rate_{down} = b + c\\))', id:'Sebuah perahu bergerak 30 km menyusuri sungai dalam 2 jam. Kecepatan arus adalah 5 km/j. Berapakah kecepatan perahu di air tenang (\\(b\\))? (Petunjuk: \\(Kecepatan_{arus} = b + c\\))'},
+      accept:['10'],
+      explanation:{en:'Distance = Rate × Time. \\(30 = (b + 5) \\times 2\\). Divide by 2: \\(15 = b + 5\\). Subtract 5: \\(b = 10\\) km/h.', id:'Jarak = Kecepatan × Waktu. \\(30 = (b + 5) \\times 2\\). Bagi 2: \\(15 = b + 5\\). Kurangi 5: \\(b = 10\\) km/j.'}
+    },
+    /* ---- EXERCISE 8 ---- */
+    {
+      type:'exercise', number:'8', qtype:'mcq',
+      question:{en:'How many mL of a 10% acid solution must be mixed with a 30% acid solution to make 20 mL of a 25% acid solution? Let \\(x\\) = 10% solution, \\(y\\) = 30% solution. Which system represents this?', id:'Berapa mL larutan asam 10% harus dicampur dengan larutan asam 30% untuk membuat 20 mL larutan asam 25%? Misal \\(x\\) = larutan 10%, \\(y\\) = larutan 30%. Sistem mana yang mewakili ini?'},
+      options:[
+        {text:'$$\\begin{cases} x + y = 20 \\\\ 0.10x + 0.30y = 0.25(20) \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} x + y = 20 \\\\ 10x + 30y = 25 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} x + y = 25 \\\\ 0.10x + 0.30y = 20 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} x \\cdot y = 20 \\\\ 0.10x + 0.30y = 5 \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'Total volume is \\(x + y = 20\\). Total acid is \\(0.10x + 0.30y\\). The final mixture has 20 mL at 25%, so total acid is \\(0.25 \\times 20 = 5\\). The system is \\(x + y = 20\\) and \\(0.10x + 0.30y = 5\\).', id:'Total volume adalah \\(x + y = 20\\). Total asam adalah \\(0.10x + 0.30y\\). Campuran akhir memiliki 20 mL pada 25%, jadi total asam adalah \\(0.25 \\times 20 = 5\\). Sistemnya adalah \\(x + y = 20\\) dan \\(0.10x + 0.30y = 5\\).'}
+    },
+    /* ---- EXERCISE 9 ---- */
+    {
+      type:'exercise', number:'9', qtype:'text',
+      question:{en:'Using the system from the previous question, how many mL of the 10% solution (\\(x\\)) are needed?', id:'Menggunakan sistem dari pertanyaan sebelumnya, berapa mL larutan 10% (\\(x\\)) yang dibutuhkan?'},
+      accept:['5'],
+      explanation:{en:'From \\(x + y = 20\\), \\(y = 20 - x\\). Substitute: \\(0.10x + 0.30(20 - x) = 5 \\Rightarrow 0.10x + 6 - 0.30x = 5 \\Rightarrow -0.20x = -1 \\Rightarrow x = 5\\). You need 5 mL of the 10% solution.', id:'Dari \\(x + y = 20\\), \\(y = 20 - x\\). Substitusi: \\(0.10x + 0.30(20 - x) = 5 \\Rightarrow 0.10x + 6 - 0.30x = 5 \\Rightarrow -0.20x = -1 \\Rightarrow x = 5\\). Anda butuh 5 mL larutan 10%.'}
+    },
+    /* ---- EXERCISE 10 ---- */
+    {
+      type:'exercise', number:'10', qtype:'mcq',
+      question:{en:'Two trains leave the same station traveling in opposite directions. Train A travels at 60 km/h, Train B at 80 km/h. How long until they are 420 km apart?', id:'Dua kereta berangkat dari stasiun yang sama bergerak ke arah berlawanan. Kereta A melaju dengan 60 km/j, Kereta B dengan 80 km/j. Berapa lama waktu mereka akan berjarak 420 km?'},
+      options:[
+        {text:'3 hours', correct:true},
+        {text:'4 hours', correct:false},
+        {text:'5 hours', correct:false},
+        {text:'6 hours', correct:false}
+      ],
+      explanation:{en:'Distance of A + Distance of B = Total Distance. \\(60t + 80t = 420 \\Rightarrow 140t = 420 \\Rightarrow t = 3\\). It takes 3 hours.', id:'Jarak A + Jarak B = Total Jarak. \\(60t + 80t = 420 \\Rightarrow 140t = 420 \\Rightarrow t = 3\\). Butuh waktu 3 jam.'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     ASSIGNMENT 1
+     ======================================================== -->
+<script>
+registerSection('assignment1', {
+  title: 'Assignment 1: Fundamentals',
+  intro: {
+    en: "Complete all 10 exercises. Once finished, your score will be calculated and you can print your result. Good luck!",
+    id: "Selesaikan semua 10 latihan. Setelah selesai, skor Anda akan dihitung dan Anda dapat mencetak hasilnya. Semoga beruntung!"
+  },
+  content: [
+    {type:'exercise', number:'1', qtype:'text',
+      question:{en:'Solve for \\(x\\):  \\(3x + 2 = 17\\)', id:'Selesaikan untuk \\(x\\):  \\(3x + 2 = 17\\)'},
+      accept:['5'],
+      explanation:{en:'\\(3x = 15 \\Rightarrow x = 5\\).', id:'\\(3x = 15 \\Rightarrow x = 5\\).'}
+    },
+    {type:'exercise', number:'2', qtype:'mcq',
+      question:{en:'Which quadrant contains the point \\((-2, -5)\\)?', id:'Kuadran mana yang berisi titik \\((-2, -5)\\)?'},
+      options:[{text:'I', correct:false},{text:'II', correct:false},{text:'III', correct:true},{text:'IV', correct:false}],
+      explanation:{en:'Both \\(x\\) and \\(y\\) are negative, which is Quadrant III.', id:'Baik \\(x\\) maupun \\(y\\) negatif, yaitu Kuadran III.'}
+    },
+    {type:'exercise', number:'3', qtype:'text',
+      question:{en:'What is the slope of the line passing through \\((1, 4)\\) and \\((3, 10)\\)?', id:'Berapakah gradien garis yang melalui \\((1, 4)\\) dan \\((3, 10)\\)?'},
+      accept:['3'],
+      explanation:{en:'\\(m = \\frac{10-4}{3-1} = \\frac{6}{2} = 3\\).', id:'\\(m = \\frac{10-4}{3-1} = \\frac{6}{2} = 3\\).'}
+    },
+    {type:'exercise', number:'4', qtype:'mcq',
+      question:{en:'What is the \\(y\\)-intercept of \\(y = -2x + 7\\)?', id:'Berapakah perpotongan-\\(y\\) dari \\(y = -2x + 7\\)?'},
+      options:[{text:'\\(-2\\)', correct:false},{text:'\\(7\\)', correct:true},{text:'\\(2\\)', correct:false},{text:'\\(-7\\)', correct:false}],
+      explanation:{en:'In \\(y = mx + b\\), \\(b\\) is the \\(y\\)-intercept. Here \\(b = 7\\).', id:'Pada \\(y = mx + b\\), \\(b\\) adalah perpotongan-\\(y\\). Di sini \\(b = 7\\).'}
+    },
+    {type:'exercise', number:'5', qtype:'checkbox',
+      question:{en:'Which of the following are linear equations? (Select ALL that apply)', id:'Manakah dari berikut ini yang merupakan persamaan linear? (Pilih SEMUA yang berlaku)'},
+      options:[{text:'\\(y = 4x - 1\\)', correct:true},{text:'\\(y = x^2 + 2\\)', correct:false},{text:'\\(3x + 2y = 8\\)', correct:true},{text:'\\(y = \\frac{1}{x}\\)', correct:false}],
+      explanation:{en:'Linear equations have variables with a power of 1. No squares or variables in denominators.', id:'Persamaan linear memiliki variabel berpangkat 1. Tidak ada kuadrat atau variabel di penyebut.'}
+    },
+    {type:'exercise', number:'6', qtype:'text',
+      question:{en:'Is \\((2, 1)\\) a solution to \\(y = 3x - 5\\)? (Type "yes" or "no")', id:'Apakah \\((2, 1)\\) adalah solusi dari \\(y = 3x - 5\\)? (Ketik "yes" atau "no")'},
+      accept:['yes','ya'],
+      explanation:{en:'\\(1 = 3(2) - 5 = 6 - 5 = 1\\). Yes, it is true.', id:'\\(1 = 3(2) - 5 = 6 - 5 = 1\\). Ya, itu benar.'}
+    },
+    {type:'exercise', number:'7', qtype:'mcq',
+      question:{en:'Solve by substitution: $$\\begin{cases} y = 2x \\\\ x + y = 9 \\end{cases}$$', id:'Selesaikan dengan substitusi: $$\\begin{cases} y = 2x \\\\ x + y = 9 \\end{cases}$$'},
+      options:[{text:'\\((3, 6)\\)', correct:true},{text:'\\((6, 3)\\)', correct:false},{text:'\\((2, 4)\\)', correct:false},{text:'\\((4, 5)\\)', correct:false}],
+      explanation:{en:'\\(x + 2x = 9 \\Rightarrow 3x = 9 \\Rightarrow x = 3\\). Then \\(y = 2(3) = 6\\).', id:'\\(x + 2x = 9 \\Rightarrow 3x = 9 \\Rightarrow x = 3\\). Lalu \\(y = 2(3) = 6\\).'}
+    },
+    {type:'exercise', number:'8', qtype:'text',
+      question:{en:'Solve by elimination: $$\\begin{cases} 2x + y = 8 \\\\ 2x - y = 0 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan dengan eliminasi: $$\\begin{cases} 2x + y = 8 \\\\ 2x - y = 0 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['2'],
+      explanation:{en:'Add equations: \\(4x = 8 \\Rightarrow x = 2\\).', id:'Jumlahkan persamaan: \\(4x = 8 \\Rightarrow x = 2\\).'}
+    },
+    {type:'exercise', number:'9', qtype:'mcq',
+      question:{en:'How many solutions does a system of parallel lines have?', id:'Berapa banyak solusi yang dimiliki sistem garis sejajar?'},
+      options:[{text:'0', correct:true},{text:'1', correct:false},{text:'2', correct:false},{text:'Infinite', correct:false}],
+      explanation:{en:'Parallel lines never intersect, so there are 0 solutions.', id:'Garis sejajar tidak pernah berpotongan, jadi ada 0 solusi.'}
+    },
+    {type:'exercise', number:'10', qtype:'text',
+      question:{en:'Find the \\(x\\)-intercept of \\(2x - 4y = 10\\). (Write just the \\(x\\)-value)', id:'Carilah perpotongan-\\(x\\) dari \\(2x - 4y = 10\\). (Tulis hanya nilai \\(x\\))'},
+      accept:['5'],
+      explanation:{en:'Set \\(y = 0\\): \\(2x = 10 \\Rightarrow x = 5\\).', id:'Set \\(y = 0\\): \\(2x = 10 \\Rightarrow x = 5\\).'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     ASSIGNMENT 2
+     ======================================================== -->
+<script>
+registerSection('assignment2', {
+  title: 'Assignment 2: Methods & Systems',
+  intro: {
+    en: "This assignment focuses on applying the three methods (Graphing, Substitution, Elimination) to solve systems.",
+    id: "Tugas ini berfokus pada penerapan tiga metode (Grafik, Substitusi, Eliminasi) untuk menyelesaikan sistem."
+  },
+  content: [
+    {type:'exercise', number:'1', qtype:'text',
+      question:{en:'Solve: $$\\begin{cases} x - y = 3 \\\\ x + y = 7 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan: $$\\begin{cases} x - y = 3 \\\\ x + y = 7 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['5'],
+      explanation:{en:'Add them: \\(2x = 10 \\Rightarrow x = 5\\).', id:'Jumlahkan: \\(2x = 10 \\Rightarrow x = 5\\).'}
+    },
+    {type:'exercise', number:'2', qtype:'text',
+      question:{en:'Using the system from Q1, what is \\(y\\)?', id:'Menggunakan sistem dari Q1, berapakah \\(y\\)?'},
+      accept:['2'],
+      explanation:{en:'\\(5 + y = 7 \\Rightarrow y = 2\\).', id:'\\(5 + y = 7 \\Rightarrow y = 2\\).'}
+    },
+    {type:'exercise', number:'3', qtype:'mcq',
+      question:{en:'Which method is best for $$\\begin{cases} y = -x + 5 \\\\ 2x + 3y = 12 \\end{cases}$$?', id:'Metode mana yang terbaik untuk $$\\begin{cases} y = -x + 5 \\\\ 2x + 3y = 12 \\end{cases}$$?'},
+      options:[{text:'Substitution', correct:true},{text:'Elimination', correct:false},{text:'Graphing', correct:false},{text:'Guessing', correct:false}],
+      explanation:{en:'\\(y\\) is already isolated, making substitution the easiest choice.', id:'\\(y\\) sudah diisolasi, membuat substitusi menjadi pilihan termudah.'}
+    },
+    {type:'exercise', number:'4', qtype:'text',
+      question:{en:'Solve the system from Q3. What is \\(x\\)?', id:'Selesaikan sistem dari Q3. Berapakah \\(x\\)?'},
+      accept:['3'],
+      explanation:{en:'\\(2x + 3(-x + 5) = 12 \\Rightarrow 2x - 3x + 15 = 12 \\Rightarrow -x = -3 \\Rightarrow x = 3\\).', id:'\\(2x + 3(-x + 5) = 12 \\Rightarrow 2x - 3x + 15 = 12 \\Rightarrow -x = -3 \\Rightarrow x = 3\\).'}
+    },
+    {type:'exercise', number:'5', qtype:'mcq',
+      question:{en:'Solve: $$\\begin{cases} 3x + 2y = 16 \\\\ x - y = 2 \\end{cases}$$ What is \\(y\\)?', id:'Selesaikan: $$\\begin{cases} 3x + 2y = 16 \\\\ x - y = 2 \\end{cases}$$ Berapakah \\(y\\)?'},
+      options:[{text:'\\(2\\)', correct:true},{text:'\\(4\\)', correct:false},{text:'\\(-2\\)', correct:false},{text:'\\(1\\)', correct:false}],
+      explanation:{en:'From the second equation, \\(x = y + 2\\). Substitute into the first: \\(3(y + 2) + 2y = 16 \\Rightarrow 5y + 6 = 16 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\).', id:'Dari persamaan kedua, \\(x = y + 2\\). Substitusi ke pertama: \\(3(y + 2) + 2y = 16 \\Rightarrow 5y + 6 = 16 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\).'}
+    },
+    {type:'exercise', number:'6', qtype:'checkbox',
+      question:{en:'Which systems have NO solution? (Select ALL that apply)', id:'Sistem mana yang TIDAK memiliki solusi? (Pilih SEMUA yang berlaku)'},
+      options:[
+        {text:'$$\\begin{cases} y = 2x + 1 \\\\ y = 2x + 5 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} 3x + y = 4 \\\\ 6x + 2y = 8 \\end{cases}$$', correct:false},
+        {text:'$$\\begin{cases} x + y = 5 \\\\ x + y = 6 \\end{cases}$$', correct:true},
+        {text:'$$\\begin{cases} y = x \\\\ y = -x \\end{cases}$$', correct:false}
+      ],
+      explanation:{en:'Systems with the same slope but different \\(y\\)-intercepts have no solution. Options 1 and 3 fit this.', id:'Sistem dengan gradien sama tetapi perpotongan-\\(y\\) berbeda tidak memiliki solusi. Opsi 1 dan 3 cocok dengan ini.'}
+    },
+    {type:'exercise', number:'7', qtype:'text',
+      question:{en:'If 2 apples and 1 banana cost $4, and 1 apple and 2 bananas cost $5, how much is 1 apple? (Let \\(a\\) = apples, \\(b\\) = bananas)', id:'Jika 2 apel dan 1 pisang berharga $4, dan 1 apel dan 2 pisang berharga $5, berapakah harga 1 apel? (Misal \\(a\\) = apel, \\(b\\) = pisang)'},
+      accept:['1'],
+      explanation:{en:'System: \\(2a + b = 4\\) and \\(a + 2b = 5\\). From first, \\(b = 4 - 2a\\). Substitute: \\(a + 2(4 - 2a) = 5 \\Rightarrow a + 8 - 4a = 5 \\Rightarrow -3a = -3 \\Rightarrow a = 1\\). An apple costs $1.', id:'Sistem: \\(2a + b = 4\\) dan \\(a + 2b = 5\\). Dari pertama, \\(b = 4 - 2a\\). Substitusi: \\(a + 2(4 - 2a) = 5 \\Rightarrow a + 8 - 4a = 5 \\Rightarrow -3a = -3 \\Rightarrow a = 1\\). Sebuah apel berharga $1.'}
+    },
+    {type:'exercise', number:'8', qtype:'text',
+      question:{en:'Using the system from Q7, how much is 1 banana? (Write just the number)', id:'Menggunakan sistem dari Q7, berapakah harga 1 pisang? (Tulis hanya angkanya)'},
+      accept:['2'],
+      explanation:{en:'If \\(a = 1\\), then \\(2(1) + b = 4 \\Rightarrow b = 2\\). A banana costs $2.', id:'Jika \\(a = 1\\), maka \\(2(1) + b = 4 \\Rightarrow b = 2\\). Sebuah pisang berharga $2.'}
+    },
+    {type:'exercise', number:'9', qtype:'mcq',
+      question:{en:'A line passes through \\((0, 3)\\) and has a slope of 2. Which equation represents this line?', id:'Sebuah garis melalui \\((0, 3)\\) dan memiliki gradien 2. Persamaan mana yang mewakili garis ini?'},
+      options:[{text:'\\(y = 2x + 3\\)', correct:true},{text:'\\(y = 3x + 2\\)', correct:false},{text:'\\(2y = 3x\\)', correct:false},{text:'\\(y = \\frac{1}{2}x + 3\\)', correct:false}],
+      explanation:{en:'Using \\(y = mx + b\\), \\(m = 2\\) and \\(b = 3\\) (since \\(y\\)-intercept is 3). Equation is \\(y = 2x + 3\\).', id:'Menggunakan \\(y = mx + b\\), \\(m = 2\\) dan \\(b = 3\\) (karena perpotongan-\\(y\\) adalah 3). Persamaannya \\(y = 2x + 3\\).'}
+    },
+    {type:'exercise', number:'10', qtype:'text',
+      question:{en:'Find the intersection point of \\(y = x + 4\\) and \\(y = -2x + 1\\). Write your answer as (x, y) with no spaces.', id:'Carilah titik potong \\(y = x + 4\\) dan \\(y = -2x + 1\\). Tulis jawaban Anda sebagai (x, y) tanpa spasi.'},
+      accept:['(-1,3)'],
+      explanation:{en:'Set them equal: \\(x + 4 = -2x + 1 \\Rightarrow 3x = -3 \\Rightarrow x = -1\\). Then \\(y = -1 + 4 = 3\\). Point is \\((-1, 3)\\).', id:'Samakan: \\(x + 4 = -2x + 1 \\Rightarrow 3x = -3 \\Rightarrow x = -1\\). Lalu \\(y = -1 + 4 = 3\\). Titiknya \\((-1, 3)\\).'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     OVERRIDE RENDER FOR CONSOLIDATION & FINAL CONTENT
+     ======================================================== -->
+<script>
+const originalRenderSection = window.renderSection;
+window.renderSection = function(id) {
+  if(id === 'consolidation'){
+    const data = LESSON_DATA[id];
+    const container = document.getElementById(id);
+    if(!data || !container) return;
+    
+    let html = `
+      <div class="section-header">
+        <span class="badge">🎯 Final Section</span>
+        <h2>${data.title}</h2>
+        <div class="time">⏱️ 01:00–01:05</div>
+      </div>
+    `;
+    
+    if(data.intro){
+      html += `<div class="theory-card" style="border-left-color:var(--purple)">
+        <div class="theory-body">
+          <p class="en-text">${data.intro.en}</p>
+          <p class="id-text">${data.intro.id}</p>
+        </div>
+      </div>`;
+    }
+    
+    data.content.forEach(item => {
+      if(item.type === 'html'){
+        html += item.html;
+      } else if(item.type === 'theory'){
+        html += renderTheory(item);
+      }
+    });
+    
+    container.innerHTML = html;
+    renderMath(container);
+  } else {
+    originalRenderSection(id);
+  }
+};
+</script>
+
+<!-- ========================================================
+     ASSIGNMENT 3
+     ======================================================== -->
+<script>
+registerSection('assignment3', {
+  title: 'Assignment 3: Advanced Solving',
+  intro: {
+    en: "Time to test your skills with more complex systems. Don't forget to use a piece of scratch paper if needed!",
+    id: "Saatnya menguji keterampilan Anda dengan sistem yang lebih kompleks. Jangan lupa gunakan kertas coretan jika perlu!"
+  },
+  content: [
+    {type:'exercise', number:'1', qtype:'text',
+      question:{en:'Solve using substitution: $$\\begin{cases} y = \\frac{1}{2}x + 3 \\\\ 2x - 2y = 2 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan dengan substitusi: $$\\begin{cases} y = \\frac{1}{2}x + 3 \\\\ 2x - 2y = 2 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['8'],
+      explanation:{en:'Substitute \\(y\\): \\(2x - 2(\\frac{1}{2}x + 3) = 2 \\Rightarrow 2x - x - 6 = 2 \\Rightarrow x = 8\\).', id:'Substitusi \\(y\\): \\(2x - 2(\\frac{1}{2}x + 3) = 2 \\Rightarrow 2x - x - 6 = 2 \\Rightarrow x = 8\\).'}
+    },
+    {type:'exercise', number:'2', qtype:'text',
+      question:{en:'Solve using elimination: $$\\begin{cases} 3x - 2y = 7 \\\\ x + 2y = 5 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan dengan eliminasi: $$\\begin{cases} 3x - 2y = 7 \\\\ x + 2y = 5 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['3'],
+      explanation:{en:'Add equations to eliminate \\(y\\): \\(4x = 12 \\Rightarrow x = 3\\).', id:'Jumlahkan persamaan untuk mengeliminasi \\(y\\): \\(4x = 12 \\Rightarrow x = 3\\).'}
+    },
+    {type:'exercise', number:'3', qtype:'text',
+      question:{en:'How many solutions does the system $$\\begin{cases} 2x + 4y = 6 \\\\ x + 2y = 3 \\end{cases}$$ have? (Type "0", "1", or "infinite")', id:'Berapa banyak solusi yang dimiliki sistem $$\\begin{cases} 2x + 4y = 6 \\\\ x + 2y = 3 \\end{cases}$$? (Ketik "0", "1", atau "infinite")'},
+      accept:['infinite','tak hingga','infinitely many'],
+      explanation:{en:'Divide the top equation by 2 to get \\(x + 2y = 3\\), which is identical to the bottom equation. Same line = infinite solutions.', id:'Bagi persamaan atas dengan 2 untuk mendapatkan \\(x + 2y = 3\\), yang identik dengan persamaan bawah. Garis yang sama = tak hingga solusi.'}
+    },
+    {type:'exercise', number:'4', qtype:'text',
+      question:{en:'How many solutions does $$\\begin{cases} y = 3x - 1 \\\\ y = 3x + 4 \\end{cases}$$ have? (Type "0", "1", or "infinite")', id:'Berapa banyak solusi yang dimiliki $$\\begin{cases} y = 3x - 1 \\\\ y = 3x + 4 \\end{cases}$$? (Ketik "0", "1", atau "infinite")'},
+      accept:['0','zero','nol'],
+      explanation:{en:'Same slope (3), different \\(y\\)-intercepts (-1 and 4). Parallel lines = 0 solutions.', id:'Gradien sama (3), perpotongan-\\(y\\) berbeda (-1 dan 4). Garis sejajar = 0 solusi.'}
+    },
+    {type:'exercise', number:'5', qtype:'text',
+      question:{en:'The sum of two numbers is 10. Their difference is 4. What is the larger number?', id:'Jumlah dua bilangan adalah 10. Selisihnya 4. Berapakah bilangan yang lebih besar?'},
+      accept:['7'],
+      explanation:{en:'System: \\(x + y = 10\\), \\(x - y = 4\\). Add them: \\(2x = 14 \\Rightarrow x = 7\\). The larger number is 7.', id:'Sistem: \\(x + y = 10\\), \\(x - y = 4\\). Jumlahkan: \\(2x = 14 \\Rightarrow x = 7\\). Bilangan yang lebih besar adalah 7.'}
+    },
+    {type:'exercise', number:'6', qtype:'text',
+      question:{en:'What is the slope of the line \\(3x + 2y = 8\\)? (Write as a decimal or fraction)', id:'Berapakah gradien garis \\(3x + 2y = 8\\)? (Tulis sebagai desimal atau pecahan)'},
+      accept:['-1.5','-3/2','-1 1/2'],
+      explanation:{en:'Convert to slope-intercept form: \\(2y = -3x + 8 \\Rightarrow y = -1.5x + 4\\). The slope \\(m = -1.5\\).', id:'Ubah ke bentuk perpotongan-gradien: \\(2y = -3x + 8 \\Rightarrow y = -1.5x + 4\\). Gradien \\(m = -1.5\\).'}
+    },
+    {type:'exercise', number:'7', qtype:'text',
+      question:{en:'Find the \\(x\\)-intercept of \\(4x - 5y = 20\\).', id:'Carilah perpotongan-\\(x\\) dari \\(4x - 5y = 20\\).'},
+      accept:['5'],
+      explanation:{en:'Set \\(y = 0\\): \\(4x = 20 \\Rightarrow x = 5\\).', id:'Set \\(y = 0\\): \\(4x = 20 \\Rightarrow x = 5\\).'}
+    },
+    {type:'exercise', number:'8', qtype:'text',
+      question:{en:'Solve: $$\\begin{cases} 2x + 3y = 12 \\\\ 2x - y = 4 \\end{cases}$$ What is \\(y\\)?', id:'Selesaikan: $$\\begin{cases} 2x + 3y = 12 \\\\ 2x - y = 4 \\end{cases}$$ Berapakah \\(y\\)?'},
+      accept:['2'],
+      explanation:{en:'Subtract bottom from top: \\((2x+3y) - (2x-y) = 12 - 4 \\Rightarrow 4y = 8 \\Rightarrow y = 2\\).', id:'Kurangi bawah dari atas: \\((2x+3y) - (2x-y) = 12 - 4 \\Rightarrow 4y = 8 \\Rightarrow y = 2\\).'}
+    },
+    {type:'exercise', number:'9', qtype:'text',
+      question:{en:'Solve: $$\\begin{cases} y = -2x + 5 \\\\ 3x + y = 10 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan: $$\\begin{cases} y = -2x + 5 \\\\ 3x + y = 10 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['5'],
+      explanation:{en:'Substitute \\(y\\): \\(3x + (-2x + 5) = 10 \\Rightarrow x + 5 = 10 \\Rightarrow x = 5\\).', id:'Substitusi \\(y\\): \\(3x + (-2x + 5) = 10 \\Rightarrow x + 5 = 10 \\Rightarrow x = 5\\).'}
+    },
+    {type:'exercise', number:'10', qtype:'text',
+      question:{en:'What is the \\(y\\)-intercept of \\(5x - 3y = 15\\)?', id:'Berapakah perpotongan-\\(y\\) dari \\(5x - 3y = 15\\)?'},
+      accept:['-5'],
+      explanation:{en:'Set \\(x = 0\\): \\(-3y = 15 \\Rightarrow y = -5\\).', id:'Set \\(x = 0\\): \\(-3y = 15 \\Rightarrow y = -5\\).'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     ASSIGNMENT 4
+     ======================================================== -->
+<script>
+registerSection('assignment4', {
+  title: 'Assignment 4: Word Problems',
+  intro: {
+    en: "Apply your knowledge to real-world scenarios. Translate words into equations and solve!",
+    id: "Terapkan pengetahuan Anda pada skenario dunia nyata. Terjemahkan kata-kata menjadi persamaan dan selesaikan!"
+  },
+  content: [
+    {type:'exercise', number:'1', qtype:'text',
+      question:{en:'2 apples and 3 oranges cost $6. 1 apple and 1 orange cost $2.50. How much is 1 apple? (Let \\(a\\) = apples, \\(o\\) = oranges)', id:'2 apel dan 3 jeruk berharga $6. 1 apel dan 1 jeruk berharga $2,50. Berapakah harga 1 apel? (Misal \\(a\\) = apel, \\(o\\) = jeruk)'},
+      accept:['1.5','$1.50','1.50'],
+      explanation:{en:'System: \\(2a + 3o = 6\\), \\(a + o = 2.5\\). From second, \\(a = 2.5 - o\\). Substitute: \\(2(2.5 - o) + 3o = 6 \\Rightarrow 5 - 2o + 3o = 6 \\Rightarrow o = 1\\). Then \\(a = 1.5\\).', id:'Sistem: \\(2a + 3o = 6\\), \\(a + o = 2.5\\). Dari kedua, \\(a = 2.5 - o\\). Substitusi: \\(2(2.5 - o) + 3o = 6 \\Rightarrow 5 - 2o + 3o = 6 \\Rightarrow o = 1\\). Lalu \\(a = 1.5\\).'}
+    },
+    {type:'exercise', number:'2', qtype:'text',
+      question:{en:'A farm has 10 animals (chickens and pigs). There are 26 legs total. How many pigs are there?', id:'Sebuah peternakan memiliki 10 hewan (ayam dan babi). Ada 26 kaki secara total. Berapa banyak babi di sana?'},
+      accept:['3'],
+      explanation:{en:'\\(c + p = 10\\), \\(2c + 4p = 26\\). Substitute \\(c = 10 - p\\): \\(2(10 - p) + 4p = 26 \\Rightarrow 20 - 2p + 4p = 26 \\Rightarrow 2p = 6 \\Rightarrow p = 3\\).', id:'\\(c + p = 10\\), \\(2c + 4p = 26\\). Substitusi \\(c = 10 - p\\): \\(2(10 - p) + 4p = 26 \\Rightarrow 20 - 2p + 4p = 26 \\Rightarrow 2p = 6 \\Rightarrow p = 3\\).'}
+    },
+    {type:'exercise', number:'3', qtype:'text',
+      question:{en:'A movie theater sold 200 tickets. Adult tickets were $5, child tickets were $3. Total revenue was $760. How many child tickets were sold?', id:'Sebuah bioskop menjual 200 tiket. Tiket dewasa $5, tiket anak $3. Total pendapatan $760. Berapa banyak tiket anak yang terjual?'},
+      accept:['120'],
+      explanation:{en:'\\(a + c = 200\\), \\(5a + 3c = 760\\). Substitute \\(a = 200 - c\\): \\(5(200 - c) + 3c = 760 \\Rightarrow 1000 - 5c + 3c = 760 \\Rightarrow -2c = -240 \\Rightarrow c = 120\\).', id:'\\(a + c = 200\\), \\(5a + 3c = 760\\). Substitusi \\(a = 200 - c\\): \\(5(200 - c) + 3c = 760 \\Rightarrow 1000 - 5c + 3c = 760 \\Rightarrow -2c = -240 \\Rightarrow c = 120\\).'}
+    },
+    {type:'exercise', number:'4', qtype:'text',
+      question:{en:'A wallet contains $10 and $5 bills, totaling 15 bills. The total value is $115. How many $10 bills are there?', id:'Sebuah dompet berisi uang kertas $10 dan $5, total 15 lembar. Nilai totalnya $115. Berapa banyak uang kertas $10 di sana?'},
+      accept:['8'],
+      explanation:{en:'\\(t + f = 15\\), \\(10t + 5f = 115\\). Substitute \\(t = 15 - f\\): \\(10(15 - f) + 5f = 115 \\Rightarrow 150 - 10f + 5f = 115 \\Rightarrow -5f = -35 \\Rightarrow f = 7\\). So \\(t = 8\\).', id:'\\(t + f = 15\\), \\(10t + 5f = 115\\). Substitusi \\(t = 15 - f\\): \\(10(15 - f) + 5f = 115 \\Rightarrow 150 - 10f + 5f = 115 \\Rightarrow -5f = -35 \\Rightarrow f = 7\\). Jadi \\(t = 8\\).'}
+    },
+    {type:'exercise', number:'5', qtype:'text',
+      question:{en:'Two cars leave the same point driving in opposite directions. Car A goes 60 km/h, Car B goes 40 km/h. How many hours until they are 200 km apart?', id:'Dua mobil berangkat dari titik yang sama bergerak ke arah berlawanan. Mobil A melaju 60 km/j, Mobil B 40 km/j. Berapa jam sampai jarak mereka 200 km?'},
+      accept:['2'],
+      explanation:{en:'\\(60t + 40t = 200 \\Rightarrow 100t = 200 \\Rightarrow t = 2\\).', id:'\\(60t + 40t = 200 \\Rightarrow 100t = 200 \\Rightarrow t = 2\\).'}
+    },
+    {type:'exercise', number:'6', qtype:'text',
+      question:{en:'A chemist needs 20 L of a 25% acid solution. She has 10% and 30% solutions. How many Liters of the 30% solution must she use?', id:'Seorang ahli kimia butuh 20 L larutan asam 25%. Dia memiliki larutan 10% dan 30%. Berapa Liter larutan 30% yang harus digunakan?'},
+      accept:['15'],
+      explanation:{en:'\\(x + y = 20\\), \\(0.10x + 0.30y = 0.25(20)\\). From first, \\(x = 20 - y\\). Substitute: \\(0.10(20 - y) + 0.30y = 5 \\Rightarrow 2 - 0.10y + 0.30y = 5 \\Rightarrow 0.20y = 3 \\Rightarrow y = 15\\).', id:'\\(x + y = 20\\), \\(0.10x + 0.30y = 0.25(20)\\). Dari pertama, \\(x = 20 - y\\). Substitusi: \\(0.10(20 - y) + 0.30y = 5 \\Rightarrow 2 - 0.10y + 0.30y = 5 \\Rightarrow 0.20y = 3 \\Rightarrow y = 15\\).'}
+    },
+    {type:'exercise', number:'7', qtype:'text',
+      question:{en:'Person A is twice as old as Person B. The sum of their ages is 30. How old is Person B?', id:'Orang A berusia dua kali lipat Orang B. Jumlah usia mereka adalah 30. Berapakah usia Orang B?'},
+      accept:['10'],
+      explanation:{en:'\\(a = 2b\\), \\(a + b = 30\\). Substitute: \\(2b + b = 30 \\Rightarrow 3b = 30 \\Rightarrow b = 10\\).', id:'\\(a = 2b\\), \\(a + b = 30\\). Substitusi: \\(2b + b = 30 \\Rightarrow 3b = 30 \\Rightarrow b = 10\\).'}
+    },
+    {type:'exercise', number:'8', qtype:'text',
+      question:{en:'A rectangle has a perimeter of 20. Its length is 2 more than its width. What is the width?', id:'Sebuah persegi panjang memiliki keliling 20. Panjangnya 2 lebih dari lebarnya. Berapakah lebarnya?'},
+      accept:['4'],
+      explanation:{en:'\\(2L + 2W = 20 \\Rightarrow L + W = 10\\). And \\(L = W + 2\\). Substitute: \\((W + 2) + W = 10 \\Rightarrow 2W = 8 \\Rightarrow W = 4\\).', id:'\\(2L + 2W = 20 \\Rightarrow L + W = 10\\). Dan \\(L = W + 2\\). Substitusi: \\((W + 2) + W = 10 \\Rightarrow 2W = 8 \\Rightarrow W = 4\\).'}
+    },
+    {type:'exercise', number:'9', qtype:'text',
+      question:{en:'An investor invests $1000 at 5% interest and $2000 at 4% interest. What is the total interest earned in one year? (in dollars)', id:'Seorang investor menginvestasikan $1000 pada bunga 5% dan $2000 pada bunga 4%. Berapakah total bunga yang diperoleh dalam satu tahun? (dalam dolar)'},
+      accept:['130'],
+      explanation:{en:'Interest = Principal × Rate. \\(1000(0.05) + 2000(0.04) = 50 + 80 = 130\\). Total interest is $130.', id:'Bunga = Pokok × Tingkat. \\(1000(0.05) + 2000(0.04) = 50 + 80 = 130\\). Total bunga adalah $130.'}
+    },
+    {type:'exercise', number:'10', qtype:'text',
+      question:{en:'A boat travels 30 km downstream in 2 hours. The speed of the current is 3 km/h. What is the speed of the boat in still water (\\(b\\))?', id:'Sebuah perahu bergerak 30 km menyusuri sungai dalam 2 jam. Kecepatan arus adalah 3 km/j. Berapakah kecepatan perahu di air tenang (\\(b\\))?'},
+      accept:['12'],
+      explanation:{en:'Distance = Rate × Time. Rate downstream = \\(b + c\\). \\(30 = (b + 3) \\times 2 \\Rightarrow 15 = b + 3 \\Rightarrow b = 12\\) km/h.', id:'Jarak = Kecepatan × Waktu. Kecepatan menyusuri sungai = \\(b + c\\). \\(30 = (b + 3) \\times 2 \\Rightarrow 15 = b + 3 \\Rightarrow b = 12\\) km/j.'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     ASSIGNMENT 5
+     ======================================================== -->
+<script>
+registerSection('assignment5', {
+  title: 'Assignment 5: Mastery Challenge',
+  intro: {
+    en: "The final challenge! This assignment mixes all concepts: methods, intercepts, slopes, and special cases.",
+    id: "Tantangan terakhir! Tugas ini mencampur semua konsep: metode, perpotongan, gradien, dan kasus khusus."
+  },
+  content: [
+    {type:'exercise', number:'1', qtype:'text',
+      question:{en:'Solve by setting equations equal: $$\\begin{cases} y = 4x - 1 \\\\ y = 2x + 3 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan dengan menyamakan persamaan: $$\\begin{cases} y = 4x - 1 \\\\ y = 2x + 3 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['2'],
+      explanation:{en:'\\(4x - 1 = 2x + 3 \\Rightarrow 2x = 4 \\Rightarrow x = 2\\).', id:'\\(4x - 1 = 2x + 3 \\Rightarrow 2x = 4 \\Rightarrow x = 2\\).'}
+    },
+    {type:'exercise', number:'2', qtype:'text',
+      question:{en:'What is the slope of the line \\(2x - 3y = 6\\)? (Write as a fraction like a/b)', id:'Berapakah gradien garis \\(2x - 3y = 6\\)? (Tulis sebagai pecahan seperti a/b)'},
+      accept:['2/3'],
+      explanation:{en:'Convert to slope-intercept: \\(-3y = -2x + 6 \\Rightarrow y = \\frac{2}{3}x - 2\\). Slope is \\(2/3\\).', id:'Ubah ke perpotongan-gradien: \\(-3y = -2x + 6 \\Rightarrow y = \\frac{2}{3}x - 2\\). Gradiennya \\(2/3\\).'}
+    },
+    {type:'exercise', number:'3', qtype:'text',
+      question:{en:'How many solutions does a system of parallel lines have?', id:'Berapa banyak solusi yang dimiliki sistem garis sejajar?'},
+      accept:['0','zero','nol'],
+      explanation:{en:'Parallel lines never intersect, so they have 0 solutions.', id:'Garis sejajar tidak pernah berpotongan, jadi mereka memiliki 0 solusi.'}
+    },
+    {type:'exercise', number:'4', qtype:'text',
+      question:{en:'How many solutions does a system with two identical equations have? (Type "0", "1", or "infinite")', id:'Berapa banyak solusi yang dimiliki sistem dengan dua persamaan identik? (Ketik "0", "1", atau "infinite")'},
+      accept:['infinite','tak hingga','infinitely many'],
+      explanation:{en:'Identical equations represent the same line, which overlaps completely. Thus, there are infinite solutions.', id:'Persamaan identik mewakili garis yang sama, yang tumpang tindih sepenuhnya. Jadi, ada tak hingga solusi.'}
+    },
+    {type:'exercise', number:'5', qtype:'text',
+      question:{en:'Solve: $$\\begin{cases} 3x - y = 4 \\\\ x + y = 8 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan: $$\\begin{cases} 3x - y = 4 \\\\ x + y = 8 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['3'],
+      explanation:{en:'Add equations to eliminate \\(y\\): \\(4x = 12 \\Rightarrow x = 3\\).', id:'Jumlahkan persamaan untuk mengeliminasi \\(y\\): \\(4x = 12 \\Rightarrow x = 3\\).'}
+    },
+    {type:'exercise', number:'6', qtype:'text',
+      question:{en:'Is the point \\((1, -2)\\) a solution to \\(y = 2x - 4\\)? (Type "yes" or "no")', id:'Apakah titik \\((1, -2)\\) adalah solusi dari \\(y = 2x - 4\\)? (Ketik "yes" atau "no")'},
+      accept:['yes','ya'],
+      explanation:{en:'Substitute \\(x = 1\\): \\(y = 2(1) - 4 = -2\\). Since the \\(y\\)-value matches, yes it is a solution.', id:'Substitusi \\(x = 1\\): \\(y = 2(1) - 4 = -2\\). Karena nilai \\(y\\) cocok, ya itu adalah solusi.'}
+    },
+    {type:'exercise', number:'7', qtype:'text',
+      question:{en:'Find the \\(x\\)-intercept of \\(y = 3x - 9\\).', id:'Carilah perpotongan-\\(x\\) dari \\(y = 3x - 9\\).'},
+      accept:['3'],
+      explanation:{en:'Set \\(y = 0\\): \\(0 = 3x - 9 \\Rightarrow 3x = 9 \\Rightarrow x = 3\\).', id:'Set \\(y = 0\\): \\(0 = 3x - 9 \\Rightarrow 3x = 9 \\Rightarrow x = 3\\).'}
+    },
+    {type:'exercise', number:'8', qtype:'text',
+      question:{en:'Find the \\(y\\)-intercept of \\(3x - 6y = 12\\).', id:'Carilah perpotongan-\\(y\\) dari \\(3x - 6y = 12\\).'},
+      accept:['-2'],
+      explanation:{en:'Set \\(x = 0\\): \\(-6y = 12 \\Rightarrow y = -2\\).', id:'Set \\(x = 0\\): \\(-6y = 12 \\Rightarrow y = -2\\).'}
+    },
+    {type:'exercise', number:'9', qtype:'text',
+      question:{en:'Solve using elimination: $$\\begin{cases} 4x + 3y = 11 \\\\ 4x - 3y = 5 \\end{cases}$$ What is \\(x\\)?', id:'Selesaikan dengan eliminasi: $$\\begin{cases} 4x + 3y = 11 \\\\ 4x - 3y = 5 \\end{cases}$$ Berapakah \\(x\\)?'},
+      accept:['2'],
+      explanation:{en:'Add equations to eliminate \\(y\\): \\(8x = 16 \\Rightarrow x = 2\\).', id:'Jumlahkan persamaan untuk mengeliminasi \\(y\\): \\(8x = 16 \\Rightarrow x = 2\\).'}
+    },
+    {type:'exercise', number:'10', qtype:'text',
+      question:{en:'Solve using substitution: $$\\begin{cases} x = 2y + 1 \\\\ 3x - y = 13 \\end{cases}$$ What is \\(y\\)?', id:'Selesaikan dengan substitusi: $$\\begin{cases} x = 2y + 1 \\\\ 3x - y = 13 \\end{cases}$$ Berapakah \\(y\\)?'},
+      accept:['2'],
+      explanation:{en:'Substitute \\(x\\): \\(3(2y + 1) - y = 13 \\Rightarrow 6y + 3 - y = 13 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\).', id:'Substitusi \\(x\\): \\(3(2y + 1) - y = 13 \\Rightarrow 6y + 3 - y = 13 \\Rightarrow 5y = 10 \\Rightarrow y = 2\\).'}
+    }
+  ]
+});
+</script>
+
+<!-- ========================================================
+     SECTION 7: CONSOLIDATION & REFLECTION
+     ======================================================== -->
+<script>
+registerSection('consolidation', {
+  title: 'Consolidation & Reflection',
+  intro: {
+    en: "You made it to the end! Take a moment to reflect on what you've learned today.",
+    id: "Anda berhasil sampai di akhir! Luangkan waktu sejenak untuk merefleksikan apa yang telah Anda pelajari hari ini."
+  },
+  content: [
+    {
+      type: 'html',
+      html: `
+        <div class="reflection-card">
+          <h3>📝 1. What was the most challenging concept today?</h3>
+          <p class="id-text" style="margin-bottom:8px">Apa konsep yang paling menantang hari ini?</p>
+          <textarea placeholder="Type your thoughts here..."></textarea>
+        </div>
+        <div class="reflection-card">
+          <h3>📝 2. Which method (Graphing, Substitution, Elimination) do you prefer and why?</h3>
+          <p class="id-text" style="margin-bottom:8px">Metode mana (Grafik, Substitusi, Eliminasi) yang Anda sukai dan mengapa?</p>
+          <textarea placeholder="Type your thoughts here..."></textarea>
+        </div>
+        <div class="reflection-card">
+          <h3>📝 3. Can you think of a real-world problem you could solve using a system of equations?</h3>
+          <p class="id-text" style="margin-bottom:8px">Bisakah Anda memikirkan masalah dunia nyata yang bisa Anda selesaikan menggunakan sistem persamaan?</p>
+          <textarea placeholder="Type your thoughts here..."></textarea>
+        </div>
+        <div class="final-cta">
+          <h2>🎉 Awesome Job!</h2>
+          <p>You've successfully completed the Math Tutoring session on Systems of Linear Equations.</p>
+          <p class="id-text">Anda telah berhasil menyelesaikan sesi Bimbingan Matematika tentang Sistem Persamaan Linear.</p>
+          <a href="https://learn.algonova.id" target="_blank" class="btn btn-primary btn-lg" style="margin-top:12px;text-decoration:none;display:inline-flex">🚀 Continue Learning at Algonova</a>
+        </div>
+      `
+    }
+  ]
+});
+</script>
+
+</body>
+</html>
