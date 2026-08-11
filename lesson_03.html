@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membongkar "Surds" Secara Visual - Interactive Lesson</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #58cc02; /* Duolingo green */
+            --primary-dark: #46a302;
+            --bg: #131f24;
+            --bg-panel: #1b2b32;
+            --bg-card: #243840;
+            --text-main: #ffffff;
+            --text-muted: #a0c4b8;
+            --border: #3a5a60;
+            --danger: #ff4b4b;
+            --warning: #ffc800;
+            --sidebar-width: 280px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-width); background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; z-index: 10; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); text-align: center; }
+        .sidebar-header h2 { color: var(--primary); font-size: 1.2rem; margin-bottom: 5px; }
+        .sidebar-header p { font-size: 0.8rem; color: var(--text-muted); }
+        .nav-list { list-style: none; padding: 10px 0; flex-grow: 1; }
+        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; transition: 0.2s; border-left: 4px solid transparent; font-size: 0.9rem; }
+        .nav-item:hover { background: var(--bg-card); }
+        .nav-item.active { background: var(--bg-card); border-left: 4px solid var(--primary); color: var(--primary); font-weight: bold; }
+        .nav-item.completed { color: var(--text-muted); }
+        .nav-item.completed::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-right: 10px; color: var(--primary); }
+        .nav-item i { margin-right: 10px; width: 20px; text-align: center; }
+        .reset-btn { margin: 20px; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .reset-btn:hover { background: #e03e3e; }
+
+        /* Main Content */
+        .main { flex-grow: 1; overflow-y: auto; padding: 40px; display: flex; justify-content: center; }
+        .content-wrapper { max-width: 800px; width: 100%; }
+        
+        /* Cards & Theory */
+        .card { background: var(--bg-card); border-radius: 16px; padding: 30px; margin-bottom: 30px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .card h2 { color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; }
+        .card h2 i { margin-right: 10px; }
+        .id-lang { display: block; font-size: 0.85em; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+        .math-block { margin: 15px 0; text-align: center; font-size: 1.2em; }
+        svg.illustration { width: 100%; max-width: 300px; height: auto; margin: 20px auto; display: block; }
+
+        /* Exercises */
+        .exercise-box { background: var(--bg-panel); border: 2px solid var(--border); border-radius: 12px; padding: 25px; margin-top: 20px; animation: fadeIn 0.4s ease-out; }
+        .exercise-question { font-size: 1.1rem; margin-bottom: 20px; font-weight: 500; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .option-btn { background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 15px; color: var(--text-main); cursor: pointer; font-size: 1rem; transition: 0.2s; text-align: center; }
+        .option-btn:hover { border-color: var(--primary); background: #2a4a52; }
+        .option-btn.selected { border-color: var(--warning); background: #3a4a32; box-shadow: inset 0 0 10px rgba(88, 204, 2, 0.2); }
+        .option-btn.correct { border-color: var(--primary); background: #2a4a22; color: var(--primary); }
+        .option-btn.wrong { border-color: var(--danger); background: #4a2a2a; color: var(--danger); }
+        
+        .input-answer { width: 100%; padding: 15px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; color: white; font-size: 1rem; margin-bottom: 20px; }
+        .input-answer:focus { outline: none; border-color: var(--primary); }
+
+        .btn-group { display: flex; gap: 10px; justify-content: space-between; margin-top: 20px; }
+        .action-btn { padding: 12px 24px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .btn-check { background: var(--primary); color: white; flex-grow: 1; }
+        .btn-check:hover { background: var(--primary-dark); }
+        .btn-check:disabled { background: #3a5a60; cursor: not-allowed; }
+        .btn-nav { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); }
+        .btn-nav:hover { background: #3a5a60; }
+
+        /* Collapse Explanation */
+        .explanation-collapse { margin-top: 20px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .explanation-toggle { width: 100%; background: var(--bg-card); padding: 15px; text-align: left; color: var(--primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; border: none; }
+        .explanation-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; background: var(--bg-panel); }
+        .explanation-content.open { max-height: 500px; padding: 15px; border-top: 1px solid var(--border); }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; color: black; display: block; height: auto; }
+            .sidebar, .reset-btn, .btn-group, .option-btn, .explanation-collapse, .input-answer { display: none !important; }
+            .main { padding: 0; }
+            .card { border: 1px solid black; box-shadow: none; background: white; }
+            .exercise-box { border: 1px solid black; background: white; }
+            .print-area { display: block !important; page-break-inside: avoid; margin-bottom: 20px; }
+            .print-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+            .print-table th, .print-table td { border: 1px solid black; padding: 5px; text-align: left; }
+        }
+        .print-area { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>MATH TUTORING</h2>
+            <p>by Deni</p>
+        </div>
+        <ul class="nav-list" id="navList">
+            <!-- Nav items injected by JS -->
+        </ul>
+        <button class="reset-btn" onclick="resetAllProgress()"><i class="fas fa-trash-alt"></i> Reset All Progress</button>
+    </div>
+
+    <div class="main">
+        <div class="content-wrapper" id="contentArea">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <div class="print-area" id="printArea"></div>
+
+    <!-- KaTeX JS -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <script>
+        // --- CORE STATE & LOGIC ---
+        let appState = {
+            currentSection: 0,
+            currentStep: 0, // 0 = theory1, 1-3 = ex1-3, 4 = theory2, 5-7 = ex4-6, 8 = theory3, 9-12 = ex7-10
+            answers: {},
+            scores: {}
+        };
+
+        function saveState() { localStorage.setItem('surdLessonState', JSON.stringify(appState)); }
+        function loadState() { 
+            const saved = localStorage.getItem('surdLessonState');
+            if(saved) appState = JSON.parse(saved); 
+        }
+
+        function resetAllProgress() {
+            if(confirm("Are you sure you want to reset all progress?")) {
+                localStorage.removeItem('surdLessonState');
+                appState = { currentSection: 0, currentStep: 0, answers: {}, scores: {} };
+                renderNav();
+                navigate(0, 0);
+            }
+        }
+
+        // Shuffle array for random options
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Render Math
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
+
+        // --- LESSON DATA STRUCTURE ---
+        /*
+        type: 'theory' | 'exercise'
+        exercise types: 'mcq' (multiple choice), 'input' (text input)
+        */
+        const LESSON_DATA = [
+            // --- SECTION 0: HOME ---
+            {
+                id: "home",
+                title: "Home",
+                icon: "fa-house",
+                steps: [
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-chalkboard-user"></i> MATH TUTORING by Deni</h2>
+                            <p><strong>Topic:</strong> Visually Unpacking "Surds"<span class="id-lang">Topik: Membongkar "Surds" Secara Visual</span></p>
+                            <br>
+                            <p>Welcome to today's lesson! Before we begin, let's review our virtual classroom rules:<span class="id-lang">Selamat datang di pelajaran hari ini! Sebelum kita mulai, mari kita tinjau aturan kelas virtual kita:</span></p>
+                            <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                                <li>Take turns speaking.<span class="id-lang">Berbicara secara bergantian.</span></li>
+                                <li>Ask for permission if you need to leave the class.<span class="id-lang">Meminta izin jika ingin meninggalkan kelas.</span></li>
+                                <li>Turn on your camera and microphone when necessary.<span class="id-lang">Menyalakan kamera dan microphone jika diperlukan.</span></li>
+                            </ul>
+                            <svg class="illustration" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="80" fill="#243840" stroke="#58cc02" stroke-width="4"/>
+                                <text x="100" y="90" text-anchor="middle" fill="#58cc02" font-size="40">√x</text>
+                                <text x="100" y="130" text-anchor="middle" fill="#a0c4b8" font-size="15">Visuals</text>
+                            </svg>
+                        `
+                    }
+                ]
+            },
+            // --- SECTION 1: SPIRAL REVIEW WARM-UP ---
+            {
+                id: "sec1",
+                title: "Spiral Review Warm-up",
+                time: "00:00-00:10",
+                icon: "fa-rotate",
+                steps: [
+                    // Theory 1
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-rotate"></i> Spiral Review: Place Value & Notation</h2>
+                            <p>Let's wake up those math muscles with a 'Power Sprint'! First, let's look at Business Place Value. If a company's revenue is $1,250,000,000$, what is the value of the digit 2?<span class="id-lang">Mari kita bangunkan otot matematika kita dengan 'Power Sprint'! Pertama, mari kita lihat Nilai Tempat Bisnis. Jika pendapatan perusahaan adalah $1,250,000,000$, berapakah nilai digit 2?</span></p>
+                            <div class="math-block">$1,250,000,000 = 1 \\text{ billion} + 2 \\text{ hundred millions} + \\dots$</div>
+                            <p>Second, how do we write that number in scientific notation?<span class="id-lang">Kedua, bagaimana kita menulis angka tersebut dalam notasi ilmiah?</span></p>
+                            <div class="math-block">$1.25 \\times 10^9$</div>
+                        `
+                    },
+                    // Ex 1, 2, 3
+                    {
+                        type: "exercise", id: "s1e1", qType: "mcq",
+                        question: "In the number $5,320,000,000$, what is the value of the digit 3?<span class='id-lang'>Pada angka $5,320,000,000$, berapakah nilai digit 3?</span>",
+                        options: ["$3 \\text{ million}$", "$30 \\text{ million}$", "$300 \\text{ million}$", "$3 \\text{ billion}$"],
+                        answer: "$300 \\text{ million}$",
+                        explanation: "The digit 3 is in the hundred millions place. Therefore, its value is $3 \\times 100,000,000 = 300,000,000$ (300 million).<span class='id-lang'>Digit 3 berada di tempat ratusan juta. Oleh karena itu, nilainya adalah $3 \\times 100,000,000 = 300,000,000$ (300 juta).</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e2", qType: "mcq",
+                        question: "Which of these is the correct scientific notation for $4,500,000,000$?<span class='id-lang'>Manakah di antara ini notasi ilmiah yang benar untuk $4,500,000,000$?</span>",
+                        options: ["$4.5 \\times 10^8$", "$45 \\times 10^8$", "$4.5 \\times 10^9$", "$0.45 \\times 10^{10}$"],
+                        answer: "$4.5 \\times 10^9$",
+                        explanation: "Move the decimal point so there's one non-zero digit to the left: 4.5. Count the jumps (9 jumps right), so it's $4.5 \\times 10^9$.<span class='id-lang'>Pindahkan titik desimal agar ada satu digit bukan nol di sebelah kiri: 4.5. Hitung lompatan (9 lompatan ke kanan), jadi hasilnya $4.5 \\times 10^9$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e3", qType: "input",
+                        question: "A company profit is $10^7$. How much is this in millions? (e.g., answer '5' for 5 million)<span class='id-lang'>Keuntungan perusahaan adalah $10^7$. Berapa kah ini dalam jutaan? (misal, jawab '5' untuk 5 juta)</span>",
+                        answer: "10",
+                        explanation: "$10^7 = 10,000,000$. To find how many millions, divide by $1,000,000$. $10,000,000 / 1,000,000 = 10$ million.<span class='id-lang'>$10^7 = 10,000,000$. Untuk mencari berapa juta, bagi dengan $1,000,000$. $10,000,000 / 1,000,000 = 10$ juta.</span>"
+                    },
+                    // Theory 2
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-rotate"></i> Spiral Review: Perfect Squares</h2>
+                            <p>Now, let's pivot to our last session on Surds. If I have a square with an area of 25, what is the side length? It's 5, because $5 \\times 5 = 25$.<span class="id-lang">Sekarang, mari kita beralih ke sesi terakhir kita tentang Surds. Jika saya memiliki persegi dengan luas 25, berapakah panjang sisinya? Yaitu 5, karena $5 \\times 5 = 25$.</span></p>
+                            <p>But what if the area is 2? The side length is $\sqrt{2}$. Can you draw a rough square and label the side for Area = 2?<span class="id-lang">Tapi bagaimana jika luasnya 2? Panjang sisinya adalah $\\sqrt{2}$. Bisakah kamu menggambar persegi kasar dan memberi label sisi untuk Luas = 2?</span></p>
+                            <svg class="illustration" viewBox="0 0 150 150">
+                                <rect x="25" y="25" width="100" height="100" fill="#243840" stroke="#58cc02" stroke-width="2" rx="5"/>
+                                <text x="75" y="85" text-anchor="middle" fill="#ffffff" font-size="16">A = 2</text>
+                                <text x="75" y="20" text-anchor="middle" fill="#ffc800" font-size="14">s = √2</text>
+                            </svg>
+                        `
+                    },
+                    // Ex 4, 5, 6
+                    {
+                        type: "exercise", id: "s1e4", qType: "mcq",
+                        question: "If a square has an area of 49, what is its exact side length?<span class='id-lang'>Jika sebuah persegi memiliki luas 49, berapakah panjang sisi pastinya?</span>",
+                        options: ["$7$", "$\\sqrt{49}$", "$6$", "$49$"],
+                        answer: "$7$",
+                        explanation: "Since $7 \\times 7 = 49$, the side length is exactly 7. Note: $\\sqrt{49}$ is also mathematically correct but simplified it is 7.<span class='id-lang'>Karena $7 \\times 7 = 49$, panjang sisinya tepat 7. Catatan: $\\sqrt{49}$ juga benar secara matematis tetapi disederhanakan menjadi 7.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e5", qType: "mcq",
+                        question: "A square has an area of 13. Its side length is $\sqrt{13}$. Is $\sqrt{13}$ closer to 3 or 4?<span class='id-lang'>Sebuah persegi memiliki luas 13. Panjang sisinya adalah $\\sqrt{13}$. Apakah $\\sqrt{13}$ lebih dekat ke 3 atau 4?</span>",
+                        options: ["3", "4"],
+                        answer: "4",
+                        explanation: "Since $3^2 = 9$ and $4^2 = 16$, 13 is closer to 16. Thus, $\\sqrt{13}$ is closer to 4.<span class='id-lang'>Karena $3^2 = 9$ dan $4^2 = 16$, 13 lebih dekat ke 16. Dengan demikian, $\\sqrt{13}$ lebih dekat ke 4.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e6", qType: "mcq",
+                        question: "Which of the following represents the side length of a square with Area = 90?<span class='id-lang'>Manakah yang mewakili panjang sisi persegi dengan Luas = 90?</span>",
+                        options: ["$9$", "$45$", "$\\sqrt{90}$", "$90$"],
+                        answer: "$\\sqrt{90}$",
+                        explanation: "By definition, if Area = $x$, side length = $\\sqrt{x}$. So for Area 90, side is $\\sqrt{90}$.<span class='id-lang'>Berdasarkan definisi, jika Luas = $x$, panjang sisi = $\\sqrt{x}$. Jadi untuk Luas 90, sisinya adalah $\\sqrt{90}$.</span>"
+                    },
+                    // Theory 3
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-rotate"></i> Initial Visualization of $\sqrt{2}$</h2>
+                            <p>Numbers like $\sqrt{2}$ are called <strong>irrational numbers</strong> or <strong>surds</strong>. They cannot be written as a simple fraction, and their decimals go on forever without repeating.<span class="id-lang">Bilangan seperti $\\sqrt{2}$ disebut <strong>bilangan irasional</strong> atau <strong>surds</strong>. Bilangan ini tidak dapat ditulis sebagai pecahan sederhana, dan desimalnya berlanjut selamanya tanpa berulang.</span></p>
+                            <p>$\sqrt{2} \approx 1.41421356...$<span class="id-lang">$\\sqrt{2} \\approx 1.41421356...$</span></p>
+                            <p>Even though it's an infinite decimal, it represents a very specific, exact physical length!<span class="id-lang">Meskipun desimalnya tak terbatas, ia mewakili panjang fisik yang sangat spesifik dan pasti!</span></p>
+                        `
+                    },
+                    // Ex 7, 8, 9, 10
+                    {
+                        type: "exercise", id: "s1e7", qType: "mcq",
+                        question: "Which of these is a surd?<span class='id-lang'>Manakah di antara ini yang merupakan surd?</span>",
+                        options: ["$\\sqrt{4}$", "$\\sqrt{9}$", "$\\sqrt{16}$", "$\\sqrt{7}$"],
+                        answer: "$\\sqrt{7}$",
+                        explanation: "A surd is an irrational root. $\\sqrt{4}=2$, $\\sqrt{9}=3$, $\\sqrt{16}=4$ are rational. $\\sqrt{7}$ cannot be simplified to a whole number or fraction.<span class='id-lang'>Surd adalah akar irasional. $\\sqrt{4}=2$, $\\sqrt{9}=3$, $\\sqrt{16}=4$ adalah rasional. $\\sqrt{7}$ tidak dapat disederhanakan menjadi bilangan bulat atau pecahan.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e8", qType: "mcq",
+                        question: "Why can't we write $\sqrt{2}$ as an exact decimal?<span class='id-lang'>Mengapa kita tidak bisa menulis $\\sqrt{2}$ sebagai desimal pasti?</span>",
+                        options: ["Because it's a negative number.", "Because its decimal expansion is infinite and non-repeating.", "Because 2 is an even number.", "Because it's too small."],
+                        answer: "Because its decimal expansion is infinite and non-repeating.",
+                        explanation: "Irrational numbers (surds) have decimal expansions that neither terminate nor repeat.<span class='id-lang'>Bilangan irasional (surd) memiliki ekspansi desimal yang tidak berakhir dan tidak berulang.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e9", qType: "mcq",
+                        question: "If Area = 13, side = $\sqrt{13}$. Is $\sqrt{13}$ closer to 3 or 4?<span class='id-lang'>Jika Luas = 13, sisi = $\\sqrt{13}$. Apakah $\\sqrt{13}$ lebih dekat ke 3 atau 4?</span>",
+                        options: ["3", "4"],
+                        answer: "4",
+                        explanation: "$3^2 = 9$ and $4^2 = 16$. 13 is closer to 16 than to 9, so $\\sqrt{13}$ is closer to 4.<span class='id-lang'>$3^2 = 9$ dan $4^2 = 16$. 13 lebih dekat ke 16 daripada 9, jadi $\\sqrt{13}$ lebih dekat ke 4.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s1e10", qType: "input",
+                        question: "Between which two whole numbers does $\sqrt{5}$ lie? (Answer in format 'a,b' e.g., '2,3')<span class='id-lang'>Di antara dua bilangan bulat apa $\\sqrt{5}$ berada? (Jawab dalam format 'a,b' misalnya '2,3')</span>",
+                        answer: "2,3",
+                        explanation: "$2^2 = 4$ and $3^2 = 9$. Since 5 is between 4 and 9, $\\sqrt{5}$ is between 2 and 3.<span class='id-lang'>$2^2 = 4$ dan $3^2 = 9$. Karena 5 di antara 4 dan 9, $\\sqrt{5}$ di antara 2 dan 3.</span>"
+                    }
+                ]
+            },
+			
+            // --- SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION ---
+            {
+                id: "sec2",
+                title: "Introduction & Real-World",
+                time: "00:10-00:15",
+                icon: "fa-globe",
+                steps: [
+                    // Theory 1
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-globe"></i> The Architect's Dilemma</h2>
+                            <p>Imagine you are an architect designing a high-end minimalist plaza. You want a square garden with an area of exactly 7 square meters. You go to the hardware store for a border fence. The store asks: "What is the exact side length?"<span class="id-lang">Bayangkan kamu adalah arsitek yang mendesain plaza minimalis kelas atas. Kamu menginginkan taman persegi dengan luas tepat 7 meter persegi. Kamu pergi ke toko perangkat keras untuk pagar pembatas. Toko tersebut bertanya: "Berapa panjang sisi yang tepat?"</span></p>
+                            <p>You can't just say 2.6 or 2.64 because it's not exact. This is where <strong>'Surds'</strong> come in. They are the 'hidden' lengths in nature and design that decimals can't perfectly capture.<span class="id-lang">Kamu tidak bisa hanya mengatakan 2.6 atau 2.64 karena itu tidak tepat. Di sinilah <strong>'Surds'</strong> berperan. Mereka adalah panjang 'tersembunyi' di alam dan desain yang tidak dapat ditangkap sempurna oleh desimal.</span></p>
+                        `
+                    },
+                    // Ex 1, 2, 3
+                    {
+                        type: "exercise", id: "s2e1", qType: "mcq",
+                        question: "Why is a decimal like 2.64 insufficient for the exact side length of a square with Area = 7?<span class='id-lang'>Mengapa desimal seperti 2.64 tidak cukup untuk panjang sisi tepat persegi dengan Luas = 7?</span>",
+                        options: ["Because 2.64 is too small.", "Because decimals are always wrong.", "Because 2.64 × 2.64 does not equal exactly 7.", "Because the store doesn't accept decimals."],
+                        answer: "Because 2.64 × 2.64 does not equal exactly 7.",
+                        explanation: "An exact side length must multiply by itself to give exactly 7. $2.64 \\times 2.64 = 6.9696$, which is close, but not exactly 7.<span class='id-lang'>Panjang sisi yang tepat harus dikalikan dengan dirinya sendiri untuk menghasilkan tepat 7. $2.64 \\times 2.64 = 6.9696$, yang mendekati, tapi tidak tepat 7.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e2", qType: "mcq",
+                        question: "What is the mathematically exact side length of a square with Area = 7?<span class='id-lang'>Berapakah panjang sisi yang secara matematis tepat untuk persegi dengan Luas = 7?</span>",
+                        options: ["$2.645$", "$\\sqrt{7}$", "$2.65$", "$3$"],
+                        answer: "$\\sqrt{7}$",
+                        explanation: "By definition, if the area of a square is $A$, the exact side length is $\\sqrt{A}$. So for Area 7, it is $\\sqrt{7}$.<span class='id-lang'>Menurut definisi, jika luas persegi adalah $A$, panjang sisi tepatnya adalah $\\sqrt{A}$. Jadi untuk Luas 7, itu adalah $\\sqrt{7}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e3", qType: "mcq",
+                        question: "Surds represent lengths that decimals cannot perfectly capture. Which of the following is a characteristic of a surd?<span class='id-lang'>Surd mewakili panjang yang tidak dapat ditangkap sempurna oleh desimal. Manakah yang merupakan karakteristik dari surd?</span>",
+                        options: ["It is always a whole number.", "It can be written as a simple fraction.", "Its decimal representation is infinite and non-repeating.", "It is always negative."],
+                        answer: "Its decimal representation is infinite and non-repeating.",
+                        explanation: "Surds are irrational numbers. Their decimal expansions go on forever without repeating, making it impossible to write them as exact terminating decimals or simple fractions.<span class='id-lang'>Surd adalah bilangan irasional. Ekspansi desimalnya berlanjut selamanya tanpa berulang, membuatnya mustahil ditulis sebagai desimal berujung pasti atau pecahan sederhana.</span>"
+                    },
+                    // Theory 2
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-globe"></i> Visualizing Area = 7</h2>
+                            <p>Today, we aren't just doing algebra; we are visualizing these lengths. Let's picture a square with an area of 7. Its side is exactly $\sqrt{7}$ meters.<span class="id-lang">Hari ini, kita tidak hanya melakukan aljabar; kita memvisualisasikan panjang ini. Mari kita bayangkan persegi dengan luas 7. Sisinya tepat $\\sqrt{7}$ meter.</span></p>
+                            <svg class="illustration" viewBox="0 0 150 150">
+                                <rect x="20" y="20" width="110" height="110" fill="#243840" stroke="#58cc02" stroke-width="2" rx="5"/>
+                                <text x="75" y="85" text-anchor="middle" fill="#ffffff" font-size="16">A = 7</text>
+                                <text x="75" y="15" text-anchor="middle" fill="#ffc800" font-size="14">s = √7</text>
+                            </svg>
+                            <p>We know $\sqrt{7}$ is between 2 and 3. Visually, this square is larger than a 2x2 square (Area 4) but smaller than a 3x3 square (Area 9).<span class="id-lang">Kita tahu $\\sqrt{7}$ berada di antara 2 dan 3. Secara visual, persegi ini lebih besar dari persegi 2x2 (Luas 4) tapi lebih kecil dari persegi 3x3 (Luas 9).</span></p>
+                        `
+                    },
+                    // Ex 4, 5, 6
+                    {
+                        type: "exercise", id: "s2e4", qType: "mcq",
+                        question: "Without a calculator, which two whole numbers does $\sqrt{7}$ fall between?<span class='id-lang'>Tanpa kalkulator, di antara dua bilangan bulat apa $\\sqrt{7}$ berada?</span>",
+                        options: ["1 and 2", "2 and 3", "3 and 4", "7 and 8"],
+                        answer: "2 and 3",
+                        explanation: "Since $2^2 = 4$ and $3^2 = 9$, and 7 is between 4 and 9, then $\\sqrt{7}$ must be between 2 and 3.<span class='id-lang'>Karena $2^2 = 4$ dan $3^2 = 9$, dan 7 di antara 4 dan 9, maka $\\sqrt{7}$ pasti di antara 2 dan 3.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e5", qType: "mcq",
+                        question: "Is $\sqrt{7}$ closer to 2 or 3?<span class='id-lang'>Apakah $\\sqrt{7}$ lebih dekat ke 2 atau 3?</span>",
+                        options: ["2", "3"],
+                        answer: "3",
+                        explanation: "7 is closer to 9 ($3^2$) than it is to 4 ($2^2$). Therefore, $\\sqrt{7}$ is closer to 3.<span class='id-lang'>7 lebih dekat ke 9 ($3^2$) daripada ke 4 ($2^2$). Oleh karena itu, $\\sqrt{7}$ lebih dekat ke 3.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e6", qType: "mcq",
+                        question: "Which is larger: $2.5$ or $\sqrt{7}$?<span class='id-lang'>Mana yang lebih besar: $2.5$ atau $\\sqrt{7}$?</span>",
+                        options: ["$2.5$", "$\\sqrt{7}$", "They are equal"],
+                        answer: "$\\sqrt{7}$",
+                        explanation: "Let's square both to compare. $2.5^2 = 6.25$. Since $6.25 < 7$, it means $2.5 < \\sqrt{7}$.<span class='id-lang'>Mari kita kuadratkan keduanya untuk membandingkan. $2.5^2 = 6.25$. Karena $6.25 < 7$, artinya $2.5 < \\sqrt{7}$.</span>"
+                    },
+                    // Theory 3
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-globe"></i> The Power of Exactness</h2>
+                            <p>In construction and design, using approximations can lead to small gaps that get worse as you build larger structures. Surds guarantee mathematically perfect fits.<span class="id-lang">Dalam konstruksi dan desain, menggunakan aproksimasi dapat menyebabkan celah kecil yang membesar saat kamu membangun struktur yang lebih besar. Surd menjamin kecocokan yang secara matematis sempurna.</span></p>
+                            <p>If you need a border for a square garden of Area 7, you buy exactly $4\sqrt{7}$ meters of fencing. No more, no less.<span class="id-lang">Jika kamu membutuhkan pembatas untuk taman persegi Luas 7, kamu membeli tepat $4\\sqrt{7}$ meter pagar. Tidak lebih, tidak kurang.</span></p>
+                            <div class="math-block">$\\text{Perimeter} = 4 \\times \\text{side} = 4 \\times \\sqrt{7} = 4\\sqrt{7}$</div>
+                        `
+                    },
+                    // Ex 7, 8, 9, 10
+                    {
+                        type: "exercise", id: "s2e7", qType: "input",
+                        question: "What is the exact perimeter of a square with an area of 5? (Write in the format $a\\sqrt{b}$, e.g., 4√5)<span class='id-lang'>Berapakah keliling pasti dari persegi dengan luas 5? (Tulis dalam format $a\\sqrt{b}$, misal, 4√5)</span>",
+                        answer: "4√5",
+                        explanation: "Side length = $\\sqrt{5}$. Perimeter = $4 \\times \\sqrt{5} = 4\\sqrt{5}$.<span class='id-lang'>Panjang sisi = $\\sqrt{5}$. Keliling = $4 \\times \\sqrt{5} = 4\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e8", qType: "mcq",
+                        question: "Why do architects prefer using surds over decimals for exact dimensions?<span class='id-lang'>Mengapa arsitek lebih memilih menggunakan surd daripada desimal untuk dimensi pasti?</span>",
+                        options: ["Decimals are harder to calculate.", "Surds look fancier on blueprints.", "Surds avoid cumulative rounding errors in large structures.", "Decimals cannot represent lengths."],
+                        answer: "Surds avoid cumulative rounding errors in large structures.",
+                        explanation: "Decimals are approximations. In large projects, tiny rounding errors add up. Surds are exact, preventing these errors.<span class='id-lang'>Desimal adalah aproksimasi. Dalam proyek besar, kesalahan pembulatan kecil akan menumpuk. Surd bersifat pasti, mencegah kesalahan ini.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e9", qType: "mcq",
+                        question: "Which of the following represents an exact length, rather than an approximation?<span class='id-lang'>Manakah di antara berikut yang mewakili panjang pasti, alih-alih aproksimasi?</span>",
+                        options: ["$3.14$", "$22/7$", "$\\sqrt{10}$", "$1.414$"],
+                        answer: "$\\sqrt{10}$",
+                        explanation: "3.14, 22/7, and 1.414 are all rational approximations. $\\sqrt{10}$ is an exact irrational value (surd).<span class='id-lang'>3.14, 22/7, dan 1.414 adalah aproksimasi rasional. $\\sqrt{10}$ adalah nilai irasional yang pasti (surd).</span>"
+                    },
+                    {
+                        type: "exercise", id: "s2e10", qType: "mcq",
+                        question: "A square playground has an area of 11 sq km. What is its exact side length?<span class='id-lang'>Sebuah taman bermain persegi memiliki luas 11 km persegi. Berapakah panjang sisi pastinya?</span>",
+                        options: ["$3.3$", "$\\sqrt{11}$", "$11$", "$3\\sqrt{2}$"],
+                        answer: "$\\sqrt{11}$",
+                        explanation: "For any square with Area $A$, the exact side length is $\\sqrt{A}$. For Area 11, it is $\\sqrt{11}$.<span class='id-lang'>Untuk persegi manapun dengan Luas $A$, panjang sisi pastinya adalah $\\sqrt{A}$. Untuk Luas 11, itu adalah $\\sqrt{11}$.</span>"
+                    }
+                ]
+            },
+            // --- SECTION 3: REVIEW OF PRIOR KNOWLEDGE (ERROR ANALYSIS) ---
+            {
+                id: "sec3",
+                title: "Prior Knowledge (Error Analysis)",
+                time: "00:15-00:20",
+                icon: "fa-bug",
+                steps: [
+                    // Theory 1
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-bug"></i> Spotting the Logic Gap</h2>
+                            <p>Let's look at a very common calculation error: $\sqrt{18} + \sqrt{18}$. Some students write this as $\sqrt{36}$.<span class="id-lang">Mari kita lihat kesalahan perhitungan yang sangat umum: $\\sqrt{18} + \\sqrt{18}$. Beberapa siswa menulis ini sebagai $\\sqrt{36}$.</span></p>
+                            <p>Using our square logic, if we have two squares of area 18, adding their side lengths does NOT create a new square of area 36! Let's be detectives and find where the visualization breaks down.<span class="id-lang">Menggunakan logika persegi kita, jika kita memiliki dua persegi luas 18, menambahkan panjang sisinya TIDAK membuat persegi baru dengan luas 36! Mari jadi detektif dan temukan di mana visualisasi ini rusak.</span></p>
+                        `
+                    },
+                    // Ex 1, 2, 3
+                    {
+                        type: "exercise", id: "s3e1", qType: "mcq",
+                        question: "Evaluate $\sqrt{4} + \sqrt{9}$.<span class='id-lang'>Hitunglah $\\sqrt{4} + \\sqrt{9}$.</span>",
+                        options: ["$\\sqrt{13}$", "$5$", "$7$", "$3.5$"],
+                        answer: "$5$",
+                        explanation: "$\\sqrt{4} = 2$ and $\\sqrt{9} = 3$. So, $2 + 3 = 5$. Note that $\\sqrt{4+9} = \\sqrt{13} \\approx 3.6$, which is not 5!<span class='id-lang'>$\\sqrt{4} = 2$ dan $\\sqrt{9} = 3$. Jadi, $2 + 3 = 5$. Perhatikan bahwa $\\sqrt{4+9} = \\sqrt{13} \\approx 3.6$, yang bukan 5!</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e2", qType: "mcq",
+                        question: "Is it true that $\sqrt{a} + \sqrt{b} = \sqrt{a + b}$?<span class='id-lang'>Apakah benar bahwa $\\sqrt{a} + \\sqrt{b} = \\sqrt{a + b}$?</span>",
+                        options: ["Yes, always.", "Only if a and b are perfect squares.", "No, never. You cannot split roots across addition."],
+                        answer: "No, never. You cannot split roots across addition.",
+                        explanation: "The square root of a sum is NOT the sum of the square roots. $\\sqrt{a+b}$ must be kept together, or evaluated first.<span class='id-lang'>Akar kuadrat dari jumlah BUKAN jumlah dari akar kuadrat. $\\sqrt{a+b}$ harus tetap disatukan, atau dihitung terlebih dahulu.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e3", qType: "mcq",
+                        question: "Identify the error in this working: $\sqrt{25} = \sqrt{9 + 16} = \sqrt{9} + \sqrt{16} = 3 + 4 = 7$.<span class='id-lang'>Identifikasi kesalahan dalam pengerjaan ini: $\\sqrt{25} = \\sqrt{9 + 16} = \\sqrt{9} + \\sqrt{16} = 3 + 4 = 7$.</span>",
+                        options: ["$\\sqrt{25}$ is not 5.", "$\\sqrt{9} + \\sqrt{16}$ is not 7.", "The step $\\sqrt{9+16} = \\sqrt{9} + \\sqrt{16}$ is invalid."],
+                        answer: "The step $\\sqrt{9+16} = \\sqrt{9} + \\sqrt{16}$ is invalid.",
+                        explanation: "You cannot split a root over addition. $\\sqrt{9+16} = \\sqrt{25} = 5$, but $\\sqrt{9} + \\sqrt{16} = 3 + 4 = 7$. Since $5 \\neq 7$, the step is invalid.<span class='id-lang'>Kamu tidak dapat memecah akar pada penjumlahan. $\\sqrt{9+16} = \\sqrt{25} = 5$, tapi $\\sqrt{9} + \\sqrt{16} = 3 + 4 = 7$. Karena $5 \\neq 7$, langkah tersebut tidak valid.</span>"
+                    },
+                    // Theory 2
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-bug"></i> Visualizing $\sqrt{18} + \sqrt{18}$</h2>
+                            <p>Think of $\sqrt{18}$ as a physical length (like a piece of wood). If you lay two pieces of length $\sqrt{18}$ end-to-end, you get a total length of $2\sqrt{18}$.<span class="id-lang">Bayangkan $\\sqrt{18}$ sebagai panjang fisik (seperti potongan kayu). Jika kamu meletakkan dua potongan panjang $\\sqrt{18}$ ujung ke ujung, kamu mendapatkan total panjang $2\\sqrt{18}$.</span></p>
+                            <p>You did NOT create a square of area 36. You created a line segment twice as long!<span class="id-lang">Kamu TIDAK membuat persegi dengan luas 36. Kamu membuat ruas garis yang dua kali lebih panjang!</span></p>
+                            <div class="math-block">$\sqrt{18} + \sqrt{18} = 1\sqrt{18} + 1\sqrt{18} = 2\sqrt{18}$</div>
+                        `
+                    },
+                    // Ex 4, 5, 6
+                    {
+                        type: "exercise", id: "s3e4", qType: "mcq",
+                        question: "Simplify $\sqrt{18} + \sqrt{18}$ correctly.<span class='id-lang'>Sederhanakan $\\sqrt{18} + \\sqrt{18}$ dengan benar.</span>",
+                        options: ["$\\sqrt{36}$", "$2\\sqrt{18}$", "$18$", "$2\\sqrt{36}$"],
+                        answer: "$2\\sqrt{18}$",
+                        explanation: "Adding two identical surds is like adding $x + x = 2x$. Here, $1\\sqrt{18} + 1\\sqrt{18} = 2\\sqrt{18}$.<span class='id-lang'>Menjumlahkan dua surd identik seperti menambahkan $x + x = 2x$. Di sini, $1\\sqrt{18} + 1\\sqrt{18} = 2\\sqrt{18}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e5", qType: "mcq",
+                        question: "What is the value of $\sqrt{36}$?<span class='id-lang'>Berapakah nilai $\\sqrt{36}$?</span>",
+                        options: ["$6$", "$2\\sqrt{18}$", "$18$", "$\\sqrt{18} + \\sqrt{18}$"],
+                        answer: "$6$",
+                        explanation: "$\\sqrt{36}$ is a perfect square, which evaluates exactly to 6.<span class='id-lang'>$\\sqrt{36}$ adalah kuadrat sempurna, yang bernilai tepat 6.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e6", qType: "mcq",
+                        question: "Since $\sqrt{36} = 6$ and $2\sqrt{18} \approx 8.48$, which statement is true?<span class='id-lang'>Karena $\\sqrt{36} = 6$ dan $2\\sqrt{18} \\approx 8.48$, pernyataan mana yang benar?</span>",
+                        options: ["$\\sqrt{18} + \\sqrt{18} = \\sqrt{36}$", "$\\sqrt{18} + \\sqrt{18} > \\sqrt{36}$", "$\\sqrt{18} + \\sqrt{18} < \\sqrt{36}$"],
+                        answer: "$\\sqrt{18} + \\sqrt{18} > \\sqrt{36}$",
+                        explanation: "Since $2\\sqrt{18} \\approx 8.48$ and $\\sqrt{36} = 6$, $2\\sqrt{18}$ is clearly larger. This proves that $\\sqrt{18} + \\sqrt{18} \\neq \\sqrt{36}$.<span class='id-lang'>Karena $2\\sqrt{18} \\approx 8.48$ dan $\\sqrt{36} = 6$, $2\\sqrt{18}$ jelas lebih besar. Ini membuktikan bahwa $\\sqrt{18} + \\sqrt{18} \\neq \\sqrt{36}$.</span>"
+                    },
+                    // Theory 3
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-bug"></i> The Rule of Addition</h2>
+                            <p>You can only add surds directly if they have the <strong>same radicand</strong> (the number inside the root). You add them like algebraic variables!<span class="id-lang">Kamu hanya bisa menjumlahkan surd secara langsung jika mereka memiliki <strong>radikand yang sama</strong> (angka di dalam akar). Kamu menjumlahkannya seperti variabel aljabar!</span></p>
+                            <div class="math-block">$$a\sqrt{x} + b\sqrt{x} = (a + b)\sqrt{x}$$</div>
+                            <p>Just like $3y + 2y = 5y$, we know $3\sqrt{5} + 2\sqrt{5} = 5\sqrt{5}$.<span class="id-lang">Sama seperti $3y + 2y = 5y$, kita tahu $3\\sqrt{5} + 2\\sqrt{5} = 5\\sqrt{5}$.</span></p>
+                        `
+                    },
+                    // Ex 7, 8, 9, 10
+                    {
+                        type: "exercise", id: "s3e7", qType: "input",
+                        question: "Simplify: $2\sqrt{5} + 3\sqrt{5}$ (Write in format a√b e.g. 5√5)<span class='id-lang'>Sederhanakan: $2\\sqrt{5} + 3\\sqrt{5}$ (Tulis dalam format a√b misal 5√5)</span>",
+                        answer: "5√5",
+                        explanation: "Since the radicands are the same ($\\sqrt{5}$), we just add the coefficients: $2 + 3 = 5$. So, $5\\sqrt{5}$.<span class='id-lang'>Karena radikandnya sama ($\\sqrt{5}$), kita cukup menjumlahkan koefisiennya: $2 + 3 = 5$. Jadi, $5\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e8", qType: "input",
+                        question: "Simplify: $\sqrt{7} + 4\sqrt{7}$ (Write in format a√b)<span class='id-lang'>Sederhanakan: $\\sqrt{7} + 4\\sqrt{7}$ (Tulis dalam format a√b)</span>",
+                        answer: "5√7",
+                        explanation: "Remember that $\\sqrt{7}$ means $1\\sqrt{7}$. So, $1\\sqrt{7} + 4\\sqrt{7} = 5\\sqrt{7}$.<span class='id-lang'>Ingat bahwa $\\sqrt{7}$ berarti $1\\sqrt{7}$. Jadi, $1\\sqrt{7} + 4\\sqrt{7} = 5\\sqrt{7}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e9", qType: "mcq",
+                        question: "Can you simplify $\sqrt{2} + \sqrt{3}$ into a single surd?<span class='id-lang'>Bisakah kamu menyederhanakan $\\sqrt{2} + \\sqrt{3}$ menjadi satu surd?</span>",
+                        options: ["Yes, it is $\\sqrt{5}$.", "Yes, it is $2\\sqrt{5}$.", "No, they have different radicands and cannot be added algebraically."],
+                        answer: "No, they have different radicands and cannot be added algebraically.",
+                        explanation: "You cannot add surds with different numbers inside the root. $\\sqrt{2} + \\sqrt{3}$ is already in its simplest form.<span class='id-lang'>Kamu tidak bisa menambahkan surd dengan angka yang berbeda di dalam akar. $\\sqrt{2} + \\sqrt{3}$ sudah dalam bentuk paling sederhana.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s3e10", qType: "mcq",
+                        question: "A square has a side length of $\sqrt{5}$. Another square has a side length of $\sqrt{5}$. If you place them side by side, what is the total length?<span class='id-lang'>Sebuah persegi memiliki panjang sisi $\\sqrt{5}$. Persegi lainnya memiliki panjang sisi $\\sqrt{5}$. Jika kamu meletakkannya berdampingan, berapakah total panjangnya?</span>",
+                        options: ["$\\sqrt{10}$", "$2\\sqrt{5}$", "$\\sqrt{25}$", "$10$"],
+                        answer: "$2\\sqrt{5}$",
+                        explanation: "Total length is $\\sqrt{5} + \\sqrt{5} = 2\\sqrt{5}$. It is a length, not a new area! $\\sqrt{10}$ and $\\sqrt{25}$ would imply we are calculating areas incorrectly.<span class='id-lang'>Total panjang adalah $\\sqrt{5} + \\sqrt{5} = 2\\sqrt{5}$. Ini adalah panjang, bukan luas baru! $\\sqrt{10}$ dan $\\sqrt{25}$ akan menyiratkan kita menghitung luas dengan salah.</span>"
+                    }
+                ]
+            },
+            // --- SECTION 4: PROBLEM INTRODUCTION: THE SQUARE ROOT SPIRAL ---
+            {
+                id: "sec4",
+                title: "Problem Introduction (Spiral)",
+                time: "00:20-00:30",
+                icon: "fa-hurricane",
+                steps: [
+                    // Theory 1
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-hurricane"></i> The Square Root Spiral</h2>
+                            <p>Let's build a 'Root Spiral' (also known as the Wheel of Theodorus). We start with a right triangle where both legs (the short sides) are length 1.<span class="id-lang">Mari kita bangun 'Spiral Akar' (juga dikenal sebagai Roda Theodorus). Kita mulai dengan segitiga siku-siku di mana kedua kaki (sisi pendek) memiliki panjang 1.</span></p>
+                            <p>By the Pythagorean theorem: $a^2 + b^2 = c^2 \\Rightarrow 1^2 + 1^2 = c^2 \\Rightarrow 2 = c^2 \\Rightarrow c = \\sqrt{2}$.<span class="id-lang">Dengan teorema Pythagoras: $a^2 + b^2 = c^2 \\Rightarrow 1^2 + 1^2 = c^2 \\Rightarrow 2 = c^2 \\Rightarrow c = \\sqrt{2}$.</span></p>
+                            <svg class="illustration" viewBox="0 0 200 200">
+                                <!-- Triangle 1,1,root2 -->
+                                <line x1="40" y1="160" x2="140" y2="160" stroke="#ffffff" stroke-width="2"/>
+                                <line x1="40" y1="160" x2="40" y2="60" stroke="#ffffff" stroke-width="2"/>
+                                <line x1="40" y1="60" x2="140" y2="160" stroke="#58cc02" stroke-width="3"/>
+                                <!-- Labels -->
+                                <text x="90" y="180" text-anchor="middle" fill="#a0c4b8" font-size="14">1</text>
+                                <text x="25" y="115" text-anchor="middle" fill="#a0c4b8" font-size="14">1</text>
+                                <text x="105" y="100" text-anchor="middle" fill="#58cc02" font-size="14">√2</text>
+                                <!-- Right angle box -->
+                                <path d="M40,150 L50,150 L50,160" fill="none" stroke="#ffc800" stroke-width="1"/>
+                            </svg>
+                        `
+                    },
+                    // Ex 1, 2, 3
+                    {
+                        type: "exercise", id: "s4e1", qType: "mcq",
+                        question: "In a right triangle, if side $a = 3$ and side $b = 4$, what is $c^2$?<span class='id-lang'>Dalam segitiga siku-siku, jika sisi $a = 3$ dan sisi $b = 4$, berapakah $c^2$?</span>",
+                        options: ["$7$", "$12$", "$25$", "$5$"],
+                        answer: "$25$",
+                        explanation: "Using $a^2 + b^2 = c^2$, we get $3^2 + 4^2 = 9 + 16 = 25$. So $c^2 = 25$.<span class='id-lang'>Menggunakan $a^2 + b^2 = c^2$, kita dapat $3^2 + 4^2 = 9 + 16 = 25$. Jadi $c^2 = 25$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e2", qType: "mcq",
+                        question: "If a right triangle has legs of 1 and 1, what is the exact length of the hypotenuse?<span class='id-lang'>Jika segitiga siku-siku memiliki kaki 1 dan 1, berapakah panjang pasti hipotenusanya?</span>",
+                        options: ["$1$", "$2$", "$\\sqrt{2}$", "$\\sqrt{3}$"],
+                        answer: "$\\sqrt{2}$",
+                        explanation: "$1^2 + 1^2 = c^2 \\Rightarrow 2 = c^2 \\Rightarrow c = \\sqrt{2}$.<span class='id-lang'>$1^2 + 1^2 = c^2 \\Rightarrow 2 = c^2 \\Rightarrow c = \\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e3", qType: "mcq",
+                        question: "If we build a square using the hypotenuse ($\\sqrt{2}$) as its side, what is the area of that square?<span class='id-lang'>Jika kita membangun persegi menggunakan hipotenusa ($\\sqrt{2}$) sebagai sisinya, berapakah luas persegi itu?</span>",
+                        options: ["$2$", "$4$", "$\\sqrt{2}$", "$1$"],
+                        answer: "$2$",
+                        explanation: "Area = side $\\times$ side = $\\sqrt{2} \\times \\sqrt{2} = 2$.<span class='id-lang'>Luas = sisi $\\times$ sisi = $\\sqrt{2} \\times \\sqrt{2} = 2$.</span>"
+                    },
+                    // Theory 2
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-hurricane"></i> Extending the Spiral to $\sqrt{3}$</h2>
+                            <p>Now, we use the hypotenuse ($\sqrt{2}$) as a new leg! We draw a perpendicular line of length 1 from its end. This creates a new right triangle with legs $\sqrt{2}$ and 1.<span class="id-lang">Sekarang, kita menggunakan hipotenusa ($\\sqrt{2}$) sebagai kaki baru! Kita menggambar garis tegak lurus sepanjang 1 dari ujungnya. Ini menciptakan segitiga siku-siku baru dengan kaki $\\sqrt{2}$ dan 1.</span></p>
+                            <p>Let's find the new hypotenuse:<br>$(\sqrt{2})^2 + 1^2 = c^2$<br>$2 + 1 = c^2$<br>$3 = c^2$<br>$c = \sqrt{3}$<span class="id-lang">Mari kita temukan hipotenusa baru:<br>$(\\sqrt{2})^2 + 1^2 = c^2$<br>$2 + 1 = c^2$<br>$3 = c^2$<br>$c = \\sqrt{3}$</span></p>
+                        `
+                    },
+                    // Ex 4, 5, 6
+                    {
+                        type: "exercise", id: "s4e4", qType: "mcq",
+                        question: "What is the value of $(\sqrt{2})^2$?<span class='id-lang'>Berapakah nilai $(\\sqrt{2})^2$?</span>",
+                        options: ["$2$", "$4$", "$\\sqrt{4}$", "$1.414$"],
+                        answer: "$2$",
+                        explanation: "Squaring a square root cancels it out. $\\sqrt{2} \\times \\sqrt{2} = 2$.<span class='id-lang'>Mengkuadratkan akar kuadrat akan menghilangkannya. $\\sqrt{2} \\times \\sqrt{2} = 2$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e5", qType: "mcq",
+                        question: "In the next step of the spiral, the legs are $\sqrt{2}$ and $1$. What is the new hypotenuse?<span class='id-lang'>Pada langkah berikutnya dari spiral, kakinya adalah $\\sqrt{2}$ dan $1$. Berapakah hipotenusa baru?</span>",
+                        options: ["$\\sqrt{2}$", "$\\sqrt{3}$", "$3$", "$2$"],
+                        answer: "$\\sqrt{3}$",
+                        explanation: "We calculate $c^2 = (\\sqrt{2})^2 + 1^2 = 2 + 1 = 3$. Therefore, $c = \\sqrt{3}$.<span class='id-lang'>Kita hitung $c^2 = (\\sqrt{2})^2 + 1^2 = 2 + 1 = 3$. Oleh karena itu, $c = \\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e6", qType: "mcq",
+                        question: "A square is built on the hypotenuse of $\sqrt{3}$. What is its area?<span class='id-lang'>Sebuah persegi dibangun di atas hipotenusa $\\sqrt{3}$. Berapakah luasnya?</span>",
+                        options: ["$9$", "$3$", "$\\sqrt{3}$", "$6$"],
+                        answer: "$3$",
+                        explanation: "Area = side $\\times$ side = $\\sqrt{3} \\times \\sqrt{3} = 3$.<span class='id-lang'>Luas = sisi $\\times$ sisi = $\\sqrt{3} \\times \\sqrt{3} = 3$.</span>"
+                    },
+                    // Theory 3
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-hurricane"></i> The Infinite Spiral</h2>
+                            <p>If we keep repeating this process—using the previous hypotenuse and a new leg of 1—we generate all the square roots!<span class="id-lang">Jika kita terus mengulangi proses ini—menggunakan hipotenusa sebelumnya dan kaki baru sepanjang 1—kita menghasilkan semua akar kuadrat!</span></p>
+                            <p>Next legs: $\\sqrt{3}$ and 1 $\\Rightarrow$ Hypotenuse: $\\sqrt{4}$ (which is 2!)<br>Next legs: $\\sqrt{4}$ and 1 $\\Rightarrow$ Hypotenuse: $\\sqrt{5}$<br>And so on...<span class="id-lang">Kaki berikutnya: $\\sqrt{3}$ dan 1 $\\Rightarrow$ Hipotenusa: $\\sqrt{4}$ (yang merupakan 2!)<br>Kaki berikutnya: $\\sqrt{4}$ dan 1 $\\Rightarrow$ Hipotenusa: $\\sqrt{5}$<br>Dan seterusnya...</span></p>
+                            <svg class="illustration" viewBox="0 0 200 200">
+                                <!-- Simplified Spiral Arc -->
+                                <path d="M100,180 A20,20 0 0,1 120,160" fill="none" stroke="#58cc02" stroke-width="3"/>
+                                <path d="M120,160 A30,30 0 0,1 100,130" fill="none" stroke="#58cc02" stroke-width="3"/>
+                                <path d="M100,130 A40,40 0 0,1 60,120" fill="none" stroke="#58cc02" stroke-width="3"/>
+                                <circle cx="100" cy="180" r="3" fill="#ffc800"/>
+                                <text x="130" y="175" fill="#a0c4b8" font-size="10">√1</text>
+                                <text x="130" y="140" fill="#a0c4b8" font-size="10">√2</text>
+                                <text x="75" y="110" fill="#a0c4b8" font-size="10">√3</text>
+                            </svg>
+                        `
+                    },
+                    // Ex 7, 8, 9, 10
+                    {
+                        type: "exercise", id: "s4e7", qType: "mcq",
+                        question: "To get a hypotenuse of $\sqrt{4}$, the two legs of the right triangle must be $\sqrt{3}$ and...<span class='id-lang'>Untuk mendapatkan hipotenusa $\\sqrt{4}$, dua kaki dari segitiga siku-siku harus $\\sqrt{3}$ dan...</span>",
+                        options: ["$1$", "$2$", "$\\sqrt{1}$", "Both A and C are correct"],
+                        answer: "Both A and C are correct",
+                        explanation: "The rule of the spiral is always adding 1 to the length for the new leg. Since $1 = \\sqrt{1}$, both are mathematically correct. $(\\sqrt{3})^2 + 1^2 = 3 + 1 = 4$.<span class='id-lang'>Aturan spiral selalu menambahkan 1 ke panjang untuk kaki baru. Karena $1 = \\sqrt{1}$, keduanya benar secara matematis. $(\\sqrt{3})^2 + 1^2 = 3 + 1 = 4$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e8", qType: "mcq",
+                        question: "If a right triangle has legs of $\sqrt{4}$ and $1$, what is the exact hypotenuse?<span class='id-lang'>Jika segitiga siku-siku memiliki kaki $\\sqrt{4}$ dan $1$, berapakah hipotenusa pastinya?</span>",
+                        options: ["$\\sqrt{4}$", "$\\sqrt{5}$", "$5$", "$3$"],
+                        answer: "$\\sqrt{5}$",
+                        explanation: "$(\\sqrt{4})^2 + 1^2 = 4 + 1 = 5$. The hypotenuse is $\\sqrt{5}$.<span class='id-lang'>$(\\sqrt{4})^2 + 1^2 = 4 + 1 = 5$. Hipotenusanya adalah $\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e9", qType: "mcq",
+                        question: "Does the Square Root Spiral ever produce a perfect integer (whole number) length for the hypotenuse?<span class='id-lang'>Apakah Spiral Akar Kuadrat pernah menghasilkan panjang bilangan bulat sempurna untuk hipotenusa?</span>",
+                        options: ["No, surds are always irrational.", "Yes, when the hypotenuse is $\\sqrt{4}$, it equals 2.", "Yes, at every step."],
+                        answer: "Yes, when the hypotenuse is $\\sqrt{4}$, it equals 2.",
+                        explanation: "While most surds are irrational, $\\sqrt{4}$ simplifies exactly to the integer 2. The spiral crosses perfect integer lengths whenever the area under the root is a perfect square (4, 9, 16, etc.).<span class='id-lang'>Meskipun sebagian besar surd irasional, $\\sqrt{4}$ disederhanakan tepat menjadi bilangan bulat 2. Spiral melintasi panjang bilangan bulat sempurna setiap kali luas di bawah akar adalah kuadrat sempurna (4, 9, 16, dll).</span>"
+                    },
+                    {
+                        type: "exercise", id: "s4e10", qType: "input",
+                        question: "If the legs of a right triangle are $\sqrt{9}$ and $1$, what is the hypotenuse? (Write in format √a)<span class='id-lang'>Jika kaki segitiga siku-siku adalah $\\sqrt{9}$ dan $1$, berapakah hipotenusa? (Tulis dalam format √a)</span>",
+                        answer: "√10",
+                        explanation: "$(\\sqrt{9})^2 + 1^2 = 9 + 1 = 10$. The hypotenuse is $\\sqrt{10}$.<span class='id-lang'>$(\\sqrt{9})^2 + 1^2 = 9 + 1 = 10$. Hipotenusanya adalah $\\sqrt{10}$.</span>"
+                    }
+                ]
+            },
+			
+            // --- SECTION 5: GUIDED PRACTICE: COMPARING AREAS ---
+            {
+                id: "sec5",
+                title: "Guided Practice (Areas)",
+                time: "00:30-00:45",
+                icon: "fa-shapes",
+                steps: [
+                    // Theory 1
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-shapes"></i> Comparing Areas</h2>
+                            <p>I have three squares. Square A has an Area of 5, Square B has an Area of 20, and Square C has an Area of 45.<span class="id-lang">Saya memiliki tiga persegi. Persegi A memiliki Luas 5, Persegi B memiliki Luas 20, dan Persegi C memiliki Luas 45.</span></p>
+                            <p>Let's write the side length for each. Square A's side is $\sqrt{5}$. Square B's side is $\sqrt{20}$. Square C's side is $\sqrt{45}$.<span class="id-lang">Mari kita tulis panjang sisi masing-masing. Sisi Persegi A adalah $\\sqrt{5}$. Sisi Persegi B adalah $\\sqrt{20}$. Sisi Persegi C adalah $\\sqrt{45}$.</span></p>
+                            <div class="math-block">$$A: s = \sqrt{5} \quad | \quad B: s = \sqrt{20} \quad | \quad C: s = \sqrt{45}$$</div>
+                        `
+                    },
+                    // Ex 1, 2, 3
+                    {
+                        type: "exercise", id: "s5e1", qType: "input",
+                        question: "What is the exact side length of a square with Area = 20? (Write in format √a e.g. √5)<span class='id-lang'>Berapakah panjang sisi pasti persegi dengan Luas = 20? (Tulis dalam format √a misal √5)</span>",
+                        answer: "√20",
+                        explanation: "By definition, Area = $s^2$, so $s = \\sqrt{\\text{Area}} = \\sqrt{20}$.<span class='id-lang'>Menurut definisi, Luas = $s^2$, jadi $s = \\sqrt{\\text{Luas}} = \\sqrt{20}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e2", qType: "mcq",
+                        question: "Which square has a longer side length: a square with Area 20 or a square with Area 45?<span class='id-lang'>Persegi mana yang memiliki panjang sisi lebih panjang: persegi dengan Luas 20 atau persegi dengan Luas 45?</span>",
+                        options: ["Area 20", "Area 45", "They are the same"],
+                        answer: "Area 45",
+                        explanation: "A larger area means a longer side length. $\\sqrt{45} > \\sqrt{20}$.<span class='id-lang'>Luas yang lebih besar berarti panjang sisi lebih panjang. $\\sqrt{45} > \\sqrt{20}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e3", qType: "mcq",
+                        question: "Which of the following is true about $\sqrt{20}$?<span class='id-lang'>Manakah dari berikut ini yang benar tentang $\\sqrt{20}$?</span>",
+                        options: ["It is exactly 4.", "It is exactly 5.", "It is between 4 and 5.", "It is between 5 and 6."],
+                        answer: "It is between 4 and 5.",
+                        explanation: "Since $4^2 = 16$ and $5^2 = 25$, 20 is between 16 and 25. Thus, $\\sqrt{20}$ is between 4 and 5.<span class='id-lang'>Karena $4^2 = 16$ dan $5^2 = 25$, 20 berada di antara 16 dan 25. Dengan demikian, $\\sqrt{20}$ berada di antara 4 dan 5.</span>"
+                    },
+                    // Theory 2
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-shapes"></i> Dissecting the Squares</h2>
+                            <p>Look closely at Square B (Area 20). $\sqrt{20}$ is actually $2\sqrt{5}$. How can we see this visually?<span class="id-lang">Perhatikan baik-baik Persegi B (Luas 20). $\\sqrt{20}$ sebenarnya adalah $2\\sqrt{5}$. Bagaimana kita bisa melihat ini secara visual?</span></p>
+                            <p>Imagine dissecting Square B into a 2x2 grid. You can fit exactly 4 smaller squares of Area 5 inside a square of Area 20! Since it's 2 squares wide, the side length is $2 \\times \\sqrt{5} = 2\\sqrt{5}$.<span class="id-lang">Bayangkan membedah Persegi B menjadi kisi 2x2. Kamu bisa memasukkan tepat 4 persegi kecil Luas 5 di dalam persegi Luas 20! Karena lebarnya 2 persegi, panjang sisinya adalah $2 \\times \\sqrt{5} = 2\\sqrt{5}$.</span></p>
+                            <svg class="illustration" viewBox="0 0 200 200">
+                                <!-- 2x2 Grid -->
+                                <rect x="20" y="20" width="160" height="160" fill="#243840" stroke="#58cc02" stroke-width="2"/>
+                                <line x1="100" y1="20" x2="100" y2="180" stroke="#ffc800" stroke-width="1" stroke-dasharray="5,5"/>
+                                <line x1="20" y1="100" x2="180" y2="100" stroke="#ffc800" stroke-width="1" stroke-dasharray="5,5"/>
+                                <text x="60" y="65" text-anchor="middle" fill="#a0c4b8" font-size="12">A=5</text>
+                                <text x="140" y="65" text-anchor="middle" fill="#a0c4b8" font-size="12">A=5</text>
+                                <text x="60" y="145" text-anchor="middle" fill="#a0c4b8" font-size="12">A=5</text>
+                                <text x="140" y="145" text-anchor="middle" fill="#a0c4b8" font-size="12">A=5</text>
+                                <text x="100" y="15" text-anchor="middle" fill="#ffffff" font-size="14">s = 2√5</text>
+                            </svg>
+                            <p>Algebraically: $\\sqrt{20} = \\sqrt{4 \\times 5} = \\sqrt{4} \\times \\sqrt{5} = 2\\sqrt{5}$.<span class="id-lang">Secara aljabar: $\\sqrt{20} = \\sqrt{4 \\times 5} = \\sqrt{4} \\times \\sqrt{5} = 2\\sqrt{5}$.</span></p>
+                        `
+                    },
+                    // Ex 4, 5, 6
+                    {
+                        type: "exercise", id: "s5e4", qType: "input",
+                        question: "Simplify $\sqrt{20}$ into the form $a\sqrt{b}$. (Write as a√b e.g. 2√5)<span class='id-lang'>Sederhanakan $\\sqrt{20}$ ke bentuk $a\\sqrt{b}$. (Tulis sebagai a√b misal 2√5)</span>",
+                        answer: "2√5",
+                        explanation: "Find the largest perfect square factor of 20, which is 4. $\\sqrt{20} = \\sqrt{4 \\times 5} = \\sqrt{4} \\times \\sqrt{5} = 2\\sqrt{5}$.<span class='id-lang'>Temukan faktor kuadrat sempurna terbesar dari 20, yaitu 4. $\\sqrt{20} = \\sqrt{4 \\times 5} = \\sqrt{4} \\times \\sqrt{5} = 2\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e5", qType: "input",
+                        question: "Simplify $\sqrt{45}$ into the form $a\sqrt{b}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{45}$ ke bentuk $a\\sqrt{b}$. (Tulis sebagai a√b)</span>",
+                        answer: "3√5",
+                        explanation: "The largest perfect square factor of 45 is 9. $\\sqrt{45} = \\sqrt{9 \\times 5} = \\sqrt{9} \\times \\sqrt{5} = 3\\sqrt{5}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar dari 45 adalah 9. $\\sqrt{45} = \\sqrt{9 \\times 5} = \\sqrt{9} \\times \\sqrt{5} = 3\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e6", qType: "input",
+                        question: "Simplify $\sqrt{8}$ into the form $a\sqrt{b}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{8}$ ke bentuk $a\\sqrt{b}$. (Tulis sebagai a√b)</span>",
+                        answer: "2√2",
+                        explanation: "The largest perfect square factor of 8 is 4. $\\sqrt{8} = \\sqrt{4 \\times 2} = \\sqrt{4} \\times \\sqrt{2} = 2\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar dari 8 adalah 4. $\\sqrt{8} = \\sqrt{4 \\times 2} = \\sqrt{4} \\times \\sqrt{2} = 2\\sqrt{2}$.</span>"
+                    },
+                    // Theory 3
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-shapes"></i> The Square-Factor Method</h2>
+                            <p>To simplify any surd $\sqrt{x}$, find the largest perfect square that divides evenly into $x$. Let's call it $a^2$.<span class="id-lang">Untuk menyederhanakan surd apapun $\\sqrt{x}$, temukan kuadrat sempurna terbesar yang membagi $x$ secara merata. Mari kita sebut $a^2$.</span></p>
+                            <div class="math-block">$$\sqrt{x} = \sqrt{a^2 \times b} = \sqrt{a^2} \times \sqrt{b} = a\sqrt{b}$$</div>
+                            <p>List of small perfect squares to memorize: 4, 9, 16, 25, 36, 49, 64, 81, 100.<span class="id-lang">Daftar kuadrat sempurna kecil untuk dihafal: 4, 9, 16, 25, 36, 49, 64, 81, 100.</span></p>
+                        `
+                    },
+                    // Ex 7, 8, 9, 10
+                    {
+                        type: "exercise", id: "s5e7", qType: "input",
+                        question: "Simplify $\sqrt{50}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{50}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√2",
+                        explanation: "Largest perfect square factor is 25. $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 25. $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e8", qType: "input",
+                        question: "Simplify $\sqrt{32}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{32}$. (Tulis sebagai a√b)</span>",
+                        answer: "4√2",
+                        explanation: "Largest perfect square factor is 16. $\\sqrt{32} = \\sqrt{16 \\times 2} = 4\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 16. $\\sqrt{32} = \\sqrt{16 \\times 2} = 4\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e9", qType: "input",
+                        question: "Simplify $\sqrt{18}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{18}$. (Tulis sebagai a√b)</span>",
+                        answer: "3√2",
+                        explanation: "Largest perfect square factor is 9. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 9. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s5e10", qType: "mcq",
+                        question: "Why do we look for the *largest* perfect square factor when simplifying, instead of just any factor?<span class='id-lang'>Mengapa kita mencari faktor kuadrat sempurna *terbesar* saat menyederhanakan, alih-alih faktor apapun?</span>",
+                        options: [
+                            "It makes the math easier to calculate in our heads.", 
+                            "It ensures the number inside the root (the radicand) cannot be simplified further.", 
+                            "Smaller factors are illegal in math."
+                        ],
+                        answer: "It ensures the number inside the root (the radicand) cannot be simplified further.",
+                        explanation: "If you used a smaller factor (e.g., $\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$), you are done. But if you used 2 ($\\sqrt{2 \\times 4} = \\sqrt{2}\\sqrt{4} = 2\\sqrt{2}$), it works, but finding the largest ensures the remaining radicand has no perfect square factors left.<span class='id-lang'>Jika kamu menggunakan faktor yang lebih kecil, kamu mungkin masih bisa menyederhanakannya lagi. Mencari yang terbesar memastikan radikand yang tersisa tidak memiliki faktor kuadrat sempurna lagi.</span>"
+                    }
+                ]
+            },
+            // --- SECTION 6: INDEPENDENT PRACTICE: THE ARCHITECT'S CHALLENGE ---
+            {
+                id: "sec6",
+                title: "Independent Practice",
+                time: "00:50-01:00",
+                icon: "fa-drafting-compass",
+                steps: [
+                    // Theory 1
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-drafting-compass"></i> The Architect's Challenge</h2>
+                            <p>Now, you're the lead designer! You have a plot of land. Calculate the exact side lengths for squares with areas 12, 27, and 75.<span class="id-lang">Sekarang, kamu adalah desainer utama! Kamu sebidang tanah. Hitunglah panjang sisi pasti untuk persegi dengan luas 12, 27, dan 75.</span></p>
+                            <p>Try simplifying them on your own first using the square-factor method.<span class="id-lang">Coba sederhanakan sendiri terlebih dahulu menggunakan metode faktor kuadrat.</span></p>
+                            <div class="math-block">$$\sqrt{12} = ? \quad | \quad \sqrt{27} = ? \quad | \quad \sqrt{75} = ?$$</div>
+                        `
+                    },
+                    // Ex 1, 2, 3
+                    {
+                        type: "exercise", id: "s6e1", qType: "input",
+                        question: "Simplify $\sqrt{12}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{12}$. (Tulis sebagai a√b)</span>",
+                        answer: "2√3",
+                        explanation: "Largest perfect square factor is 4. $\\sqrt{12} = \\sqrt{4 \\times 3} = 2\\sqrt{3}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 4. $\\sqrt{12} = \\sqrt{4 \\times 3} = 2\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e2", qType: "input",
+                        question: "Simplify $\sqrt{27}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{27}$. (Tulis sebagai a√b)</span>",
+                        answer: "3√3",
+                        explanation: "Largest perfect square factor is 9. $\\sqrt{27} = \\sqrt{9 \\times 3} = 3\\sqrt{3}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 9. $\\sqrt{27} = \\sqrt{9 \\times 3} = 3\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e3", qType: "input",
+                        question: "Simplify $\sqrt{75}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{75}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√3",
+                        explanation: "Largest perfect square factor is 25. $\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 25. $\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.</span>"
+                    },
+                    // Theory 2
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-drafting-compass"></i> Proving $\sqrt{12} + \sqrt{27} = 5\sqrt{3}$</h2>
+                            <p>Now, I want you to prove to me—using our simplified forms—why $\sqrt{12} + \sqrt{27}$ equals $5\sqrt{3}$.<span class="id-lang">Sekarang, aku ingin kamu membuktikan kepadaku—menggunakan bentuk sederhana kita—mengapa $\\sqrt{12} + \\sqrt{27}$ sama dengan $5\\sqrt{3}$.</span></p>
+                            <p>Since $\sqrt{12} = 2\sqrt{3}$ and $\sqrt{27} = 3\sqrt{3}$, we can replace them:<span class="id-lang">Karena $\\sqrt{12} = 2\\sqrt{3}$ dan $\\sqrt{27} = 3\\sqrt{3}$, kita bisa menggantinya:</span></p>
+                            <div class="math-block">$$\sqrt{12} + \sqrt{27} = 2\sqrt{3} + 3\sqrt{3}$$</div>
+                            <p>We are adding two line segments of $2\sqrt{3}$ and $3\sqrt{3}$. Just like $2x + 3x = 5x$, this equals $5\sqrt{3}$.<span class="id-lang">Kita menambahkan dua ruas garis $2\\sqrt{3}$ dan $3\\sqrt{3}$. Sama seperti $2x + 3x = 5x$, ini sama dengan $5\\sqrt{3}$.</span></p>
+                            <svg class="illustration" viewBox="0 0 350 100">
+                                <line x1="20" y1="40" x2="140" y2="40" stroke="#58cc02" stroke-width="4"/>
+                                <text x="80" y="30" text-anchor="middle" fill="#58cc02" font-size="14">2√3</text>
+                                <line x1="140" y1="40" x2="320" y2="40" stroke="#ffc800" stroke-width="4"/>
+                                <text x="230" y="30" text-anchor="middle" fill="#ffc800" font-size="14">3√3</text>
+                                <line x1="20" y1="70" x2="320" y2="70" stroke="#ffffff" stroke-width="2" stroke-dasharray="5,5"/>
+                                <text x="170" y="90" text-anchor="middle" fill="#ffffff" font-size="14">Total = 5√3</text>
+                            </svg>
+                        `
+                    },
+                    // Ex 4, 5, 6
+                    {
+                        type: "exercise", id: "s6e4", qType: "input",
+                        question: "Calculate: $2\sqrt{3} + 3\sqrt{3}$. (Write as a√b)<span class='id-lang'>Hitunglah: $2\\sqrt{3} + 3\\sqrt{3}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√3",
+                        explanation: "Add the coefficients of the like terms: $2 + 3 = 5$. So, $5\\sqrt{3}$.<span class='id-lang'>Jumlahkan koefisien dari suku sejenis: $2 + 3 = 5$. Jadi, $5\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e5", qType: "mcq",
+                        question: "A common mistake is thinking $\sqrt{12 + 27}$ equals $\sqrt{12} + \sqrt{27}$. What is $\sqrt{12 + 27}$ actually equal to?<span class='id-lang'>Kesalahan umum adalah mengira $\\sqrt{12 + 27}$ sama dengan $\\sqrt{12} + \\sqrt{27}$. Sebenarnya $\\sqrt{12 + 27}$ sama dengan apa?</span>",
+                        options: ["$5\\sqrt{3}$", "$\\sqrt{39}$", "$6$", "$\\sqrt{15}$"],
+                        answer: "$\\sqrt{39}$",
+                        explanation: "You must add the numbers inside the root first: $12 + 27 = 39$. So $\\sqrt{12 + 27} = \\sqrt{39}$. This is NOT the same as $\\sqrt{12} + \\sqrt{27}$.<span class='id-lang'>Kamu harus menjumlahkan angka di dalam akar terlebih dahulu: $12 + 27 = 39$. Jadi $\\sqrt{12 + 27} = \\sqrt{39}$. Ini TIDAK sama dengan $\\sqrt{12} + \\sqrt{27}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e6", qType: "mcq",
+                        question: "Does $\sqrt{12} + \sqrt{27} = \sqrt{12 + 27}$?<span class='id-lang'>Apakah $\\sqrt{12} + \\sqrt{27} = \\sqrt{12 + 27}$?</span>",
+                        options: ["Yes", "No"],
+                        answer: "No",
+                        explanation: "$\\sqrt{12} + \\sqrt{27} = 2\\sqrt{3} + 3\\sqrt{3} = 5\\sqrt{3} \\approx 8.66$. But $\\sqrt{12+27} = \\sqrt{39} \\approx 6.24$. They are completely different!<span class='id-lang'>$\\sqrt{12} + \\sqrt{27} = 2\\sqrt{3} + 3\\sqrt{3} = 5\\sqrt{3} \\approx 8.66$. Tapi $\\sqrt{12+27} = \\sqrt{39} \\approx 6.24$. Mereka sangat berbeda!</span>"
+                    },
+                    // Theory 3
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-drafting-compass"></i> Navigating the Pitfalls</h2>
+                            <p>The hardest part of surds is treating them like physical lengths rather than scary symbols. Remember the two main rules:<span class="id-lang">Bagian tersulit dari surd adalah memperlakukan mereka seperti panjang fisik alih-alih simbol yang menakutkan. Ingat dua aturan utama:</span></p>
+                            <ul style="line-height: 2; margin-left: 20px;">
+                                <li><strong>Multiplication:</strong> $\\sqrt{a} \\times \\sqrt{b} = \\sqrt{a \\times b}$ (Roots CAN combine over multiplication).<span class="id-lang"><strong>Perkalian:</strong> $\\sqrt{a} \\times \\sqrt{b} = \\sqrt{a \\times b}$ (Akar DAPAT digabungkan pada perkalian).</span></li>
+                                <li><strong>Addition:</strong> $\\sqrt{a} + \\sqrt{b} \\neq \\sqrt{a + b}$ (Roots CANNOT combine over addition). You can only add coefficients if radicands match.<span class="id-lang"><strong>Penjumlahan:</strong> $\\sqrt{a} + \\sqrt{b} \\neq \\sqrt{a + b}$ (Akar TIDAK DAPAT digabungkan pada penjumlahan). Kamu hanya bisa menjumlahkan koefisien jika radikandnya sama.</span></li>
+                            </ul>
+                        `
+                    },
+                    // Ex 7, 8, 9, 10
+                    {
+                        type: "exercise", id: "s6e7", qType: "input",
+                        question: "Simplify and add: $\sqrt{8} + \sqrt{32}$. (Hint: Simplify first, then add. Write as a√b)<span class='id-lang'>Sederhanakan dan jumlahkan: $\\sqrt{8} + \\sqrt{32}$. (Petunjuk: Sederhanakan dulu, lalu jumlahkan. Tulis sebagai a√b)</span>",
+                        answer: "6√2",
+                        explanation: "$\\sqrt{8} = 2\\sqrt{2}$ and $\\sqrt{32} = 4\\sqrt{2}$. So $2\\sqrt{2} + 4\\sqrt{2} = 6\\sqrt{2}$.<span class='id-lang'>$\\sqrt{8} = 2\\sqrt{2}$ dan $\\sqrt{32} = 4\\sqrt{2}$. Jadi $2\\sqrt{2} + 4\\sqrt{2} = 6\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e8", qType: "input",
+                        question: "Simplify and add: $\sqrt{50} + \sqrt{18}$. (Write as a√b)<span class='id-lang'>Sederhanakan dan jumlahkan: $\\sqrt{50} + \\sqrt{18}$. (Tulis sebagai a√b)</span>",
+                        answer: "8√2",
+                        explanation: "$\\sqrt{50} = 5\\sqrt{2}$ and $\\sqrt{18} = 3\\sqrt{2}$. So $5\\sqrt{2} + 3\\sqrt{2} = 8\\sqrt{2}$.<span class='id-lang'>$\\sqrt{50} = 5\\sqrt{2}$ dan $\\sqrt{18} = 3\\sqrt{2}$. Jadi $5\\sqrt{2} + 3\\sqrt{2} = 8\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e9", qType: "mcq",
+                        question: "Which of these expressions is equal to $\sqrt{9 + 16}$?<span class='id-lang'>Manakah ekspresi ini yang sama dengan $\\sqrt{9 + 16}$?</span>",
+                        options: ["$\\sqrt{9} + \\sqrt{16}$", "$3 + 4$", "$7$", "$5$"],
+                        answer: "$5$",
+                        explanation: "Add inside the root first: $\\sqrt{9 + 16} = \\sqrt{25} = 5$. The other options evaluate to 7, which is incorrect.<span class='id-lang'>Jumlahkan di dalam akar terlebih dahulu: $\\sqrt{9 + 16} = \\sqrt{25} = 5$. Opsi lainnya bernilai 7, yang salah.</span>"
+                    },
+                    {
+                        type: "exercise", id: "s6e10", qType: "input",
+                        question: "Simplify: $2\sqrt{27} + 3\sqrt{12}$. (Write as a√b)<span class='id-lang'>Sederhanakan: $2\\sqrt{27} + 3\\sqrt{12}$. (Tulis sebagai a√b)</span>",
+                        answer: "12√3",
+                        explanation: "First simplify: $2(3\\sqrt{3}) + 3(2\\sqrt{3}) = 6\\sqrt{3} + 6\\sqrt{3} = 12\\sqrt{3}$.<span class='id-lang'>Sederhanakan dulu: $2(3\\sqrt{3}) + 3(2\\sqrt{3}) = 6\\sqrt{3} + 6\\sqrt{3} = 12\\sqrt{3}$.</span>"
+                    }
+                ]
+            },
+			
+            // --- ASSIGNMENT 1 ---
+            {
+                id: "assign1",
+                title: "Assignment 1",
+                time: "10 Questions",
+                icon: "fa-clipboard-check",
+                isAssignment: true,
+                steps: [
+                    {
+                        type: "exercise", id: "a1e1", qType: "input",
+                        question: "A square has an area of 50 sq units. Simplify its side length ($\\sqrt{50}$) into the form $a\\sqrt{b}$. (Write as a√b)<span class='id-lang'>Sebuah persegi memiliki luas 50 unit persegi. Sederhanakan panjang sisinya ($\\sqrt{50}$) ke bentuk $a\\sqrt{b}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√2",
+                        explanation: "Find the largest perfect square factor of 50, which is 25. $\\sqrt{50} = \\sqrt{25 \\times 2} = \\sqrt{25} \\times \\sqrt{2} = 5\\sqrt{2}$.<span class='id-lang'>Temukan faktor kuadrat sempurna terbesar dari 50, yaitu 25. $\\sqrt{50} = \\sqrt{25 \\times 2} = \\sqrt{25} \\times \\sqrt{2} = 5\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e2", qType: "mcq",
+                        question: "A square has Area = 8. Visually, how does its side length relate to a square with Area = 2?<span class='id-lang'>Sebuah persegi memiliki Luas = 8. Secara visual, bagaimana panjang sisinya berhubungan dengan persegi yang memiliki Luas = 2?</span>",
+                        options: [
+                            "Its side is exactly twice as long ($2\\sqrt{2}$).", 
+                            "Its side is exactly 4 times as long.", 
+                            "Its side is $\\sqrt{8}$ times longer."
+                        ],
+                        answer: "Its side is exactly twice as long ($2\\sqrt{2}$).",
+                        explanation: "$\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$. Since the side of Area 2 is $\\sqrt{2}$, the side of Area 8 is exactly twice that length.<span class='id-lang'>$\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$. Karena sisi Luas 2 adalah $\\sqrt{2}$, sisi Luas 8 tepat dua kali panjang tersebut.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e3", qType: "input",
+                        question: "Simplify $\\sqrt{32}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{32}$. (Tulis sebagai a√b)</span>",
+                        answer: "4√2",
+                        explanation: "Largest perfect square factor is 16. $\\sqrt{32} = \\sqrt{16 \\times 2} = 4\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 16. $\\sqrt{32} = \\sqrt{16 \\times 2} = 4\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e4", qType: "input",
+                        question: "Simplify $\\sqrt{18}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{18}$. (Tulis sebagai a√b)</span>",
+                        answer: "3√2",
+                        explanation: "Largest perfect square factor is 9. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 9. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e5", qType: "mcq",
+                        question: "Explain in one sentence why $\\sqrt{9} + \\sqrt{16}$ does NOT equal $\\sqrt{25}$.<span class='id-lang'>Jelaskan dalam satu kalimat mengapa $\\sqrt{9} + \\sqrt{16}$ TIDAK sama dengan $\\sqrt{25}$.</span>",
+                        options: [
+                            "Because $3 + 4 = 7$, which is not equal to $5$.", 
+                            "Because you cannot add numbers inside square roots.", 
+                            "Because 25 is a perfect square."
+                        ],
+                        answer: "Because $3 + 4 = 7$, which is not equal to $5$.",
+                        explanation: "$\\sqrt{9} = 3$ and $\\sqrt{16} = 4$. Their sum is 7. However, $\\sqrt{25} = 5$. Since $7 \\neq 5$, the statement is false.<span class='id-lang'>$\\sqrt{9} = 3$ dan $\\sqrt{16} = 4$. Jumlahnya adalah 7. Namun, $\\sqrt{25} = 5$. Karena $7 \\neq 5$, pernyataan tersebut salah.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e6", qType: "mcq",
+                        question: "If Area = 13, the side length is $\\sqrt{13}$. Is $\\sqrt{13}$ closer to 3 or 4?<span class='id-lang'>Jika Luas = 13, panjang sisi adalah $\\sqrt{13}$. Apakah $\\sqrt{13}$ lebih dekat ke 3 atau 4?</span>",
+                        options: ["3", "4"],
+                        answer: "4",
+                        explanation: "Since $3^2 = 9$ and $4^2 = 16$, 13 is closer to 16. Therefore, $\\sqrt{13}$ is closer to 4.<span class='id-lang'>Karena $3^2 = 9$ dan $4^2 = 16$, 13 lebih dekat ke 16. Oleh karena itu, $\\sqrt{13}$ lebih dekat ke 4.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e7", qType: "mcq",
+                        question: "Identify the error in this logic: $\\sqrt{5} + \\sqrt{5} = \\sqrt{10}$.<span class='id-lang'>Identifikasi kesalahan dalam logika ini: $\\sqrt{5} + \\sqrt{5} = \\sqrt{10}$.</span>",
+                        options: [
+                            "There is no error, this is correct.", 
+                            "Addition of roots requires common radicands, the result should be $2\\sqrt{5}$.", 
+                            "It should be $\\sqrt{25}$."
+                        ],
+                        answer: "Addition of roots requires common radicands, the result should be $2\\sqrt{5}$.",
+                        explanation: "You cannot add radicands. $\\sqrt{5} + \\sqrt{5}$ is like $1x + 1x = 2x$. So it equals $2\\sqrt{5}$.<span class='id-lang'>Kamu tidak bisa menjumlahkan radikand. $\\sqrt{5} + \\sqrt{5}$ seperti $1x + 1x = 2x$. Jadi hasilnya $2\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e8", qType: "input",
+                        question: "Simplify $\\sqrt{20}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{20}$. (Tulis sebagai a√b)</span>",
+                        answer: "2√5",
+                        explanation: "Largest perfect square factor is 4. $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 4. $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e9", qType: "input",
+                        question: "Simplify $\\sqrt{45}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{45}$. (Tulis sebagai a√b)</span>",
+                        answer: "3√5",
+                        explanation: "Largest perfect square factor is 9. $\\sqrt{45} = \\sqrt{9 \\times 5} = 3\\sqrt{5}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 9. $\\sqrt{45} = \\sqrt{9 \\times 5} = 3\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a1e10", qType: "input",
+                        question: "Simplify $\\sqrt{75}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{75}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√3",
+                        explanation: "Largest perfect square factor is 25. $\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 25. $\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.</span>"
+                    }
+                ]
+            },
+            // --- ASSIGNMENT 2 ---
+            {
+                id: "assign2",
+                title: "Assignment 2",
+                time: "10 Questions",
+                icon: "fa-clipboard-check",
+                isAssignment: true,
+                steps: [
+                    {
+                        type: "exercise", id: "a2e1", qType: "input",
+                        question: "A rectangular business park has an area of 60 square kilometers. If the shape is a square, simplify its side length. (Write as a√b)<span class='id-lang'>Sebuah taman bisnis persegi panjang memiliki luas 60 kilometer persegi. Jika bentuknya persegi, sederhanakan panjang sisinya. (Tulis sebagai a√b)</span>",
+                        answer: "2√15",
+                        explanation: "Area = 60. Side = $\\sqrt{60}$. Largest perfect square factor is 4. $\\sqrt{60} = \\sqrt{4 \\times 15} = 2\\sqrt{15}$.<span class='id-lang'>Luas = 60. Sisi = $\\sqrt{60}$. Faktor kuadrat sempurna terbesar adalah 4. $\\sqrt{60} = \\sqrt{4 \\times 15} = 2\\sqrt{15}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e2", qType: "mcq",
+                        question: "Prove that a square with side length $3\\sqrt{2}$ has the same area as a rectangle with sides 9 and 2. Which statement shows this?<span class='id-lang'>Buktikan bahwa persegi dengan panjang sisi $3\\sqrt{2}$ memiliki luas yang sama dengan persegi panjang dengan sisi 9 dan 2. Pernyataan mana yang menunjukkan hal ini?</span>",
+                        options: [
+                            "$(3\\sqrt{2})^2 = 9 \\times 2 = 18$, and $9 \\times 2 = 18$.", 
+                            "$3\\sqrt{2} = 9 + 2$.", 
+                            "$3 \\times 2 = 6$ and $9 - 2 = 7$."
+                        ],
+                        answer: "$(3\\sqrt{2})^2 = 9 \\times 2 = 18$, and $9 \\times 2 = 18$.",
+                        explanation: "Area of square = $(3\\sqrt{2})^2 = 3^2 \\times (\\sqrt{2})^2 = 9 \\times 2 = 18$. Area of rectangle = $9 \\times 2 = 18$. Both are 18.<span class='id-lang'>Luas persegi = $(3\\sqrt{2})^2 = 3^2 \\times (\\sqrt{2})^2 = 9 \\times 2 = 18$. Luas persegi panjang = $9 \\times 2 = 18$. Keduanya 18.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e3", qType: "input",
+                        question: "Find the diagonal of a square whose area is 5. (Hint: Use Pythagorean theorem where sides are $\\sqrt{5}$). Write the exact length. (Write as √a)<span class='id-lang'>Temukan diagonal persegi yang luasnya 5. (Petunjuk: Gunakan teorema Pythagoras di mana sisi-sisinya adalah $\\sqrt{5}$). Tulis panjang pastinya. (Tulis sebagai √a)</span>",
+                        answer: "√10",
+                        explanation: "Let diagonal be $d$. $d^2 = (\\sqrt{5})^2 + (\\sqrt{5})^2 = 5 + 5 = 10$. So $d = \\sqrt{10}$.<span class='id-lang'>Misalkan diagonal $d$. $d^2 = (\\sqrt{5})^2 + (\\sqrt{5})^2 = 5 + 5 = 10$. Jadi $d = \\sqrt{10}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e4", qType: "input",
+                        question: "Using the side length from the square Area 60 ($2\\sqrt{15}$), calculate its exact perimeter. (Write as a√b)<span class='id-lang'>Menggunakan panjang sisi dari persegi Luas 60 ($2\\sqrt{15}$), hitunglah keliling pastinya. (Tulis sebagai a√b)</span>",
+                        answer: "8√15",
+                        explanation: "Perimeter = $4 \\times \\text{side} = 4 \\times 2\\sqrt{15} = 8\\sqrt{15}$.<span class='id-lang'>Keliling = $4 \\times \\text{sisi} = 4 \\times 2\\sqrt{15} = 8\\sqrt{15}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e5", qType: "input",
+                        question: "Simplify $\\sqrt{98}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{98}$. (Tulis sebagai a√b)</span>",
+                        answer: "7√2",
+                        explanation: "Largest perfect square factor is 49. $\\sqrt{98} = \\sqrt{49 \\times 2} = 7\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 49. $\\sqrt{98} = \\sqrt{49 \\times 2} = 7\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e6", qType: "input",
+                        question: "Simplify $\\sqrt{128}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{128}$. (Tulis sebagai a√b)</span>",
+                        answer: "8√2",
+                        explanation: "Largest perfect square factor is 64. $\\sqrt{128} = \\sqrt{64 \\times 2} = 8\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 64. $\\sqrt{128} = \\sqrt{64 \\times 2} = 8\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e7", qType: "mcq",
+                        question: "Between which two whole numbers does $\\sqrt{27}$ lie?<span class='id-lang'>Di antara dua bilangan bulat mana $\\sqrt{27}$ berada?</span>",
+                        options: ["4 and 5", "5 and 6", "6 and 7", "3 and 4"],
+                        answer: "5 and 6",
+                        explanation: "Since $5^2 = 25$ and $6^2 = 36$, 27 is between 25 and 36. Thus $\\sqrt{27}$ is between 5 and 6.<span class='id-lang'>Karena $5^2 = 25$ dan $6^2 = 36$, 27 di antara 25 dan 36. Jadi $\\sqrt{27}$ di antara 5 dan 6.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e8", qType: "mcq",
+                        question: "Between which two whole numbers does $\\sqrt{52}$ lie?<span class='id-lang'>Di antara dua bilangan bulat mana $\\sqrt{52}$ berada?</span>",
+                        options: ["6 and 7", "7 and 8", "8 and 9", "5 and 6"],
+                        answer: "7 and 8",
+                        explanation: "Since $7^2 = 49$ and $8^2 = 64$, 52 is between 49 and 64. Thus $\\sqrt{52}$ is between 7 and 8.<span class='id-lang'>Karena $7^2 = 49$ dan $8^2 = 64$, 52 di antara 49 dan 64. Jadi $\\sqrt{52}$ di antara 7 dan 8.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e9", qType: "mcq",
+                        question: "Which is larger: $3\\sqrt{3}$ or $5$?<span class='id-lang'>Mana yang lebih besar: $3\\sqrt{3}$ atau $5$?</span>",
+                        options: ["$3\\sqrt{3}$", "$5$", "They are equal"],
+                        answer: "$3\\sqrt{3}$",
+                        explanation: "Estimate $\\sqrt{3} \\approx 1.73$. So $3 \\times 1.73 = 5.19$. Since $5.19 > 5$, $3\\sqrt{3}$ is larger. Alternatively, square both: $(3\\sqrt{3})^2 = 27$, and $5^2 = 25$. $27 > 25$.<span class='id-lang'>Estimasikan $\\sqrt{3} \\approx 1.73$. Jadi $3 \\times 1.73 = 5.19$. Karena $5.19 > 5$, $3\\sqrt{3}$ lebih besar. Cara lain, kuadratkan keduanya: $(3\\sqrt{3})^2 = 27$, dan $5^2 = 25$. $27 > 25$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a2e10", qType: "mcq",
+                        question: "Which is larger: $2\\sqrt{10}$ or $3\\sqrt{5}$?<span class='id-lang'>Mana yang lebih besar: $2\\sqrt{10}$ atau $3\\sqrt{5}$?</span>",
+                        options: ["$2\\sqrt{10}$", "$3\\sqrt{5}$", "They are equal"],
+                        answer: "$3\\sqrt{5}$",
+                        explanation: "Square both to compare easily. $(2\\sqrt{10})^2 = 4 \\times 10 = 40$. $(3\\sqrt{5})^2 = 9 \\times 5 = 45$. Since $45 > 40$, $3\\sqrt{5}$ is larger.<span class='id-lang'>Kuadratkan keduanya untuk membandingkan dengan mudah. $(2\\sqrt{10})^2 = 4 \\times 10 = 40$. $(3\\sqrt{5})^2 = 9 \\times 5 = 45$. Karena $45 > 40$, $3\\sqrt{5}$ lebih besar.</span>"
+                    }
+                ]
+            },
+            // --- ASSIGNMENT 3 ---
+            {
+                id: "assign3",
+                title: "Assignment 3",
+                time: "10 Questions",
+                icon: "fa-clipboard-check",
+                isAssignment: true,
+                steps: [
+                    {
+                        type: "exercise", id: "a3e1", qType: "input",
+                        question: "Simplify $\\sqrt{32}$ and $\\sqrt{18}$, then add them together. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{32}$ dan $\\sqrt{18}$, lalu jumlahkan. (Tulis sebagai a√b)</span>",
+                        answer: "7√2",
+                        explanation: "$\\sqrt{32} = 4\\sqrt{2}$ and $\\sqrt{18} = 3\\sqrt{2}$. $4\\sqrt{2} + 3\\sqrt{2} = 7\\sqrt{2}$.<span class='id-lang'>$\\sqrt{32} = 4\\sqrt{2}$ dan $\\sqrt{18} = 3\\sqrt{2}$. $4\\sqrt{2} + 3\\sqrt{2} = 7\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e2", qType: "input",
+                        question: "Simplify $\\sqrt{12} + \\sqrt{27}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{12} + \\sqrt{27}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√3",
+                        explanation: "$\\sqrt{12} = 2\\sqrt{3}$ and $\\sqrt{27} = 3\\sqrt{3}$. $2\\sqrt{3} + 3\\sqrt{3} = 5\\sqrt{3}$.<span class='id-lang'>$\\sqrt{12} = 2\\sqrt{3}$ dan $\\sqrt{27} = 3\\sqrt{3}$. $2\\sqrt{3} + 3\\sqrt{3} = 5\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e3", qType: "input",
+                        question: "Simplify the expression: $2\\sqrt{27} + 3\\sqrt{12} - \\sqrt{75}$. (Write as a√b)<span class='id-lang'>Sederhanakan ekspresi: $2\\sqrt{27} + 3\\sqrt{12} - \\sqrt{75}$. (Tulis sebagai a√b)</span>",
+                        answer: "7√3",
+                        explanation: "Simplify each: $2(3\\sqrt{3}) + 3(2\\sqrt{3}) - 5\\sqrt{3} = 6\\sqrt{3} + 6\\sqrt{3} - 5\\sqrt{3} = 7\\sqrt{3}$.<span class='id-lang'>Sederhanakan masing-masing: $2(3\\sqrt{3}) + 3(2\\sqrt{3}) - 5\\sqrt{3} = 6\\sqrt{3} + 6\\sqrt{3} - 5\\sqrt{3} = 7\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e4", qType: "input",
+                        question: "Calculate: $5\\sqrt{2} - 3\\sqrt{2}$. (Write as a√b)<span class='id-lang'>Hitunglah: $5\\sqrt{2} - 3\\sqrt{2}$. (Tulis sebagai a√b)</span>",
+                        answer: "2√2",
+                        explanation: "Subtract the coefficients: $5 - 3 = 2$. So $2\\sqrt{2}$.<span class='id-lang'>Kurangkan koefisiennya: $5 - 3 = 2$. Jadi $2\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e5", qType: "input",
+                        question: "Simplify and add: $\\sqrt{50} + \\sqrt{8}$. (Write as a√b)<span class='id-lang'>Sederhanakan dan jumlahkan: $\\sqrt{50} + \\sqrt{8}$. (Tulis sebagai a√b)</span>",
+                        answer: "7√2",
+                        explanation: "$\\sqrt{50} = 5\\sqrt{2}$ and $\\sqrt{8} = 2\\sqrt{2}$. $5\\sqrt{2} + 2\\sqrt{2} = 7\\sqrt{2}$.<span class='id-lang'>$\\sqrt{50} = 5\\sqrt{2}$ dan $\\sqrt{8} = 2\\sqrt{2}$. $5\\sqrt{2} + 2\\sqrt{2} = 7\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e6", qType: "input",
+                        question: "Simplify: $\\sqrt{48} + \\sqrt{27} - \\sqrt{12}$. (Write as a√b)<span class='id-lang'>Sederhanakan: $\\sqrt{48} + \\sqrt{27} - \\sqrt{12}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√3",
+                        explanation: "Simplify each: $4\\sqrt{3} + 3\\sqrt{3} - 2\\sqrt{3} = 5\\sqrt{3}$.<span class='id-lang'>Sederhanakan masing-masing: $4\\sqrt{3} + 3\\sqrt{3} - 2\\sqrt{3} = 5\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e7", qType: "mcq",
+                        question: "Is it true that $\\sqrt{2} + \\sqrt{3} = \\sqrt{5}$?<span class='id-lang'>Apakah benar bahwa $\\sqrt{2} + \\sqrt{3} = \\sqrt{5}$?</span>",
+                        options: ["Yes, because 2 + 3 = 5", "No, you cannot add radicands directly. They are already simplified."],
+                        answer: "No, you cannot add radicands directly. They are already simplified.",
+                        explanation: "$\\sqrt{2} + \\sqrt{3}$ is approximately $1.414 + 1.732 = 3.146$. $\\sqrt{5}$ is approximately $2.236$. They are not equal.<span class='id-lang'>$\\sqrt{2} + \\sqrt{3}$ kira-kira $1.414 + 1.732 = 3.146$. $\\sqrt{5}$ kira-kira $2.236$. Mereka tidak sama.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e8", qType: "input",
+                        question: "Calculate: $3\\sqrt{5} + 2\\sqrt{20}$. (Write as a√b)<span class='id-lang'>Hitunglah: $3\\sqrt{5} + 2\\sqrt{20}$. (Tulis sebagai a√b)</span>",
+                        answer: "7√5",
+                        explanation: "Simplify $\\sqrt{20}$ to $2\\sqrt{5}$. Expression becomes $3\\sqrt{5} + 2(2\\sqrt{5}) = 3\\sqrt{5} + 4\\sqrt{5} = 7\\sqrt{5}$.<span class='id-lang'>Sederhanakan $\\sqrt{20}$ menjadi $2\\sqrt{5}$. Ekspresi menjadi $3\\sqrt{5} + 2(2\\sqrt{5}) = 3\\sqrt{5} + 4\\sqrt{5} = 7\\sqrt{5}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e9", qType: "input",
+                        question: "Calculate: $\\sqrt{72} - \\sqrt{50}$. (Write as a√b)<span class='id-lang'>Hitunglah: $\\sqrt{72} - \\sqrt{50}$. (Tulis sebagai a√b)</span>",
+                        answer: "√2",
+                        explanation: "Simplify: $6\\sqrt{2} - 5\\sqrt{2} = 1\\sqrt{2} = \\sqrt{2}$.<span class='id-lang'>Sederhanakan: $6\\sqrt{2} - 5\\sqrt{2} = 1\\sqrt{2} = \\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a3e10", qType: "input",
+                        question: "A rectangle has sides of length $\\sqrt{8}$ and $\\sqrt{18}$. Calculate its exact perimeter. (Write as a√b)<span class='id-lang'>Sebuah persegi panjang memiliki sisi panjang $\\sqrt{8}$ dan $\\sqrt{18}$. Hitunglah keliling pastinya. (Tulis sebagai a√b)</span>",
+                        answer: "10√2",
+                        explanation: "Perimeter = $2(\\sqrt{8}) + 2(\\sqrt{18}) = 2(2\\sqrt{2}) + 2(3\\sqrt{2}) = 4\\sqrt{2} + 6\\sqrt{2} = 10\\sqrt{2}$.<span class='id-lang'>Keliling = $2(\\sqrt{8}) + 2(\\sqrt{18}) = 2(2\\sqrt{2}) + 2(3\\sqrt{2}) = 4\\sqrt{2} + 6\\sqrt{2} = 10\\sqrt{2}$.</span>"
+                    }
+                ]
+            },
+			
+            // --- ASSIGNMENT 4 ---
+            {
+                id: "assign4",
+                title: "Assignment 4",
+                time: "10 Questions",
+                icon: "fa-clipboard-check",
+                isAssignment: true,
+                steps: [
+                    {
+                        type: "exercise", id: "a4e1", qType: "mcq",
+                        question: "If a cube has a volume of 8, its side length is 2. Another line segment is $\\sqrt{10}$. Which length is longer, and by how much?<span class='id-lang'>Jika kubus memiliki volume 8, panjang sisinya adalah 2. Ruas garis lainnya adalah $\\sqrt{10}$. Panjang mana yang lebih panjang, dan berapa selisihnya?</span>",
+                        options: ["2 is longer by $2 - \\sqrt{10}$", "$\\sqrt{10}$ is longer by $\\sqrt{10} - 2$", "They are the same length"],
+                        answer: "$\\sqrt{10}$ is longer by $\\sqrt{10} - 2$",
+                        explanation: "Since $2 = \\sqrt{4}$, and $\\sqrt{10} > \\sqrt{4}$, $\\sqrt{10}$ is longer. The difference is $\\sqrt{10} - 2$.<span class='id-lang'>Karena $2 = \\sqrt{4}$, dan $\\sqrt{10} > \\sqrt{4}$, $\\sqrt{10}$ lebih panjang. Selisihnya adalah $\\sqrt{10} - 2$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e2", qType: "mcq",
+                        question: "You want to create a 'Surd Map' with three different sized squares. When their side lengths are added, they must equal $10\\sqrt{2}$. Which of these combinations works?<span class='id-lang'>Kamu ingin membuat 'Peta Surd' dengan tiga persegi ukuran berbeda. Saat panjang sisinya dijumlahkan, harus sama dengan $10\\sqrt{2}$. Kombinasi mana yang berfungsi?</span>",
+                        options: [
+                            "Squares of Area 2, 4, 8", 
+                            "Squares of Area 8, 18, 50", 
+                            "Squares of Area 2, 18, 32"
+                        ],
+                        answer: "Squares of Area 8, 18, 50",
+                        explanation: "Area 8 -> $2\\sqrt{2}$. Area 18 -> $3\\sqrt{2}$. Area 50 -> $5\\sqrt{2}$. Sum = $2\\sqrt{2} + 3\\sqrt{2} + 5\\sqrt{2} = 10\\sqrt{2}$.<span class='id-lang'>Luas 8 -> $2\\sqrt{2}$. Luas 18 -> $3\\sqrt{2}$. Luas 50 -> $5\\sqrt{2}$. Jumlah = $2\\sqrt{2} + 3\\sqrt{2} + 5\\sqrt{2} = 10\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e3", qType: "input",
+                        question: "A square has an Area of 24. Calculate its exact perimeter. (Write as a√b)<span class='id-lang'>Sebuah persegi memiliki Luas 24. Hitunglah keliling pastinya. (Tulis sebagai a√b)</span>",
+                        answer: "8√6",
+                        explanation: "Side = $\\sqrt{24} = 2\\sqrt{6}$. Perimeter = $4 \\times 2\\sqrt{6} = 8\\sqrt{6}$.<span class='id-lang'>Sisi = $\\sqrt{24} = 2\\sqrt{6}$. Keliling = $4 \\times 2\\sqrt{6} = 8\\sqrt{6}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e4", qType: "mcq",
+                        question: "Expand and simplify: $(2\\sqrt{3})^2$<span class='id-lang'>Kembangkan dan sederhanakan: $(2\\sqrt{3})^2$</span>",
+                        options: ["$12$", "$4\\sqrt{3}$", "$6$", "$8\\sqrt{3}$"],
+                        answer: "$12$",
+                        explanation: "$(2\\sqrt{3})^2 = 2^2 \\times (\\sqrt{3})^2 = 4 \\times 3 = 12$.<span class='id-lang'>$(2\\sqrt{3})^2 = 2^2 \\times (\\sqrt{3})^2 = 4 \\times 3 = 12$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e5", qType: "input",
+                        question: "Multiply surds: $\\sqrt{6} \\times \\sqrt{3}$. Simplify your answer. (Write as a√b or just a if it's an integer)<span class='id-lang'>Kalikan surd: $\\sqrt{6} \\times \\sqrt{3}$. Sederhanakan jawabanmu. (Tulis sebagai a√b atau hanya a jika bilangan bulat)</span>",
+                        answer: "3√2",
+                        explanation: "$\\sqrt{6} \\times \\sqrt{3} = \\sqrt{18}$. Simplify $\\sqrt{18}$ to $3\\sqrt{2}$.<span class='id-lang'>$\\sqrt{6} \\times \\sqrt{3} = \\sqrt{18}$. Sederhanakan $\\sqrt{18}$ menjadi $3\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e6", qType: "input",
+                        question: "Simplify: $\\frac{\\sqrt{8}}{\\sqrt{2}}$. (Write as a)<span class='id-lang'>Sederhanakan: $\\frac{\\sqrt{8}}{\\sqrt{2}}$. (Tulis sebagai a)</span>",
+                        answer: "2",
+                        explanation: "$\\frac{\\sqrt{8}}{\\sqrt{2}} = \\sqrt{\\frac{8}{2}} = \\sqrt{4} = 2$.<span class='id-lang'>$\\frac{\\sqrt{8}}{\\sqrt{2}} = \\sqrt{\\frac{8}{2}} = \\sqrt{4} = 2$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e7", qType: "input",
+                        question: "Simplify $\\sqrt{200}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\sqrt{200}$. (Tulis sebagai a√b)</span>",
+                        answer: "10√2",
+                        explanation: "Largest perfect square factor is 100. $\\sqrt{200} = \\sqrt{100 \\times 2} = 10\\sqrt{2}$.<span class='id-lang'>Faktor kuadrat sempurna terbesar adalah 100. $\\sqrt{200} = \\sqrt{100 \\times 2} = 10\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e8", qType: "input",
+                        question: "Simplify and subtract: $\\sqrt{98} - 3\\sqrt{2}$. (Write as a√b)<span class='id-lang'>Sederhanakan dan kurangkan: $\\sqrt{98} - 3\\sqrt{2}$. (Tulis sebagai a√b)</span>",
+                        answer: "4√2",
+                        explanation: "$\\sqrt{98} = 7\\sqrt{2}$. So $7\\sqrt{2} - 3\\sqrt{2} = 4\\sqrt{2}$.<span class='id-lang'>$\\sqrt{98} = 7\\sqrt{2}$. Jadi $7\\sqrt{2} - 3\\sqrt{2} = 4\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e9", qType: "input",
+                        question: "Find the exact diagonal of a rectangle with sides 2 and 3 using Pythagorean theorem. (Write as √a)<span class='id-lang'>Temukan diagonal pasti persegi panjang dengan sisi 2 dan 3 menggunakan teorema Pythagoras. (Tulis sebagai √a)</span>",
+                        answer: "√13",
+                        explanation: "$d^2 = 2^2 + 3^2 = 4 + 9 = 13$. So $d = \\sqrt{13}$.<span class='id-lang'>$d^2 = 2^2 + 3^2 = 4 + 9 = 13$. Jadi $d = \\sqrt{13}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a4e10", qType: "mcq",
+                        question: "Identify the error: $2\\sqrt{5} \\times 3\\sqrt{5} = 6\\sqrt{5}$.<span class='id-lang'>Identifikasi kesalahan: $2\\sqrt{5} \\times 3\\sqrt{5} = 6\\sqrt{5}$.</span>",
+                        options: [
+                            "No error, this is correct.", 
+                            "The coefficients should be multiplied, and the radicands should be multiplied: $(2\\times3) \\times (\\sqrt{5}\\times\\sqrt{5}) = 6 \\times 5 = 30$.", 
+                            "The radicands should be added."
+                        ],
+                        answer: "The coefficients should be multiplied, and the radicands should be multiplied: $(2\\times3) \\times (\\sqrt{5}\\times\\sqrt{5}) = 6 \\times 5 = 30$.",
+                        explanation: "When multiplying surds, multiply coefficients by coefficients, and radicands by radicands. $\\sqrt{5} \\times \\sqrt{5} = 5$, not $\\sqrt{5}$.<span class='id-lang'>Saat mengalikan surd, kalikan koefisien dengan koefisien, dan radikand dengan radikand. $\\sqrt{5} \\times \\sqrt{5} = 5$, bukan $\\sqrt{5}$.</span>"
+                    }
+                ]
+            },
+            // --- ASSIGNMENT 5 ---
+            {
+                id: "assign5",
+                title: "Assignment 5",
+                time: "10 Questions",
+                icon: "fa-clipboard-check",
+                isAssignment: true,
+                steps: [
+                    {
+                        type: "exercise", id: "a5e1", qType: "input",
+                        question: "In the Square Root Spiral, if the legs of a right triangle are $\\sqrt{5}$ and $1$, what is the exact hypotenuse? (Write as √a)<span class='id-lang'>Dalam Spiral Akar Kuadrat, jika kaki segitiga siku-siku adalah $\\sqrt{5}$ dan $1$, berapakah hipotenusa pastinya? (Tulis sebagai √a)</span>",
+                        answer: "√6",
+                        explanation: "$(\\sqrt{5})^2 + 1^2 = 5 + 1 = 6$. Hypotenuse = $\\sqrt{6}$.<span class='id-lang'>$(\\sqrt{5})^2 + 1^2 = 5 + 1 = 6$. Hipotenusa = $\\sqrt{6}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e2", qType: "input",
+                        question: "In a special triangle, the legs are $\\sqrt{6}$ and $\\sqrt{3}$. Find the exact hypotenuse. (Write as √a or a√b)<span class='id-lang'>Dalam segitiga khusus, kakinya adalah $\\sqrt{6}$ dan $\\sqrt{3}$. Temukan hipotenusa pastinya. (Tulis sebagai √a atau a√b)</span>",
+                        answer: "3",
+                        explanation: "$(\\sqrt{6})^2 + (\\sqrt{3})^2 = 6 + 3 = 9$. Hypotenuse = $\\sqrt{9} = 3$.<span class='id-lang'>$(\\sqrt{6})^2 + (\\sqrt{3})^2 = 6 + 3 = 9$. Hipotenusa = $\\sqrt{9} = 3$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e3", qType: "input",
+                        question: "Calculate the exact area of a triangle with base $\\sqrt{8}$ and height $\\sqrt{2}$. (Area = $\\frac{1}{2}bh$). Write as an integer.<span class='id-lang'>Hitunglah luas pasti segitiga dengan alas $\\sqrt{8}$ dan tinggi $\\sqrt{2}$. (Luas = $\\frac{1}{2}at$). Tulis sebagai bilangan bulat.</span>",
+                        answer: "2",
+                        explanation: "Area = $\\frac{1}{2} \\times \\sqrt{8} \\times \\sqrt{2} = \\frac{1}{2} \\times \\sqrt{16} = \\frac{1}{2} \\times 4 = 2$.<span class='id-lang'>Luas = $\\frac{1}{2} \\times \\sqrt{8} \\times \\sqrt{2} = \\frac{1}{2} \\times \\sqrt{16} = \\frac{1}{2} \\times 4 = 2$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e4", qType: "input",
+                        question: "Multiply: $5\\sqrt{7} \\times 2\\sqrt{7}$. Write as an integer.<span class='id-lang'>Kalikan: $5\\sqrt{7} \\times 2\\sqrt{7}$. Tulis sebagai bilangan bulat.</span>",
+                        answer: "70",
+                        explanation: "$(5 \\times 2) \\times (\\sqrt{7} \\times \\sqrt{7}) = 10 \\times 7 = 70$.<span class='id-lang'>$(5 \\times 2) \\times (\\sqrt{7} \\times \\sqrt{7}) = 10 \\times 7 = 70$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e5", qType: "input",
+                        question: "Simplify $\\frac{\\sqrt{48}}{2}$. (Write as a√b)<span class='id-lang'>Sederhanakan $\\frac{\\sqrt{48}}{2}$. (Tulis sebagai a√b)</span>",
+                        answer: "2√3",
+                        explanation: "$\\sqrt{48} = 4\\sqrt{3}$. So $\\frac{4\\sqrt{3}}{2} = 2\\sqrt{3}$.<span class='id-lang'>$\\sqrt{48} = 4\\sqrt{3}$. Jadi $\\frac{4\\sqrt{3}}{2} = 2\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e6", qType: "input",
+                        question: "Simplify fully: $3\\sqrt{18} - 2\\sqrt{8}$. (Write as a√b)<span class='id-lang'>Sederhanakan sepenuhnya: $3\\sqrt{18} - 2\\sqrt{8}$. (Tulis sebagai a√b)</span>",
+                        answer: "5√2",
+                        explanation: "$3(3\\sqrt{2}) - 2(2\\sqrt{2}) = 9\\sqrt{2} - 4\\sqrt{2} = 5\\sqrt{2}$.<span class='id-lang'>$3(3\\sqrt{2}) - 2(2\\sqrt{2}) = 9\\sqrt{2} - 4\\sqrt{2} = 5\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e7", qType: "mcq",
+                        question: "Which is larger: $4\\sqrt{3}$ or $3\\sqrt{5}$?<span class='id-lang'>Mana yang lebih besar: $4\\sqrt{3}$ atau $3\\sqrt{5}$?</span>",
+                        options: ["$4\\sqrt{3}$", "$3\\sqrt{5}$", "They are equal"],
+                        answer: "$4\\sqrt{3}$",
+                        explanation: "Square both: $(4\\sqrt{3})^2 = 16 \\times 3 = 48$. $(3\\sqrt{5})^2 = 9 \\times 5 = 45$. Since $48 > 45$, $4\\sqrt{3}$ is larger.<span class='id-lang'>Kuadratkan keduanya: $(4\\sqrt{3})^2 = 16 \\times 3 = 48$. $(3\\sqrt{5})^2 = 9 \\times 5 = 45$. Karena $48 > 45$, $4\\sqrt{3}$ lebih besar.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e8", qType: "input",
+                        question: "Find the exact diagonal of a square with side length 5. (Write as a√b)<span class='id-lang'>Temukan diagonal pasti persegi dengan panjang sisi 5. (Tulis sebagai a√b)</span>",
+                        answer: "5√2",
+                        explanation: "Diagonal $d = s\\sqrt{2} = 5\\sqrt{2}$.<span class='id-lang'>Diagonal $d = s\\sqrt{2} = 5\\sqrt{2}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e9", qType: "input",
+                        question: "If $x^2 = 12$, find the positive value of $x$ in simplest surd form. (Write as a√b)<span class='id-lang'>Jika $x^2 = 12$, temukan nilai positif $x$ dalam bentuk surd paling sederhana. (Tulis sebagai a√b)</span>",
+                        answer: "2√3",
+                        explanation: "$x = \\sqrt{12}$. Simplify $\\sqrt{12}$ to $2\\sqrt{3}$.<span class='id-lang'>$x = \\sqrt{12}$. Sederhanakan $\\sqrt{12}$ menjadi $2\\sqrt{3}$.</span>"
+                    },
+                    {
+                        type: "exercise", id: "a5e10", qType: "input",
+                        question: "Simplify: $\\sqrt{2+\\sqrt{9}}$. Write as an integer.<span class='id-lang'>Sederhanakan: $\\sqrt{2+\\sqrt{9}}$. Tulis sebagai bilangan bulat.</span>",
+                        answer: "√5",
+                        explanation: "Inner root first: $\\sqrt{9} = 3$. So $\\sqrt{2+3} = \\sqrt{5}$.<span class='id-lang'>Akar dalam dulu: $\\sqrt{9} = 3$. Jadi $\\sqrt{2+3} = \\sqrt{5}$.</span>"
+                    }
+                ]
+            },
+            // --- SECTION 7: CONSOLIDATION & REFLECTION ---
+            {
+                id: "sec7",
+                title: "Consolidation & Reflection",
+                time: "01:00-01:05",
+                icon: "fa-lightbulb",
+                steps: [
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-lightbulb"></i> Seeing the Unseen</h2>
+                            <p>Amazing work today! You navigated the hardest part of surds: seeing them as physical lengths rather than scary symbols.<span class="id-lang">Kerja luar biasa hari ini! Kamu telah menavigasi bagian tersulit dari surd: melihatnya sebagai panjang fisik alih-alih simbol yang menakutkan.</span></p>
+                            <p>Remember, every time you see $\\sqrt{x}$, you can picture a square with Area $x$, and $\\sqrt{x}$ is its exact side length. You don't need decimals to find perfection!<span class="id-lang">Ingat, setiap kali kamu melihat $\\sqrt{x}$, kamu bisa membayangkan persegi dengan Luas $x$, dan $\\sqrt{x}$ adalah panjang sisi pastinya. Kamu tidak memerlukan desimal untuk menemukan kesempurnaan!</span></p>
+                        `
+                    },
+                    {
+                        type: "exercise", id: "s7e1", qType: "mcq",
+                        question: "What was the 'Aha!' moment for you today? (Select the closest match)<span class='id-lang'>Apa momen 'Aha!' Anda hari ini? (Pilih yang paling mirip)</span>",
+                        options: [
+                            "Realizing $\\sqrt{a}+\\sqrt{b} \\neq \\sqrt{a+b}$", 
+                            "Visualizing the square root spiral with triangles.", 
+                            "Using area grids to simplify surds like $\\sqrt{20} = 2\\sqrt{5}$."
+                        ],
+                        answer: "Using area grids to simplify surds like $\\sqrt{20} = 2\\sqrt{5}$.", // All are valid, just for reflection
+                        explanation: "All of these are fantastic breakthroughs in understanding surds visually!<span class='id-lang'>Semua ini adalah terobosan fantastis dalam memahami surd secara visual!</span>"
+                    },
+                    {
+                        type: "exercise", id: "s7e2", qType: "mcq",
+                        question: "How confident are you in simplifying surds visually now?<span class='id-lang'>Seberapa percaya diri Anda dalam menyederhanakan surd secara visual sekarang?</span>",
+                        options: ["I still find it confusing.", "I'm getting there, need more practice.", "I feel very confident!"],
+                        answer: "I feel very confident!", // Assume positive for self-reflection
+                        explanation: "Practice makes perfect. Visualizing math takes time, but you've made great progress today!<span class='id-lang'>Latihan menjadikan sempurna. Memvisualisasikan matematika butuh waktu, tapi Anda telah membuat kemajuan besar hari ini!</span>"
+                    },
+                    {
+                        type: "exercise", id: "s7e3", qType: "mcq",
+                        question: "If a friend asks you what a Surd is, what would you say?<span class='id-lang'>Jika teman bertanya apa itu Surd, apa yang akan Anda katakan?</span>",
+                        options: [
+                            "A weird math symbol.", 
+                            "An exact length that decimals can't capture perfectly.", 
+                            "A number with a root sign that can't be simplified to a whole number."
+                        ],
+                        answer: "An exact length that decimals can't capture perfectly.",
+                        explanation: "While the technical definition is an irrational root, thinking of it as an exact, physical length is the most powerful visual intuition!<span class='id-lang'>Meskipun definisi teknisnya adalah akar irasional, memikirkannya sebagai panjang fisik yang pasti adalah intuisi visual yang paling kuat!</span>"
+                    },
+                    {
+                        type: "theory",
+                        content: `
+                            <h2><i class="fas fa-external-link-alt"></i> Next Steps</h2>
+                            <p>Before you go, remember to log in to the learning platform to see your visual feedback and today's challenge set. See you next time!<span class="id-lang">Sebelum pergi, ingatlah untuk masuk ke platform pembelajaran untuk melihat umpan balik visual Anda dan set tantangan hari ini. Sampai jumpa lain kali!</span></p>
+                            <a href="https://learn.algonova.id" target="_blank" class="action-btn btn-check" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                                Go to learn.algonova.id <i class="fas fa-arrow-right"></i>
+                            </a>
+                        `
+                    }
+                ]
+            }
+            /* --- PART 2, 3, 4, 5 DATA WILL BE INSERTED HERE --- */
+        ];
+
+        // --- NAVIGATION & RENDERING ENGINE ---
+        function renderNav() {
+            const nav = document.getElementById('navList');
+            nav.innerHTML = '';
+            LESSON_DATA.forEach((section, sIndex) => {
+                const li = document.createElement('li');
+                li.className = 'nav-item';
+                if(sIndex === appState.currentSection) li.classList.add('active');
+                
+                // Check completion
+                const isComplete = checkSectionCompletion(sIndex);
+                if(isComplete) li.classList.add('completed');
+
+                li.innerHTML = `<i class="fas ${section.icon}"></i> ${section.title} <small>${section.time ? '('+section.time+')' : ''}</small>`;
+                li.onclick = () => navigate(sIndex, 0);
+                nav.appendChild(li);
+            });
+        }
+
+        function checkSectionCompletion(sIndex) {
+            const section = LESSON_DATA[sIndex];
+            if(!section.steps) return false;
+            const exercises = section.steps.filter(s => s.type === 'exercise');
+            if(exercises.length === 0) return appState.answers[`s${sIndex}_theory`] !== undefined;
+            return exercises.every(ex => appState.answers[ex.id] !== undefined);
+        }
+
+        function navigate(sIndex, stepIndex) {
+            appState.currentSection = sIndex;
+            appState.currentStep = stepIndex;
+            saveState();
+            renderNav();
+            renderContent();
+            window.scrollTo(0,0);
+            document.querySelector('.main').scrollTo(0,0);
+        }
+
+        function renderContent() {
+            const section = LESSON_DATA[appState.currentSection];
+            const step = section.steps[appState.currentStep];
+            const area = document.getElementById('contentArea');
+            area.innerHTML = '';
+
+            if(step.type === 'theory') {
+                area.innerHTML = `<div class="card">${step.content}</div>`;
+                appState.answers[`s${appState.currentSection}_theory`] = true;
+                saveState();
+                
+                // Add Next button for theory
+                const nextBtn = document.createElement('div');
+                nextBtn.className = 'btn-group';
+                nextBtn.style.justifyContent = 'flex-end';
+				nextBtn.innerHTML = `
+					${appState.currentStep > 0 ? `<button class="action-btn btn-nav" onclick="prevStep()"><i class="fas fa-arrow-left"></i> Previous</button>` : '<div></div>'}
+					<button class="action-btn btn-nav" onclick="nextStep()" style="margin-left: auto; margin-right: 10px;">Next <i class="fas fa-forward"></i></button>
+					<button class="action-btn btn-check" onclick="nextStep()">Continue <i class="fas fa-arrow-right"></i></button>
+				`;
+                area.appendChild(nextBtn);
+            } else {
+                renderExercise(step);
+            }
+            renderMath();
+        }
+
+        function renderExercise(ex) {
+            const area = document.getElementById('contentArea');
+            const isAnswered = appState.answers[ex.id] !== undefined;
+            const userAnswer = appState.answers[ex.id];
+            const isCorrect = appState.scores[ex.id] === true;
+
+            let html = `<div class="exercise-box">`;
+            html += `<div class="exercise-question">${ex.question}</div>`;
+            
+            if(ex.qType === 'mcq') {
+                // Randomize options on first render, but keep consistent if revisiting
+                let options = shuffleArray(ex.options);
+                html += `<div class="options-grid">`;
+                options.forEach(opt => {
+                    let optClass = 'option-btn';
+                    if(isAnswered && opt === ex.answer) optClass += ' correct';
+                    if(isAnswered && opt === userAnswer && opt !== ex.answer) optClass += ' wrong';
+                    if(!isAnswered && userAnswer === opt) optClass += ' selected';
+                    
+                    const disabled = isAnswered ? 'disabled' : '';
+                    html += `<button class="${optClass}" ${disabled} onclick="selectOption('${ex.id}', this, '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+                });
+                html += `</div>`;
+            } else { // input
+                const disabled = isAnswered ? 'disabled' : '';
+                const val = isAnswered ? userAnswer : '';
+				html += `<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+							<input type="text" class="input-answer" id="input_${ex.id}" value="${val}" ${disabled} onkeyup="if(event.key==='Enter')checkAnswer('${ex.id}', 'input')" style="margin-bottom: 0 !important; flex-grow: 1;">
+							<button class="action-btn btn-nav" onclick="insertSurd('${ex.id}')" ${disabled} title="Insert Square Root" style="font-size: 1.2rem; padding: 12px 15px; flex-shrink: 0;">√</button>
+						 </div>`;
+            }
+
+			// Check Button & Navigation
+			html += `<div class="btn-group" style="flex-wrap: wrap; gap: 8px;">`;
+			
+			// 1. Prev Button
+			html += `<button class="action-btn btn-nav" onclick="prevStep()"><i class="fas fa-arrow-left"></i> Prev</button>`;
+			
+			// 2. Reset Button (Hanya muncul jika sudah dijawab)
+			if(isAnswered) {
+				html += `<button class="action-btn btn-nav" onclick="resetExercise('${ex.id}')" style="background: var(--danger); color: white; border:none;"><i class="fas fa-redo"></i> Reset</button>`;
+			}
+
+			// 3. Next/Skip Button (Selalu muncul agar bisa lompat soal)
+			html += `<button class="action-btn btn-nav" onclick="nextStep()" style="margin-left: auto;">Next <i class="fas fa-forward"></i></button>`;
+
+			// 4. Check/Submit Button (Hanya muncul jika belum dijawab)
+			if(!isAnswered) {
+				html += `<button class="action-btn btn-check" id="checkBtn_${ex.id}" onclick="checkAnswer('${ex.id}', '${ex.qType}')">Check</button>`;
+			}
+			
+			html += `</div>`;
+
+            // Explanation Collapse
+            if(isAnswered) {
+                html += `
+                <div class="explanation-collapse" style="margin-top: 20px;">
+                    <button class="explanation-toggle" onclick="toggleCollapse(this)"><span>${isCorrect ? '<i class="fas fa-check-circle" style="color:var(--primary)"></i> Correct!' : '<i class="fas fa-times-circle" style="color:var(--danger)"></i> Incorrect'}</span> Show Explanation <i class="fas fa-chevron-down"></i></button>
+                    <div class="explanation-content">${ex.explanation}</div>
+                </div>`;
+            }
+
+            html += `</div>`;
+            area.innerHTML = html;
+        }
+
+        function selectOption(exId, btn, optValue) {
+            if(appState.answers[exId] !== undefined) return; // already answered
+            const parent = btn.parentElement;
+            Array.from(parent.children).forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            // temporarily store selection
+            btn.dataset.selected = optValue;
+        }
+
+		function checkAnswer(exId, qType) {
+			let userAnswer = '';
+			if(qType === 'mcq') {
+				const selected = document.querySelector('.option-btn.selected');
+				if(!selected) return alert("Please select an answer first!");
+				userAnswer = selected.dataset.selected;
+			} else {
+				userAnswer = document.getElementById(`input_${exId}`).value.trim();
+				if(!userAnswer) return alert("Please type an answer!");
+			}
+
+			// Find exercise data
+			let exData;
+			LESSON_DATA.forEach(s => s.steps.forEach(st => { if(st.id === exId) exData = st; }));
+			
+			// Smart Checking: Normalize strings, ignore spaces, and accept surd variations (sqrt, v, akar)
+			const normalize = (str) => {
+				let s = str.toString().trim().toLowerCase().replace(/\s+/g, '');
+				s = s.replace(/sqrt/g, '√').replace(/akar/g, '√').replace(/v/g, '√');
+				return s;
+			};
+			const isCorrect = normalize(userAnswer) === normalize(exData.answer);
+			
+			appState.answers[exId] = userAnswer;
+			appState.scores[exId] = isCorrect;
+			saveState();
+
+			renderContent(); // Re-render to show correct/wrong states and explanation
+		}
+
+        function toggleCollapse(btn) {
+            const content = btn.nextElementSibling;
+            content.classList.toggle('open');
+        }
+
+        function nextStep() {
+            const section = LESSON_DATA[appState.currentSection];
+            if(appState.currentStep < section.steps.length - 1) {
+                appState.currentStep++;
+                saveState();
+                renderNav();
+                renderContent();
+            } else {
+                // Move to next section
+                if(appState.currentSection < LESSON_DATA.length - 1) {
+                    navigate(appState.currentSection + 1, 0);
+                } else {
+                    alert("You have completed the lesson!");
+                }
+            }
+        }
+
+        function prevStep() {
+            if(appState.currentStep > 0) {
+                appState.currentStep--;
+                saveState();
+                renderNav();
+                renderContent();
+            } else if(appState.currentSection > 0) {
+                const prevSection = LESSON_DATA[appState.currentSection - 1];
+                navigate(appState.currentSection - 1, prevSection.steps.length - 1);
+            }
+        }
+
+        // --- PRINT LOGIC & UI INJECTION ---
+        // This function injects the "Print Result" button into Assignment sections
+		function injectPrintButton() {
+			const section = LESSON_DATA[appState.currentSection];
+			// Always show print button in Assignment, even if skipped
+			if(section.isAssignment) {
+				const existingBtn = document.getElementById('printBtnAssignment');
+				if(!existingBtn) {
+					const contentArea = document.querySelector('.content-wrapper');
+					const printBtn = document.createElement('button');
+					printBtn.id = 'printBtnAssignment';
+					printBtn.className = 'action-btn btn-check';
+					printBtn.style.marginBottom = '20px';
+					printBtn.innerHTML = `<i class="fas fa-print"></i> Print Result`;
+					printBtn.onclick = () => printAssignment(section.id);
+					contentArea.insertBefore(printBtn, contentArea.firstChild);
+				}
+			}
+		}
+
+        // Print window generation
+        function printAssignment(sectionId) {
+            const section = LESSON_DATA.find(s => s.id === sectionId);
+            if(!section) return;
+            
+            let exercises = section.steps.filter(s => s.type === 'exercise');
+            let score = 0;
+            let tableRows = '';
+            
+            exercises.forEach((ex, i) => {
+                const isCorrect = appState.scores[ex.id] === true;
+                if(isCorrect) score++;
+				const stuAns = appState.answers[ex.id] || '<em style="color:#888;">Skipped</em>';
+				const note = appState.answers[ex.id] !== undefined ? (isCorrect ? '✔️' : '❌') : '—';
+                // Strip Indonesian translation for the printout
+                const qText = ex.question.replace(/<span class="id-lang">.*?<\/span>/g, '').replace(/<br>/g, ' ');
+                tableRows += `<tr>
+                    <td>${i+1}</td>
+                    <td>${qText}</td>
+                    <td>${stuAns}</td>
+                    <td>${ex.answer}</td>
+                    <td style="text-align:center; font-size:1.2em;">${note}</td>
+                </tr>`;
+            });
+
+            const printHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Print Result - ${section.title}</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; font-size: 10pt; margin: 30px; color: #000; }
+                        h2 { margin-bottom: 5px; font-size: 14pt; }
+                        .meta { margin-bottom: 15px; line-height: 1.6; font-size: 10pt; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 9pt; }
+                        th, td { border: 1px solid black; padding: 6px; text-align: left; vertical-align: top; }
+                        th { background: #f0f0f0; }
+                        .footer { margin-top: 40px; font-size: 10pt; }
+                        @page { size: A4; margin: 15mm; }
+                    </style>
+                </head>
+                <body>
+                    <h2>MATH TUTORING by Deni</h2>
+                    <div class="meta">
+                        <strong>Name:</strong> ___________________________ <br>
+                        <strong>Date:</strong> ___________________________ <br>
+                        <strong>Topic:</strong> Visually Unpacking "Surds" <br>
+                        <strong>Assignment Group:</strong> ${section.title} <br>
+                        <strong>Score:</strong> ${score} / ${exercises.length}
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="5%">No.</th>
+                                <th width="40%">Question</th>
+                                <th width="20%">Student Answer</th>
+                                <th width="20%">Correct Answer</th>
+                                <th width="15%">Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                    <div class="footer">
+                        <p>Checked by,</p>
+                        <br><br>
+                        <p><strong>Deni</strong></p>
+                    </div>
+                    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+                    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>
+                    <script>
+                        renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}] });
+                        setTimeout(()=> window.print(), 800);
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            const win = window.open('', '_blank');
+            win.document.write(printHTML);
+            win.document.close();
+        }
+
+        // Override the standard renderContent to also trigger print button injection
+        const originalRenderContent = renderContent;
+		renderContent = function() {
+			originalRenderContent();
+			injectPrintButton();
+			// renderMath() is already called inside originalRenderContent, no need to call twice
+		};
+
+		// --- INSERT SURD SYMBOL FUNCTION ---
+		function insertSurd(exId) {
+			const input = document.getElementById(`input_${exId}`);
+			if(input) {
+				input.value += '√';
+				input.focus();
+			}
+		}
+
+		// --- RESET EXERCISE FUNCTION ---
+		function resetExercise(exId) {
+			if(confirm("Reset this question? Your current answer will be cleared.")) {
+				delete appState.answers[exId];
+				delete appState.scores[exId];
+				saveState();
+				renderNav(); // Update sidebar completion status
+				renderContent(); // Re-render the exercise
+			}
+		}
+
+		// --- INIT ---
+        loadState();
+        renderNav();
+        navigate(appState.currentSection, appState.currentStep);
+
+    </script>
+</body>
+</html>
