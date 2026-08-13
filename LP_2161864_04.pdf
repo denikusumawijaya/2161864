@@ -1,0 +1,1154 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 4171
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 20 Tf
+23. TL
+0 g
+56.6929133858267775 785.1970866141732586 Td
+(Menyederhanakan Surds \(Memanfaatkan Faktor & Kelipatan\) - Bintang Nararya P Y) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+56.6929133858267775 742.6774015748030706 Td
+(Created: 8/12/2026) Tj
+ET
+56.6929133858267775 714.3309448818897636 m
+538.5826771653544256 714.3309448818897636 l
+S
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 685.9844881889763428 Td
+(Student) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 657.6380314960629221 Td
+(Student: Bintang Nararya P Y) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 634.9608661417322537 Td
+(Topic: Menyederhanakan Surds \(Memanfaatkan Faktor & Kelipatan\)) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 612.2837007874015853 Td
+(Status: completed) Tj
+ET
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+0 g
+56.6929133858267775 569.7640157480313974 Td
+(Lesson Plan) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 527.2443307086614368 Td
+(Learning Objectives) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 504.5671653543306547 Td
+(• Deconstruct surds into prime factor products to identify square components.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 481.8899999999999295 Td
+(• Apply the product property of radicals, sqrt\(a × b\) = sqrt\(a\) × sqrt\(b\), to simplify complex) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 464.8821259842518998 Td
+(expressions.) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 442.2049606299212314 Td
+(• Evaluate numerical values to instantly identify the largest perfect square factor \(4, 9, 16, 25, etc.\).) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 419.5277952755905062 Td
+(• Simplify non-perfect square radicals into their simplest mixed radical form.) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 374.1734645669290558 Td
+(Lesson Information) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+56.6929133858267775 328.8191338582676053 Td
+(Lesson Sections) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 300.4726771653542983 Td
+(1. Spiral Review Warm-up \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 277.7955118110235162 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 260.7876377952754865 Td
+(Hi Bintang! Great to see you. Before we dive into today's challenge, let's sharpen our tools with a quick) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 246.614409448818833 Td
+(4-question sprint. We're looking at our previous visual surds and our business-scale place values.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 232.4411811023621794 Td
+(Ready? Question 1: Visual check—if a square has an area of 50, between which two whole numbers) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 218.2679527559054122 Td
+(does its side length lie? Question 2: Simplify the visual—draw a square of area 18; how many 'sqrt\(2\)') Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 204.0947244094487587 Td
+(units fit in its side? Question 3: Business scale—if a company revenue is 1.2 billion, how many) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 189.9214960629919915 Td
+('millions' are inside that? Question 4: Place value—write 45 million in scientific notation. Type your) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 175.748267716535338 Td
+(answers in the chat!) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 150.2364566929132934 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 133.2285826771652637 Td
+(• Rapid-fire chat box answers) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 116.220708661417234 Td
+(• Mental estimation of square roots) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 99.2128346456692043 Td
+(• Place value conversion for large business figures) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 8/12/2026, 5:01:43 PM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(1 / 4) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 5083
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 785.1970866141732586 Td
+(2. Introduction & Real-World Connection \(5 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 762.5199212598424765 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 745.5120472440944468 Td
+(Bintang, imagine you are a data analyst for a global tech firm. You are calculating the 'Standard) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 731.3388188976377933 Td
+(Deviation' of market volatility. The formula gives you an answer like sqrt\(200\). Reporting 'sqrt\(200\)' to) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 717.1655905511811397 Td
+(your CEO looks messy. We need to simplify it to '10 sqrt\(2\)' to make it comparable to other data sets.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 702.9923622047243725 Td
+(Today, we turn messy square roots into clean, professional 'Mixed Surds'.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 677.480551181102328 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 660.4726771653542983 Td
+(• Discussion on why simplified forms are preferred in professional fields) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 615.1183464566928478 Td
+(3. Review of Prior Knowledge \(5 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 592.4411811023621794 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 575.4333070866141497 Td
+(To do this, we need to be 'Factor Detectives'. Tell me, Bintang, what are the first 6 perfect squares?) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 561.2600787401574962 Td
+(\(Wait for: 1, 4, 9, 16, 25, 36\). Perfect. Remember, a square root 'neutralizes' a square. So, sqrt\(25\) is) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 547.086850393700729 Td
+(just 5. We will use this 'neutralizing power' to pull numbers out of the radical sign.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 521.5750393700786844 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 504.5671653543306547 Td
+(• Reciting perfect squares) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 487.559291338582625 Td
+(• Mental math factor pairs) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 442.2049606299212314 Td
+(4. Problem Introduction \(10 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 419.5277952755905062 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 402.5199212598424765 Td
+(Let's look at sqrt\(12\). It isn't a perfect square. But, we can use the 'Breakup Rule': sqrt\(a * b\) = sqrt\(a\) *) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 388.3466929133857661 Td
+(sqrt\(b\). I can write 12 as 4 * 3. So, sqrt\(12\) = sqrt\(4\) * sqrt\(3\). Since we know sqrt\(4\) is 2, the final) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 374.1734645669290558 Td
+(answer is 2 sqrt\(3\). Why didn't I use 6 * 2? Because 6 and 2 aren't square numbers! They don't help us) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 360.0002362204724022 Td
+(simplify. We always hunt for the 'Hidden Square'.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 334.4884251968503008 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 317.480551181102328 Td
+(• Demonstrating the product property of radicals) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 300.4726771653542983 Td
+(• Comparing factor pairs \(4x3 vs 6x2\)) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 255.1183464566928478 Td
+(5. Guided Practice \(15 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 232.4411811023621794 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 215.4333070866141497 Td
+(Let's try a harder one together: sqrt\(72\). On the whiteboard, list all factor pairs of 72. \(9*8, 36*2, 4*18\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 201.2600787401573825 Td
+(Which is the 'King' of these pairs? The one with the biggest perfect square! Yes, 36. Now, apply the) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 187.086850393700729 Td
+(rule: sqrt\(36 * 2\). Break it apart. What do you get? \(Wait for: 6 sqrt\(2\)\). Excellent. Now, what if we used) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 172.9136220472439618 Td
+(9*8? We would get 3 sqrt\(8\), but sqrt\(8\) can be simplified again! It's always faster to find the biggest) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 158.7403937007873083 Td
+(square first.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 133.2285826771652637 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 116.220708661417234 Td
+(• Factor tree construction) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 99.2128346456692043 Td
+(• Multi-step simplification practice) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 8/12/2026, 5:01:43 PM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(2 / 4) Tj
+ET
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 8 0 R
+>>
+endobj
+8 0 obj
+<<
+/Length 4241
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 785.1970866141732586 Td
+(6. Independent Practice \(15 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 762.5199212598424765 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 745.5120472440944468 Td
+(Now, it's your turn to be the lead analyst. I'm putting 5 'messy' market figures on the board: sqrt\(20\),) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 731.3388188976377933 Td
+(sqrt\(45\), sqrt\(48\), sqrt\(75\), and the boss-level sqrt\(108\). Simplify these as fast as you can. Type your) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 717.1655905511811397 Td
+(final forms in the chat or write them on the board.) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 691.6537795275589815 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 674.6459055118109518 Td
+(• Solo problem solving) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 657.6380314960629221 Td
+(• Timed challenge for speed \(fluency building\)) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 612.2837007874015853 Td
+(7. Consolidation & Reflection \(5 minutes\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 589.6065354330708033 Td
+(Teacher Script:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 572.5986614173227736 Td
+(Incredible work today, Bintang. You've mastered the art of extracting squares from surds. Remember:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 558.42543307086612 Td
+(factor, split, and simplify. Before we go, please log in to https://learn.algonova.id/login to access your) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 544.2522047244094665 Td
+(post-session notes and homework. What was the most 'aha!' moment for you today?) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+70.8661417322834666 518.7403937007873083 Td
+(Activities:) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 501.7325196850393354 Td
+(• Verbal summary) Tj
+ET
+BT
+/F3 10 Tf
+11.5 TL
+0 g
+85.0393700787401627 484.7246456692913057 Td
+(• Platform login reminder) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 439.3703149606298552 Td
+(Homework) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 411.0238582677164914 Td
+(Medium Questions:) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 394.0159842519684616 Td
+(1. Simplify sqrt\(50\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 371.3388188976377364 Td
+(2. Simplify sqrt\(28\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 348.6616535433070112 Td
+(3. Simplify sqrt\(63\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 325.9844881889763428 Td
+(4. Simplify sqrt\(80\)) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 286.2994488188975311 Td
+(Hard Questions:) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 269.2915748031495013 Td
+(1. Simplify sqrt\(162\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 246.614409448818833 Td
+(2. Simplify sqrt\(300\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 223.9372440944881646 Td
+(3. Simplify 3 * sqrt\(48\) \(Hint: simplify the root then multiply by 3\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 201.2600787401573825 Td
+(4. Simplify sqrt\(98\) + sqrt\(18\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 178.5829133858267141 Td
+(5. Find the value of x if sqrt\(x\) = 5 sqrt\(2\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 155.9057480314959321 Td
+(6. Simplify sqrt\(252\) using prime factorization) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 116.220708661417234 Td
+(Answer Key:) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 99.2128346456692043 Td
+(sqrt\(50\) = 5 sqrt\(2\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 85.0396062992125508 Td
+(sqrt\(28\) = 2 sqrt\(7\)) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 8/12/2026, 5:01:43 PM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(3 / 4) Tj
+ET
+endstream
+endobj
+9 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 10 0 R
+>>
+endobj
+10 0 obj
+<<
+/Length 3118
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 785.1970866141732586 Td
+(sqrt\(63\) = 3 sqrt\(7\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 771.0238582677164914 Td
+(sqrt\(80\) = 4 sqrt\(5\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 756.8506299212598378 Td
+(sqrt\(162\) = 9 sqrt\(2\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 742.6774015748030706 Td
+(sqrt\(300\) = 10 sqrt\(3\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 728.5041732283464171 Td
+(3 * sqrt\(48\) = 12 sqrt\(3\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 714.3309448818897636 Td
+(sqrt\(98\) + sqrt\(18\) = 7 sqrt\(2\) + 3 sqrt\(2\) = 10 sqrt\(2\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 700.15771653543311 Td
+(sqrt\(x\) = sqrt\(25*2\) -> x = 50) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 685.9844881889763428 Td
+(sqrt\(252\) = sqrt\(36 * 7\) = 6 sqrt\(7\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 671.8112598425196893 Td
+(REVIEW: Membongkar 'Surds' Secara Visual - sqrt\(40\) is between 6 and 7 \(Answer: 6 <) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 657.6380314960629221 Td
+(sqrt\(40\) < 7\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 643.4648031496062686 Td
+(REVIEW: Membongkar 'Surds' Secara Visual - Side of area 20 square = 2 sqrt\(5\)) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 629.291574803149615 Td
+(REVIEW: Nilai Tempat & Bilangan Besar - 15.5 Million in Standard Form = 15,500,000) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+85.0393700787401627 615.1183464566928478 Td
+(REVIEW: Nilai Tempat & Bilangan Besar - $4.2 Billion / 100 = 42 Million) Tj
+ET
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 578.2679527559055259 Td
+(Parent Reminder) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 555.5907874015747439 Td
+(Bintang's Progress: Mastering Surds) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 538.5829133858267141 Td
+(Today Bintang learned how to simplify complex square roots \(surds\) by breaking them down) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 524.4096850393700606 Td
+(into factors. This is a crucial skill for Grade 10 Math and beyond. He practiced identifying) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 510.2364566929133503 Td
+('hidden' square numbers to make expressions cleaner and easier to use in business) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 496.0632283464566399 Td
+(calculations. Please ensure he completes the homework on the portal to reinforce these) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0 g
+70.8661417322834666 481.8899999999999295 Td
+(speed-skills!) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+56.6929133858267775 34.0159842519684616 Td
+(Generated on: 8/12/2026, 5:01:43 PM) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0 g
+523.0626771653543301 34.0159842519684616 Td
+(4 / 4) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R 9 0 R ]
+/Count 4
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+21 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+22 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+23 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+24 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 11 0 R
+/F2 12 0 R
+/F3 13 0 R
+/F4 14 0 R
+/F5 15 0 R
+/F6 16 0 R
+/F7 17 0 R
+/F8 18 0 R
+/F9 19 0 R
+/F10 20 0 R
+/F11 21 0 R
+/F12 22 0 R
+/F13 23 0 R
+/F14 24 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+25 0 obj
+<<
+/Producer (jsPDF 3.0.2)
+/CreationDate (D:20260812170143+07'00')
+>>
+endobj
+26 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 27
+0000000000 65535 f 
+0000017386 00000 n 
+0000019226 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000004375 00000 n 
+0000004512 00000 n 
+0000009647 00000 n 
+0000009784 00000 n 
+0000014077 00000 n 
+0000014215 00000 n 
+0000017461 00000 n 
+0000017587 00000 n 
+0000017718 00000 n 
+0000017852 00000 n 
+0000017990 00000 n 
+0000018114 00000 n 
+0000018243 00000 n 
+0000018375 00000 n 
+0000018511 00000 n 
+0000018639 00000 n 
+0000018766 00000 n 
+0000018895 00000 n 
+0000019028 00000 n 
+0000019130 00000 n 
+0000019479 00000 n 
+0000019565 00000 n 
+trailer
+<<
+/Size 27
+/Root 26 0 R
+/Info 25 0 R
+/ID [ <6DC4BAB66D7403390B2DD0A1FAD0FCDA> <6DC4BAB66D7403390B2DD0A1FAD0FCDA> ]
+>>
+startxref
+19669
+%%EOF
