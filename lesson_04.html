@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring - Simplifying Surds</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .idn { display: block; font-size: 0.8em; color: #6b7280; font-style: italic; margin-top: 2px; }
+        .math-inline { font-size: 1.1em; }
+        .nav-item { transition: all 0.3s ease; }
+        .nav-item:hover { background-color: #f3f4f6; transform: translateX(5px); }
+        .nav-item.active { background-color: #e0f2fe; border-left: 4px solid #0ea5e9; font-weight: bold; color: #0284c7; }
+        .content-enter { animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-nav { transition: all 0.2s; }
+        .btn-nav:hover { transform: scale(1.05); }
+        .btn-nav:active { transform: scale(0.95); }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .collapse-content.open { max-height: 500px; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover:not(.disabled) { border-color: #0ea5e9; background-color: #f0f9ff; }
+        .option-btn.correct { border-color: #10b981; background-color: #ecfdf5; color: #065f46; }
+        .option-btn.in-incorrect { border-color: #ef4444; background-color: #fef2f2; color: #991b1b; }
+        .svg-icon { width: 80px; height: 80px; fill: #0ea5e9; margin: 0 auto; }
+        
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; font-size: 10pt; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <!-- Sidebar Navbar -->
+    <nav id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col shadow-md no-print">
+        <div class="p-4 border-b border-gray-200 bg-sky-50">
+            <h2 class="font-bold text-sky-800 text-lg">MATH TUTORING by Deni</h2>
+            <p class="text-xs text-sky-600 mt-1">Interactive Lesson Material</p>
+        </div>
+        
+        <div class="p-3 border-b border-gray-200">
+            <button onclick="resetAllProgress()" class="w-full bg-red-500 text-white py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition flex items-center justify-center gap-2">
+                <i class="fas fa-redo"></i> Reset All Progress
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-2" id="nav-container">
+            <!-- Navigation items will be injected here -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto relative bg-gradient-to-br from-sky-50 to-white">
+        <!-- Top Bar -->
+        <div class="sticky top-0 bg-white/80 backdrop-blur-md p-4 border-b border-gray-100 flex justify-between items-center z-10 no-print">
+            <div>
+                <h3 id="section-title" class="font-bold text-sky-800 text-xl">Home</h3>
+                <p id="section-subtitle" class="text-xs text-gray-500">Welcome</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="progress-bar-container" class="w-48 bg-gray-200 rounded-full h-2.5 hidden">
+                    <div id="progress-bar" class="bg-sky-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <!-- Tombol Print Assignment -->
+                <button id="btn-print" onclick="printAssignment(appState.currentSection)" class="btn-nav bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hidden" target="_blank">
+                    <i class="fas fa-print"></i> Print Result
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area" class="p-6 md:p-10 max-w-3xl mx-auto content-enter">
+            <!-- Dynamic content injected here -->
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="sticky bottom-0 bg-white/80 backdrop-blur-md p-4 border-t border-gray-100 flex justify-between items-center z-10 no-print">
+            <button id="btn-prev" onclick="prevItem()" class="btn-nav bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold flex items-center gap-2 disabled:opacity-50" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button id="btn-check" onclick="checkAnswer()" class="btn-nav bg-sky-500 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2" hidden>
+                Check Answer <i class="fas fa-check"></i>
+            </button>
+            <button id="btn-next" onclick="nextItem()" class="btn-nav bg-sky-500 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2" disabled>
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- Print Area (Hidden) -->
+    <div id="print-area" class="p-8 hidden">
+        <!-- Print template injected here via JS -->
+    </div>
+
+    <script>
+        // --- GLOBAL STATE & CONFIG ---
+        let appState = {
+            currentSection: 0,
+            currentItem: 0, // index of theory/exercise
+            answers: {},
+            scores: {}
+        };
+
+        // ---. - 7 < 8 = 9 --- 
+        // THIS ARRAY WILL BE POPULATED IN PART 2, 3, and 4
+        // Structure: [ { id, title, time, items: [ {type:'theory', content:'...'}, {type:'exercise', question:'...', options:[], correct:'...', explanation:'...'} ] } ]
+        const COURSE_DATA = [
+            {
+                id: 'home',
+                title: 'Home',
+                time: '00:00',
+                items: [
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="text-center">
+                                <svg class="svg-icon mb-4" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+                                <h2 class="text-2xl font-bold text-sky-800 mb-2">Topic: Simplifying Surds (Using Factors & Multiples)</h2>
+                                <p class="idn">Topik: Menyederhanakan Surds (Memanfaatkan Faktor & Kelipatan)</p>
+                            </div>
+                            <div class="mt-6 bg-sky-50 p-4 rounded-lg border border-sky-100">
+                                <h3 class="font-semibold text-sky-700 mb-2"><i class="fas fa-video mr-2"></i>Classroom Rules:</h3>
+                                <p class="idn">Aturan Kelas:</p>
+                                <ul class="list-disc ml-5 mt-2 space-y-1">
+                                    <li>Take turns speaking. <span class="idn">Berbicara secara bergantian.</li>
+                                    <li>Ask for permission if you need to leave the class. <span class="idn">Meminta izin jika ingin meninggalkan kelas.</li>
+                                    <li>Turn on camera and microphone when necessary. <span class="idn">Menyalakan kamera dan microphone jika diperlukan.</li>
+                                </ul>
+                            </div>
+                        `
+                    }
+                ]
+            },
+			
+			// --- DATA PART 2: SECTIONS 1, 2, and 3 ---
+			{
+				id: 'sec1',
+				title: 'Spiral Review Warm-up',
+				time: '00:00 - 00:10',
+				items: [
+					// Theory 1
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-eye text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">Visual Check & Estimation</h3>
+							</div>
+							<p>Before we dive into today's challenge, let's sharpen our tools. If a square has an area of 50, between which two whole numbers does its side length lie?</p>
+							<p class="idn">Sebelum kita menyelami tantangan hari ini, mari asah alat kita. Jika sebuah persegi memiliki luas 50, di antara dua bilangan bulat mana panjang sisinya berada?</p>
+							<div class="mt-4 p-4 bg-sky-50 rounded-lg border border-sky-100 text-center">
+								<p class="font-semibold">We know that $\\sqrt{49} = 7$ and $\\sqrt{64} = 8$.</p>
+								<p class="idn">Kita tahu bahwa $\\sqrt{49} = 7$ dan $\\sqrt{64} = 8$.</p>
+								<p class="mt-2">Since 50 is between 49 and 64, $\\sqrt{50}$ must be between 7 and 8.</p>
+								<p class="idn">Karena 50 berada di antara 49 dan 64, $\\sqrt{50}$ pasti di antara 7 dan 8.</p>
+							</div>
+						`
+					},
+					// Exercise 1-3 (Estimation)
+					{
+						type: 'exercise',
+						question: 'If a square has an area of 18, between which two whole numbers does its side length lie?',
+						options: ['2 and 3', '3 and 4', '4 and 5', '5 and 6'],
+						correct: '3 and 4',
+						explanation: 'We look for perfect squares around 18. $\\sqrt{16} = 4$ and $\\sqrt{25} = 5$. Since 18 is between 16 and 25, $\\sqrt{18}$ is between 4 and 5. (Wait, 4 and 5 is not in the correct logic, let me re-evaluate: $\\sqrt{9}=3, \\sqrt{16}=4$. 18 is between 16 and 9, so $\\sqrt{18}$ is between 4 and 3. Thus, "3 and 4" is correct!).'
+					},
+					{
+						type: 'exercise',
+						question: 'Between which two consecutive whole numbers does $\\sqrt{70}$ lie?',
+						options: ['7 and 8', '8 and 9', '6 and 7', '9 and 10'],
+						correct: '8 and 9',
+						explanation: '$\\sqrt{64} = 8$ and $\\sqrt{81} = 9$. Since 70 is between 64 and 81, $\\sqrt{70}$ is between 8 and 9.'
+					},
+					{
+						type: 'exercise',
+						question: 'Which integer is $\\sqrt{90}$ closest to?',
+						options: ['8', '9', '10', '11'],
+						correct: '9',
+						explanation: '$\\sqrt{81} = 9$ and $\\sqrt{100} = 10$. 90 is exactly halfway, but $90 - 81 = 9$, while $100 - 90 = 10$. It is slightly closer to 81, so $\\sqrt{90}$ is closer to 9.'
+					},
+					// Theory 2
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-building text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">Business Scale Place Values</h3>
+							</div>
+							<p>In business and data analysis, we often deal with massive numbers. Converting between scales (like Millions and Billions) is crucial.</p>
+							<p class="idn">Dalam bisnis dan analisis data, kita sering berurusan dengan angka besar. Konversi antar skala (seperti Jutaan dan Miliaran) sangat penting.</p>
+							<div class="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
+								<p class="font-semibold"><i class="fas fa-lightbulb text-amber-500 mr-2"></i>Rule of Thumb:</p>
+								<p class="idn">Pedoman:</p>
+								<p class="mt-1">1 Billion = 1,000 Million.</p>
+								<p class="idn">1 Miliar = 1.000 Juta.</p>
+							</div>
+						`
+					},
+					// Exercise 4-6 (Place Value)
+					{
+						type: 'exercise',
+						question: 'If a company revenue is 1.2 billion, how many "millions" are inside that?',
+						options: ['120 millions', '12 millions', '1200 millions', '1.2 millions'],
+						correct: '1200 millions',
+						explanation: '1 Billion = 1000 Million. So, 1.2 Billion = 1.2 × 1000 Million = 1200 Million.'
+					},
+					{
+						type: 'exercise',
+						question: 'A tech firm made a profit of 45 million. How is this written in standard form?',
+						options: ['45,000,000', '4,500,000', '450,000,000', '45,000'],
+						correct: '45,000,000',
+						explanation: '1 Million = 1,000,000. Therefore, 45 Million = 45 × 1,000,000 = 45,000,000.'
+					},
+					{
+						type: 'exercise',
+						question: 'Convert $4.2 \\times 10^9$ into millions.',
+						options: ['4200 millions', '420 millions', '42 millions', '4.2 millions'],
+						correct: '4200 millions',
+						explanation: '$4.2 \\times 10^9$ is 4.2 billion. Since 1 billion = 1000 million, 4.2 billion = 4.2 × 1000 = 4200 million.'
+					},
+					// Theory 3
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-calculator text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">Scientific Notation Refresher</h3>
+							</div>
+							<p>Scientific notation writes numbers as $a \\times 10^n$, where $1 \\le a < 10$.</p>
+							<p class="idn">Notasi ilmiah menulis bilangan sebagai $a \\times 10^n$, di mana $1 \\le a < 10$.</p>
+							<p class="mt-2">For example, 45 million is $45,000,000$, which is $4.5 \\times 10^7$ in scientific notation.</p>
+							<p class="idn">Sebagai contoh, 45 juta adalah $45.000.000$, yang dalam notasi ilmiah menjadi $4.5 \\times 10^7$.</p>
+						`
+					},
+					// Exercise 7-10 (Mixed)
+					{
+						type: 'exercise',
+						question: 'Write 15.5 million in standard form.',
+						options: ['15,500,000', '1,550,000', '155,000,000', '15,500'],
+						correct: '15,500,000',
+						explanation: '15.5 million = 15.5 × 1,000,000 = 15,500,000.'
+					},
+					{
+						type: 'exercise',
+						question: 'If $\\sqrt{x} = 9$, what is the value of $x$?',
+						options: ['81', '18', '3', '91'],
+						correct: '81',
+						explanation: 'To find $x$, square both sides. $9^2 = 81$. So $x = 81$.'
+					},
+					{
+						type: 'exercise',
+						question: 'Between which two integers does $\\sqrt{40}$ lie?',
+						options: ['6 and 7', '5 and 6', '4 and 5', '7 and 8'],
+						correct: '6 and 7',
+						explanation: '$\\sqrt{36} = 6$ and $\\sqrt{49} = 7$. Since 40 is between 36 and 49, $\\sqrt{40}$ is between 6 and 7.'
+					},
+					{
+						type: 'exercise',
+						question: 'A dataset contains 200,000 entries. How is this expressed in hundred thousands?',
+						options: ['2 hundred thousands', '20 hundred thousands', '200 hundred thousands', '0.2 hundred thousands'],
+						correct: '2 hundred thousands',
+						explanation: '1 hundred thousand = 100,000. 200,000 / 100,000 = 2. So, it is 2 hundred thousands.'
+					}
+				]
+			},
+			{
+				id: 'sec2',
+				title: 'Intro & Real-World',
+				time: '00:10 - 00:15',
+				items: [
+					// Theory 1
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-chart-line text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">The Data Analyst's Problem</h3>
+							</div>
+							<p>Imagine you are a data analyst for a global tech firm. You are calculating the 'Standard Deviation' of market volatility. The formula gives you an answer like $\\sqrt{200}$.</p>
+							<p class="idn">Bayangkan Anda adalah analis data untuk perusahaan teknologi global. Anda menghitung 'Standar Deviasi' dari volatilitas pasar. Rumusnya memberikan jawaban seperti $\\sqrt{200}$.</p>
+							<div class="mt-4 p-4 bg-red-50 rounded-lg border border-red-100">
+								<p class="font-semibold text-red-700"><i class="fas fa-times-circle mr-2"></i>Messy Form:</p>
+								<p class="idn">Bentuk Berantakan:</p>
+								<p class="mt-1 text-lg">$\\sqrt{200}$</p>
+							</div>
+							<div class="mt-4 p-4 bg-green-50 rounded-lg border border-green-100">
+								<p class="font-semibold text-green-700"><i class="fas fa-check-circle mr-2"></i>Clean, Professional Form:</p>
+								<p class="idn">Bentuk Bersih, Profesional:</p>
+								<p class="mt-1 text-lg">$10\\sqrt{2}$</p>
+							</div>
+						`
+					},
+					// Exercise 1-3
+					{
+						type: 'exercise',
+						question: 'Why is $10\\sqrt{2}$ preferred over $\\sqrt{200}$ in professional reporting?',
+						options: ['It is easier to compare with other simplified data.', 'It makes the number bigger.', '$\\sqrt{200}$ is mathematically incorrect.', 'Calculators only understand simplified forms.'],
+						correct: 'It is easier to compare with other simplified data.',
+						explanation: 'Simplified surds (mixed radicals) standardize data, making it much easier to compare magnitudes across different sets. Both are mathematically equal, but $10\\sqrt{2}$ is conventionally cleaner.'
+					},
+					{
+						type: 'exercise',
+						question: 'Which of the following is considered a "messy" surd?',
+						options: ['$\\sqrt{75}$', '$5\\sqrt{3}$', '$7\\sqrt{2}$', '$4\\sqrt{5}$'],
+						correct: '$\\sqrt{75}$',
+						explanation: 'A "messy" surd (entire radical) has a number under the square root that still contains perfect square factors. $75$ has a factor of $25$. $5\\sqrt{3}$, $7\\sqrt{2}$, and $4\\sqrt{5}$ are already simplified (mixed radicals).'
+					},
+					{
+						type: 'exercise',
+						question: 'If a variance calculation yields $\\sqrt{48}$, what should your goal be?',
+						options: ['To extract the square part to simplify it', 'To multiply 48 by 2', 'To find the decimal approximation only', 'To change the root to a cube root'],
+						correct: 'To extract the square part to simplify it',
+						explanation: 'Our goal in simplifying surds is to find the largest perfect square hidden inside the number and pull its root out, turning $\\sqrt{48}$ into $4\\sqrt{3}$.'
+					},
+					// Theory 2
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-broom text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">What is a "Mixed Surd"?</h3>
+							</div>
+							<p>A Mixed Surd (or mixed radical) is a number in the form $a\\sqrt{b}$, where $b$ has NO perfect square factors other than 1.</p>
+							<p class="idn">Surds Campuran (atau radikal campuran) adalah bilangan dalam bentuk $a\\sqrt{b}$, di mana $b$ TIDAK memiliki faktor persegi panjang (perfect square) selain 1.</p>
+							<div class="mt-4 p-4 bg-sky-50 rounded-lg border border-sky-100">
+								<p class="font-semibold">Examples:</p>
+								<p class="idn">Contoh:</p>
+								<ul class="list-disc ml-5 mt-2 space-y-1">
+									<li>$3\\sqrt{5}$ (5 has no square factors) <span class="idn">(5 tidak memiliki faktor kuadrat)</span></li>
+									<li>$10\\sqrt{2}$ (2 has no square factors) <span class="idn">(2 tidak memiliki faktor kuadrat)</span></li>
+								</ul>
+							</div>
+						`
+					},
+					// Exercise 4-6
+					{
+						type: 'exercise',
+						question: 'Which of the following is a properly simplified mixed surd?',
+						options: ['$2\\sqrt{7}$', '$\\sqrt{28}$', '$2\\sqrt{14}$', '$14\\sqrt{2}$'],
+						correct: '$2\\sqrt{7}$',
+						explanation: '$2\\sqrt{7}$ is simplified because 7 has no perfect square factors. $\\sqrt{28}$ is not simplified. $2\\sqrt{14}$ could be simplified because 14 contains a factor of 2, but actually $\\sqrt{14}$ is fully simplified. Wait, $\\sqrt{28} = \\sqrt{4 \\times 7} = 2\\sqrt{7}$. Thus $2\\sqrt{7}$ is the correct mixed surd form of $\\sqrt{28}$.'
+					},
+					{
+						type: 'exercise',
+						question: 'Is $3\\sqrt{8}$ fully simplified?',
+						options: ['No, 8 contains a perfect square factor of 4.', 'Yes, 8 is an even number.', 'No, 3 can be squared.', 'Yes, 8 has no factors.'],
+						correct: 'No, 8 contains a perfect square factor of 4.',
+						explanation: '8 can be factored into $4 \\times 2$. Since 4 is a perfect square, $3\\sqrt{8}$ can be further simplified to $3 \\times 2\\sqrt{2} = 6\\sqrt{2}$.'
+					},
+					{
+						type: 'exercise',
+						question: 'Identify the mixed surd: $5\\sqrt{11}$',
+						options: ['It is a mixed surd.', 'It is an entire surd.', 'It is a perfect square.', 'It is a rational number.'],
+						correct: 'It is a mixed surd.',
+						explanation: 'A mixed surd has a coefficient outside the radical (the 5) and a radicand with no perfect square factors (11). Therefore, $5\\sqrt{11}$ is a mixed surd.'
+					},
+					// Theory 3
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-balance-scale text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">Comparing Simplified Surds</h3>
+							</div>
+							<p>Simplifying surds makes comparison incredibly easy. Which is larger: $\\sqrt{48}$ or $\\sqrt{75}$? Hard to tell instantly.</p>
+							<p class="idn">Menyederhanakan surds membuat perbandingan sangat mudah. Mana yang lebih besar: $\\sqrt{48}$ atau $\\sqrt{75}$? Sulit diketahui secara instan.</p>
+							<p class="mt-2">But if we simplify them: $4\\sqrt{3}$ vs $5\\sqrt{3}$. Now it's obvious!</p>
+							<p class="idn">Tapi jika kita sederhanakan: $4\\sqrt{3}$ vs $5\\sqrt{3}$. Sekarang jelas!</p>
+						`
+					},
+					// Exercise 7-10
+					{
+						type: 'exercise',
+						question: 'Using simplified forms, which is larger: $\\sqrt{32}$ or $\\sqrt{50}$?',
+						options: ['$\\sqrt{50}$ is larger.', '$\\sqrt{32}$ is larger.', 'They are equal.', 'Cannot be determined.'],
+						correct: '$\\sqrt{50}$ is larger.',
+						explanation: '$\\sqrt{32} = 4\\sqrt{2}$ and $\\sqrt{50} = 5\\sqrt{2}$. Since $5\\sqrt{2}$ is larger than $4\\sqrt{2}$, $\\sqrt{50}$ is larger.'
+					},
+					{
+						type: 'exercise',
+						question: 'If $\\sqrt{75} = 5\\sqrt{3}$ and $\\sqrt{27} = 3\\sqrt{3}$, what is $\\sqrt{75} + \\sqrt{27}$?',
+						options: ['$8\\sqrt{3}$', '$15\\sqrt{3}$', '$\\sqrt{102}$', '$2\\sqrt{3}$'],
+						correct: '$8\\sqrt{3}$',
+						explanation: 'Substitute the simplified forms: $5\\sqrt{3} + 3\\sqrt{3}$. Since the radicals are the same, we add the coefficients: $(5 + 3)\\sqrt{3} = 8\\sqrt{3}$.'
+					},
+					{
+						type: 'exercise',
+						question: 'Why can we NOT add $\\sqrt{2} + \\sqrt{3}$ directly?',
+						options: ['They have different radicands (numbers inside the root).', 'Square roots cannot be added.', 'They equal $\\sqrt{5}$.', '2 and 3 are prime numbers.'],
+						correct: 'They have different radicands (numbers inside the root).',
+						explanation: 'You can only add/subtract surds if the number inside the square root (the radicand) is exactly the same. $\\sqrt{2}$ and $\\sqrt{3}$ are unlike terms, much like $x$ and $y$ in algebra.'
+					},
+					{
+						type: 'exercise',
+						question: 'A dataset yields a deviation of $\\sqrt{98}$. Simplify this to its mixed surd form to prepare for comparison.',
+						options: ['$7\\sqrt{2}$', '$2\\sqrt{7}$', '$49\\sqrt{2}$', '$14\\sqrt{7}$'],
+						correct: '$7\\sqrt{2}$',
+						explanation: '$\\sqrt{98} = \\sqrt{49 \\times 2}$. Since $\\sqrt{49} = 7$, the simplified mixed surd is $7\\sqrt{2}$.'
+					}
+				]
+			},
+			{
+				id: 'sec3',
+				title: 'Review of Prior Knowledge',
+				time: '00:15 - 00:20',
+				items: [
+					// Theory 1
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-search text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">The Factor Detectives</h3>
+							</div>
+							<p>To simplify surds, we need to be "Factor Detectives". We hunt for <strong>Perfect Squares</strong> hiding inside larger numbers.</p>
+							<p class="idn">Untuk menyederhanakan surds, kita harus menjadi "Detektif Faktor". kita berburu <strong>Kuadrat Sempurna</strong> yang bersembunyi di dalam bilangan yang lebih besar.</p>
+							<div class="mt-4 p-4 bg-sky-50 rounded-lg border border-sky-100">
+								<p class="font-semibold">The first 6 perfect squares are:</p>
+								<p class="idn">6 kuadrat sempurna pertama adalah:</p>
+								<p class="mt-2 text-lg font-mono tracking-widest text-center">1, 4, 9, 16, 25, 36</p>
+							</div>
+						`
+					},
+					// Exercise 1-3
+					{
+						type: 'exercise',
+						question: 'Which of the following numbers is a perfect square?',
+						options: ['64', '50', '20', '12'],
+						correct: '64',
+						explanation: '64 is $8 \\times 8$, making it a perfect square. The others do not result in an integer when square rooted.'
+					},
+					{
+						type: 'exercise',
+						question: 'List the next three perfect squares after 36.',
+						options: ['49, 64, 81', '48, 64, 80', '37, 38, 39', '42, 56, 72'],
+						correct: '49, 64, 81',
+						explanation: 'The squares are $7^2=49$, $8^2=64$, and $9^2=81$.'
+					},
+					{
+						type: 'exercise',
+						question: 'Is 100 a perfect square?',
+						options: ['Yes, because $10 \\times 10 = 100$', 'No, because it ends in 0', 'Yes, because $5 \\times 20 = 100$', 'No, it is a perfect cube only.'],
+						correct: 'Yes, because $10 \\times 10 = 100$',
+						explanation: 'A perfect square is the product of an integer with itself. Since $10 \\times 10 = 100$, it is a perfect square.'
+					},
+					// Theory 2
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-magic text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">The Neutralizing Power</h3>
+							</div>
+							<p>A square root "neutralizes" a square. This is the core magic of simplifying!</p>
+							<p class="idn">Akar kuadrat "menetralisasikan" kuadrat. Ini adalah sihir inti dari penyederhanaan!</p>
+							<div class="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-100 text-center">
+								<p class="text-2xl font-bold text-purple-700">$\\sqrt{x^2} = x$</p>
+								<p class="mt-2">Examples: $\\sqrt{25} = 5$, $\\sqrt{81} = 9$</p>
+								<p class="idn">Contoh: $\\sqrt{25} = 5$, $\\sqrt{81} = 9$</p>
+							</div>
+						`
+					},
+					// Exercise 4-6
+					{
+						type: 'exercise',
+						question: 'Evaluate $\\sqrt{144}$ using the neutralizing power.',
+						options: ['12', '14', '72', '12.5'],
+						correct: '12',
+						explanation: 'Since $12 \\times 12 = 144$, then $\\sqrt{144} = 12$. The square root neutralizes the square.'
+					},
+					{
+						type: 'exercise',
+						question: 'What is $\\sqrt{9 \\times 9}$?',
+						options: ['9', '81', '3', '18'],
+						correct: '9',
+						explanation: 'By definition, the square root of a number squared is the number itself. $\\sqrt{9^2} = 9$.'
+					},
+					{
+						type: 'exercise',
+						question: 'If $\\sqrt{x} = 11$, what is $x$?',
+						options: ['121', '22', '111', '11'],
+						correct: '121',
+						explanation: 'To find $x$, we square both sides. $11^2 = 121$.'
+					},
+					// Theory 3
+					{
+						type: 'theory',
+						content: `
+							<div class="flex items-center gap-4 mb-4">
+								<i class="fas fa-crown text-3xl text-sky-500"></i>
+								<h3 class="text-xl font-bold text-sky-800">The "Hidden Square"</h3>
+							</div>
+							<p>Not all numbers are perfect squares, but many contain <strong>hidden squares</strong> as factors. To simplify, we must find the largest perfect square factor.</p>
+							<p class="idn">Tidak semua bilangan adalah kuadrat sempurna, tetapi banyak yang mengandung <strong>kuadrat tersembunyi</strong> sebagai faktor. Untuk menyederhanakan, kita harus menemukan faktor kuadrat sempurna terbesar.</p>
+							<div class="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
+								<p class="font-semibold">Example: Factors of 20</p>
+								<p class="idn">Contoh: Faktor dari 20</p>
+								<p class="mt-1">Pairs: (1, 20), <strong>(4, 5)</strong>, (2, 10)</p>
+								<p>The hidden square is <strong>4</strong>.</p>
+								<p class="idn">Kuadrat tersembunyi adalah <strong>4</strong>.</p>
+							</div>
+						`
+					},
+					// Exercise 7-10
+					{
+						type: 'exercise',
+						question: 'What is the largest perfect square factor of 12?',
+						options: ['4', '9', '3', '2'],
+						correct: '4',
+						explanation: 'Factors of 12: 1, 2, 3, 4, 6, 12. Out of these, 1 and 4 are perfect squares. The largest is 4.'
+					},
+					{
+						type: 'exercise',
+						question: 'What is the largest perfect square factor of 50?',
+						options: ['25', '5', '10', '1'],
+						correct: '25',
+						explanation: 'Factors of 50: 1, 2, 5, 10, 25, 50. The perfect squares are 1 and 25. The largest is 25.'
+					},
+					{
+						type: 'exercise',
+						question: 'Find the largest perfect square factor of 72.',
+						options: ['36', '9', '4', '16'],
+						correct: '36',
+						explanation: 'Factors of 72 include 1, 2, 3, 4, 6, 8, 9, 12, 18, 24, 36, 72. The perfect squares are 1, 4, 9, 36. The largest (the "King") is 36.'
+					},
+					{
+						type: 'exercise',
+						question: 'Why do we look for the LARGEST perfect square factor instead of just any factor?',
+						options: ['It simplifies the surd in one step, saving time.', 'Smaller factors make the math wrong.', 'Only the largest factor is a real number.', 'It makes the final answer bigger.'],
+						correct: 'It simplifies the surd in one step, saving time.',
+						explanation: 'If you use a smaller square (like 4 instead of 36 for 72), you will have to simplify the result again. Finding the largest perfect square (the "King") ensures you are fully done in one step.'
+					}
+				]
+			},
+			
+            // --- DATA PART 3: SECTIONS 4, 5, and 6 (CLEANED) ---
+            {
+                id: 'sec4',
+                title: 'Problem Introduction',
+                time: '00:20 - 00:30',
+                items: [
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-cut text-3xl text-sky-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">The Breakup Rule</h3>
+                            </div>
+                            <p>Let's look at $\\sqrt{12}$. It isn't a perfect square. But, we can use the <strong>Breakup Rule</strong> (Product Property of Radicals):</p>
+                            <p class="idn">Mari kita lihat $\\sqrt{12}$. Itu bukan kuadrat sempurna. Tapi kita bisa menggunakan <strong>Aturan Pemisahan</strong> (Sifat Perkalian Radikal):</p>
+                            <div class="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-100 text-center text-xl font-mono">
+                                $\\sqrt{a \\times b} = \\sqrt{a} \\times \\sqrt{b}$ 							</div>
+                            <p class="mt-4">I can write 12 as $4 \\times 3$. So, $\\sqrt{12} = \\sqrt{4} \\times \\sqrt{3}$.</p>
+                            <p class="idn">Saya bisa menulis 12 sebagai $4 \\times 3$. Jadi, $\\sqrt{12} = \\sqrt{4} \\times \\sqrt{3}$.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Using the Breakup Rule, how can we split $\\sqrt{20}$?',
+                        options: ['$\\sqrt{4} \\times \\sqrt{5}$', '$\\sqrt{2} \\times \\sqrt{10}$', '$\\sqrt{1} \\times \\sqrt{20}$', '$\\sqrt{20} \\times \\sqrt{1}$'],
+                        correct: '$\\sqrt{4} \\times \\sqrt{5}$',
+                        explanation: 'While all options multiply to 20, we always look for a perfect square to split. 4 is a perfect square, making $\\sqrt{4} \\times \\sqrt{5}$ the most useful split.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Apply the Breakup Rule to $\\sqrt{9 \\times 2}$.',
+                        options: ['$\\sqrt{9} \\times \\sqrt{2}$', '$\\sqrt{11}$', '$9 \\times \\sqrt{2}$', '$\\sqrt{18}$'],
+                        correct: '$\\sqrt{9} \\times \\sqrt{2}$',
+                        explanation: 'The Breakup Rule $\\sqrt{a \\times b} = \\sqrt{a} \\times \\sqrt{b}$ means $\\sqrt{9 \\times 2}$ becomes $\\sqrt{9} \\times \\sqrt{2}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Which split is most helpful for simplifying $\\sqrt{45}$?',
+                        options: ['$\\sqrt{9} \\times \\sqrt{5}$', '$\\sqrt{3} \\times \\sqrt{15}$', '$\\sqrt{5} \\times \\sqrt{9}$', 'Both A and C are equally helpful'],
+                        correct: 'Both A and C are equally helpful',
+                        explanation: 'Since multiplication is commutative ($a \\times b = b \\times a$), $\\sqrt{9} \\times \\sqrt{5}$ and $\\sqrt{5} \\times \\sqrt{9}$ are the same and both contain the perfect square 9.'
+                    },
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-search text-3xl text-sky-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">Hunting the "Hidden Square"</h3>
+                            </div>
+                            <p>Why didn't I use $6 \\times 2$ for $\\sqrt{12}$? Because 6 and 2 aren't square numbers! They don't help us simplify.</p>
+                            <p class="idn">Mengapa saya tidak menggunakan $6 \\times 2$ untuk $\\sqrt{12}$? Karena 6 dan 2 bukan bilangan kuadrat! Itu tidak membantu kita menyederhanakan.</p>
+                            <div class="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
+                                <p class="font-semibold"><i class="fas fa-lightbulb text-amber-500 mr-2"></i>Rule:</p>
+                                <p class="idn">Aturan:</p>
+                                <p class="mt-1">We <strong>always</strong> hunt for the "Hidden Square" (a perfect square factor) inside the radical.</p>
+                                <p class="idn">Kita <strong>selalu</strong> berburu "Kuadrat Tersembunyi" (faktor kuadrat sempurna) di dalam radikal.</p>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'For $\\sqrt{28}$, which factor pair contains a perfect square?',
+                        options: ['4 and 7', '2 and 14', '1 and 28', '28 and 1'],
+                        correct: '4 and 7',
+                        explanation: '28 can be factored into 4 × 7. 4 is a perfect square ($2^2$), which allows us to simplify the surd.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Why is splitting $\\sqrt{50}$ into $\\sqrt{25} \\times \\sqrt{2}$ better than $\\sqrt{5} \\times \\sqrt{10}$?',
+                        options: ['25 is a perfect square, so its root is an integer.', '5 and 10 are prime.', 'It makes the number larger.', '25 is bigger than 10.'],
+                        correct: '25 is a perfect square, so its root is an integer.',
+                        explanation: 'The goal of simplifying is to remove the radical from as much of the number as possible. Since 25 is a perfect square, $\\sqrt{25} = 5$, pulling the number entirely out of the surd.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Identify the "Hidden Square" in $\\sqrt{63}$.',
+                        options: ['9', '3', '7', '21'],
+                        correct: '9',
+                        explanation: '63 can be split into 9 × 7. 9 is the hidden perfect square.'
+                    },
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-magic text-3xl text-sky-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">Neutralize and Simplify</h3>
+                            </div>
+                            <p>Let's finish $\\sqrt{12}$. We split it: $\\sqrt{4 \\times 3} = \\sqrt{4} \\times \\sqrt{3}$.</p>
+                            <p class="idn">Mari kita selesaikan $\\sqrt{12}$. Kita pisahkan: $\\sqrt{4 \\times 3} = \\sqrt{4} \\times \\sqrt{3}$.</p>
+                            <p class="mt-2">Now, use the <strong>Neutralizing Power</strong>: $\\sqrt{4} = 2$.</p>
+                            <p class="idn">Sekarang, gunakan <strong>Kekuatan Netralisasi</strong>: $\\sqrt{4} = 2$.</p>
+                            <div class="mt-4 p-4 bg-green-50 rounded-lg border border-green-100 text-center text-xl font-bold text-green-700">
+                                $\\sqrt{12} = 2\\sqrt{3}$ 							</div>
+                            <p class="mt-2 text-center">This is the simplest mixed surd form! <span class="idn">Ini adalah bentuk surds campuran paling sederhana!</span></p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{8}$.',
+                        options: ['$2\\sqrt{2}$', '$4\\sqrt{2}$', '$2\\sqrt{4}$', '$\\sqrt{4}\\sqrt{2}$'],
+                        correct: '$2\\sqrt{2}$',
+                        explanation: '$\\sqrt{8} = \\sqrt{4 \\times 2} = \\sqrt{4} \\times \\sqrt{2} = 2\\sqrt{2}$. $\\sqrt{4}\\sqrt{2}$ is not fully simplified because $\\sqrt{4}$ should be evaluated to 2.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{27}$.',
+                        options: ['$3\\sqrt{3}$', '$9\\sqrt{3}$', '$3\\sqrt{9}$', '$2\\sqrt{7}$'],
+                        correct: '$3\\sqrt{3}$',
+                        explanation: '$\\sqrt{27} = \\sqrt{9 \\times 3} = \\sqrt{9} \\times \\sqrt{3} = 3\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{45}$.',
+                        options: ['$3\\sqrt{5}$', '$5\\sqrt{9}$', '$9\\sqrt{5}$', '$4\\sqrt{5}$'],
+                        correct: '$3\\sqrt{5}$',
+                        explanation: '$\\sqrt{45} = \\sqrt{9 \\times 5} = \\sqrt{9} \\times \\sqrt{5} = 3\\sqrt{5}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{20}$.',
+                        options: ['$2\\sqrt{5}$', '$4\\sqrt{5}$', '$5\\sqrt{4}$', '$2\\sqrt{10}$'],
+                        correct: '$2\\sqrt{5}$',
+                        explanation: '$\\sqrt{20} = \\sqrt{4 \\times 5} = \\sqrt{4} \\times \\sqrt{5} = 2\\sqrt{5}$.'
+                    }
+                ]
+            },
+            {
+                id: 'sec5',
+                title: 'Guided Practice',
+                time: '00:30 - 00:45',
+                items: [
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-crown text-3xl text-amber-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">Finding the "King" Factor</h3>
+                            </div>
+                            <p>Let's try a harder one together: $\\sqrt{72}$. On the whiteboard, list all factor pairs of 72: (9×8, 36×2, 4×18).</p>
+                            <p class="idn">Mari coba yang lebih sulit bersama: $\\sqrt{72}$. Di papan tulis, daftar semua pasangan faktor dari 72: (9×8, 36×2, 4×18).</p>
+                            <div class="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
+                                <p class="font-semibold">Which is the "King" of these pairs? The one with the biggest perfect square!</p>
+                                <p class="idn">Mana "Raja" dari pasangan ini? Yang memiliki kuadrat sempurna terbesar!</p>
+                                <p class="mt-2 text-center text-xl text-amber-700 font-bold">Yes, 36.</p>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'What is the "King" (largest perfect square factor) of 48?',
+                        options: ['16', '4', '9', '36'],
+                        correct: '16',
+                        explanation: 'Factors of 48: 1, 2, 3, 4, 6, 8, 12, 16, 24, 48. The perfect squares are 1, 4, 16. The largest is 16.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'What is the "King" (largest perfect square factor) of 75?',
+                        options: ['25', '15', '9', '5'],
+                        correct: '25',
+                        explanation: 'Factors of 75: 1, 3, 5, 15, 25, 75. The perfect squares are 1, 25. The largest is 25.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'What is the "King" of 108?',
+                        options: ['36', '9', '18', '4'],
+                        correct: '36',
+                        explanation: 'Factors of 108: 1, 2, 3, 4, 6, 9, 12, 18, 27, 36, 54, 108. The perfect squares are 1, 4, 9, 36. The largest is 36.'
+                    },
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-bolt text-3xl text-sky-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">Applying the King to $\\sqrt{72}$</h3>
+                            </div>
+                            <p>Now, apply the Breakup Rule using the King factor: $\\sqrt{36 \\times 2}$.</p>
+                            <p class="idn">Sekarang, terapkan Aturan Pemisahan menggunakan faktor Raja: $\\sqrt{36 \\times 2}$.</p>
+                            <div class="mt-4 p-4 bg-sky-50 rounded-lg border border-sky-100 text-lg font-mono text-center space-y-2">
+                                <p>$\\sqrt{72} = \\sqrt{36 \\times 2}$</p>
+                                <p>$= \\sqrt{36} \\times \\sqrt{2}$</p>
+                                <p class="text-sky-700 font-bold">$= 6\\sqrt{2}$</p>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{48}$ using the King factor.',
+                        options: ['$4\\sqrt{3}$', '$3\\sqrt{4}$', '$2\\sqrt{12}$', '$16\\sqrt{3}$'],
+                        correct: '$4\\sqrt{3}$',
+                        explanation: 'Largest square of 48 is 16. $\\sqrt{48} = \\sqrt{16 \\times 3} = \\sqrt{16} \\times \\sqrt{3} = 4\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{75}$ using the King factor.',
+                        options: ['$5\\sqrt{3}$', '$3\\sqrt{25}$', '$15\\sqrt{5}$', '$25\\sqrt{3}$'],
+                        correct: '$5\\sqrt{3}$',
+                        explanation: 'Largest square of 75 is 25. $\\sqrt{75} = \\sqrt{25 \\times 3} = \\sqrt{25} \\times \\sqrt{3} = 5\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{200}$ using the King factor.',
+                        options: ['$10\\sqrt{2}$', '$2\\sqrt{50}$', '$5\\sqrt{8}$', '$20\\sqrt{10}$'],
+                        correct: '$10\\sqrt{2}$',
+                        explanation: 'Largest square of 200 is 100. $\\sqrt{200} = \\sqrt{100 \\times 2} = \\sqrt{100} \\times \\sqrt{2} = 10\\sqrt{2}$.'
+                    },
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-exclamation-triangle text-3xl text-red-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">What if we use a smaller square?</h3>
+                            </div>
+                            <p>What if we used $9 \\times 8$ for $\\sqrt{72}$? We would get $3\\sqrt{8}$. But $\\sqrt{8}$ can be simplified again to $2\\sqrt{2}$, making it $3 \\times 2\\sqrt{2} = 6\\sqrt{2}$.</p>
+                            <p class="idn">Bagaimana jika kita menggunakan $9 \\times 8$ untuk $\\sqrt{72}$? Kita akan mendapatkan $3\\sqrt{8}$. Tapi $\\sqrt{8}$ bisa disederhanakan lagi menjadi $2\\sqrt{2}$, menjadikannya $3 \\times 2\\sqrt{2} = 6\\sqrt{2}$.</p>
+                            <div class="mt-4 p-4 bg-green-50 rounded-lg border border-green-100">
+                                <p class="font-semibold text-green-700"><i class="fas fa-check-circle mr-2"></i>It's always faster to find the biggest square first.</p>
+                                <p class="idn">Selalu lebih cepat menemukan kuadrat terbesar terlebih dahulu.</p>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'If a student simplifies $\\sqrt{72}$ to $3\\sqrt{8}$, what did they do wrong?',
+                        options: ['They used a non-king perfect square (9 instead of 36).', 'They didn\'t break the root at all.', 'The math is correct and fully simplified.', 'They added instead of multiplied.'],
+                        correct: 'They used a non-king perfect square (9 instead of 36).',
+                        explanation: '9 is a perfect square, so $\\sqrt{9 \\times 8}$ is valid, but it leads to $3\\sqrt{8}$, which is not fully simplified. Using the King (36) avoids this multi-step process.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{108}$ fully in one step.',
+                        options: ['$6\\sqrt{3}$', '$3\\sqrt{12}$', '$2\\sqrt{27}$', '$9\\sqrt{12}$'],
+                        correct: '$6\\sqrt{3}$',
+                        explanation: 'Largest square of 108 is 36. $\\sqrt{108} = \\sqrt{36 \\times 3} = 6\\sqrt{3}$. Choosing 9 would give $3\\sqrt{12}$, which needs more work.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Which of these is NOT fully simplified?',
+                        options: ['$2\\sqrt{13}$', '$4\\sqrt{5}$', '$5\\sqrt{8}$', '$7\\sqrt{2}$'],
+                        correct: '$5\\sqrt{8}$',
+                        explanation: '$5\\sqrt{8}$ is not fully simplified because 8 contains a perfect square factor of 4. It should be $10\\sqrt{2}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{98}$.',
+                        options: ['$7\\sqrt{2}$', '$2\\sqrt{7}$', '$9\\sqrt{8}$', '$49\\sqrt{2}$'],
+                        correct: '$7\\sqrt{2}$',
+                        explanation: 'Largest square of 98 is 49. $\\sqrt{98} = \\sqrt{49 \\times 2} = 7\\sqrt{2}$.'
+                    }
+                ]
+            },
+            {
+                id: 'sec6',
+                title: 'Independent Practice',
+                time: '00:50 - 01:00',
+                items: [
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-user-tie text-3xl text-sky-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">You are the Lead Analyst</h3>
+                            </div>
+                            <p>Now, it's your turn to be the lead analyst. I'm putting 3 'messy' market figures on the board: $\\sqrt{20}$, $\\sqrt{45}$, and $\\sqrt{48}$.</p>
+                            <p class="idn">Sekarang, giliran Anda menjadi analis utama. Saya meletakkan 3 angka pasar yang 'berantakan' di papan: $\\sqrt{20}$, $\\sqrt{45}$, dan $\\sqrt{48}$.</p>
+                            <p class="mt-2">Simplify these as fast as you can using the King factor method.</p>
+                            <p class="idn">Sederhanakan ini secepat mungkin menggunakan metode faktor Raja.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{20}$.',
+                        options: ['$2\\sqrt{5}$', '$4\\sqrt{5}$', '$5\\sqrt{4}$', '$10\\sqrt{2}$'],
+                        correct: '$2\\sqrt{5}$',
+                        explanation: 'Largest square of 20 is 4. $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{45}$.',
+                        options: ['$3\\sqrt{5}$', '$5\\sqrt{9}$', '$9\\sqrt{5}$', '$15\\sqrt{3}$'],
+                        correct: '$3\\sqrt{5}$',
+                        explanation: 'Largest square of 45 is 25. $\\sqrt{45} = \\sqrt{9 \\times 5} = 3\\sqrt{5}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{48}$.',
+                        options: ['$4\\sqrt{3}$', '$3\\sqrt{4}$', '$6\\sqrt{8}$', '$2\\sqrt{12}$'],
+                        correct: '$4\\sqrt{3}$',
+                        explanation: 'Largest square of 48 is 16. $\\sqrt{48} = \\sqrt{16 \\times 3} = 4\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-dragon text-3xl text-red-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">Boss-Level Surds</h3>
+                            </div>
+                            <p>Ready for the boss level? Let's handle $\\sqrt{75}$ and $\\sqrt{108}$. These require finding the absolute largest square hiding inside them.</p>
+                            <p class="idn">Siap untuk level boss? Mari tangani $\\sqrt{75}$ dan $\\sqrt{108}$. Ini membutuhkan menemukan kuadrat terbesar yang mutlak bersembunyi di dalamnya.</p>
+                            <div class="mt-4 bg-gray-100 p-3 rounded-lg font-mono text-center space-y-1">
+                                <p>$75 = 25 \\times 3 \\rightarrow$ King is 25</p>
+                                <p>$108 = 36 \\times 3 \\rightarrow$ King is 36</p>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify the boss-level surd: $\\sqrt{75}$.',
+                        options: ['$5\\sqrt{3}$', '$3\\sqrt{5}$', '$25\\sqrt{3}$', '$7\\sqrt{5}$'],
+                        correct: '$5\\sqrt{3}$',
+                        explanation: '$\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify the boss-level surd: $\\sqrt{108}$.',
+                        options: ['$6\\sqrt{3}$', '$3\\sqrt{36}$', '$9\\sqrt{12}$', '$4\\sqrt{27}$'],
+                        correct: '$6\\sqrt{3}$',
+                        explanation: '$\\sqrt{108} = \\sqrt{36 \\times 3} = 6\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{50}$ (Often seen in standard deviation!).',
+                        options: ['$5\\sqrt{2}$', '$2\\sqrt{25}$', '$25\\sqrt{5}$', '$25\\sqrt{2}$'],
+                        correct: '$5\\sqrt{2}$',
+                        explanation: '$\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.'
+                    },
+                    {
+                        type: 'theory',
+                        content: `
+                            <div class="flex items-center gap-4 mb-4">
+                                <i class="fas fa-clipboard-list text-3xl text-sky-500"></i>
+                                <h3 class="text-xl font-bold text-sky-800">The 3-Step Checklist</h3>
+                            </div>
+                            <p>Before we finish, remember this 3-step checklist for any surd:</p>
+                            <p class="idn">Sebelum kita selesai, ingat daftar periksa 3 langkah ini untuk <strong>semua</strong> soal:</p>
+                            <div class="mt-4 bg-sky-50 p-4 rounded-lg border-l-4 border-sky-500 space-y-2">
+                                <p><strong>1. Factor:</strong> Find the "King" (largest perfect square). <span class="idn">Faktor: Temukan "Raja" (kuadrat sempurna terbesar).</span></p>
+                                <p><strong>2. Split:</strong> Apply $\\sqrt{a \\times b} = \\sqrt{a} \\times \\sqrt{b}$. <span class="idn">Pisahkan: Terapkan $\\sqrt{a \\times b} = \\sqrt{a} \\times \\sqrt{b}$.</span></p>
+                                <p><strong>3. Simplify:</strong> Neutralize the square root of the perfect square. <span class="idn">Sederhanakan: Netralisasi akar kuadrat dari kuadrat sempurna.</span></p>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{80}$.',
+                        options: ['$4\\sqrt{5}$', '$5\\sqrt{4}$', '$8\\sqrt{10}$', '$2\\sqrt{40}$'],
+                        correct: '$4\\sqrt{5}$',
+                        explanation: 'Largest square of 80 is 16. $\\sqrt{80} = \\sqrt{16 \\times 5} = 4\\sqrt{5}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{162}$.',
+                        options: ['$9\\sqrt{2}$', '$2\\sqrt{81}$', '$3\\sqrt{54}$', '$81\\sqrt{2}$'],
+                        correct: '$9\\sqrt{2}$',
+                        explanation: 'Largest square of 162 is 81. $\\sqrt{162} = \\sqrt{81 \\times 2} = 9\\sqrt{2}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{300}$.',
+                        options: ['$10\\sqrt{3}$', '$3\\sqrt{100}$', '30', '$100\\sqrt{3}$'],
+                        correct: '$10\\sqrt{3}$',
+                        explanation: 'Largest square of 300 is 100. $\\sqrt{300} = \\sqrt{100 \\times 3} = 10\\sqrt{3}$.'
+                    },
+                    {
+                        type: 'exercise',
+                        question: 'Simplify $\\sqrt{98} + \\sqrt{18}$, then add them together.',
+                        options: ['$10\\sqrt{2}$', '$9\\sqrt{2} + 3\\sqrt{2}$', '$16\\sqrt{20}$', '$5\\sqrt{2} + 9\\sqrt{2}$'],
+                        correct: '$10\\sqrt{2}$',
+                        explanation: 'First, simplify each root: $\\sqrt{98} = 7\\sqrt{2}$ and $\\sqrt{18} = 3\\sqrt{2}$. Then add the coefficients since the radicands are the same: $7\\sqrt{2} + 3\\sqrt{2} = 10\\sqrt{2}$.'
+                    }
+                ]
+            },
+			
+			// --- DATA PART 4: ASSIGNMENTS 1-5 and REFLECTION ---
+			{
+				id: 'assign1',
+				title: 'Assignment 1',
+				time: '10 Questions',
+				items: [
+					{ type: 'exercise', question: 'Simplify $\\sqrt{8}$.', options: ['$2\\sqrt{2}$', '$4\\sqrt{2}$', '$2\\sqrt{4}$', '$8\\sqrt{1}$'], correct: '$2\\sqrt{2}$', explanation: 'Largest perfect square factor of 8 is 4. $\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{12}$.', options: ['$2\\sqrt{3}$', '$3\\sqrt{2}$', '$4\\sqrt{3}$', '$6\\sqrt{2}$'], correct: '$2\\sqrt{3}$', explanation: 'Largest perfect square factor of 12 is 4. $\\sqrt{12} = \\sqrt{4 \\times 3} = 2\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{18}$.', options: ['$3\\sqrt{2}$', '$2\\sqrt{9}$', '$9\\sqrt{2}$', '$6\\sqrt{3}$'], correct: '$3\\sqrt{2}$', explanation: 'Largest perfect square factor of 18 is 9. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{20}$.', options: ['$2\\sqrt{5}$', '$4\\sqrt{5}$', '$5\\sqrt{4}$', '$10\\sqrt{2}$'], correct: '$2\\sqrt{5}$', explanation: 'Largest perfect square factor of 20 is 4. $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{28}$.', options: ['$2\\sqrt{7}$', '$4\\sqrt{7}$', '$7\\sqrt{4}$', '$14\\sqrt{2}$'], correct: '$2\\sqrt{7}$', explanation: 'Largest perfect square factor of 28 is 4. $\\sqrt{28} = \\sqrt{4 \\times 7} = 2\\sqrt{7}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{32}$.', options: ['$4\\sqrt{2}$', '$2\\sqrt{16}$', '$16\\sqrt{2}$', '$8\\sqrt{4}$'], correct: '$4\\sqrt{2}$', explanation: 'Largest perfect square factor of 32 is 16. $\\sqrt{32} = \\sqrt{16 \\times 2} = 4\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{45}$.', options: ['$3\\sqrt{5}$', '$5\\sqrt{9}$', '$9\\sqrt{5}$', '$15\\sqrt{3}$'], correct: '$3\\sqrt{5}$', explanation: 'Largest perfect square factor of 45 is 9. $\\sqrt{45} = \\sqrt{9 \\times 5} = 3\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{50}$.', options: ['$5\\sqrt{2}$', '$2\\sqrt{25}$', '$25\\sqrt{2}$', '$10\\sqrt{5}$'], correct: '$5\\sqrt{2}$', explanation: 'Largest perfect square factor of 50 is 25. $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{63}$.', options: ['$3\\sqrt{7}$', '$7\\sqrt{9}$', '$9\\sqrt{7}$', '$21\\sqrt{3}$'], correct: '$3\\sqrt{7}$', explanation: 'Largest perfect square factor of 63 is 9. $\\sqrt{63} = \\sqrt{9 \\times 7} = 3\\sqrt{7}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{75}$.', options: ['$5\\sqrt{3}$', '$3\\sqrt{25}$', '$25\\sqrt{3}$', '$15\\sqrt{5}$'], correct: '$5\\sqrt{3}$', explanation: 'Largest perfect square factor of 75 is 25. $\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.' }
+				]
+			},
+			{
+				id: 'assign2',
+				title: 'Assignment 2',
+				time: '10 Questions',
+				items: [
+					{ type: 'exercise', question: 'Simplify $\\sqrt{48}$.', options: ['$4\\sqrt{3}$', '$3\\sqrt{4}$', '$6\\sqrt{8}$', '$2\\sqrt{12}$'], correct: '$4\\sqrt{3}$', explanation: 'Largest perfect square factor of 48 is 16. $\\sqrt{48} = \\sqrt{16 \\times 3} = 4\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{54}$.', options: ['$3\\sqrt{6}$', '$6\\sqrt{9}$', '$9\\sqrt{6}$', '$2\\sqrt{27}$'], correct: '$3\\sqrt{6}$', explanation: 'Largest perfect square factor of 54 is 9. $\\sqrt{54} = \\sqrt{9 \\times 6} = 3\\sqrt{6}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{72}$.', options: ['$6\\sqrt{2}$', '$2\\sqrt{36}$', '$8\\sqrt{9}$', '$3\\sqrt{8}$'], correct: '$6\\sqrt{2}$', explanation: 'Largest perfect square factor of 72 is 36. $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{80}$.', options: ['$4\\sqrt{5}$', '$5\\sqrt{16}$', '$8\\sqrt{10}$', '$2\\sqrt{40}$'], correct: '$4\\sqrt{5}$', explanation: 'Largest perfect square factor of 80 is 16. $\\sqrt{80} = \\sqrt{16 \\times 5} = 4\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{98}$.', options: ['$7\\sqrt{2}$', '$2\\sqrt{49}$', '$14\\sqrt{7}$', '$9\\sqrt{8}$'], correct: '$7\\sqrt{2}$', explanation: 'Largest perfect square factor of 98 is 49. $\\sqrt{98} = \\sqrt{49 \\times 2} = 7\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{108}$.', options: ['$6\\sqrt{3}$', '$3\\sqrt{36}$', '$9\\sqrt{12}$', '$2\\sqrt{54}$'], correct: '$6\\sqrt{3}$', explanation: 'Largest perfect square factor of 108 is 36. $\\sqrt{108} = \\sqrt{36 \\times 3} = 6\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{125}$.', options: ['$5\\sqrt{5}$', '$25\\sqrt{5}$', '$5\\sqrt{25}$', '$15\\sqrt{5}$'], correct: '$5\\sqrt{5}$', explanation: 'Largest perfect square factor of 125 is 25. $\\sqrt{125} = \\sqrt{25 \\times 5} = 5\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{147}$.', options: ['$7\\sqrt{3}$', '$3\\sqrt{49}$', '$21\\sqrt{7}$', '$14\\sqrt{3}$'], correct: '$7\\sqrt{3}$', explanation: 'Largest perfect square factor of 147 is 49. $\\sqrt{147} = \\sqrt{49 \\times 3} = 7\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{162}$.', options: ['$9\\sqrt{2}$', '$2\\sqrt{81}$', '$81\\sqrt{2}$', '$3\\sqrt{54}$'], correct: '$9\\sqrt{2}$', explanation: 'Largest perfect square factor of 162 is 81. $\\sqrt{162} = \\sqrt{81 \\times 2} = 9\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{200}$.', options: ['$10\\sqrt{2}$', '$2\\sqrt{100}$', '$5\\sqrt{8}$', '$20\\sqrt{10}$'], correct: '$10\\sqrt{2}$', explanation: 'Largest perfect square factor of 200 is 100. $\\sqrt{200} = \\sqrt{100 \\times 2} = 10\\sqrt{2}$.' }
+				]
+			},
+			{
+				id: 'assign3',
+				title: 'Assignment 3',
+				time: '10 Questions',
+				items: [
+					{ type: 'exercise', question: 'Simplify $\\sqrt{8} + \\sqrt{32}$.', options: ['$6\\sqrt{2}$', '$5\\sqrt{2}$', '$8\\sqrt{2}$', '$2\\sqrt{10}$'], correct: '$6\\sqrt{2}$', explanation: '$\\sqrt{8} = 2\\sqrt{2}$ and $\\sqrt{32} = 4\\sqrt{2}$. So, $2\\sqrt{2} + 4\\sqrt{2} = 6\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{27} + \\sqrt{48}$.', options: ['$7\\sqrt{3}$', '$5\\sqrt{3}$', '$9\\sqrt{3}$', '$3\\sqrt{7}$'], correct: '$7\\sqrt{3}$', explanation: '$\\sqrt{27} = 3\\sqrt{3}$ and $\\sqrt{48} = 4\\sqrt{3}$. So, $3\\sqrt{3} + 4\\sqrt{3} = 7\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{50} + \\sqrt{98}$.', options: ['$12\\sqrt{2}$', '$10\\sqrt{2}$', '$14\\sqrt{2}$', '$7\\sqrt{2}$'], correct: '$12\\sqrt{2}$', explanation: '$\\sqrt{50} = 5\\sqrt{2}$ and $\\sqrt{98} = 7\\sqrt{2}$. So, $5\\sqrt{2} + 7\\sqrt{2} = 12\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{20} + \\sqrt{45}$.', options: ['$5\\sqrt{5}$', '$7\\sqrt{5}$', '$3\\sqrt{5}$', '$8\\sqrt{5}$'], correct: '$5\\sqrt{5}$', explanation: '$\\sqrt{20} = 2\\sqrt{5}$ and $\\sqrt{45} = 3\\sqrt{5}$. So, $2\\sqrt{5} + 3\\sqrt{5} = 5\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{75} - \\sqrt{27}$.', options: ['$2\\sqrt{3}$', '$4\\sqrt{3}$', '$8\\sqrt{3}$', '$6\\sqrt{3}$'], correct: '$2\\sqrt{3}$', explanation: '$\\sqrt{75} = 5\\sqrt{3}$ and $\\sqrt{27} = 3\\sqrt{3}$. So, $5\\sqrt{3} - 3\\sqrt{3} = 2\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $2\\sqrt{12} - \\sqrt{27}$.', options: ['$\\sqrt{3}$', '$3\\sqrt{3}$', '$5\\sqrt{3}$', '$2\\sqrt{3}$'], correct: '$\\sqrt{3}$', explanation: '$2\\sqrt{12} = 2(2\\sqrt{3}) = 4\\sqrt{3}$ and $\\sqrt{27} = 3\\sqrt{3}$. So, $4\\sqrt{3} - 3\\sqrt{3} = \\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $3\\sqrt{20} + \\sqrt{80}$.', options: ['$10\\sqrt{5}$', '$8\\sqrt{5}$', '$7\\sqrt{5}$', '$5\\sqrt{5}$'], correct: '$10\\sqrt{5}$', explanation: '$3\\sqrt{20} = 3(2\\sqrt{5}) = 6\\sqrt{5}$ and $\\sqrt{80} = 4\\sqrt{5}$. So, $6\\sqrt{5} + 4\\sqrt{5} = 10\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{72} - \\sqrt{50}$.', options: ['$\\sqrt{2}$', '$2\\sqrt{2}$', '$3\\sqrt{2}$', '$4\\sqrt{2}$'], correct: '$\\sqrt{2}$', explanation: '$\\sqrt{72} = 6\\sqrt{2}$ and $\\sqrt{50} = 5\\sqrt{2}$. So, $6\\sqrt{2} - 5\\sqrt{2} = \\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{200} - \\sqrt{98}$.', options: ['$3\\sqrt{2}$', '$2\\sqrt{2}$', '$5\\sqrt{2}$', '$8\\sqrt{2}$'], correct: '$3\\sqrt{2}$', explanation: '$\\sqrt{200} = 10\\sqrt{2}$ and $\\sqrt{98} = 7\\sqrt{2}$. So, $10\\sqrt{2} - 7\\sqrt{2} = 3\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{125} + \\sqrt{80}$.', options: ['$9\\sqrt{5}$', '$7\\sqrt{5}$', '$5\\sqrt{5}$', '$11\\sqrt{5}$'], correct: '$9\\sqrt{5}$', explanation: '$\\sqrt{125} = 5\\sqrt{5}$ and $\\sqrt{80} = 4\\sqrt{5}$. So, $5\\sqrt{5} + 4\\sqrt{5} = 9\\sqrt{5}$.' }
+				]
+			},
+			{
+				id: 'assign4',
+				title: 'Assignment 4',
+				time: '10 Questions',
+				items: [
+					{ type: 'exercise', question: 'Simplify $3 \\times \\sqrt{12}$.', options: ['$6\\sqrt{3}$', '$3\\sqrt{12}$', '$9\\sqrt{3}$', '$12\\sqrt{3}$'], correct: '$6\\sqrt{3}$', explanation: 'Simplify the root first: $\\sqrt{12} = 2\\sqrt{3}$. Then multiply by 3: $3 \\times 2\\sqrt{3} = 6\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $2 \\times \\sqrt{18}$.', options: ['$6\\sqrt{2}$', '$2\\sqrt{18}$', '$4\\sqrt{2}$', '$8\\sqrt{2}$'], correct: '$6\\sqrt{2}$', explanation: 'Simplify the root first: $\\sqrt{18} = 3\\sqrt{2}$. Then multiply by 2: $2 \\times 3\\sqrt{2} = 6\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $5 \\times \\sqrt{28}$.', options: ['$10\\sqrt{7}$', '$5\\sqrt{28}$', '$20\\sqrt{7}$', '$15\\sqrt{7}$'], correct: '$10\\sqrt{7}$', explanation: 'Simplify the root first: $\\sqrt{28} = 2\\sqrt{7}$. Then multiply by 5: $5 \\times 2\\sqrt{7} = 10\\sqrt{7}$.' },
+					{ type: 'exercise', question: 'Simplify $4 \\times \\sqrt{63}$.', options: ['$12\\sqrt{7}$', '$4\\sqrt{63}$', '$8\\sqrt{7}$', '$16\\sqrt{7}$'], correct: '$12\\sqrt{7}$', explanation: 'Simplify the root first: $\\sqrt{63} = 3\\sqrt{7}$. Then multiply by 4: $4 \\times 3\\sqrt{7} = 12\\sqrt{7}$.' },
+					{ type: 'exercise', question: 'Simplify $6 \\times \\sqrt{45}$.', options: ['$18\\sqrt{5}$', '$6\\sqrt{45}$', '$12\\sqrt{5}$', '$24\\sqrt{5}$'], correct: '$18\\sqrt{5}$', explanation: 'Simplify the root first: $\\sqrt{45} = 3\\sqrt{5}$. Then multiply by 6: $6 \\times 3\\sqrt{5} = 18\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Find the value of $x$ if $\\sqrt{x} = 5\\sqrt{2}$.', options: ['50', '25', '10', '100'], correct: '50', explanation: 'Square both sides: $(5\\sqrt{2})^2 = 5^2 \\times (\\sqrt{2})^2 = 25 \\times 2 = 50$.' },
+					{ type: 'exercise', question: 'Find the value of $x$ if $\\sqrt{x} = 3\\sqrt{7}$.', options: ['63', '21', '9', '49'], correct: '63', explanation: 'Square both sides: $(3\\sqrt{7})^2 = 3^2 \\times (\\sqrt{7})^2 = 9 \\times 7 = 63$.' },
+					{ type: 'exercise', question: 'Find the value of $x$ if $\\sqrt{x} = 6\\sqrt{3}$.', options: ['108', '36', '18', '54'], correct: '108', explanation: 'Square both sides: $(6\\sqrt{3})^2 = 6^2 \\times (\\sqrt{3})^2 = 36 \\times 3 = 108$.' },
+					{ type: 'exercise', question: 'Find the value of $x$ if $\\sqrt{x} = 4\\sqrt{5}$.', options: ['80', '20', '16', '40'], correct: '80', explanation: 'Square both sides: $(4\\sqrt{5})^2 = 4^2 \\times (\\sqrt{5})^2 = 16 \\times 5 = 80$.' },
+					{ type: 'exercise', question: 'Find the value of $x$ if $\\sqrt{x} = 10\\sqrt{2}$.', options: ['200', '20', '100', '50'], correct: '200', explanation: 'Square both sides: $(10\\sqrt{2})^2 = 10^2 \\times (\\sqrt{2})^2 = 100 \\times 2 = 200$.' }
+				]
+			},
+			{
+				id: 'assign5',
+				title: 'Assignment 5',
+				time: '10 Questions',
+				items: [
+					{ type: 'exercise', question: 'Simplify $\\sqrt{252}$ using prime factorization.', options: ['$6\\sqrt{7}$', '$7\\sqrt{6}$', '$14\\sqrt{2}$', '$3\\sqrt{28}$'], correct: '$6\\sqrt{7}$', explanation: '$252 = 36 \\times 7$. The largest perfect square is 36. $\\sqrt{252} = 6\\sqrt{7}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{300}$ using prime factorization.', options: ['$10\\sqrt{3}$', '$3\\sqrt{100}$', '$15\\sqrt{2}$', '$5\\sqrt{12}$'], correct: '$10\\sqrt{3}$', explanation: '$300 = 100 \\times 3$. The largest perfect square is 100. $\\sqrt{300} = 10\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{128}$ using prime factorization.', options: ['$8\\sqrt{2}$', '$2\\sqrt{32}$', '$4\\sqrt{8}$', '$16\\sqrt{2}$'], correct: '$8\\sqrt{2}$', explanation: '$128 = 64 \\times 2$. The largest perfect square is 64. $\\sqrt{128} = 8\\sqrt{2}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{192}$ using prime factorization.', options: ['$8\\sqrt{3}$', '$3\\sqrt{64}$', '$4\\sqrt{12}$', '$12\\sqrt{2}$'], correct: '$8\\sqrt{3}$', explanation: '$192 = 64 \\times 3$. The largest perfect square is 64. $\\sqrt{192} = 8\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{245}$ using prime factorization.', options: ['$7\\sqrt{5}$', '$5\\sqrt{49}$', '$35\\sqrt{7}$', '$14\\sqrt{5}$'], correct: '$7\\sqrt{5}$', explanation: '$245 = 49 \\times 5$. The largest perfect square is 49. $\\sqrt{245} = 7\\sqrt{5}$.' },
+					{ type: 'exercise', question: 'Simplify $2\\sqrt{48} + 3\\sqrt{27}$.', options: ['$17\\sqrt{3}$', '$5\\sqrt{75}$', '$11\\sqrt{3}$', '$15\\sqrt{3}$'], correct: '$17\\sqrt{3}$', explanation: '$2(4\\sqrt{3}) + 3(3\\sqrt{3}) = 8\\sqrt{3} + 9\\sqrt{3} = 17\\sqrt{3}$.' },
+					{ type: 'exercise', question: 'Simplify $5\\sqrt{20} - 2\\sqrt{125}$.', options: ['$0$', '$10\\sqrt{5}$', '$-5\\sqrt{5}$', '$3\\sqrt{5}$'], correct: '$0$', explanation: '$5(2\\sqrt{5}) - 2(5\\sqrt{5}) = 10\\sqrt{5} - 10\\sqrt{5} = 0$.' },
+					{ type: 'exercise', question: 'Which is larger: $3\\sqrt{6}$ or $5\\sqrt{2}$?', options: ['$3\\sqrt{6}$', '$5\\sqrt{2}$', 'They are equal', 'Cannot be determined'], correct: '$3\\sqrt{6}$', explanation: 'Convert to entire surds: $(3\\sqrt{6})^2 = 9 \\times 6 = 54$. $(5\\sqrt{2})^2 = 25 \\times 2 = 50$. Since 54 > 50, $3\\sqrt{6}$ is larger.' },
+					{ type: 'exercise', question: 'Simplify $\\sqrt{18} \\times \\sqrt{2}$.', options: ['$6$', '$6\\sqrt{2}$', '$3\\sqrt{2}$', '$\\sqrt{36}$'], correct: '$6$', explanation: 'Multiply the insides: $\\sqrt{18 \\times 2} = \\sqrt{36} = 6$. Alternatively, $3\\sqrt{2} \\times \\sqrt{2} = 3 \\times 2 = 6$.' },
+					{ type: 'exercise', question: 'Simplify $\\frac{\\sqrt{98}}{\\sqrt{2}}$.', options: ['$7$', '$7\\sqrt{2}$', '$49$', '$14$'], correct: '$7$', explanation: 'Divide the insides: $\\sqrt{\\frac{98}{2}} = \\sqrt{49} = 7$. Alternatively, $\\frac{7\\sqrt{2}}{\\sqrt{2}} = 7$.' }
+				]
+			},
+			{
+				id: 'reflect',
+				title: 'Consolidation & Reflection',
+				time: '01:00 - 01:05',
+				items: [
+					{
+						type: 'theory',
+						content: `
+							<div class="text-center mb-6">
+								<svg class="svg-icon mb-4" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+								<h3 class="text-2xl font-bold text-sky-800">Incredible Work Today!</h3>
+								<p class="idn">Kerja luar biasa hari ini!</p>
+							</div>
+							<p class="text-lg text-gray-700 text-center">You've mastered the art of extracting squares from surds.</p>
+							<p class="idn text-center">Anda telah menguasai seni mengekstrak kuadrat dari surds.</p>
+							<div class="mt-6 bg-sky-50 p-4 rounded-lg border border-sky-100">
+								<h4 class="font-bold text-sky-700 mb-2"><i class="fas fa-clipboard-list mr-2"></i>Remember the 3-Step Checklist:</h4>
+								<p class="idn">Ingat Daftar Periksa 3 Langkah:</p>
+								<ol class="list-decimal ml-5 mt-2 space-y-1 font-semibold text-sky-900">
+									<li>Factor (Find the King) <span class="idn font-normal">Faktor (Temukan Raja)</span></li>
+									<li>Split (Breakup Rule) <span class="idn font-normal">Pisahkan (Aturan Pemisahan)</span></li>
+									<li>Simplify (Neutralize) <span class="idn font-normal">Sederhanakan (Netralisasi)</span></li>
+								</ol>
+							</div>
+						`
+					},
+					{
+						type: 'theory',
+						content: `
+							<div class="mt-6 p-6 bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg border border-sky-200 text-center shadow-sm">
+								<h4 class="font-bold text-sky-800 mb-2">What was your biggest "Aha!" moment today?</h4>
+								<p class="idn">Apa momen "Aha!" terbesar Anda hari ini?</p>
+								<div class="mt-6">
+									<p class="font-semibold mb-4 text-gray-700">Access your post-session notes and homework here:</p>
+									<p class="idn">Akses catatan pasca-sesi dan pekerjaan rumah Anda di sini:</p>
+									<a href="https://learn.algonova.id/login" target="_blank" class="inline-block mt-4 bg-sky-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-sky-700 transition transform hover:scale-105 shadow-md">
+										<i class="fas fa-external-link-alt mr-2"></i> Go to learn.algonova.id
+									</a>
+								</div>
+							</div>
+						`
+					}
+				]
+			}
+            // SECTIONS 1 to 6, ASSIGNMENTS 1-5, AND REFLECTION WILL BE INJECTED HERE
+        ];
+
+        // --- RENDERING ENGINE ---
+        function renderApp() {
+            renderNavbar();
+            renderContent();
+            updateNavButtons();
+        }
+
+        function renderNavbar() {
+            const container = document.getElementById('nav-container');
+            container.innerHTML = '';
+            
+            COURSE_DATA.forEach((section, sIdx) => {
+                const isAssignment = section.id.includes('assign');
+                const isReflection = section.id.includes('reflect');
+                
+                let icon = 'fa-book-open';
+                if(isAssignment) icon = 'fa-file-alt';
+                if(isReflection) icon = 'fa-flag-checkered';
+                if(sIdx === 0) icon = 'fa-home';
+
+                const div = document.createElement('div');
+                div.className = `nav-item p-3 mb-1 rounded-r-lg cursor-pointer flex items-center gap-3 ${appState.currentSection === sIdx ? 'active' : ''}`;
+                div.onclick = () => jumpTo(sIdx, 0);
+                
+                let statusIcon = '';
+                if(sIdx > 0 && isSectionComplete(sIdx)) statusIcon = `<i class="fas fa-check-circle text-green-500 ml-auto"></i>`;
+                
+                div.innerHTML = `
+                    <i class="fas ${icon} text-gray-400"></i>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-700">${section.title}</div>
+                        ${section.time ? `<div class="text-xs text-gray-400">${section.time}</div>` : ''}
+                    </div>
+                    ${statusIcon}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderContent() {
+            const section = COURSE_DATA[appState.currentSection];
+            const item = section.items[appState.currentItem];
+            const area = document.getElementById('content-area');
+            
+            document.getElementById('section-title').innerText = section.title;
+            document.getElementById('section-subtitle').innerText = section.time ? `Time: ${section.time}` : '';
+            
+            // Progress bar
+            const isExercise = item && item.type === 'exercise';
+            document.getElementById('progress-bar-container').classList.toggle('hidden', !isExercise);
+            if(isExercise) updateProgressBar();
+
+            // Print Button Visibility (Hanya muncul di Assignment)
+            const isAssignmentSection = section.id.includes('assign');
+            document.getElementById('btn-print').classList.toggle('hidden', !isAssignmentSection);
+
+            // Check button visibility
+            const hasAnswer = appState.answers[`${appState.currentSection}-${appState.currentItem}`] !== undefined;
+            document.getElementById('btn-check').toggleAttribute('hidden', !isExercise || hasAnswer);
+            
+            area.className = 'p-6 md:p-10 max-w-3xl mx-auto content-enter'; // trigger animation
+            area.innerHTML = '';
+
+            if (item.type === 'theory') {
+                area.innerHTML = `<div class="theory-card bg-white p-6 rounded-xl shadow-sm border border-gray-100">${item.content}</div>`;
+            } else if (item.type === 'exercise') {
+                renderExercise(area, item);
+            }
+            
+            // Render KaTeX
+            renderMathInElement(area, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
+
+        function renderExercise(container, item) {
+            const key = `${appState.currentSection}-${appState.currentItem}`;
+            const userAnswer = appState.answers[key];
+            const isAnswered = userAnswer !== undefined;
+            const isCorrect = userAnswer === item.correct;
+
+            let html = `<div class="exercise-card bg-white p-6 rounded-xl shadow-sm border ${isAnswered ? (isCorrect ? 'border-green-200' : 'border-red-200') : 'border-sky-100'}">`;
+            html += `<div class="flex items-center gap-2 mb-4 text-sky-800 font-bold"><i class="fas fa-brain"></i> Exercise</div>`;
+            html += `<div class="question mb-6 text-lg text-gray-800">${item.question}</div>`;
+            
+           // Options
+            let options = item.options;
+            // We use a seeded random or pre-shuffled so it doesn't change on re-render. 
+            // For simplicity, we shuffle based on key as seed (simple array index check)
+            if(!item.shuffled) {
+                item.options = shuffleArray(item.options, key);
+                item.shuffled = true;
+            }
+            options = item.options;
+
+            html += `<div class="options-container space-y-3">`;
+            options.forEach((opt, idx) => {
+                let classes = `option-btn border-2 border-gray-200 p-3 rounded-lg flex items-center gap-3 cursor-pointer`;
+                if(isAnswered) {
+                    classes += ` disabled pointer-events-none`;
+                    if(opt === item.correct) classes += ` correct`;
+                    else if(opt === userAnswer && !isCorrect) classes += ` incorrect`;
+                } else {
+                    classes += ` hover:bg-sky-50`;
+                }
+                html += `<div class="${classes}" onclick="selectOption('${opt}', this)">
+                    <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-sm font-bold">${String.fromCharCode(65 + idx)}</div>
+                    <div class="flex-1">${opt}</div>
+                </div>`;
+            });
+            html += `</div>`;
+
+            // Explanation Collapse & Reset Button
+            if(isAnswered) {
+                html += `<div class="mt-6 border-t border-gray-100 pt-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <button onclick="toggleCollapse(this)" class="text-sm text-sky-600 hover:text-sky-800 font-semibold flex items-center gap-2 transition">
+                            <i class="fas fa-lightbulb"></i> ${isCorrect ? 'Correct! See explanation' : 'Incorrect. See explanation'} 
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <button onclick="resetCurrentExercise()" class="text-sm text-amber-600 hover:text-amber-800 font-semibold flex items-center gap-2 transition">
+                            <i class="fas fa-undo-alt"></i> Try Again
+                        </button>
+                    </div>
+                    <div class="collapse-content text-gray-600 text-sm leading-relaxed">
+                        <p class="pb-2 border-b border-gray-50">${item.explanation}</p>
+                    </div>
+                </div>`;
+            }
+            
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // --- INTERACTIONS ---
+        function selectOption(opt, element) {
+            // Visual selection (optional, since we check immediately or on button click)
+            // We will use Check Answer button!>
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('border-sky-500', 'bg-sky-50');
+                btn.querySelector('.w-8').classList.remove('bg-sky-500', 'text-white');
+                btn.querySelector('.w-8').classList.add('border-gray-300');
+            });
+            element.classList.add('border-sky-500', 'bg-sky-50');
+            element.querySelector('.w-8').classList.remove('border-gray-300');
+            element.querySelector('.w-8').classList.add('bg-sky-500', 'text-white');
+            
+            window._tempSelection = opt;
+            document.getElementById('btn-check').classList.remove('hidden');
+            document.getElementById('btn-check').disabled = false;
+        }
+
+        function checkAnswer() {
+            if(!window._tempSelection) return;
+            const key = `${appState.currentSection}-${appState.currentItem}`;
+            appState.answers[key] = window._tempSelection;
+            
+            const item = COURSE_DATA[appState.currentSection].items[appState.currentItem];
+            const isCorrect = window._tempSelection === item.correct;
+            
+            // Save score for assignments
+            if(COURSE_DATA[appState.currentSection].id.includes('assign')) {
+                if(!appState.scores[key]) appState.scores[key] = isCorrect ? 1 : 0;
+            }
+
+            window._tempSelection = null;
+            saveState();
+            renderContent();
+            updateNavButtons();
+            renderNavbar(); // update checkmarks
+        }
+
+        function resetCurrentExercise() {
+            const key = `${appState.currentSection}-${appState.currentItem}`;
+            // Hapus jawaban dan skor untuk exercise ini
+            delete appState.answers[key];
+            delete appState.scores[key];
+            
+            // Reset state sementara
+            window._tempSelection = null;
+            
+            // Simpan dan render ulang
+            saveState();
+            renderContent();
+            updateNavButtons();
+        }
+
+        function toggleCollapse(btn) {
+            // Target konten collapse berada di sebelah parent wrapper
+            const content = btn.parentElement.nextElementSibling;
+            content.classList.toggle('open');
+            const icon = btn.querySelector('.fa-chevron-down, .fa-chevron-up');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        function jumpTo(sIdx, iIdx) {
+            appState.currentSection = sIdx;
+            appState.currentItem = iIdx;
+            window._tempSelection = null;
+            saveState();
+            renderApp();
+        }
+
+        function nextItem() {
+            const section = COURSE_DATA[appState.currentSection];
+            if (appState.currentItem < section.items.length - 1) {
+                appState.currentItem++;
+            } else if (appState.currentSection < COURSE_DATA.length - 1) {
+                appState.currentSection++;
+                appState.currentItem = 0;
+            }
+            window._tempSelection = null;
+            saveState();
+            renderApp();
+        }
+
+        function prevItem() {
+            if (appState.currentItem > 0) {
+                appState.currentItem--;
+            } else if (appState.currentSection > 0) {
+                appState.currentSection--;
+                appState.currentItem = COURSE_DATA[appState.currentSection].items.length - 1;
+            }
+            window._tempSelection = null;
+            saveState();
+            renderApp();
+        }
+
+        function updateNavButtons() {
+            const section = COURSE_DATA[appState.currentSection];
+            const item = section.items[appState.currentItem];
+            const isExercise = item && item.type === 'exercise';
+            const isAnswered = appState.answers[`${appState.currentSection}-${appState.currentItem}`] !== undefined;
+
+            // Prev
+            document.getElementById('btn-prev').disabled = (appState.currentSection === 0 && appState.currentItem === 0);
+
+            // Next
+            let canNext = true;
+            // (Kunci Duolingo dihapus agar siswa bisa skip exercise)
+            if(appState.currentSection === COURSE_DATA.length - 1 && appState.currentItem === section.items.length - 1) canNext = false;
+            document.getElementById('btn-next').disabled = !canNext;
+            
+            // Check
+            document.getElementById('btn-check').hidden = !isExercise || isAnswered;
+        }
+
+        function updateProgressBar() {
+            // Overall progress logic
+            let totalEx = 0, doneEx = 0;
+            COURSE_DATA.forEach((s, sI) => {
+                s.items.forEach((it, iI) => {
+                    if(it.type === 'exercise') {
+                        totalEx++;
+                        if(appState.answers[`${sI}-${iI}`] !== undefined) doneEx++;
+                    }
+                });
+            });
+            const pct = totalEx === 0 ? 0 : (doneEx / totalEx) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        function isSectionComplete(sIdx) {
+            const section = COURSE_DATA[sIdx];
+            return section.items.every((item, iIdx) => {
+                if(item.type === 'theory') return true;
+                return appState.answers[`${sIdx}-${iIdx}`] !== undefined;
+            });
+        }
+
+        // --- UTILS ---
+        function shuffleArray(array, seed) {
+            // Simple deterministic shuffle for options so they don't jump on re-render
+            let hash = 0;
+            for (let i = 0; i < seed.length; i++) { hash = ((hash << 5) - hash) + seed.charCodeAt(i); hash |= 0; }
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                let j = Math.abs(hash + i) % (i + 1);
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function resetAllProgress() {
+            if(confirm("Are you sure? This will delete all your answers and progress.")) {
+                localStorage.removeItem('surdsAppState');
+                appState = { currentSection: 0, currentItem: 0, answers: {}, scores: {} };
+                // Reset shuffle flags
+                COURSE_DATA.forEach(s => s.items.forEach(i => i.shuffled = false));
+                renderApp();
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('surdsAppState', JSON.stringify(appState));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('surdsAppState');
+            if(saved) {
+                appState = JSON.parse(saved);
+            }
+        }
+
+        // --- HELPER: PRE-RENDER KATEX FOR PRINT ---
+        function renderKatexToString(text) {
+            if (!text || text === '-') return '-';
+            // Cari teks di antara $ ... $ dan render menggunakan KaTeX
+            return text.replace(/\$(.*?)\$/g, (match, latex) => {
+                try {
+                    return katex.renderToString(latex, { throwOnError: false });
+                } catch (e) {
+                    return match; // Jika error, kembalikan teks asli
+                }
+            });
+        }
+
+        // --- PRINT LOGIC (FINAL VERSION - PRE-RENDERED) ---
+        function printAssignment(assignIndex) {
+            const section = COURSE_DATA[assignIndex];
+            if(!section) return;
+
+            const printWindow = window.open('', '_blank');
+            let tableRows = '';
+            let score = 0;
+            const totalQ = section.items.length;
+
+            section.items.forEach((item, idx) => {
+                const key = `${assignIndex}-${idx}`;
+                const userAns = appState.answers[key] || '-';
+                const correctAns = item.correct;
+                const isCorrect = appState.scores[key] === 1;
+                if(isCorrect) score++;
+                const noteSymbol = isCorrect ? '<span style="color:green;">&#10004;</span>' : (appState.answers[key] ? '<span style="color:red;">&#10008;</span>' : '-');
+
+                // Olah teks math mentah menjadi HTML visual menggunakan helper
+                const pQuestion = renderKatexToString(item.question);
+                const pUserAns = renderKatexToString(userAns);
+                const pCorrectAns = renderKatexToString(correctAns);
+
+                tableRows += `<tr>
+                    <td style="text-align:center;">${idx + 1}</td>
+                    <td>${pQuestion}</td>
+                    <td>${pUserAns}</td>
+                    <td>${pCorrectAns}</td>
+                    <td style="text-align:center;">${noteSymbol}</td>
+                </tr>`;
+            });
+
+            const html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Print Result - ${section.title}</title>
+                <!-- Muat hanya CSS KaTeX agar tampilan math rapi, tanpa JS untuk hindari error file:// -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                <style>
+                    @page { size: A4; margin: 15mm; }
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 11pt; line-height: 1.4; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10pt; }
+                    th, td { border: 1px solid #000; padding: 6px 8px; text-align: left; }
+                    th { background-color: #f0f0f0; font-weight: bold; }
+                    h2 { margin: 0; font-size: 16pt; }
+                    .info { margin-top: 4px; font-size: 11pt; }
+                    .info strong { display: inline-block; width: 150px; }
+                </style>
+            </head>
+            <body>
+                <h2>MATH TUTORING by Deni</h2>
+                <div class="info"><strong>Name:</strong> ______________________________________</div>
+                <div class="info"><strong>Date:</strong> ______________________________________</div>
+                <div class="info"><strong>Topic:</strong> Simplifying Surds (Factors & Multiples)</div>
+                <div class="info"><strong>Assignment Group:</strong> ${section.title}</div>
+                <div class="info"><strong>Score:</strong> ${score} / ${totalQ}</div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:5%;">No.</th>
+                            <th style="width:35%;">Question</th>
+                            <th style="width:25%;">Student Answer</th>
+                            <th style="width:25%;">Correct Answer</th>
+                            <th style="width:10%;">Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 60px; text-align: right;">
+                    <p>Checked by,</p>
+                    <p><strong>Deni</strong></p>
+                </div>
+            </body>
+            </html>`;
+            
+            printWindow.document.write(html);
+            printWindow.document.close();
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            loadState();
+            renderApp();
+        };
+    </script>
+</body>
+</html>
