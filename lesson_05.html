@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Surds Operations</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <!-- KaTeX Auto-render -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #58cc02;
+            --primary-dark: #46a302;
+            --secondary: #1cb0f6;
+            --danger: #ff4b4b;
+            --warning: #ffc800;
+            --bg-color: #fff;
+            --text-main: #3c3c3c;
+            --text-muted: #777777;
+            --border: #e5e5e5;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navbar */
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            border-right: 2px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-left: 5px solid transparent;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .sidebar-item:hover {
+            background: #f0f0f0;
+            color: var(--text-main);
+        }
+
+        .sidebar-item.active {
+            background: #e8f7ff;
+            color: var(--secondary);
+            border-left-color: var(--secondary);
+        }
+
+        .sidebar-item.completed i {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-wrapper {
+            max-width: 700px;
+            width: 100%;
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Buttons */
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-primary:active { transform: translateY(2px); }
+
+        .btn-secondary { background: #e5e5e5; color: #777; }
+        .btn-secondary:hover { background: #dcdcdc; }
+
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { filter: brightness(1.1); }
+
+        .btn-outline { background: #fff; border: 2px solid var(--border); color: var(--text-muted); }
+        
+        /* Steps & Exercises */
+        .step-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            flex: 1;
+        }
+
+        .step-container.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e5e5e5;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover { border-color: var(--secondary); background: #e8f7ff; }
+        .option-btn.selected { border-color: var(--secondary); background: #e8f7ff; }
+        .option-btn.correct { border-color: var(--primary); background: #e3f8d6; }
+		.option-btn.correct { border-color: var(--primary) !important; background: #e3f8d6 !important; }
+		.option-btn.incorrect { border-color: var(--danger) !important; background: #ffe0e0 !important; }
+		.option-btn[disabled] { opacity: 1 !important; }
+
+        /* Accordion */
+        .accordion {
+            margin-top: 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        .accordion.active { display: block; animation: fadeIn 0.3s ease; }
+        
+        .accordion-header {
+            background: #f7f7f7;
+            padding: 12px 15px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-body {
+            padding: 15px;
+            background: #fff;
+        }
+
+        /* Bilingual Text */
+        .lang-en { font-size: 1.1rem; margin-bottom: 5px; color: var(--text-main); }
+        .lang-id { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px; font-style: italic; }
+
+        /* SVG/Illustration containers */
+        .illustration {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20mm; }
+            @page { size: A4; margin: 10mm; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 20px; }
+            .mobile-menu-btn { display: block !important; }
+        }
+
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; left: 20px; z-index: 200; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="text-xl font-extrabold text-[#58cc02]">MATH TUTORING</h2>
+                <p class="text-sm text-gray-500 font-bold">by Deni</p>
+                <button class="btn btn-outline mt-4 w-full text-sm py-2" onclick="resetAllProgress()">
+                    <i class="fas fa-redo-alt mr-2"></i> Reset All Progress
+                </button>
+            </div>
+            <div id="sidebar-nav">
+                <!-- Nav items will be injected here -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div id="content-display"></div>
+                <div id="action-buttons" class="flex justify-between mt-6">
+                    <button class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-chevron-left"></i> Prev</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Area -->
+    <div id="printArea" style="display: none;"></div>
+
+    <script>
+        // Lesson Data Structure
+        const lessonData = [
+            {
+                id: 'home',
+                title: 'Home',
+                type: 'static',
+                content: `
+                    <h1 class="text-2xl font-extrabold text-[#1cb0f6] mb-2">MATH TUTORING by Deni</h1>
+                    <p class="lang-en">Welcome to today's lesson! Please read the rules carefully.</p>
+                    <p class="lang-id">Selamat datang di pelajaran hari ini! Silakan baca peraturannya dengan teliti.</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4">
+                        <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-info-circle"></i> Topic / Topik</h3>
+                        <p class="lang-en">Operations with Surds (Addition & Subtraction)</p>
+                        <p class="lang-id">Operasi Surds (Penjumlahan & Pengurangan)</p>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mt-4">
+                        <h3 class="font-bold text-yellow-800 mb-2"><i class="fas fa-exclamation-triangle"></i> Class Rules / Aturan Kelas</h3>
+                        <ul class="list-disc pl-5">
+                            <li class="lang-en" style="margin-bottom: 5px; font-size: 1rem;">Take turns speaking.</li>
+                            <li class="lang-id" style="margin-bottom: 15px;">Berbicara secara bergantian.</li>
+                            <li class="lang-en" style="margin-bottom: 5px; font-size: 1rem;">Ask for permission if you need to leave the class.</li>
+                            <li class="lang-id" style="margin-bottom: 15px;">Meminta izin jika ingin meninggalkan kelas.</li>
+                            <li class="lang-en" style="margin-bottom: 5px; font-size: 1rem;">Turn on your camera and microphone when needed.</li>
+                            <li class="lang-id" style="margin-bottom: 0px;">Menyalakan kamera dan microphone jika diperlukan.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 mt-4">
+                        <h3 class="font-bold text-green-800"><i class="fas fa-seedling"></i> Your Goal / Tujuan Kamu</h3>
+                        <p class="lang-en">Improve your math skills so your school grades go up!</p>
+                        <p class="lang-id">Tingkatkan kemampuan matematikamu supaya nilai sekolahmu naik!</p>
+                        <p class="lang-en" style="margin-top:10px; font-size: 0.9rem;">Note: Don't worry if English is hard right now. We will learn step-by-step. Everything has an Indonesian translation.</p>
+                        <p class="lang-id" style="margin-bottom:0; font-size: 0.9rem;">Catatan: Jangan khawatir jika bahasa Inggrisnya sulit sekarang. Kita akan belajar tahap demi tahap. Semuanya ada terjemahan bahasa Indonesianya.</p>
+                    </div>
+                `
+            },
+            {
+                id: 'sec1',
+                title: '1. Spiral Review Warm-up',
+                time: '00:00-00:10',
+                type: 'lesson',
+                steps: [
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">What is a Surd? | Apa itu Surd?</h2><p class="lang-en">In math, a <b>surd</b> is a number left in square root form (like $\\sqrt{2}$) that cannot be simplified into a whole number or fraction.</p><p class="lang-id">Dalam matematika, <b>surds (bentuk akar)</b> adalah angka yang tetap dalam bentuk akar (seperti $\\sqrt{2}$) yang tidak bisa disederhanakan menjadi bilangan bulat atau pecahan.</p><div class="illustration"><svg width="200" height="100" viewBox="0 0 200 100"><rect x="10" y="10" width="80" height="80" fill="#ffcccc" stroke="#ff4b4b" stroke-width="2" rx="8"/><text x="50" y="60" font-size="24" font-weight="bold" fill="#ff4b4b" text-anchor="middle">&#8730;4</text><path d="M100 50 L130 50" stroke="#3c3c3c" stroke-width="3" marker-end="url(#arrow)"/><rect x="140" y="10" width="50" height="80" fill="#ccffcc" stroke="#58cc02" stroke-width="2" rx="8"/><text x="165" y="60" font-size="24" font-weight="bold" fill="#58cc02" text-anchor="middle">2</text><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3c3c3c"/></marker></defs></svg></div><p class="lang-en"><b>Rule of Thumb:</b> $\\sqrt{4}$ is NOT a surd because the answer is exactly 2. But $\\sqrt{2}$, $\\sqrt{3}$, and $\\sqrt{5}$ ARE surds because they are messy decimals.</p><p class="lang-id"><b>Aturan Dasar:</b> $\\sqrt{4}$ BUKAN surd karena hasilnya tepat 2. Tapi $\\sqrt{2}$, $\\sqrt{3}$, dan $\\sqrt{5}$ ADALAH surd karena mereka angka desimal yang panjang.</p><p class="lang-en">Think of surds like different fruits. You can't say 1 Apple + 1 Orange = 2 Apples. You can only add Apples to Apples!</p><p class="lang-id">Anggap surds seperti buah yang berbeda. Kamu tidak bisa bilang 1 Apel + 1 Jeruk = 2 Apel. Kamu hanya bisa menjumlahkan Apel dengan Apel!</p>` },
+                    { type: 'exercise', question: 'Which of the following is a Surd? | Manakah dari berikut ini yang merupakan Surd?', options: ['$\\sqrt{9}$', '$\\sqrt{16}$', '$\\sqrt{7}$', '$\\sqrt{25}$'], correct: '$\\sqrt{7}$', explanation: '<p class="lang-en"><b>Correct Answer: $\\sqrt{7}$</b>. $\\sqrt{9}=3$, $\\sqrt{16}=4$, and $\\sqrt{25}=5$ are perfect squares. $\\sqrt{7}$ is a surd!</p><p class="lang-id"><b>Jawaban Benar: $\\sqrt{7}$</b>. $\\sqrt{9}=3$, $\\sqrt{16}=4$, dan $\\sqrt{25}=5$ adalah kuadrat sempurna. $\\sqrt{7}$ adalah surd!</p>' },
+                    { type: 'exercise', question: 'If you have $\\sqrt{2}$ and $\\sqrt{3}$, can you add them to make $\\sqrt{5}$? | Jika kamu punya $\\sqrt{2}$ dan $\\sqrt{3}$, bisakah dijumlahkan menjadi $\\sqrt{5}$?', options: ['Yes, you just add the numbers inside. | Ya, cukup jumlahkan angkanya di dalam.', 'No, they are different "families". | Tidak, mereka "keluarga" yang berbeda.'], correct: 'No, they are different "families". | Tidak, mereka "keluarga" yang berbeda.', explanation: '<p class="lang-en"><b>Correct Answer: No.</b> Just like Apples and Oranges, $\\sqrt{2}$ and $\\sqrt{3}$ are unlike surds. You cannot add them!</p><p class="lang-id"><b>Jawaban Benar: Tidak.</b> Sama seperti Apel dan Jeruk, $\\sqrt{2}$ dan $\\sqrt{3}$ adalah surd berbeda jenis. Kamu tidak bisa menjumlahkannya!</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{75}$. | Sederhanakan $\\sqrt{75}$.', options: ['$3\\sqrt{5}$', '$5\\sqrt{3}$', '$25\\sqrt{3}$', '$8\\sqrt{3}$'], correct: '$5\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $5\\sqrt{3}$</b>. We look for a perfect square that multiplies to 75. That\'s $25 \\times 3$.</p><p class="lang-id"><b>Jawaban Benar: $5\\sqrt{3}$</b>. Kita mencari kuadrat sempurna yang dikali menjadi 75. Yaitu $25 \\times 3$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Breaking Down Numbers | Memecah Angka</h2><p class="lang-en">To simplify surds, we must find a <b>Perfect Square</b> inside the number. A perfect square is a number made by multiplying a number by itself (4, 9, 16, 25, 36...).</p><p class="lang-id">Untuk menyederhanakan surd, kita harus mencari <b>Kuadrat Sempurna</b> di dalam angka. Kuadrat sempurna adalah angka dari perkalian angka itu dengan dirinya sendiri (4, 9, 16, 25, 36...).</p><div class="bg-gray-100 p-4 rounded-xl mt-4 border-l-4 border-gray-400"><p class="lang-en font-bold">Example: Simplify $\\sqrt{128}$</p><p class="lang-id font-bold">Contoh: Sederhanakan $\\sqrt{128}$</p><p class="lang-en">1. What perfect square goes into 128? Let's use 64!</p><p class="lang-id">1. Kuadrat sempurna apa yang masuk ke 128? Kita gunakan 64!</p><p class="lang-en">2. $\\sqrt{128} = \\sqrt{64 \\times 2}$</p><p class="lang-id">2. $\\sqrt{128} = \\sqrt{64 \\times 2}$</p><p class="lang-en">3. $\\sqrt{64}$ is 8. So the answer is $8\\sqrt{2}$.</p><p class="lang-id">3. $\\sqrt{64}$ adalah 8. Jadi jawabannya $8\\sqrt{2}$.</p></div>` },
+                    { type: 'exercise', question: 'What perfect square should you use to simplify $\\sqrt{50}$? | Kuadrat sempurna apa yang harus kamu gunakan untuk menyederhanakan $\\sqrt{50}$?', options: ['4', '9', '25', '16'], correct: '25', explanation: '<p class="lang-en"><b>Correct Answer: 25</b>. Because $25 \\times 2 = 50$. This makes it easy: $\\sqrt{50} = 5\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: 25</b>. Karena $25 \\times 2 = 50$. Ini membuatnya mudah: $\\sqrt{50} = 5\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{32}$. | Sederhanakan $\\sqrt{32}$.', options: ['$4\\sqrt{2}$', '$2\\sqrt{8}$', '$16\\sqrt{2}$', '$8\\sqrt{4}$'], correct: '$4\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $4\\sqrt{2}$</b>. $16 \\times 2 = 32$. So $\\sqrt{32} = 4\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $4\\sqrt{2}$</b>. $16 \\times 2 = 32$. Jadi $\\sqrt{32} = 4\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{90}$. | Sederhanakan $\\sqrt{90}$.', options: ['$3\\sqrt{10}$', '$9\\sqrt{10}$', '$10\\sqrt{9}$', '$5\\sqrt{18}$'], correct: '$3\\sqrt{10}$', explanation: '<p class="lang-en"><b>Correct Answer: $3\\sqrt{10}$</b>. $9 \\times 10 = 90$. So $\\sqrt{90} = 3\\sqrt{10}$.</p><p class="lang-id"><b>Jawaban Benar: $3\\sqrt{10}$</b>. $9 \\times 10 = 90$. Jadi $\\sqrt{90} = 3\\sqrt{10}$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Business Place Value & Scientific Notation | Nilai Tempat Bisnis & Notasi Ilmiah</h2><p class="lang-en">In business, we deal with huge numbers. Instead of writing 15,000,000, we write $1.5 \\times 10^7$. This is called <b>Scientific Notation</b>.</p><p class="lang-id">Dalam bisnis, kita berurusan dengan angka besar. Daripada menulis 15.000.000, kita menulis $1.5 \\times 10^7$. Ini disebut <b>Notasi Ilmiah</b>.</p><div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4"><p class="lang-en font-bold">Rule: Move the decimal point so there is only 1 non-zero number in front of it. The number of jumps is the power of 10.</p><p class="lang-id font-bold">Aturan: Pindahkan koma sehingga hanya ada 1 angka bukan nol di depannya. Jumlah lompatan adalah pangkat dari 10.</p></div><div class="illustration mt-4"><svg width="300" height="100" viewBox="0 0 300 100"><text x="10" y="50" font-size="24" font-weight="bold" fill="#3c3c3c">1 5 0 0 0 0 0 0</text><circle cx="20" cy="40" r="12" fill="none" stroke="#58cc02" stroke-width="3"/><path d="M25 40 Q60 20, 90 40" stroke="#58cc02" stroke-width="2" fill="none" marker-end="url(#arrow2)"/><text x="50" y="20" font-size="14" fill="#58cc02" text-anchor="middle">7 jumps</text><defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#58cc02"/></marker></defs><text x="150" y="50" font-size="20" font-weight="bold" fill="#1cb0f6">$1.5 \\times 10^7$</text></svg></div><p class="lang-en">The '5' in 15,000,000 is in the million's place.</p><p class="lang-id">Angka '5' di 15.000.000 berada di tempat jutaan.</p>` },
+                    { type: 'exercise', question: 'Convert 250,000,000 to scientific notation. | Ubah 250.000.000 ke notasi ilmiah.', options: ['$2.5 \\times 10^7$', '$2.5 \\times 10^8$', '$25 \\times 10^7$', '$0.25 \\times 10^9$'], correct: '$2.5 \\times 10^8$', explanation: '<p class="lang-en"><b>Correct Answer: $2.5 \\times 10^8$</b>. Move the decimal 8 times to the left to get 2.5.</p><p class="lang-id"><b>Jawaban Benar: $2.5 \\times 10^8$</b>. Pindahkan koma 8 kali ke kiri untuk mendapatkan 2.5.</p>' },
+                    { type: 'exercise', question: 'In the number 4,580,000, what is the value of the digit 5? | Pada angka 4.580.000, berapakah nilai dari angka 5?', options: ['Five thousand | Lima ribu', 'Fifty thousand | Lima puluh ribu', 'Five hundred thousand | Lima ratus ribu', 'Five million | Lima juta'], correct: 'Five hundred thousand | Lima ratus ribu', explanation: '<p class="lang-en"><b>Correct Answer: Five hundred thousand (500,000)</b>. The 5 is in the hundred-thousands place.</p><p class="lang-id"><b>Jawaban Benar: Lima ratus ribu (500.000)</b>. Angka 5 berada di tempat ratusan ribu.</p>' },
+                    { type: 'exercise', question: 'A company has a profit of $10^6$. If the profit is tripled, what is the new value? | Sebuah perusahaan memiliki keuntungan $10^6$. Jika keuntungan dilipatgandakan tiga kali, berapakah nilai barunya?', options: ['$3 \\times 10^6$', '$10^{18}$', '$10^3$', '$30^6$'], correct: '$3 \\times 10^6$', explanation: '<p class="lang-en"><b>Correct Answer: $3 \\times 10^6$</b>. Tripling means multiplying by 3.</p><p class="lang-id"><b>Jawaban Benar: $3 \\times 10^6$</b>. Melipatgandakan tiga kali berarti dikali 3.</p>' },
+                    { type: 'exercise', question: 'Convert 0.00045 to scientific notation. | Ubah 0.00045 ke notasi ilmiah.', options: ['$4.5 \\times 10^3$', '$4.5 \\times 10^{-4}$', '$45 \\times 10^{-5}$', '$0.45 \\times 10^{-3}$'], correct: '$4.5 \\times 10^{-4}$', explanation: '<p class="lang-en"><b>Correct Answer: $4.5 \\times 10^{-4}$</b>. For small numbers, move the decimal to the RIGHT 4 times. The power is negative.</p><p class="lang-id"><b>Jawaban Benar: $4.5 \\times 10^{-4}$</b>. Untuk angka kecil, pindahkan koma ke KANAN 4 kali. Pangkatnya negatif.</p>' }
+                ]
+            },
+            {
+                id: 'sec2',
+                title: '2. Intro & Real World',
+                time: '00:10-00:15',
+                type: 'lesson',
+                steps: [
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Real-World Surds | Surds di Dunia Nyata</h2><p class="lang-en">Imagine you are an architect designing a modern skyscraper. The lengths of the glass panels are not nice whole numbers; they are surds like $\\sqrt{8}$ and $\\sqrt{18}$ meters.</p><p class="lang-id">Bayangkan kamu seorang arsitek yang merancang gedung pencakar langit. Panjang panel kaca bukan angka bulat yang bagus; melainkan surds seperti $\\sqrt{8}$ dan $\\sqrt{18}$ meter.</p><div class="illustration"><svg width="300" height="150" viewBox="0 0 300 150"><rect x="20" y="20" width="260" height="110" fill="#e8f7ff" stroke="#1cb0f6" stroke-width="2" rx="4"/><rect x="40" y="40" width="80" height="90" fill="#b3e5fc" stroke="#1cb0f6" stroke-width="1"/><text x="80" y="90" font-size="14" font-weight="bold" fill="#1cb0f6" text-anchor="middle">&#8730;8 m</text><rect x="180" y="40" width="80" height="90" fill="#b3e5fc" stroke="#1cb0f6" stroke-width="1"/><text x="220" y="90" font-size="14" font-weight="bold" fill="#1cb0f6" text-anchor="middle">&#8730;18 m</text></svg></div><p class="lang-en"><b>Why not use decimals?</b> In high-precision engineering and finance, using decimals like $2.828...$ causes rounding errors. A building might collapse if you round numbers incorrectly! We must use exact surds.</p><p class="lang-id"><b>Kenapa tidak pakai desimal?</b> Di teknik dan keuangan tingkat tinggi, pakai desimal seperti $2.828...$ menyebabkan kesalahan pembulatan. Gedung bisa runtuh kalau salah bulat! Kita harus pakai surds yang tepat.</p>` },
+                    { type: 'exercise', question: 'Why do engineers and architects prefer exact surds over decimals? | Kenapa insinyur dan arsitek lebih suka surds yang tepat daripada desimal?', options: ['Decimals are too hard to read. | Desimal terlalu sulit dibaca.', 'Decimals cause rounding errors in high-precision work. | Desimal menyebabkan kesalahan pembulatan di kerja presisi tinggi.', 'Surds look cooler on paper. | Surds kelihatan lebih keren di kertas.'], correct: 'Decimals cause rounding errors in high-precision work. | Desimal menyebabkan kesalatan pembulatan di kerja presisi tinggi.', explanation: '<p class="lang-en"><b>Correct!</b> Decimals can go on forever. If you cut them short, you lose precision. Surds keep the exact value.</p><p class="lang-id"><b>Benar!</b> Desimal bisa berjalan selamanya. Kalau dipotong, presisinya hilang. Surds menyimpan nilai yang tepat.</p>' },
+                    { type: 'exercise', question: 'If you have a panel of length $\\sqrt{8}$ m and another of $\\sqrt{18}$ m, is the total length $\\sqrt{26}$ m? | Jika kamu punya panel sepanjang $\\sqrt{8}$ m dan $\\sqrt{18}$ m, apakah total panjangnya $\\sqrt{26}$ m?', options: ['Yes, just add the numbers inside the square root. | Ya, tinggal jumlahkan angkanya di dalam akar.', 'No, you cannot add square roots like that directly. | Tidak, kamu tidak bisa menjumlahkan akar seperti itu secara langsung.'], correct: 'No, you cannot add square roots like that directly. | Tidak, kamu tidak bisa menjumlahkan akar seperti itu secara langsung.', explanation: '<p class="lang-en"><b>Correct Answer: No.</b> $\\sqrt{8} + \\sqrt{18}$ does NOT equal $\\sqrt{26}$. You must simplify them first to see their true "family".</p><p class="lang-id"><b>Jawaban Benar: Tidak.</b> $\\sqrt{8} + \\sqrt{18}$ TIDAK sama dengan $\\sqrt{26}$. Kamu harus menyederhanakannya dulu.</p>' },
+                    { type: 'exercise', question: 'Which of these is a valid mathematical statement? | Manakah dari ini yang merupakan pernyataan matematika yang valid?', options: ['$\\sqrt{4} + \\sqrt{9} = \\sqrt{13}$', '$\\sqrt{4} + \\sqrt{9} = 2 + 3 = 5$', '$\\sqrt{4} + \\sqrt{9} = \\sqrt{4+9}$'], correct: '$\\sqrt{4} + \\sqrt{9} = 2 + 3 = 5$', explanation: '<p class="lang-en"><b>Correct Answer:</b> $\\sqrt{4} + \\sqrt{9} = 2 + 3 = 5$. You can only add them if you simplify them first, OR if they have the exact same root.</p><p class="lang-id"><b>Jawaban Benar:</b> $\\sqrt{4} + \\sqrt{9} = 2 + 3 = 5$. Kamu hanya bisa menjumlahkan jika disederhanakan dulu.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">"Like" vs "Unlike" Surds | Surd "Sejenis" vs "Tidak Sejenis"</h2><p class="lang-en">Just like in algebra where you can add $2x + 3x = 5x$, but you CANNOT add $2x + 3y$... Surds work the exact same way!</p><p class="lang-id">Sama seperti di aljabar di mana kamu bisa menjumlahkan $2x + 3x = 5x$, tapi TIDAK BISA menjumlahkan $2x + 3y$... Surds cara kerjanya persis sama!</p><div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 mt-4"><p class="lang-en font-bold">Like Surds (Same root): $3\\sqrt{2}$ and $5\\sqrt{2}$</p><p class="lang-id font-bold">Surd Sejenis (Akar sama): $3\\sqrt{2}$ dan $5\\sqrt{2}$</p><p class="lang-en">These can be added: $3\\sqrt{2} + 5\\sqrt{2} = (3+5)\\sqrt{2} = 8\\sqrt{2}$.</p><p class="lang-id">Ini bisa dijumlahkan: $3\\sqrt{2} + 5\\sqrt{2} = (3+5)\\sqrt{2} = 8\\sqrt{2}$.</p></div><div class="bg-red-50 p-4 rounded-xl border-2 border-red-200 mt-4"><p class="lang-en font-bold">Unlike Surds (Different root): $3\\sqrt{2}$ and $5\\sqrt{3}$</p><p class="lang-id font-bold">Surd Tak Sejenis (Akar beda): $3\\sqrt{2}$ dan $5\\sqrt{3}$</p><p class="lang-en">These CANNOT be added. $3\\sqrt{2} + 5\\sqrt{3}$ stays exactly as it is.</p><p class="lang-id">Ini TIDAK BISA dijumlahkan. $3\\sqrt{2} + 5\\sqrt{3}$ tetap seperti adanya.</p></div>` },
+                    { type: 'exercise', question: 'Which of the following pairs are "Like Surds"? | Pasangan manakah yang merupakan "Surd Sejenis"?', options: ['$2\\sqrt{5}$ and $3\\sqrt{7}$', '$4\\sqrt{3}$ and $4\\sqrt{2}$', '$6\\sqrt{2}$ and $9\\sqrt{2}$', '$\\sqrt{2}$ and $\\sqrt{3}$'], correct: '$6\\sqrt{2}$ and $9\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{2}$ and $9\\sqrt{2}$.</b> They both have $\\sqrt{2}$ inside. The number outside does not matter for matching families!</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{2}$ and $9\\sqrt{2}$.</b> Keduanya memiliki $\\sqrt{2}$. Angka di luar tidak masalah!</p>' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{5} + 3\\sqrt{5}$ | Sederhanakan: $4\\sqrt{5} + 3\\sqrt{5}$', options: ['$7\\sqrt{10}$', '$7\\sqrt{5}$', '$12\\sqrt{5}$', '$7\\sqrt{25}$'], correct: '$7\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $7\\sqrt{5}$</b>. Add the numbers outside (4 + 3 = 7). The $\\sqrt{5}$ stays untouched!</p><p class="lang-id"><b>Jawaban Benar: $7\\sqrt{5}$</b>. Jumlahkan angka di luar (4 + 3 = 7). $\\sqrt{5}$-nya tetap!</p>' },
+                    { type: 'exercise', question: 'Simplify: $8\\sqrt{3} - 2\\sqrt{3}$ | Sederhanakan: $8\\sqrt{3} - 2\\sqrt{3}$', options: ['$6\\sqrt{0}$', '$6\\sqrt{3}$', '$10\\sqrt{3}$', '$6\\sqrt{9}$'], correct: '$6\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{3}$</b>. Subtract the outside numbers (8 - 2 = 6). Leave the root alone.</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{3}$</b>. Kurangi angka di luarnya (8 - 2 = 6). Akarnya biarkan saja.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">The Trap: Hidden Like Surds | Jebakan: Surd Sejenis Tersembunyi</h2><p class="lang-en">Sometimes, surds look different but are actually the same! Look at $\\sqrt{8}$ and $\\sqrt{18}$. They look "Unlike". But watch what happens if we simplify them:</p><p class="lang-id">Terkadang, surd terlihat berbeda tapi sebenarnya sama! Lihat $\\sqrt{8}$ dan $\\sqrt{18}$. Mereka terlihat "Tidak Sejenis". Tapi perhatikan apa yang terjadi kalau disederhanakan:</p><div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4"><p class="lang-en">1. $\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$</p><p class="lang-id">1. $\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$</p><p class="lang-en">2. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$</p><p class="lang-id">2. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$</p><p class="lang-en mt-3 font-bold">Surprise! Both are actually $\\sqrt{2}$ families! Now we can add them: $2\\sqrt{2} + 3\\sqrt{2} = 5\\sqrt{2}$.</p><p class="lang-id mt-3 font-bold">Kejutan! Keduanya sebenarnya keluarga $\\sqrt{2}$! Sekarang kita bisa menjumlahkannya: $2\\sqrt{2} + 3\\sqrt{2} = 5\\sqrt{2}$.</p></div>` },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{8}$ completely. | Sederhanakan $\\sqrt{8}$ sepenuhnya.', options: ['$4\\sqrt{2}$', '$2\\sqrt{4}$', '$2\\sqrt{2}$', '$8\\sqrt{2}$'], correct: '$2\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $2\\sqrt{2}$</b>. $\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $2\\sqrt{2}$</b>. $\\sqrt{8} = \\sqrt{4 \\times 2} = 2\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{18}$ completely. | Sederhanakan $\\sqrt{18}$ sepenuhnya.', options: ['$9\\sqrt{2}$', '$2\\sqrt{3}$', '$3\\sqrt{6}$', '$3\\sqrt{2}$'], correct: '$3\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $3\\sqrt{2}$</b>. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $3\\sqrt{2}$</b>. $\\sqrt{18} = \\sqrt{9 \\times 2} = 3\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Using your previous answers, what is $\\sqrt{8} + \\sqrt{18}$? | Menggunakan jawabanmu sebelumnya, berapakah $\\sqrt{8} + \\sqrt{18}$?', options: ['$\\sqrt{26}$', '$5\\sqrt{2}$', '$6\\sqrt{2}$', '$5\\sqrt{4}$'], correct: '$5\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $5\\sqrt{2}$</b>. $\\sqrt{8}$ is $2\\sqrt{2}$. $\\sqrt{18}$ is $3\\sqrt{2}$. Add them: $2\\sqrt{2} + 3\\sqrt{2} = 5\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $5\\sqrt{2}$</b>. $\\sqrt{8}$ adalah $2\\sqrt{2}$. $\\sqrt{18}$ adalah $3\\sqrt{2}$. Jumlahkan: $2\\sqrt{2} + 3\\sqrt{2} = 5\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'What is $3\\sqrt{2} + 5\\sqrt{2}$? | Berapakah $3\\sqrt{2} + 5\\sqrt{2}$?', options: ['$8\\sqrt{4}$', '$15\\sqrt{2}$', '$8\\sqrt{2}$', '$8$'], correct: '$8\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $8\\sqrt{2}$</b>. Just add the outside numbers!</p><p class="lang-id"><b>Jawaban Benar: $8\\sqrt{2}$</b>. Cukup jumlahkan angka di luarnya!</p>' }
+                ]
+            },
+            {
+                id: 'sec3',
+                title: '3. Review of Prior Knowledge',
+                time: '00:15-00:20',
+                type: 'lesson',
+                steps: [
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Algebra Review: Don't Mix Families! | Review Aljabar: Jangan Campur Keluarga!</h2><p class="lang-en">In algebra, $2x$ and $3y$ are from different families. You cannot say $2x + 3y = 5xy$. That is a math crime! The same rule applies to surds.</p><p class="lang-id">Di aljabar, $2x$ dan $3y$ dari keluarga berbeda. Kamu tidak bisa bilang $2x + 3y = 5xy$. Itu kejahatan matematika! Aturan yang sama berlaku untuk surds.</p><div class="illustration"><svg width="250" height="100" viewBox="0 0 250 100"><rect x="10" y="20" width="60" height="60" fill="#ffcccc" rx="8"/><text x="40" y="55" font-size="20" font-weight="bold" fill="#ff4b4b" text-anchor="middle">2x</text><text x="80" y="55" font-size="20" font-weight="bold" fill="#3c3c3c" text-anchor="middle">+</text><rect x="90" y="20" width="60" height="60" fill="#ccffcc" rx="8"/><text x="120" y="55" font-size="20" font-weight="bold" fill="#58cc02" text-anchor="middle">3y</text><text x="160" y="55" font-size="14" font-weight="bold" fill="#3c3c3c" text-anchor="middle">= ?</text><text x="210" y="55" font-size="20" font-weight="bold" fill="#ffc800" text-anchor="middle">NO!</text></svg></div><p class="lang-en"><b>Rule:</b> You can ONLY add or subtract terms if the "variable" (the surd part) is EXACTLY the same.</p><p class="lang-id"><b>Aturan:</b> Kamu HANYA bisa menjumlahkan atau mengurangkan suku jika "variabel"-nya (bagian surdnya) PERSIS sama.</p>` },
+                    { type: 'exercise', question: 'Simplify $2x + 5x$. | Sederhanakan $2x + 5x$.', options: ['$7x$', '$10x$', '$7x^2$', '$7$'], correct: '$7x$', explanation: '<p class="lang-en"><b>Correct Answer: $7x$</b>. $2 + 5 = 7$. Keep the $x$.</p><p class="lang-id"><b>Jawaban Benar: $7x$</b>. $2 + 5 = 7$. Tetap pakai $x$.</p>' },
+                    { type: 'exercise', question: 'What is the "variable" in the expression $4\\sqrt{5} + 3\\sqrt{5}$? | Apa "variabel" pada ekspresi $4\\sqrt{5} + 3\\sqrt{5}$?', options: ['$4$ and $3$', '$\\sqrt{5}$', '$\\sqrt{10}$', '$7$'], correct: '$\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $\\sqrt{5}$</b>. The numbers outside (4 and 3) are just coefficients. The $\\sqrt{5}$ is the family name.</p><p class="lang-id"><b>Jawaban Benar: $\\sqrt{5}$</b>. Angka di luar (4 dan 3) hanya koefisien. $\\sqrt{5}$ itu nama keluarganya.</p>' },
+                    { type: 'exercise', question: 'Simplify $4\\sqrt{5} + 3\\sqrt{5}$. | Sederhanakan $4\\sqrt{5} + 3\\sqrt{5}$.', options: ['$7\\sqrt{10}$', '$12\\sqrt{5}$', '$7\\sqrt{5}$', '$7\\sqrt{25}$'], correct: '$7\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $7\\sqrt{5}$</b>. $4 + 3 = 7$. Keep the family name $\\sqrt{5}$.</p><p class="lang-id"><b>Jawaban Benar: $7\\sqrt{5}$</b>. $4 + 3 = 7$. Tetap pakai nama keluarga $\\sqrt{5}$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Factorization Strategy | Strategi Faktorisasi</h2><p class="lang-en">To simplify a surd, you must find the LARGEST perfect square hiding inside it. Don't pick small ones, or you'll do double the work!</p><p class="lang-id">Untuk menyederhanakan surd, kamu harus mencari kuadrat sempurna TERBESAR yang bersembunyi di dalamnya. Jangan pilih yang kecil, atau kamu akan melakukan pekerjaan dua kali lipat!</p><div class="bg-gray-100 p-4 rounded-xl mt-4 border-l-4 border-gray-400"><p class="lang-en font-bold">Example: Simplify $\\sqrt{72}$</p><p class="lang-id font-bold">Contoh: Sederhanakan $\\sqrt{72}$</p><p class="lang-en"><b>Bad way:</b> Use 4. $\\sqrt{72} = \\sqrt{4 \\times 18} = 2\\sqrt{18}$. But wait, 18 still has a 9 in it! Now you have to simplify again: $2\\sqrt{18} = 2\\sqrt{9 \\times 2} = 2(3\\sqrt{2}) = 6\\sqrt{2}$.</p><p class="lang-id"><b>Cara buruk:</b> Pakai 4. $\\sqrt{72} = \\sqrt{4 \\times 18} = 2\\sqrt{18}$. Tapi tunggu, 18 masih ada angka 9 di dalamnya! Sekarang harus disederhanakan lagi.</p><p class="lang-en"><b>Good way:</b> Find the LARGEST perfect square (36). $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$. Fast and clean!</p><p class="lang-id"><b>Cara bagus:</b> Cari kuadrat sempurna TERBESAR (36). $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$. Cepat dan bersih!</p></div>` },
+                    { type: 'exercise', question: 'What is the LARGEST perfect square factor of 72? | Apa faktor kuadrat sempurna TERBESAR dari 72?', options: ['4', '8', '9', '36'], correct: '36', explanation: '<p class="lang-en"><b>Correct Answer: 36</b>. $36 \\times 2 = 72$. 36 is a perfect square ($6 \\times 6$).</p><p class="lang-id"><b>Jawaban Benar: 36</b>. $36 \\times 2 = 72$. 36 adalah kuadrat sempurna ($6 \\times 6$).</p>' },
+                    { type: 'exercise', question: 'What is the LARGEST perfect square factor of 45? | Apa faktor kuadrat sempurna TERBESAR dari 45?', options: ['5', '9', '15', '25'], correct: '9', explanation: '<p class="lang-en"><b>Correct Answer: 9</b>. $9 \\times 5 = 45$. 9 is a perfect square ($3 \\times 3$).</p><p class="lang-id"><b>Jawaban Benar: 9</b>. $9 \\times 5 = 45$. 9 adalah kuadrat sempurna ($3 \\times 3$).</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{72}$. | Sederhanakan $\\sqrt{72}$.', options: ['$2\\sqrt{18}$', '$6\\sqrt{2}$', '$8\\sqrt{8}$', '$9\\sqrt{8}$'], correct: '$6\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{2}$</b>. $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{2}$</b>. $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">The 3-Step Rule | Aturan 3 Langkah</h2><p class="lang-en">Whenever you face a messy surd problem, follow this exact order:</p><p class="lang-id">Kapanpun kamu menghadapi masalah surd yang berantakan, ikuti urutan ini persis:</p><div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4"><p class="lang-en"><b>Step 1: Simplify.</b> Break down every single term to its prime surd form.</p><p class="lang-id"><b>Langkah 1: Sederhanakan.</b> Pecahkan setiap suku ke bentuk surd primanya.</p><p class="lang-en"><b>Step 2: Match.</b> Group the "like" surds together.</p><p class="lang-id"><b>Langkah 2: Cocokkan.</b> Kelompokkan surd yang "sejenis" bersama-sama.</p><p class="lang-en"><b>Step 3: Combine.</b> Add or subtract the outside numbers. Leave the root alone!</p><p class="lang-id"><b>Langkah 3: Gabungkan.</b> Jumlahkan atau kurangkan angka di luarnya. Biarkan akarnya tetap utuh!</p></div><p class="lang-en mt-3"><b>Crucial Warning:</b> Never touch the root when adding! $3\\sqrt{5} + 2\\sqrt{5}$ is $5\\sqrt{5}$, NOT $5\\sqrt{10}$.</p><p class="lang-id mt-3"><b>Peringatan Penting:</b> Jangan pernah utak-atik akarnya saat menjumlahkan! $3\\sqrt{5} + 2\\sqrt{5}$ adalah $5\\sqrt{5}$, BUKAN $5\\sqrt{10}$.</p>` },
+                    { type: 'exercise', question: 'What is the FIRST step to solve $\\sqrt{50} + \\sqrt{2}$? | Apa LANGKAH PERTAMA untuk menyelesaikan $\\sqrt{50} + \\sqrt{2}$?', options: ['Add them to get $\\sqrt{52}$. | Jumlahkan jadi $\\sqrt{52}$.', 'Simplify $\\sqrt{50}$ into $5\\sqrt{2}$. | Sederhanakan $\\sqrt{50}$ jadi $5\\sqrt{2}$.', 'Multiply them. | Kalikan keduanya.'], correct: 'Simplify $\\sqrt{50}$ into $5\\sqrt{2}$. | Sederhanakan $\\sqrt{50}$ jadi $5\\sqrt{2}$.', explanation: '<p class="lang-en"><b>Correct Answer: Simplify first.</b> Always simplify before adding! $\\sqrt{50} = 5\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: Sederhanakan dulu.</b> Selalu sederhanakan sebelum menjumlahkan! $\\sqrt{50} = 5\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{50} + \\sqrt{2}$. | Sederhanakan $\\sqrt{50} + \\sqrt{2}$.', options: ['$\\sqrt{52}$', '$6\\sqrt{2}$', '$5\\sqrt{4}$', '$10\\sqrt{2}$'], correct: '$6\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{2}$</b>. $\\sqrt{50}$ is $5\\sqrt{2}$. Add it to the $1\\sqrt{2}$. Result is $6\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{2}$</b>. $\\sqrt{50}$ adalah $5\\sqrt{2}$. Jumlahkan dengan $1\\sqrt{2}$. Hasilnya $6\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{12} - \\sqrt{3}$. | Sederhanakan $\\sqrt{12} - \\sqrt{3}$.', options: ['$\\sqrt{9} = 3$', '$\\sqrt{3}$', '$\\sqrt{15}$', '$4\\sqrt{3}$'], correct: '$\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $\\sqrt{3}$</b>. $\\sqrt{12} = 2\\sqrt{3}$. Subtract $\\sqrt{3}$ (which is $1\\sqrt{3}$). Result is $1\\sqrt{3}$, or just $\\sqrt{3}$.</p><p class="lang-id"><b>Jawaban Benar: $\\sqrt{3}$</b>. $\\sqrt{12} = 2\\sqrt{3}$. Kurangi $\\sqrt{3}$ (yang mana $1\\sqrt{3}$). Hasilnya $1\\sqrt{3}$, atau cukup $\\sqrt{3}$.</p>' },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{27} + \\sqrt{48}$. | Sederhanakan $\\sqrt{27} + \\sqrt{48}$.', options: ['$\\sqrt{75}$', '$7\\sqrt{3}$', '$12\\sqrt{3}$', '$4\\sqrt{3}$'], correct: '$7\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $7\\sqrt{3}$</b>. $\\sqrt{27} = 3\\sqrt{3}$ (since 9x3=27). $\\sqrt{48} = 4\\sqrt{3}$ (since 16x3=48). Add them!</p><p class="lang-id"><b>Jawaban Benar: $7\\sqrt{3}$</b>. $\\sqrt{27} = 3\\sqrt{3}$. $\\sqrt{48} = 4\\sqrt{3}$. Jumlahkan!</p>' }
+                ]
+            },
+            {
+                id: 'sec4',
+                title: '4. Problem Introduction',
+                time: '00:20-00:30',
+                type: 'lesson',
+                steps: [
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Tackling Hard Problems | Menyelesaikan Masalah Sulit</h2><p class="lang-en">Let's look at a hard problem from the lesson plan: $3\\sqrt{20} - \\sqrt{45} + 2\\sqrt{5}$.</p><p class="lang-id">Mari kita lihat masalah sulit dari pelajaran: $3\\sqrt{20} - \\sqrt{45} + 2\\sqrt{5}$.</p><p class="lang-en">This looks messy. But don't panic. Just follow the 3-Step Rule: Simplify, Match, Combine.</p><p class="lang-id">Ini terlihat berantakan. Tapi jangan panik. Ikuti saja Aturan 3 Langkah: Sederhanakan, Cocokkan, Gabungkan.</p><div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 mt-4"><p class="lang-en font-bold">Step 1: Simplify everything.</p><p class="lang-id font-bold">Langkah 1: Sederhanakan semuanya.</p><p class="lang-en">$3\\sqrt{20}$: The perfect square in 20 is 4. So, $3\\sqrt{4 \\times 5} = 3 \\times 2\\sqrt{5} = 6\\sqrt{5}$.</p><p class="lang-id">$3\\sqrt{20}$: Kuadrat sempurna di 20 adalah 4. Jadi, $3\\sqrt{4 \\times 5} = 3 \\times 2\\sqrt{5} = 6\\sqrt{5}$.</p></div>` },
+                    { type: 'exercise', question: 'Simplify the first term: $3\\sqrt{20}$. | Sederhanakan suku pertama: $3\\sqrt{20}$.', options: ['$6\\sqrt{5}$', '$3\\sqrt{5}$', '$5\\sqrt{3}$', '$12\\sqrt{5}$'], correct: '$6\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{5}$</b>. $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$. Multiply by the 3 outside: $3 \\times 2\\sqrt{5} = 6\\sqrt{5}$.</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{5}$</b>. $\\sqrt{20} = \\sqrt{4 \\times 5} = 2\\sqrt{5}$. Kalikan dengan 3 di luar: $3 \\times 2\\sqrt{5} = 6\\sqrt{5}$.</p>' },
+                    { type: 'exercise', question: 'Simplify the second term: $-\\sqrt{45}$. | Sederhanakan suku kedua: $-\\sqrt{45}$.', options: ['$-3\\sqrt{5}$', '$-5\\sqrt{3}$', '$-9\\sqrt{5}$', '$-15\\sqrt{3}$'], correct: '$-3\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $-3\\sqrt{5}$</b>. $\\sqrt{45} = \\sqrt{9 \\times 5} = 3\\sqrt{5}$. Keep the negative sign!</p><p class="lang-id"><b>Jawaban Benar: $-3\\sqrt{5}$</b>. $\\sqrt{45} = \\sqrt{9 \\times 5} = 3\\sqrt{5}$. Tetap pertahankan tanda minusnya!</p>' },
+                    { type: 'exercise', question: 'Look at the third term: $2\\sqrt{5}$. Is it already simplified? | Lihat suku ketiga: $2\\sqrt{5}$. Apakah sudah disederhanakan?', options: ['No, it needs to be simplified further. | Tidak, perlu disederhanakan lagi.', 'Yes, 5 has no perfect square factors (other than 1). | Ya, 5 tidak punya faktor kuadrat sempurna (kecuali 1).'], correct: 'Yes, 5 has no perfect square factors (other than 1). | Ya, 5 tidak punya faktor kuadrat sempurna (kecuali 1).', explanation: '<p class="lang-en"><b>Correct Answer: Yes.</b> 5 is a prime number, so it cannot be broken down further.</p><p class="lang-id"><b>Jawaban Benar: Ya.</b> 5 adalah bilangan prima, jadi tidak bisa dipecah lagi.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Step 2 & 3: Match and Combine | Langkah 2 & 3: Cocokkan dan Gabungkan</h2><p class="lang-en">Now our messy problem $3\\sqrt{20} - \\sqrt{45} + 2\\sqrt{5}$ has become: $6\\sqrt{5} - 3\\sqrt{5} + 2\\sqrt{5}$.</p><p class="lang-id">Sekarang masalah berantakan kita $3\\sqrt{20} - \\sqrt{45} + 2\\sqrt{5}$ telah menjadi: $6\\sqrt{5} - 3\\sqrt{5} + 2\\sqrt{5}$.</p><div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 mt-4"><p class="lang-en font-bold">Step 2: Match.</p><p class="lang-id font-bold">Langkah 2: Cocokkan.</p><p class="lang-en">Look at the roots. They are ALL $\\sqrt{5}$! They are all from the same family.</p><p class="lang-id">Lihat akarnya. Semuanya $\\sqrt{5}$! Mereka semua dari keluarga yang sama.</p><p class="lang-en font-bold mt-3">Step 3: Combine.</p><p class="lang-id font-bold mt-3">Langkah 3: Gabungkan.</p><p class="lang-en">Just add and subtract the outside numbers: $6 - 3 + 2 = 5$.</p><p class="lang-id">Cukup jumlah dan kurangi angka di luarnya: $6 - 3 + 2 = 5$.</p><p class="lang-en">So the final answer is $5\\sqrt{5}$!</p><p class="lang-id">Jadi jawaban akhirnya adalah $5\\sqrt{5}$!</p></div>` },
+                    { type: 'exercise', question: 'Combine the matched terms: $6\\sqrt{5} - 3\\sqrt{5} + 2\\sqrt{5}$. | Gabungkan suku yang cocok: $6\\sqrt{5} - 3\\sqrt{5} + 2\\sqrt{5}$.', options: ['$5\\sqrt{5}$', '$7\\sqrt{5}$', '$5\\sqrt{15}$', '$11\\sqrt{5}$'], correct: '$5\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $5\\sqrt{5}$</b>. $6 - 3 = 3$. Then $3 + 2 = 5$. The root stays $\\sqrt{5}$.</p><p class="lang-id"><b>Jawaban Benar: $5\\sqrt{5}$</b>. $6 - 3 = 3$. Lalu $3 + 2 = 5$. Akarnya tetap $\\sqrt{5}$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{8} + \\sqrt{32}$. | Sederhanakan: $\\sqrt{8} + \\sqrt{32}$.', options: ['$6\\sqrt{2}$', '$\\sqrt{40}$', '$8\\sqrt{2}$', '$12\\sqrt{2}$'], correct: '$6\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{2}$</b>. $\\sqrt{8} = 2\\sqrt{2}$. $\\sqrt{32} = 4\\sqrt{2}$. Add them: $2 + 4 = 6$.</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{2}$</b>. $\\sqrt{8} = 2\\sqrt{2}$. $\\sqrt{32} = 4\\sqrt{2}$. Jumlahkan: $2 + 4 = 6$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{18} - \\sqrt{8}$. | Sederhanakan: $4\\sqrt{18} - \\sqrt{8}$.', options: ['$10\\sqrt{2}$', '$\\sqrt{2}$', '$4\\sqrt{10}$', '$14\\sqrt{2}$'], correct: '$10\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $10\\sqrt{2}$</b>. $\\sqrt{18} = 3\\sqrt{2}$, so $4\\sqrt{18} = 12\\sqrt{2}$. $\\sqrt{8} = 2\\sqrt{2}$. Subtract: $12 - 2 = 10$.</p><p class="lang-id"><b>Jawaban Benar: $10\\sqrt{2}$</b>. $\\sqrt{18} = 3\\sqrt{2}$, jadi $4\\sqrt{18} = 12\\sqrt{2}$. $\\sqrt{8} = 2\\sqrt{2}$. Kurangi: $12 - 2 = 10$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">The "Distractor" & BODMAS | "Penyusun" & BODMAS</h2><p class="lang-en">Sometimes, problems mix surds that CANNOT be combined. Look at: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$.</p><p class="lang-id">Terkadang, soal mencampur surd yang TIDAK BISA digabungkan. Lihat: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$.</p><div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mt-4"><p class="lang-en font-bold">Warning: BODMAS/PEMDAS</p><p class="lang-id font-bold">Peringatan: BODMAS/PEMDAS</p><p class="lang-en">If you see $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$, you MUST multiply first! $\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$. Then simplify $\\sqrt{54} = 3\\sqrt{6}$. Add them: $\\sqrt{6} + 3\\sqrt{6} = 4\\sqrt{6}$.</p><p class="lang-id">Kalau kamu lihat $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$, kamu WAJIB kali dulu! $\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$. Lalu sederhanakan $\\sqrt{54} = 3\\sqrt{6}$. Jumlahkan: $\\sqrt{6} + 3\\sqrt{6} = 4\\sqrt{6}$.</p></div><p class="lang-en mt-3">For $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$, after simplifying you get $8\\sqrt{2} + \\sqrt{5}$. You CANNOT add these. That is the final answer!</p><p class="lang-id mt-3">Untuk $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$, setelah disederhanakan kamu dapat $8\\sqrt{2} + \\sqrt{5}$. Ini TIDAK BISA dijumlahkan. Itu sudah jawaban finalnya!</p>` },
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{48} - 3\\sqrt{12} + \\sqrt{75}$. | Sederhanakan: $2\\sqrt{48} - 3\\sqrt{12} + \\sqrt{75}$.', options: ['$7\\sqrt{3}$', '$6\\sqrt{3}$', '$3\\sqrt{3}$', '$5\\sqrt{3}$'], correct: '$7\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $7\\sqrt{3}$</b>. $2\\sqrt{48} = 2(4\\sqrt{3}) = 8\\sqrt{3}$. $3\\sqrt{12} = 3(2\\sqrt{3}) = 6\\sqrt{3}$. $\\sqrt{75} = 5\\sqrt{3}$. Final: $8 - 6 + 5 = 7$.</p><p class="lang-id"><b>Jawaban Benar: $7\\sqrt{3}$</b>. $2\\sqrt{48} = 8\\sqrt{3}$. $3\\sqrt{12} = 6\\sqrt{3}$. $\\sqrt{75} = 5\\sqrt{3}$. Akhir: $8 - 6 + 5 = 7$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{108} + \\sqrt{48} - \\sqrt{147}$. | Sederhanakan: $\\sqrt{108} + \\sqrt{48} - \\sqrt{147}$.', options: ['$3\\sqrt{3}$', '$4\\sqrt{3}$', '$12\\sqrt{3}$', '$5\\sqrt{3}$'], correct: '$3\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $3\\sqrt{3}$</b>. $\\sqrt{108} = 6\\sqrt{3}$. $\\sqrt{48} = 4\\sqrt{3}$. $\\sqrt{147} = 7\\sqrt{3}$. Add and subtract: $6 + 4 - 7 = 3$.</p><p class="lang-id"><b>Jawaban Benar: $3\\sqrt{3}$</b>. $\\sqrt{108} = 6\\sqrt{3}$. $\\sqrt{48} = 4\\sqrt{3}$. $\\sqrt{147} = 7\\sqrt{3}$. Jumlah dan kurangi: $6 + 4 - 7 = 3$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$. (Multiply first!) | Sederhanakan: $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$. (Kali dulu!)', options: ['$4\\sqrt{6}$', '$5\\sqrt{6}$', '$3\\sqrt{6}$', '$\\sqrt{60}$'], correct: '$4\\sqrt{6}$', explanation: '<p class="lang-en"><b>Correct Answer: $4\\sqrt{6}$</b>. $\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$. $\\sqrt{54} = 3\\sqrt{6}$. Add them: $1 + 3 = 4$.</p><p class="lang-id"><b>Jawaban Benar: $4\\sqrt{6}$</b>. $\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$. $\\sqrt{54} = 3\\sqrt{6}$. Jumlahkan: $1 + 3 = 4$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$. | Sederhanakan: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$.', options: ['$8\\sqrt{2} + \\sqrt{5}$', '$10\\sqrt{2} + \\sqrt{5}$', '$11\\sqrt{7}$', '$10\\sqrt{7} + \\sqrt{5}$'], correct: '$8\\sqrt{2} + \\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $8\\sqrt{2} + \\sqrt{5}$</b>. $4\\sqrt{18} = 4(3\\sqrt{2}) = 12\\sqrt{2}$. $2\\sqrt{8} = 2(2\\sqrt{2}) = 4\\sqrt{2}$. Subtract: $12 - 4 = 8$. The $\\sqrt{5}$ cannot be added.</p><p class="lang-id"><b>Jawaban Benar: $8\\sqrt{2} + \\sqrt{5}$</b>. $4\\sqrt{18} = 12\\sqrt{2}$. $2\\sqrt{8} = 4\\sqrt{2}$. Kurangi: $12 - 4 = 8$. $\\sqrt{5}$ tidak bisa dijumlahkan.</p>' }
+                ]
+            },
+            {
+                id: 'sec5',
+                title: '5. Guided Practice',
+                time: '00:30-00:45',
+                type: 'lesson',
+                steps: [
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Rally Style: Step-by-Step | Rally: Langkah demi Langkah</h2><p class="lang-en">In this section, we do "Rally Coaching". We will break down a problem together. I do step 1, you do step 2. Let's look at: $5\\sqrt{12} + 2\\sqrt{3}$.</p><p class="lang-id">Di bagian ini, kita melakukan "Rally Coaching". Kita akan memecah masalah bersama-sama. Saya kerjakan langkah 1, kamu kerjakan langkah 2. Mari kita lihat: $5\\sqrt{12} + 2\\sqrt{3}$.</p><div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 mt-4"><p class="lang-en font-bold">My Turn (Step 1): Simplify the messy term.</p><p class="lang-id font-bold">Giliranku (Langkah 1): Sederhanakan suku yang berantakan.</p><p class="lang-en">$5\\sqrt{12}$. The largest perfect square inside 12 is 4. So, $\\sqrt{12} = \\sqrt{4 \\times 3} = 2\\sqrt{3}$. Multiply by the 5 outside: $5 \\times 2\\sqrt{3} = 10\\sqrt{3}$.</p><p class="lang-id">$5\\sqrt{12}$. Kuadrat sempurna terbesar di dalam 12 adalah 4. Jadi, $\\sqrt{12} = \\sqrt{4 \\times 3} = 2\\sqrt{3}$. Kalikan dengan 5 di luar: $5 \\times 2\\sqrt{3} = 10\\sqrt{3}$.</p><p class="lang-en mt-3 font-bold">Your Turn (Step 2): Now the problem is $10\\sqrt{3} + 2\\sqrt{3}$. Combine them!</p><p class="lang-id mt-3 font-bold">Giliranmu (Langkah 2): Sekarang soalnya $10\\sqrt{3} + 2\\sqrt{3}$. Gabungkan!</p></div>` },
+                    { type: 'exercise', question: 'Combine the matched terms: $10\\sqrt{3} + 2\\sqrt{3}$. | Gabungkan suku yang cocok: $10\\sqrt{3} + 2\\sqrt{3}$.', options: ['$12\\sqrt{3}$', '$12\\sqrt{6}$', '$8\\sqrt{3}$', '$12$'], correct: '$12\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $12\\sqrt{3}$</b>. Add the outside numbers (10 + 2 = 12). Leave the root alone!</p><p class="lang-id"><b>Jawaban Benar: $12\\sqrt{3}$</b>. Jumlahkan angka di luar (10 + 2 = 12). Biarkan akarnya tetap utuh!</p>' },
+                    { type: 'exercise', question: 'Timed Challenge Prep: What is the largest perfect square factor of 72? | Persiapan Tantangan Waktu: Apa faktor kuadrat sempurna terbesar dari 72?', options: ['8', '9', '12', '36'], correct: '36', explanation: '<p class="lang-en"><b>Correct Answer: 36</b>. $36 \\times 2 = 72$. 36 is a perfect square ($6 \\times 6$).</p><p class="lang-id"><b>Jawaban Benar: 36</b>. $36 \\times 2 = 72$. 36 adalah kuadrat sempurna ($6 \\times 6$).</p>' },
+                    { type: 'exercise', question: 'Timed Challenge Prep: Simplify $\\sqrt{72}$. | Persiapan Tantangan Waktu: Sederhanakan $\\sqrt{72}$.', options: ['$6\\sqrt{2}$', '$8\\sqrt{8}$', '$9\\sqrt{8}$', '$2\\sqrt{18}$'], correct: '$6\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $6\\sqrt{2}$</b>. $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $6\\sqrt{2}$</b>. $\\sqrt{72} = \\sqrt{36 \\times 2} = 6\\sqrt{2}$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Timed Challenge: $\\sqrt{72} + \\sqrt{50}$ | Tantangan Berwaktu: $\\sqrt{72} + \\sqrt{50}$</h2><p class="lang-en">In 60 seconds, an analyst must simplify $\\sqrt{72} + \\sqrt{50}$. Let's break it down quickly.</p><p class="lang-id">Dalam 60 detik, seorang analis harus menyederhanakan $\\sqrt{72} + \\sqrt{50}$. Mari kita pecah dengan cepat.</p><div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4"><p class="lang-en font-bold">Step 1: Simplify $\\sqrt{72}$ to get $6\\sqrt{2}$.</p><p class="lang-id font-bold">Langkah 1: Sederhanakan $\\sqrt{72}$ dapat $6\\sqrt{2}$.</p><p class="lang-en">Step 2: Simplify $\\sqrt{50}$. The largest perfect square in 50 is 25. So, $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.</p><p class="lang-id">Langkah 2: Sederhanakan $\\sqrt{50}$. Kuadrat sempurna terbesar di 50 adalah 25. Jadi, $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.</p><p class="lang-en mt-3 font-bold">Step 3: Add them together. $6\\sqrt{2} + 5\\sqrt{2}$.</p><p class="lang-id mt-3 font-bold">Langkah 3: Jumlahkan. $6\\sqrt{2} + 5\\sqrt{2}$.</p></div>` },
+                    { type: 'exercise', question: 'Simplify $\\sqrt{50}$ completely. | Sederhanakan $\\sqrt{50}$ sepenuhnya.', options: ['$25\\sqrt{2}$', '$5\\sqrt{2}$', '$2\\sqrt{25}$', '$5\\sqrt{10}$'], correct: '$5\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $5\\sqrt{2}$</b>. $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $5\\sqrt{2}$</b>. $\\sqrt{50} = \\sqrt{25 \\times 2} = 5\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Solve the timed challenge: $\\sqrt{72} + \\sqrt{50}$. | Selesaikan tantangan berwaktu: $\\sqrt{72} + \\sqrt{50}$.', options: ['$11\\sqrt{2}$', '$\\sqrt{122}$', '$6\\sqrt{2} + 5\\sqrt{2}$', '$11\\sqrt{4}$'], correct: '$11\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $11\\sqrt{2}$</b>. $\\sqrt{72}$ is $6\\sqrt{2}$. $\\sqrt{50}$ is $5\\sqrt{2}$. Add them: $6 + 5 = 11$.</p><p class="lang-id"><b>Jawaban Benar: $11\\sqrt{2}$</b>. $\\sqrt{72}$ adalah $6\\sqrt{2}$. $\\sqrt{50}$ adalah $5\\sqrt{2}$. Jumlahkan: $6 + 5 = 11$.</p>' },
+                    { type: 'exercise', question: 'Timed Challenge 2: Simplify $\\sqrt{98} + \\sqrt{8}$. | Tantangan Berwaktu 2: Sederhanakan $\\sqrt{98} + \\sqrt{8}$.', options: ['$9\\sqrt{2}$', '$11\\sqrt{2}$', '$5\\sqrt{2} + 4\\sqrt{2}$', '$\\sqrt{106}$'], correct: '$9\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $9\\sqrt{2}$</b>. $\\sqrt{98} = 7\\sqrt{2}$ (since 49x2=98). $\\sqrt{8} = 2\\sqrt{2}$ (since 4x2=8). Add: $7 + 2 = 9$.</p><p class="lang-id"><b>Jawaban Benar: $9\\sqrt{2}$</b>. $\\sqrt{98} = 7\\sqrt{2}$. $\\sqrt{8} = 2\\sqrt{2}$. Jumlah: $7 + 2 = 9$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Distractors & Traps | Penyusun & Jebakan</h2><p class="lang-en">A "distractor" is a term that looks like it belongs, but it doesn't. Look at: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$.</p><p class="lang-id">"Penyusun" (distractor) adalah suku yang terlihat seperti milik kelompok, tapi sebenarnya tidak. Lihat: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$.</p><div class="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 mt-4"><p class="lang-en">Step 1: Simplify $4\\sqrt{18}$ to $4(3\\sqrt{2}) = 12\\sqrt{2}$.</p><p class="lang-id">Langkah 1: Sederhanakan $4\\sqrt{18}$ jadi $4(3\\sqrt{2}) = 12\\sqrt{2}$.</p><p class="lang-en">Step 2: Simplify $-2\\sqrt{8}$ to $-2(2\\sqrt{2}) = -4\\sqrt{2}$.</p><p class="lang-id">Langkah 2: Sederhanakan $-2\\sqrt{8}$ jadi $-2(2\\sqrt{2}) = -4\\sqrt{2}$.</p><p class="lang-en">Step 3: Look at $\\sqrt{5}$. Can we simplify it? No. Can we add it to $\\sqrt{2}$? NO! Different families.</p><p class="lang-id">Langkah 3: Lihat $\\sqrt{5}$. Bisakah disederhanakan? Tidak. Bisakah ditambahkan ke $\\sqrt{2}$? TIDAK! Keluarga berbeda.</p><p class="lang-en mt-3 font-bold">Final Answer: Combine the $\\sqrt{2}$s and leave $\\sqrt{5}$ alone: $12\\sqrt{2} - 4\\sqrt{2} + \\sqrt{5} = 8\\sqrt{2} + \\sqrt{5}$.</p><p class="lang-id mt-3 font-bold">Jawaban Akhir: Gabungkan $\\sqrt{2}$-nya dan biarkan $\\sqrt{5}$: $12\\sqrt{2} - 4\\sqrt{2} + \\sqrt{5} = 8\\sqrt{2} + \\sqrt{5}$.</p></div>` },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{18} - 2\\sqrt{8}$. | Sederhanakan: $4\\sqrt{18} - 2\\sqrt{8}$.', options: ['$8\\sqrt{2}$', '$2\\sqrt{10}$', '$12\\sqrt{2}$', '$20\\sqrt{2}$'], correct: '$8\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $8\\sqrt{2}$</b>. $4\\sqrt{18} = 12\\sqrt{2}$. $2\\sqrt{8} = 4\\sqrt{2}$. Subtract: $12 - 4 = 8$.</p><p class="lang-id"><b>Jawaban Benar: $8\\sqrt{2}$</b>. $4\\sqrt{18} = 12\\sqrt{2}$. $2\\sqrt{8} = 4\\sqrt{2}$. Kurangi: $12 - 4 = 8$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$. | Sederhanakan: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$.', options: ['$8\\sqrt{2} + \\sqrt{5}$', '$8\\sqrt{7}$', '$10\\sqrt{7}$', '$12\\sqrt{2} + \\sqrt{5}$'], correct: '$8\\sqrt{2} + \\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $8\\sqrt{2} + \\sqrt{5}$</b>. The $\\sqrt{5}$ is a distractor. It cannot mix with $\\sqrt{2}$.</p><p class="lang-id"><b>Jawaban Benar: $8\\sqrt{2} + \\sqrt{5}$</b>. $\\sqrt{5}$ adalah penyusun. Tidak bisa dicampur dengan $\\sqrt{2}$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{2}(\\sqrt{8} + \\sqrt{18})$. (Simplify inside bracket first!) | Sederhanakan: $3\\sqrt{2}(\\sqrt{8} + \\sqrt{18})$. (Sederhanakan di dalam kurung dulu!) ', options: ['$30$', '$15\\sqrt{2}$', '$3\\sqrt{2}(\\sqrt{26})$', '$12\\sqrt{2}$'], correct: '$30$', explanation: '<p class="lang-en"><b>Correct Answer: 30</b>. Inside bracket: $\\sqrt{8} = 2\\sqrt{2}$, $\\sqrt{18} = 3\\sqrt{2}$. Sum is $5\\sqrt{2}$. Now multiply: $3\\sqrt{2} \\times 5\\sqrt{2} = 15 \\times 2 = 30$.</p><p class="lang-id"><b>Jawaban Benar: 30</b>. Di dalam kurung: $\\sqrt{8} = 2\\sqrt{2}$, $\\sqrt{18} = 3\\sqrt{2}$. Jumlahnya $5\\sqrt{2}$. Sekarang kali: $3\\sqrt{2} \\times 5\\sqrt{2} = 15 \\times 2 = 30$.</p>' },
+                    { type: 'exercise', question: 'Simplify: $\\frac{\\sqrt{50} - \\sqrt{8}}{\\sqrt{2}}$. (Simplify top first!) | Sederhanakan: $\\frac{\\sqrt{50} - \\sqrt{8}}{\\sqrt{2}}$. (Sederhanakan atas dulu!)', options: ['$3$', '$3\\sqrt{2}$', '$2$', '$21$'], correct: '$3$', explanation: '<p class="lang-en"><b>Correct Answer: 3</b>. Top: $\\sqrt{50} = 5\\sqrt{2}$, $\\sqrt{8} = 2\\sqrt{2}$. Subtract: $3\\sqrt{2}$. Now divide by $\\sqrt{2}$: $\\frac{3\\sqrt{2}}{\\sqrt{2}} = 3$.</p><p class="lang-id"><b>Jawaban Benar: 3</b>. Atas: $\\sqrt{50} = 5\\sqrt{2}$, $\\sqrt{8} = 2\\sqrt{2}$. Kurangi: $3\\sqrt{2}$. Sekarang bagi dengan $\\sqrt{2}$: $\\frac{3\\sqrt{2}}{\\sqrt{2}} = 3$.</p>' }
+                ]
+            },
+            {
+                id: 'sec6',
+                title: '6. Independent Practice',
+                time: '00:50-01:00',
+                type: 'lesson',
+                steps: [
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">You are the Lead Consultant! | Kamu Konsultan Utama!</h2><p class="lang-en">It's your turn to shine. Here are problems with "traps" where surds look different but are the same. Focus on speed and precision. Remember the 3 rules: Simplify, Match, Combine!</p><p class="lang-id">Sekarang giliranmu bersinar. Ini soal-soal dengan "jebakan" di mana surd terlihat berbeda tapi sebenarnya sama. Fokus pada kecepatan dan ketepatan. Ingat 3 aturan: Sederhanakan, Cocokkan, Gabungkan!</p>` },
+                    { type: 'exercise', question: 'Solve: $7\\sqrt{3} - 2\\sqrt{27} + \\sqrt{12}$. | Selesaikan: $7\\sqrt{3} - 2\\sqrt{27} + \\sqrt{12}$.', options: ['$4\\sqrt{3}$', '$6\\sqrt{3}$', '$3\\sqrt{3}$', '$5\\sqrt{3}$'], correct: '$3\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $3\\sqrt{3}$</b>. $2\\sqrt{27} = 2(3\\sqrt{3}) = 6\\sqrt{3}$. $\\sqrt{12} = 2\\sqrt{3}$. Final: $7 - 6 + 2 = 3$.</p><p class="lang-id"><b>Jawaban Benar: $3\\sqrt{3}$</b>. $2\\sqrt{27} = 6\\sqrt{3}$. $\\sqrt{12} = 2\\sqrt{3}$. Akhir: $7 - 6 + 2 = 3$.</p>' },
+                    { type: 'exercise', question: 'Solve: $2\\sqrt{50} + 3\\sqrt{32}$. | Selesaikan: $2\\sqrt{50} + 3\\sqrt{32}$.', options: ['$22\\sqrt{2}$', '$5\\sqrt{2}$', '$12\\sqrt{2}$', '$20\\sqrt{2}$'], correct: '$22\\sqrt{2}$', explanation: '<p class="lang-en"><b>Correct Answer: $22\\sqrt{2}$</b>. $2\\sqrt{50} = 2(5\\sqrt{2}) = 10\\sqrt{2}$. $3\\sqrt{32} = 3(4\\sqrt{2}) = 12\\sqrt{2}$. Add: $10 + 12 = 22$.</p><p class="lang-id"><b>Jawaban Benar: $22\\sqrt{2}$</b>. $2\\sqrt{50} = 10\\sqrt{2}$. $3\\sqrt{32} = 12\\sqrt{2}$. Jumlah: $10 + 12 = 22$.</p>' },
+                    { type: 'exercise', question: 'Solve: $3\\sqrt{7} + 2\\sqrt{28}$. | Selesaikan: $3\\sqrt{7} + 2\\sqrt{28}$.', options: ['$8\\sqrt{7}$', '$5\\sqrt{7}$', '$7\\sqrt{14}$', '$10\\sqrt{7}$'], correct: '$7\\sqrt{7}$', explanation: '<p class="lang-en"><b>Correct Answer: $7\\sqrt{7}$</b>. $2\\sqrt{28} = 2(2\\sqrt{7}) = 4\\sqrt{7}$. Add: $3 + 4 = 7$.</p><p class="lang-id"><b>Jawaban Benar: $7\\sqrt{7}$</b>. $2\\sqrt{28} = 4\\sqrt{7}$. Jumlah: $3 + 4 = 7$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Subtraction Traps | Jebakan Pengurangan</h2><p class="lang-en">Be very careful with minus signs! When you have $\\sqrt{20} + \\sqrt{45} - \\sqrt{5}$, the $\\sqrt{5}$ is subtracted from the total of the other two.</p><p class="lang-id">Berhati-hatilah dengan tanda minus! Saat kamu punya $\\sqrt{20} + \\sqrt{45} - \\sqrt{5}$, $\\sqrt{5}$ dikurangkan dari jumlah dua angka lainnya.</p><div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 mt-4"><p class="lang-en">1. $\\sqrt{20} = 2\\sqrt{5}$</p><p class="lang-id">1. $\\sqrt{20} = 2\\sqrt{5}$</p><p class="lang-en">2. $\\sqrt{45} = 3\\sqrt{5}$</p><p class="lang-id">2. $\\sqrt{45} = 3\\sqrt{5}$</p><p class="lang-en">3. Total: $2\\sqrt{5} + 3\\sqrt{5} - \\sqrt{5} = (2 + 3 - 1)\\sqrt{5} = 4\\sqrt{5}$.</p><p class="lang-id">3. Total: $2\\sqrt{5} + 3\\sqrt{5} - \\sqrt{5} = (2 + 3 - 1)\\sqrt{5} = 4\\sqrt{5}$.</p></div>` },
+                    { type: 'exercise', question: 'Solve: $\\sqrt{20} + \\sqrt{45} - \\sqrt{5}$. | Selesaikan: $\\sqrt{20} + \\sqrt{45} - \\sqrt{5}$.', options: ['$4\\sqrt{5}$', '$6\\sqrt{5}$', '$5\\sqrt{5}$', '$3\\sqrt{5}$'], correct: '$4\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $4\\sqrt{5}$</b>. $2 + 3 - 1 = 4$.</p><p class="lang-id"><b>Jawaban Benar: $4\\sqrt{5}$</b>. $2 + 3 - 1 = 4$.</p>' },
+                    { type: 'exercise', question: 'Solve: $4\\sqrt{20} + 2\\sqrt{45} - 3\\sqrt{80}$. | Selesaikan: $4\\sqrt{20} + 2\\sqrt{45} - 3\\sqrt{80}$.', options: ['$2\\sqrt{5}$', '$4\\sqrt{5}$', '$12\\sqrt{5}$', '$0$'], correct: '$2\\sqrt{5}$', explanation: '<p class="lang-en"><b>Correct Answer: $2\\sqrt{5}$</b>. $4(2\\sqrt{5}) + 2(3\\sqrt{5}) - 3(4\\sqrt{5}) = 8\\sqrt{5} + 6\\sqrt{5} - 12\\sqrt{5} = (8+6-12)\\sqrt{5} = 2\\sqrt{5}$.</p><p class="lang-id"><b>Jawaban Benar: $2\\sqrt{5}$</b>. $4(2\\sqrt{5}) + 2(3\\sqrt{5}) - 3(4\\sqrt{5}) = 8\\sqrt{5} + 6\\sqrt{5} - 12\\sqrt{5} = (8+6-12)\\sqrt{5} = 2\\sqrt{5}$.</p>' },
+                    { type: 'exercise', question: 'Find the perimeter of a rectangle with sides $\\sqrt{12}$ and $\\sqrt{27}$. | Cari keliling persegi panjang dengan sisi $\\sqrt{12}$ dan $\\sqrt{27}$.', options: ['$P = 2(\\sqrt{12} + \\sqrt{27}) = 2(2\\sqrt{3} + 3\\sqrt{3}) = 10\\sqrt{3}$', '$10\\sqrt{3}$', '$5\\sqrt{3}$', '$12\\sqrt{3}$'], correct: '$10\\sqrt{3}$', explanation: '<p class="lang-en"><b>Correct Answer: $10\\sqrt{3}$</b>. Perimeter = $2(L+W)$. $L = 2\\sqrt{3}$, $W = 3\\sqrt{3}$. Sum is $5\\sqrt{3}$. Times 2 is $10\\sqrt{3}$.</p><p class="lang-id"><b>Jawaban Benar: $10\\sqrt{3}$</b>. Keliling = $2(P+L)$. $P = 2\\sqrt{3}$, $L = 3\\sqrt{3}$. Jumlah $5\\sqrt{3}$. Dikali 2 jadi $10\\sqrt{3}$.</p>' },
+                    { type: 'theory', content: `<h2 class="text-xl font-bold text-[#1cb0f6] mb-4">Mixed Operations | Operasi Campuran</h2><p class="lang-en">When multiplication and addition mix, always follow BODMAS/PEMDAS. Multiply brackets first, or simplify inside brackets first.</p><p class="lang-id">Saat perkalian dan penjumlahan bercampur, selalu ikuti BODMAS/PEMDAS. Kalikan dalam kurung dulu, atau sederhanakan di dalam kurung dulu.</p><p class="lang-en"><b>Example:</b> $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$. Multiply first: $\\sqrt{6}$. Then simplify $\\sqrt{54} = 3\\sqrt{6}$. Finally add: $\\sqrt{6} + 3\\sqrt{6} = 4\\sqrt{6}$.</p><p class="lang-id"><b>Contoh:</b> $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$. Kali dulu: $\\sqrt{6}$. Lalu sederhanakan $\\sqrt{54} = 3\\sqrt{6}$. Terakhir jumlah: $\\sqrt{6} + 3\\sqrt{6} = 4\\sqrt{6}$.</p>` },
+                    { type: 'exercise', question: 'Solve: $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$. | Selesaikan: $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$.', options: ['$5\\sqrt{6}$', '$4\\sqrt{6}$', '$5\\sqrt{6}$', '$\\sqrt{60}$'], correct: '$4\\sqrt{6}$', explanation: '<p class="lang-en"><b>Correct Answer: $4\\sqrt{6}$</b>. $\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$. $\\sqrt{54} = 3\\sqrt{6}$. Add them: $1 + 3 = 4$.</p><p class="lang-id"><b>Jawaban Benar: $4\\sqrt{6}$</b>. $\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$. $\\sqrt{54} = 3\\sqrt{6}$. Jumlahkan: $1 + 3 = 4$.</p>' },
+                    { type: 'exercise', question: 'Solve: $3\\sqrt{2}(\\sqrt{8} + \\sqrt{18})$. | Selesaikan: $3\\sqrt{2}(\\sqrt{8} + \\sqrt{18})$.', options: ['$30$', '$15\\sqrt{2}$', '$3\\sqrt{2}(5\\sqrt{2}) = 15\\sqrt{2}$', '$12\\sqrt{2}$'], correct: '$30$', explanation: '<p class="lang-en"><b>Correct Answer: 30</b>. Inside: $2\\sqrt{2} + 3\\sqrt{2} = 5\\sqrt{2}$. Multiply: $3\\sqrt{2} \\times 5\\sqrt{2} = 15 \\times 2 = 30$.</p><p class="lang-id"><b>Jawaban Benar: 30</b>. Dalam kurung: $2\\sqrt{2} + 3\\sqrt{2} = 5\\sqrt{2}$. Kali: $3\\sqrt{2} \\times 5\\sqrt{2} = 15 \\times 2 = 30$.</p>' },
+                    { type: 'exercise', question: 'Solve: $\\frac{\\sqrt{50} - \\sqrt{8}}{\\sqrt{2}}$. | Selesaikan: $\\frac{\\sqrt{50} - \\sqrt{8}}{\\sqrt{2}}$.', options: ['$3$', '$3\\sqrt{2}$', '$4$', '$5$'], correct: '$3$', explanation: '<p class="lang-en"><b>Correct Answer: 3</b>. Top: $5\\sqrt{2} - 2\\sqrt{2} = 3\\sqrt{2}$. Divide by $\\sqrt{2}$: $\\frac{3\\sqrt{2}}{\\sqrt{2}} = 3$.</p><p class="lang-id"><b>Jawaban Benar: 3</b>. Atas: $5\\sqrt{2} - 2\\sqrt{2} = 3\\sqrt{2}$. Bagi dengan $\\sqrt{2}$: $\\frac{3\\sqrt{2}}{\\sqrt{2}} = 3$.</p>' }
+                ]
+            },
+            {
+                id: 'asg1',
+                title: 'Assignment 1',
+                type: 'assignment',
+                steps: [
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{24} + \\sqrt{54}$', options: ['$4\\sqrt{6}$', '$5\\sqrt{6}$', '$6\\sqrt{5}$', '$\\sqrt{78}$'], correct: '$5\\sqrt{6}$', explanation: '$\\sqrt{24}=2\\sqrt{6}$, $\\sqrt{54}=3\\sqrt{6}$. Sum = $5\\sqrt{6}$.' },
+                    { type: 'exercise', question: 'Simplify: $5\\sqrt{2} - \\sqrt{18}$', options: ['$2\\sqrt{2}$', '$6\\sqrt{2}$', '$4\\sqrt{2}$', '$3\\sqrt{2}$'], correct: '$2\\sqrt{2}$', explanation: '$\\sqrt{18}=3\\sqrt{2}$. $5 - 3 = 2$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{7} + 2\\sqrt{28}$', options: ['$7\\sqrt{7}$', '$8\\sqrt{7}$', '$5\\sqrt{7}$', '$10\\sqrt{7}$'], correct: '$7\\sqrt{7}$', explanation: '$2\\sqrt{28}=4\\sqrt{7}$. $3+4=7$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{20} + \\sqrt{45} - \\sqrt{5}$', options: ['$4\\sqrt{5}$', '$6\\sqrt{5}$', '$5\\sqrt{5}$', '$3\\sqrt{5}$'], correct: '$4\\sqrt{5}$', explanation: '$2+3-1=4$.' },
+                    { type: 'exercise', question: 'Simplify: $7\\sqrt{3} - 2\\sqrt{27} + \\sqrt{12}$', options: ['$3\\sqrt{3}$', '$4\\sqrt{3}$', '$6\\sqrt{3}$', '$5\\sqrt{3}$'], correct: '$3\\sqrt{3}$', explanation: '$2\\sqrt{27}=6\\sqrt{3}$, $\\sqrt{12}=2\\sqrt{3}$. $7-6+2=3$.' },
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{50} + 3\\sqrt{32}$', options: ['$22\\sqrt{2}$', '$20\\sqrt{2}$', '$12\\sqrt{2}$', '$5\\sqrt{2}$'], correct: '$22\\sqrt{2}$', explanation: '$2(5\\sqrt{2}) + 3(4\\sqrt{2}) = 10+12=22$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{8} + \\sqrt{32}$', options: ['$6\\sqrt{2}$', '$4\\sqrt{2}$', '$10\\sqrt{2}$', '$8\\sqrt{2}$'], correct: '$6\\sqrt{2}$', explanation: '$\\sqrt{8}=2\\sqrt{2}$, $\\sqrt{32}=4\\sqrt{2}$. $2+4=6$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{18} - \\sqrt{8}$', options: ['$10\\sqrt{2}$', '$6\\sqrt{2}$', '$8\\sqrt{2}$', '$4\\sqrt{2}$'], correct: '$10\\sqrt{2}$', explanation: '$4(3\\sqrt{2}) - 2\\sqrt{2} = 12 - 2 = 10$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{98} + \\sqrt{8}$', options: ['$9\\sqrt{2}$', '$5\\sqrt{2}$', '$11\\sqrt{2}$', '$8\\sqrt{2}$'], correct: '$9\\sqrt{2}$', explanation: '$\\sqrt{98}=7\\sqrt{2}$. $7+2=9$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{7} + 2\\sqrt{28} - \\sqrt{63}$', options: ['$4\\sqrt{7}$', '$6\\sqrt{7}$', '$7\\sqrt{7}$', '$5\\sqrt{7}$'], correct: '$4\\sqrt{7}$', explanation: '$2\\sqrt{28}=4\\sqrt{7}$, $\\sqrt{63}=3\\sqrt{7}$. $3+4-3=4$.' }
+                ]
+            },
+            {
+                id: 'asg2',
+                title: 'Assignment 2',
+                type: 'assignment',
+                steps: [
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{48} - 3\\sqrt{12} + \\sqrt{75}$', options: ['$7\\sqrt{3}$', '$5\\sqrt{3}$', '$6\\sqrt{3}$', '$3\\sqrt{3}$'], correct: '$7\\sqrt{3}$', explanation: '$2(4\\sqrt{3}) - 3(2\\sqrt{3}) + 5\\sqrt{3} = 8 - 6 + 5 = 7$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{108} + \\sqrt{48} - \\sqrt{147}$', options: ['$3\\sqrt{3}$', '$2\\sqrt{3}$', '$4\\sqrt{3}$', '$7\\sqrt{3}$'], correct: '$3\\sqrt{3}$', explanation: 'Simplify all to $\\sqrt{3}$. $6+4-7=3$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{2}(\\sqrt{8} + \\sqrt{18})$', options: ['$30$', '$60$', '$15\\sqrt{2}$', '$12\\sqrt{2}$'], correct: '$30$', explanation: 'Inside: $2\\sqrt{2}+3\\sqrt{2}=5\\sqrt{2}$. $3 \\times 5 \\times 2 = 30$.' },
+                    { type: 'exercise', question: 'Simplify: $\\frac{\\sqrt{50} - \\sqrt{8}}{\\sqrt{2}}$', options: ['$3$', '$2$', '$3\\sqrt{2}$', '$5$'], correct: '$3$', explanation: 'Top: $5\\sqrt{2}-2\\sqrt{2}=3\\sqrt{2}$. Divide by $\\sqrt{2}$ gives 3.' },
+                    { type: 'exercise', question: 'Perimeter of rectangle with sides $\\sqrt{12}$ and $\\sqrt{27}$.', options: ['$10\\sqrt{3}$', '$15\\sqrt{3}$', '$5\\sqrt{3}$', '$12\\sqrt{3}$'], correct: '$10\\sqrt{3}$', explanation: 'Sides are $2\\sqrt{3}$ and $3\\sqrt{3}$. $P = 2(2+3)\\sqrt{3} = 10\\sqrt{3}$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{20} + 2\\sqrt{45} - 3\\sqrt{80}$', options: ['$2\\sqrt{5}$', '$4\\sqrt{5}$', '$12\\sqrt{5}$', '$0$'], correct: '$2\\sqrt{5}$', explanation: '$4(2\\sqrt{5}) + 2(3\\sqrt{5}) - 3(4\\sqrt{5}) = 8+6-12=2$.' },
+                    { type: 'exercise', question: 'Simplify: $5\\sqrt{12} + 2\\sqrt{3}$', options: ['$12\\sqrt{3}$', '$8\\sqrt{3}$', '$11\\sqrt{3}$', '$7\\sqrt{3}$'], correct: '$12\\sqrt{3}$', explanation: '$5(2\\sqrt{3}) = 10\\sqrt{3}$. $10+2=12$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{75} - \\sqrt{27}$', options: ['$2\\sqrt{3}$', '$6\\sqrt{3}$', '$4\\sqrt{3}$', '$3\\sqrt{3}$'], correct: '$2\\sqrt{3}$', explanation: '$5\\sqrt{3} - 3\\sqrt{3} = 2\\sqrt{3}$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{8} + 5\\sqrt{18}$', options: ['$21\\sqrt{2}$', '$10\\sqrt{2}$', '$11\\sqrt{2}$', '$8\\sqrt{2}$'], correct: '$21\\sqrt{2}$', explanation: '$3(2\\sqrt{2}) + 5(3\\sqrt{2}) = 6+15=21$.' },
+                    { type: 'exercise', question: 'Simplify: $6\\sqrt{2} - \\sqrt{50}$', options: ['$\\sqrt{2}$', '$3\\sqrt{2}$', '$2\\sqrt{2}$', '$11\\sqrt{2}$'], correct: '$\\sqrt{2}$', explanation: '$\\sqrt{50}=5\\sqrt{2}$. $6-5=1$. $1\\sqrt{2} = \\sqrt{2}$.' }
+                ]
+            },
+            {
+                id: 'asg3',
+                title: 'Assignment 3',
+                type: 'assignment',
+                steps: [
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{75} + 3\\sqrt{12}$', options: ['$16\\sqrt{3}$', '$8\\sqrt{3}$', '$12\\sqrt{3}$', '$5\\sqrt{3}$'], correct: '$16\\sqrt{3}$', explanation: '$2(5\\sqrt{3}) + 3(2\\sqrt{3}) = 10+6=16$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{18} - 2\\sqrt{8} + \\sqrt{5}$', options: ['$8\\sqrt{2} + \\sqrt{5}$', '$12\\sqrt{2} + \\sqrt{5}$', '$10\\sqrt{2} + \\sqrt{5}$', '$8\\sqrt{7}$'], correct: '$8\\sqrt{2} + \\sqrt{5}$', explanation: 'Combine $\\sqrt{2}$s. $\\sqrt{5}$ is a distractor.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{98} - \\sqrt{50}$', options: ['$2\\sqrt{2}$', '$5\\sqrt{2}$', '$3\\sqrt{2}$', '$4\\sqrt{2}$'], correct: '$2\\sqrt{2}$', explanation: '$7-5=2$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{45} - 2\\sqrt{20}$', options: ['$5\\sqrt{5}$', '$4\\sqrt{5}$', '$6\\sqrt{5}$', '$3\\sqrt{5}$'], correct: '$5\\sqrt{5}$', explanation: '$3(3\\sqrt{5}) - 2(2\\sqrt{5}) = 9-4=5$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{162} - \\sqrt{98}$', options: ['$2\\sqrt{2}$', '$6\\sqrt{2}$', '$4\\sqrt{2}$', '$3\\sqrt{2}$'], correct: '$2\\sqrt{2}$', explanation: '$\\sqrt{162}=9\\sqrt{2}$. $9-7=2$.' },
+                    { type: 'exercise', question: 'Simplify: $5\\sqrt{8} - \\sqrt{18} + 2\\sqrt{50}$', options: ['$17\\sqrt{2}$', '$15\\sqrt{2}$', '$14\\sqrt{2}$', '$19\\sqrt{2}$'], correct: '$17\\sqrt{2}$', explanation: '$10 - 3 + 10 = 17$.' },
+                    { type: 'exercise', question: 'Simplify: $\\frac{\\sqrt{72}}{\\sqrt{2}}$', options: ['$6$', '$5$', '$8$', '$4$'], correct: '$6$', explanation: '$\\sqrt{72}=6\\sqrt{2}$. Divide by $\\sqrt{2}$ gives 6.' },
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{27} + \\sqrt{48} - \\sqrt{108}$', options: ['$4\\sqrt{3}$', '$5\\sqrt{3}$', '$6\\sqrt{3}$', '$3\\sqrt{3}$'], correct: '$4\\sqrt{3}$', explanation: '$2(3\\sqrt{3}) + 4\\sqrt{3} - 6\\sqrt{3} = 6+4-6=4$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{12} - \\sqrt{27} + \\sqrt{48}$', options: ['$9\\sqrt{3}$', '$10\\sqrt{3}$', '$13\\sqrt{3}$', '$15\\sqrt{3}$'], correct: '$9\\sqrt{3}$', explanation: '$4(2\\sqrt{3}) = 8$. $8-3+4=9$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{28} - 2\\sqrt{63} + \\sqrt{112}$', options: ['$4\\sqrt{7}$', '$12\\sqrt{7}$', '$8\\sqrt{7}$', '$10\\sqrt{7}$'], correct: '$4\\sqrt{7}$', explanation: '$3(2\\sqrt{7}) - 2(3\\sqrt{7}) + 4\\sqrt{7} = 6-6+4=4$.' }
+                ]
+            },
+            {
+                id: 'asg4',
+                title: 'Assignment 4',
+                type: 'assignment',
+                steps: [
+                    { type: 'exercise', question: 'Simplify: $(\\sqrt{2} \\times \\sqrt{3}) + \\sqrt{54}$', options: ['$4\\sqrt{6}$', '$5\\sqrt{6}$', '$3\\sqrt{6}$', '$6\\sqrt{6}$'], correct: '$4\\sqrt{6}$', explanation: 'Multiply first: $\\sqrt{6}$. $\\sqrt{54}=3\\sqrt{6}$. $1+3=4$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{2} \\times (\\sqrt{8} + \\sqrt{18})$', options: ['$30$', '$60$', '$15\\sqrt{2}$', '$12\\sqrt{2}$'], correct: '$30$', explanation: 'Inside: $5\\sqrt{2}$. $3 \\times 5 \\times 2 = 30$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{5}(\\sqrt{20} - \\sqrt{45})$', options: ['$-5$', '$5$', '$-10$', '$-15$'], correct: '$-5$', explanation: 'Inside: $2\\sqrt{5}-3\\sqrt{5}=-\\sqrt{5}$. $\\sqrt{5} \\times -\\sqrt{5} = -5$.' },
+                    { type: 'exercise', question: 'Simplify: $\\frac{\\sqrt{72} + \\sqrt{50}}{\\sqrt{2}}$', options: ['$11$', '$9$', '$15$', '$10$'], correct: '$11$', explanation: 'Top: $11\\sqrt{2}$. Divide by $\\sqrt{2}$ gives 11.' },
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{3}(\\sqrt{12} - \\sqrt{27})$', options: ['$-6$', '$6$', '$-3$', '$-9$'], correct: '$-6$', explanation: 'Inside: $2\\sqrt{3} - 3\\sqrt{3} = -\\sqrt{3}$. $2 \\times -1 \\times 3 = -6$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{2}(\\sqrt{18} - \\sqrt{8})$', options: ['$8$', '$16$', '$24$', '$4$'], correct: '$8$', explanation: 'Inside: $3\\sqrt{2} - 2\\sqrt{2} = \\sqrt{2}$. $4\\sqrt{2} \\times \\sqrt{2} = 4 \\times 2 = 8$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{6} \\times \\sqrt{8} + \\sqrt{12}$', options: ['$6\\sqrt{3}$', '$5\\sqrt{3}$', '$7\\sqrt{3}$', '$8\\sqrt{3}$'], correct: '$6\\sqrt{3}$', explanation: 'Multiply first: $\\sqrt{6} \\times \\sqrt{8} = \\sqrt{48} = 4\\sqrt{3}$. $\\sqrt{12} = 2\\sqrt{3}$. Add: $4 + 2 = 6$.' },
+                    { type: 'exercise', question: 'Simplify: $(\\sqrt{5} + \\sqrt{20}) \\times \\sqrt{5}$', options: ['$15$', '$10$', '$20$', '$25$'], correct: '$15$', explanation: 'Inside: $\\sqrt{5} + 2\\sqrt{5} = 3\\sqrt{5}$. $3\\sqrt{5} \\times \\sqrt{5} = 3 \\times 5 = 15$.' },
+                    { type: 'exercise', question: 'Simplify: $\\frac{3\\sqrt{8} + 2\\sqrt{18}}{\\sqrt{2}}$', options: ['$12$', '$6$', '$8$', '$24$'], correct: '$12$', explanation: 'Top: $6\\sqrt{2} + 6\\sqrt{2} = 12\\sqrt{2}$. Divide by $\\sqrt{2}$ gives 12.' },
+                    { type: 'exercise', question: 'Simplify: $5\\sqrt{2} \\times (\\sqrt{50} - \\sqrt{32})$', options: ['$10$', '$30$', '$15$', '$20$'], correct: '$10$', explanation: 'Inside: $5\\sqrt{2} - 4\\sqrt{2} = \\sqrt{2}$. $5\\sqrt{2} \\times \\sqrt{2} = 5 \\times 2 = 10$.' }
+                ]
+            },
+            {
+                id: 'asg5',
+                title: 'Assignment 5',
+                type: 'assignment',
+                steps: [
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{2} + \\sqrt{32} - \\sqrt{50}$', options: ['$2\\sqrt{2}$', '$4\\sqrt{2}$', '$5\\sqrt{2}$', '$6\\sqrt{2}$'], correct: '$2\\sqrt{2}$', explanation: '$\\sqrt{32}=4\\sqrt{2}$, $\\sqrt{50}=5\\sqrt{2}$. $3+4-5=2$.' },
+                    { type: 'exercise', question: 'Simplify: $\\sqrt{125} - \\sqrt{45}$', options: ['$2\\sqrt{5}$', '$4\\sqrt{5}$', '$3\\sqrt{5}$', '$6\\sqrt{5}$'], correct: '$2\\sqrt{5}$', explanation: '$\\sqrt{125}=5\\sqrt{5}$. $5-3=2$.' },
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{63} - 5\\sqrt{7}$', options: ['$\\sqrt{7}$', '$2\\sqrt{7}$', '$3\\sqrt{7}$', '$\\sqrt{14}$'], correct: '$\\sqrt{7}$', explanation: '$2(3\\sqrt{7}) = 6\\sqrt{7}$. $6-5=1$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{28} + 3\\sqrt{7} - \\sqrt{112}$', options: ['$7\\sqrt{7}$', '$9\\sqrt{7}$', '$10\\sqrt{7}$', '$12\\sqrt{7}$'], correct: '$7\\sqrt{7}$', explanation: '$4(2\\sqrt{7})=8\\sqrt{7}$. $\\sqrt{112}=4\\sqrt{7}$. $8+3-4=7$.' },
+                    { type: 'exercise', question: 'Simplify: $5\\sqrt{2}(\\sqrt{8} - \\sqrt{2})$', options: ['$10$', '$5$', '$15$', '$20$'], correct: '$10$', explanation: 'Inside: $2\\sqrt{2} - \\sqrt{2} = \\sqrt{2}$. $5\\sqrt{2} \\times \\sqrt{2} = 5 \\times 2 = 10$.' },
+                    { type: 'exercise', question: 'Simplify: $\\frac{\\sqrt{98} - \\sqrt{8}}{\\sqrt{2}}$', options: ['$5$', '$6$', '$4$', '$3$'], correct: '$5$', explanation: 'Top: $7\\sqrt{2} - 2\\sqrt{2} = 5\\sqrt{2}$. Divide by $\\sqrt{2}$ gives 5.' },
+                    { type: 'exercise', question: 'Perimeter of triangle with sides $\\sqrt{12}, \\sqrt{27}, \\sqrt{48}$.', options: ['$9\\sqrt{3}$', '$8\\sqrt{3}$', '$10\\sqrt{3}$', '$12\\sqrt{3}$'], correct: '$9\\sqrt{3}$', explanation: 'Sum all sides: $2+3+4=9$.' },
+                    { type: 'exercise', question: 'Simplify: $2\\sqrt{5} \\times \\sqrt{20} + \\sqrt{45}$', options: ['$20 + 3\\sqrt{5}$', '$23\\sqrt{5}$', '$20 + 5\\sqrt{5}$', '$13\\sqrt{5}$'], correct: '$20 + 3\\sqrt{5}$', explanation: 'Multiply first: $\\sqrt{20} = 2\\sqrt{5}$. $2\\sqrt{5} \\times 2\\sqrt{5} = 4 \\times 5 = 20$. Then add $\\sqrt{45} = 3\\sqrt{5}$.' },
+                    { type: 'exercise', question: 'Simplify: $3\\sqrt{8} \\times \\sqrt{18} - \\sqrt{50}$', options: ['$36 - 5\\sqrt{2}$', '$31\\sqrt{2}$', '$23\\sqrt{2}$', '$36 - 3\\sqrt{2}$'], correct: '$36 - 5\\sqrt{2}$', explanation: 'Multiply first: $3\\sqrt{8} = 6\\sqrt{2}$. $\\sqrt{18} = 3\\sqrt{2}$. $6\\sqrt{2} \\times 3\\sqrt{2} = 18 \\times 2 = 36$. Then subtract $\\sqrt{50} = 5\\sqrt{2}$.' },
+                    { type: 'exercise', question: 'Simplify: $4\\sqrt{5} - 2\\sqrt{45} + \\sqrt{125}$', options: ['$3\\sqrt{5}$', '$5\\sqrt{5}$', '$4\\sqrt{5}$', '$6\\sqrt{5}$'], correct: '$3\\sqrt{5}$', explanation: '$4 - 6 + 5 = 3$.' }
+                ]
+            },
+            {
+                id: 'final',
+                title: 'Consolidation',
+                type: 'final',
+                content: `
+                    <h2 class="text-xl font-bold text-[#58cc02] mb-4">Excellent Work! | Kerja Bagus!</h2>
+                    <p class="lang-en">You have mastered the "Architecture of Radicals" today. You learned how to simplify, match, and combine surds perfectly!</p>
+                    <p class="lang-id">Kamu telah menguasai "Arsitektur Radikal" hari ini. Kamu belajar cara menyederhanakan, mencocokkan, dan menggabungkan surd dengan sempurna!</p>
+                    <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 mt-4">
+                        <h3 class="font-bold text-green-800 mb-2"><i class="fas fa-clipboard-check"></i> Summary | Ringkasan</h3>
+                        <p class="lang-en">1. <b>Simplify</b> every radical first.</p>
+                        <p class="lang-id">1. <b>Sederhanakan</b> semua akar terlebih dahulu.</p>
+                        <p class="lang-en">2. <b>Match</b> the "like" surds (same root).</p>
+                        <p class="lang-id">2. <b>Cocokkan</b> surd yang "sejenis" (akar sama).</p>
+                        <p class="lang-en">3. <b>Combine</b> the outside numbers. Never touch the root when adding!</p>
+                        <p class="lang-id">3. <b>Gabungkan</b> angka di luarnya. Jangan sentuh akarnya saat menjumlahkan!</p>
+                    </div>
+                    <p class="lang-en mt-4">To complete your homework and review today notes, please click the button below to go to your dashboard.</p>
+                    <p class="lang-id mt-4">Untuk mengerjakan PR dan melihat catatan hari ini, silakan klik tombol di bawah untuk masuk ke dashboard kamu.</p>
+                `
+            }
+        ];
+
+        // State Management
+        let currentSectionIndex = 0;
+        let currentStepIndex = 0;
+        let progress = {};
+
+        function loadProgress() {
+            const saved = localStorage.getItem('mathTutorProgress');
+            if (saved) progress = JSON.parse(saved);
+        }
+
+        function saveProgress() {
+            localStorage.setItem('mathTutorProgress', JSON.stringify(progress));
+        }
+
+        function resetAllProgress() {
+            if (confirm("Are you sure you want to reset ALL progress? This cannot be undone. | Kamu yakin ingin mereset SEMUA progres? Ini tidak bisa dibatalkan.")) {
+                localStorage.removeItem('mathTutorProgress');
+                progress = {};
+                currentSectionIndex = 0;
+                currentStepIndex = 0;
+                renderSidebar();
+                renderContent();
+                updateProgressBar();
+            }
+        }
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebar-nav');
+            nav.innerHTML = '';
+            lessonData.forEach((section, sIndex) => {
+                let itemClass = 'sidebar-item';
+                if (sIndex === currentSectionIndex) itemClass += ' active';
+                let icon = 'fa-circle';
+                if (section.type === 'static') icon = 'fa-home';
+                else if (section.type === 'lesson') icon = 'fa-book-open';
+                else if (section.type === 'assignment') icon = 'fa-pencil-alt';
+                else if (section.type === 'final') icon = 'fa-flag-checkered';
+                let isCompleted = false;
+                if ((section.type === 'lesson' || section.type === 'assignment') && progress[section.id]) {
+                    const totalSteps = section.steps.length;
+                    const answeredSteps = Object.keys(progress[section.id]).length;
+                    if (answeredSteps >= totalSteps) {
+                        isCompleted = true;
+                        icon = 'fa-check-circle';
+                    }
+                }
+                nav.innerHTML += `<div class="${itemClass} ${isCompleted ? 'completed' : ''}" onclick="jumpToSection(${sIndex})"><i class="fas ${icon} mr-3" style="width: 20px;"></i><span>${section.title}</span></div>`;
+            });
+        }
+
+        function jumpToSection(index) {
+            currentSectionIndex = index;
+            currentStepIndex = 0;
+            renderSidebar();
+            renderContent();
+            updateProgressBar();
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function renderContent() {
+            const display = document.getElementById('content-display');
+            const section = lessonData[currentSectionIndex];
+
+            if (section.type === 'static' || section.type === 'final') {
+                display.innerHTML = section.content;
+                document.getElementById('action-buttons').style.display = 'flex';
+                if (section.type === 'final') {
+                    document.getElementById('action-buttons').innerHTML = `
+                        <button class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-chevron-left"></i> Prev</button>
+                        <a href="https://learn.algonova.id/login" target="_blank" class="btn btn-primary">Go to Homework <i class="fas fa-external-link-alt"></i></a>`;
+                } else {
+                     document.getElementById('action-buttons').innerHTML = `
+                        <button class="btn btn-secondary" style="visibility: hidden;"></button>
+                        <button class="btn btn-primary" onclick="nextStep()">Start Lesson <i class="fas fa-chevron-right"></i></button>`;
+                }
+            } else if (section.type === 'assignment' && section.steps.every(s => s.type === 'exercise')) {
+                let html = `<h3 class="text-sm font-bold uppercase text-gray-400 tracking-wide mb-2">${section.title}</h3>`;
+                const step = section.steps[currentStepIndex];
+                const stepProgress = progress[section.id]?.[currentStepIndex];
+                const qParts = step.question.split('|');
+                const qEn = qParts[0].trim();
+                const qId = qParts[1] ? qParts[1].trim() : '';
+                const optionsHtml = shuffleOptions(step.options, step.correct, step.explanation, `${section.id}-${currentStepIndex}`);
+                html += `
+                    <h3 class="text-sm font-bold uppercase text-gray-400 tracking-wide mb-2">Exercise ${currentStepIndex + 1} of ${section.steps.length}</h3>
+                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                        <p class="lang-en text-lg font-bold mb-1">${qEn}</p>
+                        ${qId ? `<p class="lang-id text-sm italic text-gray-500 mb-3">${qId}</p>` : ''}
+                        <div class="mt-4" id="options-container-${section.id}-${currentStepIndex}">${optionsHtml}</div>
+                        <div class="accordion ${stepProgress ? 'active' : ''}" id="accordion-${section.id}-${currentStepIndex}">
+                            <div class="accordion-header" onclick="toggleAccordion('${section.id}-${currentStepIndex}')">
+                                <span>Explanation | Penjelasan</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-body" id="accordion-body-${section.id}-${currentStepIndex}">
+                                ${stepProgress ? step.explanation : 'Answer the question first to see the explanation. | Jawab pertanyaan dulu untuk melihat penjelasan.'}
+                            </div>
+                        </div>
+                    </div>`;
+                
+                if (currentStepIndex === section.steps.length - 1) {
+                    let allAnswered = true;
+                    for(let i=0; i<section.steps.length; i++) {
+                        if (!progress[section.id]?.[i]) { allAnswered = false; break; }
+                    }
+                    html += `<div class="mt-6 text-center bg-blue-50 p-4 rounded-xl border border-blue-200">
+                        <button class="btn btn-primary" onclick="printAssignment('${section.id}')"><i class="fas fa-print"></i> Print Result</button>
+                    </div>`;
+                }
+
+                display.innerHTML = html;
+                document.getElementById('action-buttons').style.display = 'flex';
+                let nextBtnLabel = (currentStepIndex === section.steps.length - 1) ? "Next Assignment" : "Next";
+                document.getElementById('action-buttons').innerHTML = `
+                    <button class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-chevron-left"></i> Prev</button>
+                    <button class="btn btn-primary" onclick="nextStep()">${nextBtnLabel} <i class="fas fa-chevron-right"></i></button>`;
+            } else {
+                const step = section.steps[currentStepIndex];
+                let html = `<h3 class="text-sm font-bold uppercase text-gray-400 tracking-wide mb-2">${section.title}</h3>`;
+                if (step.type === 'theory') {
+                    html += step.content;
+                } else if (step.type === 'exercise') {
+                    const stepProgress = progress[section.id]?.[currentStepIndex];
+                    const qParts = step.question.split('|');
+                    const qEn = qParts[0].trim();
+                    const qId = qParts[1] ? qParts[1].trim() : '';
+                    const optionsHtml = shuffleOptions(step.options, step.correct, step.explanation, `${section.id}-${currentStepIndex}`);
+                    html += `
+                        <h3 class="text-sm font-bold uppercase text-gray-400 tracking-wide mb-2">Exercise ${currentStepIndex + 1} of ${section.steps.length}</h3>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <p class="lang-en text-lg font-bold mb-1">${qEn}</p>
+                            ${qId ? `<p class="lang-id text-sm italic text-gray-500 mb-3">${qId}</p>` : ''}
+                            <div class="mt-4" id="options-container-${section.id}-${currentStepIndex}">${optionsHtml}</div>
+                            <div class="accordion ${stepProgress ? 'active' : ''}" id="accordion-${section.id}-${currentStepIndex}">
+                                <div class="accordion-header" onclick="toggleAccordion('${section.id}-${currentStepIndex}')">
+                                    <span>Explanation | Penjelasan</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="accordion-body" id="accordion-body-${section.id}-${currentStepIndex}">
+                                    ${stepProgress ? step.explanation : 'Answer the question first to see the explanation. | Jawab pertanyaan dulu untuk melihat penjelasan.'}
+                                </div>
+                            </div>
+                        </div>`;
+                }
+                display.innerHTML = html;
+                document.getElementById('action-buttons').style.display = 'flex';
+                document.getElementById('action-buttons').innerHTML = `
+                    <button class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-chevron-left"></i> Prev</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next <i class="fas fa-chevron-right"></i></button>`;
+            }
+            
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(display, {
+                    delimiters: [{left: "$$", right: "$$", display: true},{left: "$", right: "$", display: false}]
+                });
+            }
+        }
+
+        function shuffleOptions(options, correct, explanation, stepId) {
+            if (progress[lessonData[currentSectionIndex].id]?.[currentStepIndex]) {
+                const sp = progress[lessonData[currentSectionIndex].id][currentStepIndex];
+                let html = '';
+                sp.shuffledOptions.forEach(opt => {
+                    let cls = 'option-btn';
+                    if (opt === sp.selected) { cls += sp.correct ? ' correct' : ' incorrect'; } 
+                    else if (opt === correct && !sp.correct) { cls += ' correct'; }
+                    html += `<button class="${cls}" disabled><i class="fas ${opt === correct ? 'fa-check' : 'fa-times'}"></i> ${opt}</button>`;
+                });
+                html += `<button class="btn btn-outline mt-3 text-sm py-2" onclick="resetStep('${stepId}')"><i class="fas fa-redo-alt mr-2"></i> Reset Answer | Reset Jawaban</button>`;
+                return html;
+            }
+            const shuffled = [...options].sort(() => Math.random() - 0.5);
+            let html = '';
+            shuffled.forEach(opt => {
+                html += `<button class="option-btn" onclick="selectOption('${stepId}', '${opt.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}')"><i class="fas fa-circle text-gray-300"></i> ${opt}</button>`;
+            });
+            window[`shuffled_${stepId}`] = shuffled;
+            return html;
+        }
+
+        function selectOption(stepId, selectedOption) {
+            const [sectionId, stepIdx] = stepId.split('-');
+            const stepIdxNum = parseInt(stepIdx);
+            const section = lessonData.find(s => s.id === sectionId);
+            const step = section.steps[stepIdxNum];
+            const isCorrect = selectedOption === step.correct;
+            if (!progress[sectionId]) progress[sectionId] = {};
+            progress[sectionId][stepIdxNum] = { answered: true, correct: isCorrect, selected: selectedOption, shuffledOptions: window[`shuffled_${stepId}`] };
+            saveProgress();
+            renderContent();
+            setTimeout(() => { toggleAccordion(stepId, true); }, 100);
+            updateProgressBar();
+        }
+
+        function resetStep(stepId) {
+            const [sectionId, stepIdx] = stepId.split('-');
+            const stepIdxNum = parseInt(stepIdx);
+            if (progress[sectionId] && progress[sectionId][stepIdxNum]) {
+                delete progress[sectionId][stepIdxNum];
+                saveProgress();
+                renderContent();
+                updateProgressBar();
+            }
+        }
+
+        function toggleAccordion(stepId, forceOpen) {
+            const acc = document.getElementById(`accordion-${stepId}`);
+            if (acc) {
+                if (forceOpen) { acc.classList.add('active'); } else { acc.classList.toggle('active'); }
+                const [sectionId, stepIdx] = stepId.split('-');
+                const step = lessonData.find(s => s.id === sectionId).steps[parseInt(stepIdx)];
+                document.getElementById(`accordion-body-${stepId}`).innerHTML = step.explanation;
+                if (typeof renderMathInElement !== 'undefined') {
+                    renderMathInElement(document.getElementById(`accordion-body-${stepId}`), {
+                        delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}]
+                    });
+                }
+            }
+        }
+
+        function nextStep() {
+            const section = lessonData[currentSectionIndex];
+            if ((section.type === 'lesson' || section.type === 'assignment') && currentStepIndex < section.steps.length - 1) {
+                currentStepIndex++;
+            } else if (currentSectionIndex < lessonData.length - 1) {
+                currentSectionIndex++;
+                currentStepIndex = 0;
+            }
+            renderSidebar();
+            renderContent();
+            updateProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+            } else if (currentSectionIndex > 0) {
+                currentSectionIndex--;
+                const prevSection = lessonData[currentSectionIndex];
+                if (prevSection.type === 'lesson' || prevSection.type === 'assignment') {
+                    currentStepIndex = prevSection.steps.length - 1;
+                } else { currentStepIndex = 0; }
+            }
+            renderSidebar();
+            renderContent();
+            updateProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgressBar() {
+            let totalSteps = 0;
+            let completedSteps = 0;
+            lessonData.forEach(sec => {
+                if (sec.type === 'lesson' || sec.type === 'assignment') {
+                    totalSteps += sec.steps.length;
+                    if (progress[sec.id]) { completedSteps += Object.keys(progress[sec.id]).length; }
+                }
+            });
+            const percent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
+            document.getElementById('progress-fill').style.width = percent + '%';
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+        function printAssignment(sectionId) {
+            const section = lessonData.find(s => s.id === sectionId);
+            if (!section) return;
+            let score = 0;
+            let tableRows = '';
+            section.steps.forEach((step, index) => {
+                const sp = progress[sectionId]?.[index];
+                const studentAns = sp ? sp.selected : '-';
+                const correctAns = step.correct;
+                const note = sp ? (sp.correct ? '<span style="color:green; font-weight:bold;">&#10004;</span>' : '<span style="color:red; font-weight:bold;">&#10008;</span>') : '-';
+                if (sp && sp.correct) score++;
+                
+                const qParts = step.question.split('|');
+                const qEn = qParts[0] ? qParts[0].trim() : '';
+                const qId = qParts[1] ? qParts[1].trim() : '';
+                const questionHtml = qEn + (qId ? `<br><i style="font-size:9px; color:#555;">${qId}</i>` : '');
+
+                tableRows += `<tr><td style="text-align: center; vertical-align: top;">${index + 1}</td><td style="vertical-align: top;">${questionHtml}</td><td style="vertical-align: top;">${studentAns}</td><td style="vertical-align: top;">${correctAns}</td><td style="text-align: center; vertical-align: top;">${note}</td></tr>`;
+            });
+
+            const printHtml = `
+                <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Print Result - ${section.title}</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+                <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>
+                <style>@page { size: A4; margin: 10mm; } body { font-family: Arial, sans-serif; font-size: 11px; } h1, h2, h3 { margin: 0; padding: 0; } .header { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 5px; } .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; } .info-item { font-size: 11px; } table { width: 100%; border-collapse: collapse; margin-top: 5px; table-layout: fixed; } th, td { border: 1px solid #000; padding: 4px; font-size: 10px; word-wrap: break-word; } th { background: #f0f0f0; text-align: center; } .footer { margin-top: 30px; text-align: right; } @media print { body { -webkit-print-color-adjust: exact; } }</style>
+                </head><body>
+                    <div class="header"><h2>MATH TUTORING by Deni</h2></div>
+                    <div class="info-grid">
+                        <div class="info-item"><b>Name:</b> .....................................</div>
+                        <div class="info-item"><b>Date:</b> .....................................</div>
+                        <div class="info-item"><b>Topic:</b> Operations with Surds (Addition & Subtraction)</div>
+                        <div class="info-item"><b>Assignment Group:</b> ${section.title}</div>
+                        <div class="info-item"><b>Score:</b> ${score} / 10</div>
+                    </div>
+                    <table><thead><tr><th style="width: 5%;">No.</th><th style="width: 35%;">Question</th><th style="width: 20%;">Student Answer</th><th style="width: 20%;">Correct Answer</th><th style="width: 10%;">Note</th></tr></thead><tbody>${tableRows}</tbody></table>
+                    <div class="footer"><p>Checked by,</p><br><br><p><b>Deni</b></p></div>
+                    <script>window.onload = function() { if (typeof renderMathInElement !== 'undefined') { renderMathInElement(document.body, { delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}], throwOnError: false }); } setTimeout(function() { window.print(); }, 500); };<\/script>
+                </body></html>`;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printHtml);
+            printWindow.document.close();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadProgress();
+            renderSidebar();
+            renderContent();
+            updateProgressBar();
+        });
+</script>
+</body>
+</html>
