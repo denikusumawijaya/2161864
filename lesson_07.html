@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Algebra: Using Letters for Unknowns</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+        .translation { font-style: italic; font-size: 0.85em; color: #6b7280; display: block; margin-top: 4px; }
+        .main-content { min-height: 70vh; }
+        .sidebar-item.active { background-color: #3b82f6; color: white; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { background-color: #e0f2fe; }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .collapse-content.open { max-height: 1000px; }
+        @media print {
+            body > *:not(#printArea) { display: none !important; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            table { width: 100%; border-collapse: collapse; }
+            tr, td, th { page-break-inside: avoid; }
+            @page { size: A4; margin: 1cm; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold text-blue-600">Math Tutoring by Deni</h1>
+            <p class="text-sm text-gray-600">Topic: Making Sense of Algebra - Using Letters to Represent Unknown Values</p>
+            <p class="translation">Topik: Memahami Aljabar - Menggunakan Huruf untuk Mewakili Nilai yang Tidak Diketahui</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700">
+                <i class="fas fa-gavel"></i> Class Rules
+                <span class="translation" style="color: #bfdbfe;">Aturan Kelas</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Class Rules Modal -->
+    <div id="rulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-blue-600">Class Rules</h2>
+                <span class="translation">Aturan Kelas</span>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-blue-500 mt-1"></i>
+                    <div>
+                        <p>Take turns speaking.</p>
+                        <p class="translation">Berbicara secara bergantian.</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-blue-500 mt-1"></i>
+                    <div>
+                        <p>Ask for permission if you want to leave the class.</p>
+                        <p class="translation">Meminta izin jika ingin meninggalkan kelas.</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-blue-500 mt-1"></i>
+                    <div>
+                        <p>Turn on camera and microphone when needed.</p>
+                        <p class="translation">Menyalakan kamera dan microphone jika diperlukan.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg h-screen sticky top-0 overflow-y-auto no-print">
+            <ul class="py-4">
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('warmup', 0, event)">
+                    <i class="fas fa-fire mr-2"></i>Spiral Review Warm-up (00:00-00:10)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('intro', 0, event)">
+                    <i class="fas fa-bullhorn mr-2"></i>Introduction & Real-World (00:10-00:15)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('review', 0, event)">
+                    <i class="fas fa-history mr-2"></i>Review of Prior Knowledge (00:15-00:20)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('problem', 0, event)">
+                    <i class="fas fa-puzzle-piece mr-2"></i>Problem Introduction (00:20-00:30)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('guided', 0, event)">
+                    <i class="fas fa-hand-holding mr-2"></i>Guided Practice (00:30-00:45)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('independent', 0, event)">
+                    <i class="fas fa-user-graduate mr-2"></i>Independent Practice (00:45-00:55)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('consolidation', 0, event)">
+                    <i class="fas fa-book-open mr-2"></i>Consolidation & Reflection (00:55-01:00)
+                </li>
+                <li class="border-t border-gray-200 mt-2"></li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task1', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 1
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task2', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 2
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task3', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 3
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task4', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 4
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task5', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 5
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8 main-content" id="mainContent">
+            <!-- Content will be injected here -->
+        </main>
+    </div>
+
+    <!-- Hidden Print Area -->
+    <div id="printArea" class="hidden"></div>
+
+    <script>
+        let contentData = {
+            warmup: {
+                title: "Spiral Review Warm-up",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-question-circle mr-2"></i>What is a Variable?</h2>
+                            <p class="translation">Apa itu Variabel?</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="40" y="40" width="120" height="120" rx="10" fill="#e0e7ff" stroke="#3b82f6" stroke-width="4"/>
+                                <text x="100" y="120" font-size="80" font-weight="bold" fill="#3b82f6" text-anchor="middle" font-family="Arial">x</text>
+                                <circle cx="160" cy="40" r="15" fill="#fbbf24"/>
+                                <text x="160" y="46" font-size="20" font-weight="bold" fill="#fff" text-anchor="middle">?</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">In algebra, we use letters (like \\( x \\) or \\( y \\)) to represent unknown values. These letters are called <strong>variables</strong>.</p>
+                                <p class="translation">Dalam aljabar, kita menggunakan huruf (seperti \\( x \\) atau \\( y \\)) untuk mewakili nilai yang tidak diketahui. Huruf-huruf ini disebut <strong>variabel</strong>.</p>
+                                <p class="mt-2">For example, if you have some apples in a basket and you don't know how many, you can say there are \\( a \\) apples.</p>
+                                <p class="translation">Misalnya, jika Anda memiliki beberapa apel di keranjang dan Anda tidak tahu berapa jumlahnya, Anda dapat mengatakan ada \\( a \\) apel.</p>
+                            </div>
+                        </div>
+                        <p class="bg-yellow-50 p-4 rounded-lg border border-yellow-200"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i>A variable can change its value depending on the situation.</p>
+                        <p class="translation"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i>Variabel dapat berubah nilainya tergantung pada situasinya.</p>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Sarah has 5 pens. Her friend gives her some more pens. If \\( x \\) represents the number of pens her friend gave her, which expression represents the total number of pens Sarah has now?", q_trans: "Sarah memiliki 5 pulpen. Temannya memberinya beberapa pulpen lagi. Jika \\( x \\) mewakili jumlah pulpen yang diberikan temannya, ekspresi manakah yang mewakili jumlah total pulpen yang Sarah miliki sekarang?", opts: ["\\( x - 5 \\)", "\\( 5 - x \\)", "\\( 5x \\)", "\\( 5 + x \\)", "\\( \\frac{5}{x} \\)"], correct: 3, exp: "<p>Initially, Sarah has 5 pens. She receives \\( x \\) more pens. 'More' indicates addition. So, the total is \\( 5 + x \\).</p><p class='translation'>Awalnya, Sarah memiliki 5 pulpen. Dia menerima \\( x \\) pulpen lagi. 'Lagi' menunjukkan penjumlahan. Jadi, totalnya adalah \\( 5 + x \\).</p>" },
+                        { q: "A taxi charges a flat fee of $3 plus $2 for every kilometer traveled. If \\( k \\) is the number of kilometers traveled, what is the total cost?", q_trans: "Sebuah taksi mengenakan biaya tetap $3 ditambah $2 untuk setiap kilometer yang ditempuh. Jika \\( k \\) adalah jumlah kilometer yang ditempuh, berapakah total biayanya?", opts: ["\\( 3 + 2 \\)", "\\( 3k + 2 \\)", "\\( 2k + 3 \\)", "\\( 2 + 3k \\)", "\\( 5k \\)"], correct: 2, exp: "<p>The flat fee is $3. The cost per km is $2, so for \\( k \\) km it's \\( 2k \\). Total cost is \\( 3 + 2k \\), which can be written as \\( 2k + 3 \\).</p><p class='translation'>Biaya tetap adalah $3. Biaya per km adalah $2, jadi untuk \\( k \\) km biayanya \\( 2k \\). Total biaya adalah \\( 3 + 2k \\), yang bisa ditulis sebagai \\( 2k + 3 \\).</p>" },
+                        { q: "Think of a number. Multiply it by 4, then subtract 7. If the number is \\( n \\), what is the result?", q_trans: "Pikirkan sebuah angka. Kalikan dengan 4, lalu kurangi 7. Jika angka tersebut adalah \\( n \\), berapakah hasilnya?", opts: ["\\( 4(n - 7) \\)", "\\( 7 - 4n \\)", "\\( 4n - 7 \\)", "\\( \\frac{n}{4} - 7 \\)", "\\( 4 + n - 7 \\)"], correct: 2, exp: "<p>Multiplying \\( n \\) by 4 gives \\( 4n \\). Subtracting 7 from that gives \\( 4n - 7 \\).</p><p class='translation'>Mengalikan \\( n \\) dengan 4 menghasilkan \\( 4n \\). Mengurangi 7 dari itu menghasilkan \\( 4n - 7 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-cubes mr-2"></i>Constants and Coefficients</h2>
+                            <p class="translation">Konstanta dan Koefisien</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="30" y="80" font-size="40" font-weight="bold" fill="#10b981" font-family="Arial">3</text>
+                                <text x="70" y="80" font-size="40" font-weight="bold" fill="#3b82f6" font-family="Arial">x</text>
+                                <text x="120" y="80" font-size="40" font-weight="bold" fill="#ef4444" font-family="Arial">+5</text>
+                                <path d="M 30 90 L 90 90" stroke="#10b981" stroke-width="3"/>
+                                <text x="60" y="110" font-size="12" text-anchor="middle" fill="#10b981">Coefficient</text>
+                                <text x="145" y="110" font-size="12" text-anchor="middle" fill="#ef4444">Constant</text>
+                                <text x="70" y="40" font-size="12" text-anchor="middle" fill="#3b82f6">Variable</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">In an expression like \\( 3x + 5 \\), the number 3 is a <strong>coefficient</strong> (the number multiplying the variable).</p>
+                                <p class="translation">Dalam ekspresi seperti \\( 3x + 5 \\), angka 3 adalah <strong>koefisien</strong> (angka yang mengalikan variabel).</p>
+                                <p class="mt-2">The number 5 is a <strong>constant</strong> (a fixed number that doesn't change).</p>
+                                <p class="translation">Angka 5 adalah <strong>konstanta</strong> (angka tetap yang tidak berubah).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "In the algebraic expression \\( 7y - 4 \\), what is the coefficient?", q_trans: "Dalam ekspresi aljabar \\( 7y - 4 \\), apakah koefisiennya?", opts: ["\\( y \\)", "\\( 7 \\)", "\\( 4 \\)", "\\( -4 \\)", "\\( 3 \\)"], correct: 1, exp: "<p>The coefficient is the number multiplying the variable \\( y \\). Here, it is 7.</p><p class='translation'>Koefisien adalah angka yang mengalikan variabel \\( y \\). Di sini, angkanya adalah 7.</p>" },
+                        { q: "John is \\( y \\) years old. His father is 25 years older than him. Which expression represents his father's age?", q_trans: "Umur John adalah \\( y \\) tahun. Ayahnya 25 tahun lebih tua dari dia. Ekspresi manakah yang mewakili umur ayahnya?", opts: ["\\( 25y \\)", "\\( y - 25 \\)", "\\( 25 - y \\)", "\\( y + 25 \\)", "\\( \\frac{y}{25} \\)"], correct: 3, exp: "<p>His father is older, so we add 25 to John's age \\( y \\). The expression is \\( y + 25 \\).</p><p class='translation'>Ayahnya lebih tua, jadi kita tambahkan 25 ke umur John \\( y \\). Ekspresinya adalah \\( y + 25 \\).</p>" },
+                        { q: "A rectangle has a length of \\( 2x \\) and a width of 5. What is the constant in the expression for its perimeter, \\( P = 2(2x) + 2(5) \\)?", q_trans: "Sebuah persegi panjang memiliki panjang \\( 2x \\) dan lebar 5. Berapakah konstanta dalam ekspresi kelilingnya, \\( P = 2(2x) + 2(5) \\)?", opts: ["\\( x \\)", "\\( 2 \\)", "\\( 5 \\)", "\\( 10 \\)", "\\( 4 \\)"], correct: 3, exp: "<p>Simplifying the perimeter: \\( P = 4x + 10 \\). The constant term is 10.</p><p class='translation'>Menyederhanakan keliling: \\( P = 4x + 10 \\). Suku konstantanya adalah 10.</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-calculator mr-2"></i>Substituting Values</h2>
+                            <p class="translation">Substitusi Nilai</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="20" y="60" width="60" height="60" rx="5" fill="#fbbf24" stroke="#d97706" stroke-width="3"/>
+                                <text x="50" y="100" font-size="30" font-weight="bold" text-anchor="middle">x=2</text>
+                                <path d="M 90 90 L 130 90" stroke="#4f46e5" stroke-width="4" marker-end="url(#arrow)"/>
+                                <rect x="140" y="60" width="40" height="60" rx="5" fill="#4f46e5" stroke="#3730a3" stroke-width="3"/>
+                                <text x="160" y="100" font-size="30" font-weight="bold" fill="#fff" text-anchor="middle">8</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">If we know the value of a variable, we can substitute it into an expression to find a numerical answer.</p>
+                                <p class="translation">Jika kita mengetahui nilai variabel, kita bisa menggantikannya ke dalam ekspresi untuk mencari jawaban numerik.</p>
+                                <p class="mt-2">For example, if \\( x = 2 \\), then \\( 3x + 2 = 3(2) + 2 = 6 + 2 = 8 \\).</p>
+                                <p class="translation">Misalnya, jika \\( x = 2 \\), maka \\( 3x + 2 = 3(2) + 2 = 6 + 2 = 8 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { q: "If \\( a = 4 \\), what is the value of \\( a + 7 \\)?", q_trans: "Jika \\( a = 4 \\), berapakah nilai dari \\( a + 7 \\)?", opts: ["3", "11", "28", "14", "10"], correct: 1, exp: "<p>Substitute \\( a = 4 \\): \\( 4 + 7 = 11 \\).</p><p class='translation'>Substitusi \\( a = 4 \\): \\( 4 + 7 = 11 \\).</p>" },
+                        { q: "The formula for the area of a triangle is \\( A = \\frac{1}{2}bh \\). If the base \\( b = 10 \\) cm and height \\( h = 6 \\) cm, what is the area?", q_trans: "Rumus luas segitiga adalah \\( A = \\frac{1}{2}bh \\). Jika alas \\( b = 10 \\) cm dan tinggi \\( h = 6 \\) cm, berapakah luasnya?", opts: ["\\( 60 \\text{ cm}^2 \\)", "\\( 30 \\text{ cm}^2 \\)", "\\( 16 \\text{ cm}^2 \\)", "\\( 8 \\text{ cm}^2 \\)", "\\( 32 \\text{ cm}^2 \\)"], correct: 1, exp: "<p>Substitute values: \\( A = \\frac{1}{2}(10)(6) = 5 \\times 6 = 30 \\text{ cm}^2 \\).</p><p class='translation'>Substitusi nilai: \\( A = \\frac{1}{2}(10)(6) = 5 \\times 6 = 30 \\text{ cm}^2 \\).</p>" },
+                        { q: "If \\( p = -3 \\), evaluate the expression \\( 2p^2 + 4 \\).", q_trans: "Jika \\( p = -3 \\), nilai dari ekspresi \\( 2p^2 + 4 \\) adalah.", opts: ["-2", "10", "22", "-14", "18"], correct: 2, exp: "<p>Substitute \\( p = -3 \\): \\( 2(-3)^2 + 4 = 2(9) + 4 = 18 + 4 = 22 \\).</p><p class='translation'>Substitusi \\( p = -3 \\): \\( 2(-3)^2 + 4 = 2(9) + 4 = 18 + 4 = 22 \\).</p>" },
+                        { q: "A baker uses the formula \\( C = 50f + 20 \\) to find the cost (in dollars) of baking \\( f \\) cakes. How much will it cost to bake 4 cakes?", q_trans: "Seorang tukang roti menggunakan rumus \\( C = 50f + 20 \\) untuk mencari biaya (dalam dolar) memanggang \\( f \\) kue. Berapa biayanya untuk memanggang 4 kue?", opts: ["\\( \\$120 \\)", "\\( \\$200 \\)", "\\( \\$220 \\)", "\\( \\$170 \\)", "\\( \\$240 \\)"], correct: 2, exp: "<p>Substitute \\( f = 4 \\): \\( C = 50(4) + 20 = 200 + 20 = 220 \\).</p><p class='translation'>Substitusi \\( f = 4 \\): \\( C = 50(4) + 20 = 200 + 20 = 220 \\).</p>" }
+                    ]}
+                ]
+            },
+            intro: {
+                title: "Introduction & Real-World Connection",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-globe mr-2"></i>Algebra in the Real World</h2>
+                            <p class="translation">Aljabar di Dunia Nyata</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 100 L 60 60 L 100 100 L 140 50 L 180 100" fill="none" stroke="#3b82f6" stroke-width="4"/>
+                                <circle cx="140" cy="50" r="6" fill="#ef4444"/>
+                                <text x="100" y="130" font-size="14" text-anchor="middle" fill="#000">Profit Growth</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Algebra is used everywhere! Businesses use it to calculate profits, engineers use it to design bridges, and scientists use it to track data.</p>
+                                <p class="translation">Aljabar digunakan di mana-mana! Bisnis menggunakannya untuk menghitung keuntungan, insinyur menggunakannya untuk merancang jembatan, dan ilmuwan menggunakannya untuk melacak data.</p>
+                                <p class="mt-2">If a business makes $10 for every item sold, and they sell \\( x \\) items, their revenue is \\( 10x \\).</p>
+                                <p class="translation">Jika sebuah bisnis menghasilkan $10 untuk setiap barang yang terjual, dan mereka menjual \\( x \\) barang, pendapatan mereka adalah \\( 10x \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "A mobile phone plan costs $15 per month plus $0.10 for every text message sent. If \\( t \\) is the number of texts sent, what is the monthly cost?", q_trans: "Paket ponsel biayanya $15 per bulan ditambah $0,10 untuk setiap pesan teks yang dikirim. Jika \\( t \\) adalah jumlah pesan yang dikirim, berapakah biaya bulanannya?", opts: ["\\( 15 + 0.10t \\)", "\\( 15t + 0.10 \\)", "\\( 15.10t \\)", "\\( 0.10(15 + t) \\)", "\\( 15 + t \\)"], correct: 0, exp: "<p>The fixed cost is $15. The variable cost is $0.10 per text, which is \\( 0.10t \\). Total cost is \\( 15 + 0.10t \\).</p><p class='translation'>Biaya tetap adalah $15. Biaya variabel adalah $0,10 per pesan, yaitu \\( 0.10t \\). Total biaya adalah \\( 15 + 0.10t \\).</p>" },
+                        { q: "A car rental company charges $50 per day and $0.20 per kilometer. If you rent the car for 3 days and drive \\( d \\) kilometers, what is the total cost?", q_trans: "Perusahaan sewa mobil membebankan biaya $50 per hari dan $0,20 per kilometer. Jika Anda menyewa mobil selama 3 hari dan mengemudi \\( d \\) kilometer, berapakah total biayanya?", opts: ["\\( 50 + 0.20d \\)", "\\( 150 + 0.20d \\)", "\\( 3(50) + 0.20d \\)", "\\( 50d + 60 \\)", "\\( 150 + 0.60d \\)"], correct: 2, exp: "<p>Cost for 3 days is \\( 3 \\times 50 = 150 \\). Cost for distance is \\( 0.20d \\). Total is \\( 150 + 0.20d \\), which is the same as \\( 3(50) + 0.20d \\).</p><p class='translation'>Biaya untuk 3 hari adalah \\( 3 \\times 50 = 150 \\). Biaya untuk jarak adalah \\( 0.20d \\). Totalnya adalah \\( 150 + 0.20d \\), yang sama dengan \\( 3(50) + 0.20d \\).</p>" },
+                        { q: "Tom is 4 years older than twice his brother's age. If his brother is \\( b \\) years old, how old is Tom?", q_trans: "Tom berusia 4 tahun lebih tua dari dua kali umur adiknya. Jika adiknya berusia \\( b \\) tahun, berapakah umur Tom?", opts: ["\\( 2b - 4 \\)", "\\( 4 - 2b \\)", "\\( 2b + 4 \\)", "\\( b + 4 \\)", "\\( \\frac{b}{2} + 4 \\)"], correct: 2, exp: "<p>Twice his brother's age is \\( 2b \\). 'Older than' means add 4. So, Tom's age is \\( 2b + 4 \\).</p><p class='translation'>Dua kali umur adiknya adalah \\( 2b \\). 'Lebih tua dari' berarti tambah 4. Jadi, umur Tom adalah \\( 2b + 4 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-balance-scale-right mr-2"></i>Formulas and Unknowns</h2>
+                            <p class="translation">Rumus dan Nilai yang Tidak Diketahui</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="40" y="30" width="120" height="50" rx="5" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"/>
+                                <text x="100" y="60" font-size="20" font-family="Arial" text-anchor="middle">v = u + at</text>
+                                <rect x="40" y="100" width="120" height="50" rx="5" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                <text x="100" y="130" font-size="20" font-family="Arial" text-anchor="middle">?</text>
+                                <path d="M 100 80 L 100 100" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+                            </svg>
+                            <div>
+                                <p class="mb-2">A formula is an equation that shows the relationship between variables. We can rearrange formulas to find any unknown value.</p>
+                                <p class="translation">Rumus adalah persamaan yang menunjukkan hubungan antara variabel. Kita dapat mengatur ulang rumus untuk mencari nilai yang tidak diketahui.</p>
+                                <p class="mt-2">For example, in the formula for speed \\( v = u + at \\), if we know \\( v, u, \\) and \\( a \\), we can find \\( t \\).</p>
+                                <p class="translation">Misalnya, dalam rumus kecepatan \\( v = u + at \\), jika kita mengetahui \\( v, u, \\) dan \\( a \\), kita dapat mencari \\( t \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "The formula for the perimeter of a square is \\( P = 4s \\). If the perimeter \\( P \\) is 20 cm, what is the length of one side \\( s \\)?", q_trans: "Rumus keliling persegi adalah \\( P = 4s \\). Jika keliling \\( P \\) adalah 20 cm, berapakah panjang satu sisi \\( s \\)?", opts: ["\\( 5 \\text{ cm} \\)", "\\( 16 \\text{ cm} \\)", "\\( 80 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)", "\\( 24 \\text{ cm} \\)"], correct: 0, exp: "<p>Substitute \\( P = 20 \\): \\( 20 = 4s \\). Divide by 4: \\( s = 5 \\text{ cm} \\).</p><p class='translation'>Substitusi \\( P = 20 \\): \\( 20 = 4s \\). Bagi dengan 4: \\( s = 5 \\text{ cm} \\).</p>" },
+                        { q: "Using the formula \\( C = \\frac{5}{9}(F - 32) \\) to convert Fahrenheit to Celsius, find \\( F \\) if \\( C = 0 \\).", q_trans: "Menggunakan rumus \\( C = \\frac{5}{9}(F - 32) \\) untuk mengubah Fahrenheit menjadi Celsius, carilah \\( F \\) jika \\( C = 0 \\).", opts: ["\\( 0 \\)", "\\( 32 \\)", "\\( -32 \\)", "\\( 100 \\)", "\\( 212 \\)"], correct: 1, exp: "<p>Substitute \\( C = 0 \\): \\( 0 = \\frac{5}{9}(F - 32) \\). Multiply both sides by \\( \\frac{9}{5} \\): \\( 0 = F - 32 \\). So, \\( F = 32 \\).</p><p class='translation'>Substitusi \\( C = 0 \\): \\( 0 = \\frac{5}{9}(F - 32) \\). Kalikan kedua sisi dengan \\( \\frac{9}{5} \\): \\( 0 = F - 32 \\). Jadi, \\( F = 32 \\).</p>" },
+                        { q: "The area of a rectangle is \\( A = lw \\). If the area is 24 and the length is 6, what is the width?", q_trans: "Luas persegi panjang adalah \\( A = lw \\). Jika luasnya 24 dan panjangnya 6, berapakah lebarnya?", opts: ["4", "6", "30", "18", "144"], correct: 0, exp: "<p>Substitute \\( A = 24 \\) and \\( l = 6 \\): \\( 24 = 6w \\). Divide by 6: \\( w = 4 \\).</p><p class='translation'>Substitusi \\( A = 24 \\) dan \\( l = 6 \\): \\( 24 = 6w \\). Bagi dengan 6: \\( w = 4 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-yellow-700 mb-2"><i class="fas fa-shapes mr-2"></i>Geometry and Algebra</h2>
+                            <p class="translation">Geometri dan Aljabar</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 50 100 L 100 40 L 150 100 Z" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                <text x="100" y="120" font-size="14" text-anchor="middle" fill="#000">Angles = 180°</text>
+                                <text x="70" y="90" font-size="12" fill="#ef4444">x</text>
+                                <text x="110" y="90" font-size="12" fill="#10b981">2x</text>
+                                <text x="95" y="60" font-size="12" fill="#fbbf24">x+10</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Algebra is heavily used in geometry to find missing angles and sides. The angles in a triangle add up to \\( 180^\\circ \\).</p>
+                                <p class="translation">Aljabar banyak digunakan dalam geometri untuk mencari sudut dan sisi yang hilang. Sudut-sudut dalam segitiga berjumlah \\( 180^\\circ \\).</p>
+                                <p class="mt-2">If angles are \\( x, 2x, \\) and \\( x+10 \\), we can write the equation \\( x + 2x + (x + 10) = 180 \\).</p>
+                                <p class="translation">Jika sudutnya adalah \\( x, 2x, \\) dan \\( x+10 \\), kita dapat menulis persamaan \\( x + 2x + (x + 10) = 180 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { q: "Two angles in a triangle are \\( 50^\\circ \\) and \\( 60^\\circ \\). What is the value of the third angle?", q_trans: "Dua sudut dalam segitiga adalah \\( 50^\\circ \\) dan \\( 60^\\circ \\). Berapakah nilai sudut ketiga?", opts: ["\\( 110^\\circ \\)", "\\( 70^\\circ \\)", "\\( 60^\\circ \\)", "\\( 90^\\circ \\)", "\\( 50^\\circ \\)"], correct: 1, exp: "<p>Sum of angles is \\( 180^\\circ \\). Third angle = \\( 180 - (50 + 60) = 180 - 110 = 70^\\circ \\).</p><p class='translation'>Jumlah sudut adalah \\( 180^\\circ \\). Sudut ketiga = \\( 180 - (50 + 60) = 180 - 110 = 70^\\circ \\).</p>" },
+                        { q: "A triangle has angles \\( x, 3x, \\) and \\( 2x \\). What is the value of \\( x \\)?", q_trans: "Sebuah segitiga memiliki sudut \\( x, 3x, \\) dan \\( 2x \\). Berapakah nilai \\( x \\)?", opts: ["\\( 30^\\circ \\)", "\\( 36^\\circ \\)", "\\( 45^\\circ \\)", "\\( 60^\\circ \\)", "\\( 90^\\circ \\)"], correct: 0, exp: "<p>\\( x + 3x + 2x = 180 \\implies 6x = 180 \\implies x = 30^\\circ \\).</p><p class='translation'>\\( x + 3x + 2x = 180 \\implies 6x = 180 \\implies x = 30^\\circ \\).</p>" },
+                        { q: "The length of a rectangle is \\( (x + 3) \\) and the width is \\( x \\). If the perimeter is 22 cm, what is \\( x \\)?", q_trans: "Panjang persegi panjang adalah \\( (x + 3) \\) dan lebarnya \\( x \\). Jika kelilingnya 22 cm, berapakah \\( x \\)?", opts: ["\\( 2 \\)", "\\( 4 \\)", "\\( 5 \\)", "\\( 8 \\)", "\\( 11 \\)"], correct: 1, exp: "<p>Perimeter \\( P = 2(l + w) \\implies 22 = 2(x + 3 + x) \\implies 11 = 2x + 3 \\implies 2x = 8 \\implies x = 4 \\).</p><p class='translation'>Keliling \\( P = 2(l + w) \\implies 22 = 2(x + 3 + x) \\implies 11 = 2x + 3 \\implies 2x = 8 \\implies x = 4 \\).</p>" },
+                        { q: "Two complementary angles are represented by \\( (2x) \\) and \\( (x + 30) \\). Find \\( x \\).", q_trans: "Dua sudut saling berpelengkap direpresentasikan oleh \\( (2x) \\) dan \\( (x + 30) \\). Carilah \\( x \\).", opts: ["\\( 20^\\circ \\)", "\\( 30^\\circ \\)", "\\( 40^\\circ \\)", "\\( 60^\\circ \\)", "\\( 90^\\circ \\)"], correct: 0, exp: "<p>Complementary angles sum to \\( 90^\\circ \\). \\( 2x + x + 30 = 90 \\implies 3x = 60 \\implies x = 20^\\circ \\).</p><p class='translation'>Sudut berpelengkap berjumlah \\( 90^\\circ \\). \\( 2x + x + 30 = 90 \\implies 3x = 60 \\implies x = 20^\\circ \\).</p>" }
+                    ]}
+                ]
+            },
+            review: {
+                title: "Review of Prior Knowledge",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-object-group mr-2"></i>Collecting Like Terms</h2>
+                            <p class="translation">Mengumpulkan Suku Sejenis</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <circle cx="50" cy="50" r="20" fill="#3b82f6"/>
+                                <circle cx="50" cy="100" r="20" fill="#3b82f6"/>
+                                <text x="100" y="80" font-size="20">+</text>
+                                <circle cx="130" cy="75" r="20" fill="#3b82f6"/>
+                                <text x="90" y="150" font-size="14" text-anchor="middle">3 circles</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">In algebra, we can only add or subtract <strong>like terms</strong> (terms with the same variable and power).</p>
+                                <p class="translation">Dalam aljabar, kita hanya bisa menjumlahkan atau mengurangkan <strong>suku sejenis</strong> (suku dengan variabel dan pangkat yang sama).</p>
+                                <p class="mt-2">For example, \\( 3x + 2x = 5x \\). But \\( 3x + 2y \\) cannot be simplified further.</p>
+                                <p class="translation">Misalnya, \\( 3x + 2x = 5x \\). Tetapi \\( 3x + 2y \\) tidak dapat disederhanakan lebih lanjut.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Simplify the expression: \\( 4x + 5y - 2x + y \\).", q_trans: "Sederhanakan ekspresi: \\( 4x + 5y - 2x + y \\).", opts: ["\\( 6x + 6y \\)", "\\( 2x + 6y \\)", "\\( 2x + 4y \\)", "\\( 6x + 4y \\)", "\\( 2x - 6y \\)"], correct: 1, exp: "<p>Group like terms: \\( (4x - 2x) + (5y + y) = 2x + 6y \\).</p><p class='translation'>Kelompokkan suku sejenis: \\( (4x - 2x) + (5y + y) = 2x + 6y \\).</p>" },
+                        { q: "Simplify: \\( 7a - 3b + 4a + 8b \\).", q_trans: "Sederhanakan: \\( 7a - 3b + 4a + 8b \\).", opts: ["\\( 11a + 11b \\)", "\\( 11a + 5b \\)", "\\( 3a + 5b \\)", "\\( 10ab \\)", "\\( 11a - 5b \\)"], correct: 1, exp: "<p>Group like terms: \\( (7a + 4a) + (-3b + 8b) = 11a + 5b \\).</p><p class='translation'>Kelompokkan suku sejenis: \\( (7a + 4a) + (-3b + 8b) = 11a + 5b \\).</p>" },
+                        { q: "A bag contains \\( 3r \\) red marbles and \\( 5b \\) blue marbles. If 1 red and 2 blue are removed, how many are left?", q_trans: "Sebuah kantong berisi \\( 3r \\) kelereng merah dan \\( 5b \\) kelereng biru. Jika 1 merah dan 2 biru dikeluarkan, berapa banyak yang tersisa?", opts: ["\\( 3r + 5b - 3 \\)", "\\( 2r + 3b \\)", "\\( 3r - 1 + 5b - 2 \\)", "\\( 8rb - 3 \\)", "\\( 2r + 5b - 2 \\)"], correct: 2, exp: "<p>Red left: \\( 3r - 1 \\). Blue left: \\( 5b - 2 \\). Total left: \\( 3r - 1 + 5b - 2 \\).</p><p class='translation'>Merah tersisa: \\( 3r - 1 \\). Biru tersisa: \\( 5b - 2 \\). Total tersisa: \\( 3r - 1 + 5b - 2 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-expand-arrows-alt mr-2"></i>Expanding Brackets</h2>
+                            <p class="translation">Mengembangkan Kurung</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="30" y="50" width="40" height="40" fill="#3b82f6" opacity="0.5"/>
+                                <rect x="70" y="50" width="40" height="40" fill="#10b981" opacity="0.5"/>
+                                <rect x="30" y="90" width="40" height="40" fill="#fbbf24" opacity="0.5"/>
+                                <rect x="70" y="90" width="40" height="40" fill="#ef4444" opacity="0.5"/>
+                                <text x="90" y="160" font-size="14" text-anchor="middle">(x + 2)(x + 3)</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">When a number is outside a bracket, it multiplies everything inside. This is called the <strong>distributive property</strong>.</p>
+                                <p class="translation">Ketika angka berada di luar kurung, angka tersebut mengalikan semua yang ada di dalamnya. Ini disebut <strong>sifat distributif</strong>.</p>
+                                <p class="mt-2">For example, \\( 3(x + 4) = 3x + 12 \\).</p>
+                                <p class="translation">Misalnya, \\( 3(x + 4) = 3x + 12 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Expand the expression: \\( 5(2x - 3) \\).", q_trans: "Kembangkan ekspresi: \\( 5(2x - 3) \\).", opts: ["\\( 10x - 3 \\)", "\\( 10x - 15 \\)", "\\( 7x - 15 \\)", "\\( 10x + 15 \\)", "\\( 7x + 2 \\)"], correct: 1, exp: "<p>Multiply 5 by both terms: \\( 5 \\times 2x = 10x \\) and \\( 5 \\times (-3) = -15 \\). Result: \\( 10x - 15 \\).</p><p class='translation'>Kalikan 5 dengan kedua suku: \\( 5 \\times 2x = 10x \\) dan \\( 5 \\times (-3) = -15 \\). Hasil: \\( 10x - 15 \\).</p>" },
+                        { q: "Expand and simplify: \\( 4(x + 2) + 3(x - 1) \\).", q_trans: "Kembangkan dan sederhanakan: \\( 4(x + 2) + 3(x - 1) \\).", opts: ["\\( 7x + 5 \\)", "\\( 7x + 11 \\)", "\\( 7x - 5 \\)", "\\( 4x + 5 \\)", "\\( 7x + 1 \\)"], correct: 0, exp: "<p>Expand: \\( 4x + 8 + 3x - 3 \\). Simplify: \\( (4x + 3x) + (8 - 3) = 7x + 5 \\).</p><p class='translation'>Kembangkan: \\( 4x + 8 + 3x - 3 \\). Sederhanakan: \\( (4x + 3x) + (8 - 3) = 7x + 5 \\).</p>" },
+                        { q: "A rectangle has a width of \\( x \\) and a length of \\( 2x + 1 \\). What is the expanded expression for its perimeter?", q_trans: "Sebuah persegi panjang memiliki lebar \\( x \\) dan panjang \\( 2x + 1 \\). Berapakah ekspresi yang dikembangkan untuk kelilingnya?", opts: ["\\( 2x^2 + x \\)", "\\( 3x + 1 \\)", "\\( 6x + 2 \\)", "\\( 4x + 2 \\)", "\\( 6x + 1 \\)"], correct: 2, exp: "<p>Perimeter = \\( 2(w + l) = 2(x + 2x + 1) = 2(3x + 1) = 6x + 2 \\).</p><p class='translation'>Keliling = \\( 2(w + l) = 2(x + 2x + 1) = 2(3x + 1) = 6x + 2 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-cut mr-2"></i>Factorizing Expressions</h2>
+                            <p class="translation">Memfaktorkan Ekspresi</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="30" y="30" width="60" height="60" fill="#3b82f6"/>
+                                <rect x="30" y="90" width="40" height="40" fill="#3b82f6"/>
+                                <text x="100" y="100" font-size="20">=</text>
+                                <rect x="120" y="60" width="30" height="40" fill="#10b981"/>
+                                <text x="155" y="90" font-size="16">( ... )</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Factorizing is the opposite of expanding. We take out the <strong>Highest Common Factor (HCF)</strong> and put it outside the brackets.</p>
+                                <p class="translation">Memfaktorkan adalah kebalikan dari mengembangkan. Kita mengeluarkan <strong>Faktor Persekutuan Terbesar (FPB)</strong> dan meletakkannya di luar kurung.</p>
+                                <p class="mt-2">For example, \\( 6x + 9 = 3(2x + 3) \\) because 3 is the HCF of 6 and 9.</p>
+                                <p class="translation">Misalnya, \\( 6x + 9 = 3(2x + 3) \\) karena 3 adalah FPB dari 6 dan 9.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { q: "Factorize completely: \\( 8x + 12y \\).", q_trans: "Faktorkan secara lengkap: \\( 8x + 12y \\).", opts: ["\\( 2(4x + 6y) \\)", "\\( 4(2x + 3y) \\)", "\\( 8(x + 4y) \\)", "\\( 2x(4 + 6y) \\)", "\\( 4x(2 + 3y) \\)"], correct: 1, exp: "<p>HCF of 8 and 12 is 4. Take 4 out: \\( 4(2x + 3y) \\).</p><p class='translation'>FPB dari 8 dan 12 adalah 4. Keluarkan 4: \\( 4(2x + 3y) \\).</p>" },
+                        { q: "Factorize: \\( 5a^2 - 10a \\).", q_trans: "Faktorkan: \\( 5a^2 - 10a \\).", opts: ["\\( 5(a^2 - 2a) \\)", "\\( a(5a - 10) \\)", "\\( 5a(a - 2) \\)", "\\( 5(a - 2) \\)", "\\( 5a(a + 2) \\)"], correct: 2, exp: "<p>HCF of 5 and 10 is 5. HCF of \\( a^2 \\) and \\( a \\) is \\( a \\). Overall HCF is \\( 5a \\). Result: \\( 5a(a - 2) \\).</p><p class='translation'>FPB dari 5 dan 10 adalah 5. FPB dari \\( a^2 \\) dan \\( a \\) adalah \\( a \\). Total FPB adalah \\( 5a \\). Hasil: \\( 5a(a - 2) \\).</p>" },
+                        { q: "The area of a rectangle is \\( 15x^2 + 5x \\). If the width is \\( 5x \\), what is the length?", q_trans: "Luas persegi panjang adalah \\( 15x^2 + 5x \\). Jika lebarnya \\( 5x \\), berapakah panjangnya?", opts: ["\\( 3x + 1 \\)", "\\( 3x \\)", "\\( 3x - 1 \\)", "\\( 15x \\)", "\\( 5x \\)"], correct: 0, exp: "<p>Length = Area / Width = \\( \\frac{15x^2 + 5x}{5x} = 3x + 1 \\).</p><p class='translation'>Panjang = Luas / Lebar = \\( \\frac{15x^2 + 5x}{5x} = 3x + 1 \\).</p>" },
+                        { q: "Factorize: \\( 3x^2 - 12 \\).", q_trans: "Faktorkan: \\( 3x^2 - 12 \\).", opts: ["\\( 3(x^2 - 4) \\)", "\\( 3(x - 2)(x - 2) \\)", "\\( 3(x - 2)(x + 2) \\)", "\\( x(3x - 12) \\)", "\\( (3x - 3)(x + 4) \\)"], correct: 2, exp: "<p>First take out 3: \\( 3(x^2 - 4) \\). Then recognize difference of squares: \\( x^2 - 4 = (x-2)(x+2) \\). Result: \\( 3(x-2)(x+2) \\).</p><p class='translation'>Pertama keluarkan 3: \\( 3(x^2 - 4) \\). Lalu kenali selisih kuadrat: \\( x^2 - 4 = (x-2)(x+2) \\). Hasil: \\( 3(x-2)(x+2) \\).</p>" }
+                    ]}
+                ]
+            },
+			
+            problem: {
+                title: "Problem Introduction",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-balance-scale-right mr-2"></i>Forming Linear Equations</h2>
+                            <p class="translation">Membentuk Persamaan Linear</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 100 20 L 100 110" stroke="#000" stroke-width="4"/>
+                                <path d="M 50 110 L 150 110" stroke="#000" stroke-width="4"/>
+                                <path d="M 40 60 L 100 60 L 160 60" fill="none" stroke="#3b82f6" stroke-width="4"/>
+                                <rect x="20" y="60" width="20" height="40" fill="#ef4444"/>
+                                <text x="30" y="115" font-size="12" text-anchor="middle">x</text>
+                                <rect x="160" y="50" width="20" height="50" fill="#10b981"/>
+                                <text x="170" y="115" font-size="12" text-anchor="middle">10</text>
+                                <rect x="110" y="70" width="20" height="30" fill="#10b981"/>
+                                <text x="120" y="115" font-size="12" text-anchor="middle">6</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">An equation is like a balance scale. Whatever you do to one side, you must do to the other to keep it balanced.</p>
+                                <p class="translation">Persamaan seperti timbangan. Apa pun yang Anda lakukan pada satu sisi, harus dilakukan juga pada sisi lainnya agar tetap seimbang.</p>
+                                <p class="mt-2">If a bag contains \\( x \\) apples and 6 more apples are added, making it equal to 10 apples, we write: \\( x + 6 = 10 \\).</p>
+                                <p class="translation">Jika sebuah kantong berisi \\( x \\) apel dan 6 apel lagi ditambahkan, sehingga jumlahnya sama dengan 10 apel, kita menulis: \\( x + 6 = 10 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "I think of a number, multiply it by 3, and subtract 4. The result is 11. What is the number?", q_trans: "Saya memikirkan sebuah angka, mengalikannya dengan 3, dan mengurangkan 4. Hasilnya adalah 11. Berapakah angka tersebut?", opts: ["\\( 3 \\)", "\\( 5 \\)", "\\( 7 \\)", "\\( 15 \\)", "\\( 4 \\)"], correct: 1, exp: "<p>Let the number be \\( x \\). Equation: \\( 3x - 4 = 11 \\). Add 4: \\( 3x = 15 \\). Divide by 3: \\( x = 5 \\).</p><p class='translation'>Misalkan angkanya \\( x \\). Persamaan: \\( 3x - 4 = 11 \\). Tambah 4: \\( 3x = 15 \\). Bagi 3: \\( x = 5 \\).</p>" },
+                        { q: "A father is 30 years older than his son. If the sum of their ages is 56, how old is the son? Let son's age be \\( x \\).", q_trans: "Seorang ayah berusia 30 tahun lebih tua dari anaknya. Jika jumlah usia mereka adalah 56 tahun, berapakah usia anak? Misalkan usia anak adalah \\( x \\).", opts: ["\\( x + 30 = 56 \\implies x = 26 \\)", "\\( x + (x+30) = 56 \\implies x = 13 \\)", "\\( 2x - 30 = 56 \\implies x = 43 \\)", "\\( 2x + 30 = 56 \\implies x = 13 \\)", "\\( x = 56 - 30 = 26 \\)"], correct: 1, exp: "<p>Son = \\( x \\). Father = \\( x + 30 \\). Sum: \\( x + x + 30 = 56 \\implies 2x = 26 \\implies x = 13 \\).</p><p class='translation'>Anak = \\( x \\). Ayah = \\( x + 30 \\). Jumlah: \\( x + x + 30 = 56 \\implies 2x = 26 \\implies x = 13 \\).</p>" },
+                        { q: "The perimeter of a rectangle is 50 cm. If the length is 3 times the width, find the width \\( w \\).", q_trans: "Keliling persegi panjang adalah 50 cm. Jika panjangnya 3 kali lebarnya, carilah lebar \\( w \\).", opts: ["\\( 2(w + 3w) = 50 \\implies w = 6.25 \\)", "\\( w + 3w = 50 \\implies w = 12.5 \\)", "\\( 2(3w) = 50 \\implies w = 8.33 \\)", "\\( 2w + 3w = 50 \\implies w = 10 \\)", "\\( 6w = 50 \\implies w = 8.33 \\)"], correct: 0, exp: "<p>Perimeter \\( P = 2(l + w) \\). Substitute \\( l = 3w \\): \\( 2(3w + w) = 50 \\implies 2(4w) = 50 \\implies 8w = 50 \\implies w = 6.25 \\) cm.</p><p class='translation'>Keliling \\( P = 2(l + w) \\). Substitusi \\( l = 3w \\): \\( 2(3w + w) = 50 \\implies 2(4w) = 50 \\implies 8w = 50 \\implies w = 6,25 \\) cm.</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-undo-alt mr-2"></i>Inverse Operations</h2>
+                            <p class="translation">Operasi Invers</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <rect x="20" y="50" width="40" height="40" rx="5" fill="#3b82f6"/>
+                                <text x="40" y="75" font-size="14" fill="#fff" text-anchor="middle">+5</text>
+                                <path d="M 70 70 L 100 70" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+                                <rect x="110" y="50" width="40" height="40" rx="5" fill="#10b981"/>
+                                <text x="130" y="75" font-size="14" fill="#fff" text-anchor="middle">-5</text>
+                                <text x="100" y="110" font-size="14" text-anchor="middle">Balance</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">To solve an equation, we use <strong>inverse operations</strong> to isolate the variable. Addition reverses subtraction, and multiplication reverses division.</p>
+                                <p class="translation">Untuk menyelesaikan persamaan, kita menggunakan <strong>operasi invers</strong> untuk mengisolasi variabel. Penjumlahan membalik pengurangan, dan perkalian membalik pembagian.</p>
+                                <p class="mt-2">To solve \\( x + 5 = 12 \\), subtract 5 from both sides: \\( x = 12 - 5 = 7 \\).</p>
+                                <p class="translation">Untuk menyelesaikan \\( x + 5 = 12 \\), kurangi 5 dari kedua sisi: \\( x = 12 - 5 = 7 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Solve for \\( x \\): \\( 2x + 3 = 15 \\).", q_trans: "Selesaikan untuk \\( x \\): \\( 2x + 3 = 15 \\).", opts: ["\\( x = 6 \\)", "\\( x = 9 \\)", "\\( x = 7.5 \\)", "\\( x = 5 \\)", "\\( x = 12 \\)"], correct: 0, exp: "<p>Subtract 3: \\( 2x = 12 \\). Divide by 2: \\( x = 6 \\).</p><p class='translation'>Kurangi 3: \\( 2x = 12 \\). Bagi 2: \\( x = 6 \\).</p>" },
+                        { q: "A taxi charges a $4 flag fall plus $2 per km. If a ride costs $14, how many km was the ride? (Let distance be \\( d \\))", q_trans: "Sebuah taksi mengenakan biaya tunggak $4 ditambah $2 per km. Jika ongkosnya $14, berapa km jaraknya? (Misalkan jaraknya \\( d \\))", opts: ["\\( 4d + 2 = 14 \\implies d = 3 \\)", "\\( 2d + 4 = 14 \\implies d = 5 \\)", "\\( 2d - 4 = 14 \\implies d = 9 \\)", "\\( 4d - 2 = 14 \\implies d = 4 \\)", "\\( 2d + 4 = 14 \\implies d = 7 \\)"], correct: 1, exp: "<p>Equation: \\( 2d + 4 = 14 \\). Subtract 4: \\( 2d = 10 \\implies d = 5 \\) km.</p><p class='translation'>Persamaan: \\( 2d + 4 = 14 \\). Kurangi 4: \\( 2d = 10 \\implies d = 5 \\) km.</p>" },
+                        { q: "If \\( \\frac{x}{3} - 1 = 4 \\), what is the value of \\( x \\)?", q_trans: "Jika \\( \\frac{x}{3} - 1 = 4 \\), berapakah nilai \\( x \\)?", opts: ["\\( 9 \\)", "\\( 15 \\)", "\\( 12 \\)", "\\( 3 \\)", "\\( 5 \\)"], correct: 1, exp: "<p>Add 1: \\( \\frac{x}{3} = 5 \\). Multiply by 3: \\( x = 15 \\).</p><p class='translation'>Tambah 1: \\( \\frac{x}{3} = 5 \\). Kalikan 3: \\( x = 15 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-yellow-700 mb-2"><i class="fas fa-arrows-alt-h mr-2"></i>Variables on Both Sides</h2>
+                            <p class="translation">Variabel di Kedua Sisi</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="20" y="80" width="50" height="50" fill="#3b82f6"/>
+                                <text x="45" y="110" font-size="16" fill="#fff" text-anchor="middle">3x</text>
+                                <rect x="70" y="80" width="20" height="50" fill="#ef4444"/>
+                                <text x="100" y="110" font-size="20" text-anchor="middle">=</text>
+                                <rect x="110" y="80" width="20" height="50" fill="#10b981"/>
+                                <rect x="130" y="80" width="50" height="50" fill="#3b82f6"/>
+                                <text x="155" y="110" font-size="16" fill="#fff" text-anchor="middle">2x</text>
+                                <path d="M 130 50 L 70 50" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrow)"/>
+                                <text x="100" y="40" font-size="12" text-anchor="middle">Move variables</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Sometimes, the variable appears on both sides of the equation. Move all variables to one side and numbers to the other.</p>
+                                <p class="translation">Kadang-kadang, variabel muncul di kedua sisi persamaan. Pindahkan semua variabel ke satu sisi dan angka ke sisi lainnya.</p>
+                                <p class="mt-2">For example, to solve \\( 3x + 5 = 2x + 10 \\), subtract \\( 2x \\) from both sides.</p>
+                                <p class="translation">Misalnya, untuk menyelesaikan \\( 3x + 5 = 2x + 10 \\), kurangi \\( 2x \\) dari kedua sisi.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { q: "Solve for \\( x \\): \\( 5x - 3 = 2x + 9 \\).", q_trans: "Selesaikan untuk \\( x \\): \\( 5x - 3 = 2x + 9 \\).", opts: ["\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 6 \\)", "\\( x = 12 \\)"], correct: 2, exp: "<p>Subtract \\( 2x \\): \\( 3x - 3 = 9 \\). Add 3: \\( 3x = 12 \\implies x = 4 \\).</p><p class='translation'>Kurangi \\( 2x \\): \\( 3x - 3 = 9 \\). Tambah 3: \\( 3x = 12 \\implies x = 4 \\).</p>" },
+                        { q: "Two brothers, Sam and Tom, have money. Sam has \\( 4x \\) dollars and Tom has \\( 3x + 15 \\) dollars. If they have the same amount of money, what is \\( x \\)?", q_trans: "Dua saudara, Sam dan Tom, memiliki uang. Sam memiliki \\( 4x \\) dolar dan Tom memiliki \\( 3x + 15 \\) dolar. Jika mereka memiliki jumlah uang yang sama, berapakah \\( x \\)?", opts: ["\\( 5 \\)", "\\( 10 \\)", "\\( 15 \\)", "\\( 20 \\)", "\\( 25 \\)"], correct: 2, exp: "<p>Equation: \\( 4x = 3x + 15 \\). Subtract \\( 3x \\): \\( x = 15 \\).</p><p class='translation'>Persamaan: \\( 4x = 3x + 15 \\). Kurangi \\( 3x \\): \\( x = 15 \\).</p>" },
+                        { q: "A rectangle has a length of \\( 2x + 5 \\) and a width of \\( x + 10 \\). If the length and width are equal, find \\( x \\).", q_trans: "Sebuah persegi panjang memiliki panjang \\( 2x + 5 \\) dan lebar \\( x + 10 \\). Jika panjang dan lebar sama, carilah \\( x \\).", opts: ["\\( 2 \\)", "\\( 3 \\)", "\\( 5 \\)", "\\( 10 \\)", "\\( 15 \\)"], correct: 2, exp: "<p>Equation: \\( 2x + 5 = x + 10 \\). Subtract \\( x \\): \\( x + 5 = 10 \\implies x = 5 \\).</p><p class='translation'>Persamaan: \\( 2x + 5 = x + 10 \\). Kurangi \\( x \\): \\( x + 5 = 10 \\implies x = 5 \\).</p>" },
+                        { q: "Lisa's age is \\( 3y \\) and her brother is \\( 2y + 4 \\). They are the same age. What is Lisa's age?", q_trans: "Usia Lisa adalah \\( 3y \\) dan adiknya \\( 2y + 4 \\). Mereka berusia sama. Berapakah usia Lisa?", opts: ["\\( 4 \\)", "\\( 8 \\)", "\\( 12 \\)", "\\( 16 \\)", "\\( 20 \\)"], correct: 2, exp: "<p>\\( 3y = 2y + 4 \\implies y = 4 \\). Lisa's age is \\( 3(4) = 12 \\).</p><p class='translation'>\\( 3y = 2y + 4 \\implies y = 4 \\). Usia Lisa adalah \\( 3(4) = 12 \\).</p>" }
+                    ]}
+                ]
+            },
+            guided: {
+                title: "Guided Practice",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-expand-arrows-alt mr-2"></i>Solving Equations with Brackets</h2>
+                            <p class="translation">Menyelesaikan Persamaan dengan Kurung</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="40" y="80" font-size="20" font-family="Arial">3(x+4)=27</text>
+                                <path d="M 80 90 L 120 90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+                                <text x="140" y="80" font-size="20" font-family="Arial">3x+12=27</text>
+                                <path d="M 100 50 L 100 100" stroke="#ef4444" stroke-width="0"/>
+                                <text x="100" y="130" font-size="12" text-anchor="middle">Expand first</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">When an equation contains brackets, the first step is to expand them using the distributive property.</p>
+                                <p class="translation">Ketika persamaan mengandung kurung, langkah pertama adalah mengembangkannya menggunakan sifat distributif.</p>
+                                <p class="mt-2">For example, \\( 3(x + 4) = 27 \\) becomes \\( 3x + 12 = 27 \\).</p>
+                                <p class="translation">Misalnya, \\( 3(x + 4) = 27 \\) menjadi \\( 3x + 12 = 27 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Solve for \\( x \\): \\( 2(x + 5) = 16 \\).", q_trans: "Selesaikan untuk \\( x \\): \\( 2(x + 5) = 16 \\).", opts: ["\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 6 \\)", "\\( x = 8 \\)"], correct: 0, exp: "<p>Expand: \\( 2x + 10 = 16 \\implies 2x = 6 \\implies x = 3 \\).</p><p class='translation'>Kembangkan: \\( 2x + 10 = 16 \\implies 2x = 6 \\implies x = 3 \\).</p>" },
+                        { q: "Solve: \\( 4(2x - 3) = 20 \\).", q_trans: "Selesaikan: \\( 4(2x - 3) = 20 \\).", opts: ["\\( x = 1 \\)", "\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)"], correct: 3, exp: "<p>Expand: \\( 8x - 12 = 20 \\implies 8x = 32 \\implies x = 4 \\).</p><p class='translation'>Kembangkan: \\( 8x - 12 = 20 \\implies 8x = 32 \\implies x = 4 \\).</p>" },
+                        { q: "A shop sells 3 boxes of chocolates and a $2 card for $20 total. How much does one box of chocolate cost? (Let price be \\( c \\))", q_trans: "Sebuah toko menjual 3 kotak cokelat dan kartu seharga $2 dengan total $20. Berapakah harga satu kotak cokelat? (Misalkan harganya \\( c \\))", opts: ["\\( 3c + 2 = 20 \\implies c = 6 \\)", "\\( \\$3 \\)", "\\( \\$5 \\)", "\\( 3c - 2 = 20 \\implies c = 7.33 \\)", "\\( \\$4 \\)"], correct: 0, exp: "<p>Equation: \\( 3c + 2 = 20 \\implies 3c = 18 \\implies c = 6 \\).</p><p class='translation'>Persamaan: \\( 3c + 2 = 20 \\implies 3c = 18 \\implies c = 6 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-divide mr-2"></i>Equations with Fractions</h2>
+                            <p class="translation">Persamaan dengan Pecahan</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <text x="50" y="100" font-size="20" font-family="Arial">x/4 = 5</text>
+                                <path d="M 80 110 L 120 110" stroke="#10b981" stroke-width="3" marker-end="url(#arrow)"/>
+                                <text x="140" y="100" font-size="20" font-family="Arial">x = 20</text>
+                                <text x="100" y="140" font-size="12" text-anchor="middle">Multiply by 4</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">To solve equations with fractions, multiply both sides by the denominator to clear the fraction.</p>
+                                <p class="translation">Untuk menyelesaikan persamaan dengan pecahan, kalikan kedua sisi dengan penyebut untuk menghilangkan pecahan.</p>
+                                <p class="mt-2">For example, if \\( \\frac{x}{4} = 5 \\), multiply by 4 to get \\( x = 20 \\).</p>
+                                <p class="translation">Misalnya, jika \\( \\frac{x}{4} = 5 \\), kalikan dengan 4 untuk mendapatkan \\( x = 20 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Solve for \\( y \\): \\( \\frac{y}{3} + 2 = 6 \\).", q_trans: "Selesaikan untuk \\( y \\): \\( \\frac{y}{3} + 2 = 6 \\).", opts: ["\\( y = 8 \\)", "\\( y = 10 \\)", "\\( y = 12 \\)", "\\( y = 14 \\)", "\\( y = 24 \\)"], correct: 2, exp: "<p>Subtract 2: \\( \\frac{y}{3} = 4 \\). Multiply by 3: \\( y = 12 \\).</p><p class='translation'>Kurangi 2: \\( \\frac{y}{3} = 4 \\). Kalikan 3: \\( y = 12 \\).</p>" },
+                        { q: "If \\( \\frac{2x}{5} = 4 \\), find the value of \\( x \\).", q_trans: "Jika \\( \\frac{2x}{5} = 4 \\), carilah nilai \\( x \\).", opts: ["\\( 5 \\)", "\\( 8 \\)", "\\( 10 \\)", "\\( 12 \\)", "\\( 20 \\)"], correct: 2, exp: "<p>Multiply by 5: \\( 2x = 20 \\). Divide by 2: \\( x = 10 \\).</p><p class='translation'>Kalikan 5: \\( 2x = 20 \\). Bagi 2: \\( x = 10 \\).</p>" },
+                        { q: "A car travels a distance \\( d \\) km in 3 hours at an average speed of \\( \\frac{d}{3} = 40 \\) km/h. What is the distance traveled?", q_trans: "Sebuah mobil menempuh jarak \\( d \\) km dalam 3 jam dengan kecepatan rata-rata \\( \\frac{d}{3} = 40 \\) km/jam. Berapakah jarak yang ditempuh?", opts: ["\\( 43 \\text{ km} \\)", "\\( 37 \\text{ km} \\)", "\\( 80 \\text{ km} \\)", "\\( 120 \\text{ km} \\)", "\\( 160 \\text{ km} \\)"], correct: 3, exp: "<p>Multiply by 3: \\( d = 40 \\times 3 = 120 \\) km.</p><p class='translation'>Kalikan 3: \\( d = 40 \\times 3 = 120 \\) km.</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-cogs mr-2"></i>Changing the Subject of a Formula</h2>
+                            <p class="translation">Mengubah Subjek Rumus</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <circle cx="50" cy="75" r="30" fill="#e0e7ff" stroke="#4f46e5" stroke-width="3"/>
+                                <text x="50" y="80" font-size="16" text-anchor="middle">A</text>
+                                <path d="M 90 75 L 110 75" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+                                <text x="100" y="65" font-size="12" text-anchor="middle">A = l*w</text>
+                                <circle cx="150" cy="75" r="30" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+                                <text x="150" y="80" font-size="16" text-anchor="middle">l</text>
+                                <text x="100" y="115" font-size="12" text-anchor="middle">Make l the subject</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Sometimes we need to rearrange a formula to make a different variable the subject. We use the same inverse operations as solving equations.</p>
+                                <p class="translation">Kadang kita perlu mengatur ulang rumus untuk menjadikan variabel lain sebagai subjek. Kita menggunakan operasi invers yang sama seperti menyelesaikan persamaan.</p>
+                                <p class="mt-2">For \\( A = l \\times w \\), to make \\( l \\) the subject, divide by \\( w \\): \\( l = \\frac{A}{w} \\).</p>
+                                <p class="translation">Untuk \\( A = l \\times w \\), agar \\( l \\) menjadi subjek, bagi dengan \\( w \\): \\( l = \\frac{A}{w} \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { q: "Make \\( x \\) the subject of the formula: \\( y = mx + c \\).", q_trans: "Jadikan \\( x \\) subjek dari rumus: \\( y = mx + c \\).", opts: ["\\( x = y - mc \\)", "\\( x = \\frac{y - c}{m} \\)", "\\( x = \\frac{y + c}{m} \\)", "\\( x = m(y - c) \\)", "\\( x = \\frac{m}{y - c} \\)"], correct: 1, exp: "<p>Subtract \\( c \\): \\( y - c = mx \\). Divide by \\( m \\): \\( x = \\frac{y - c}{m} \\).</p><p class='translation'>Kurangi \\( c \\): \\( y - c = mx \\). Bagi \\( m \\): \\( x = \\frac{y - c}{m} \\).</p>" },
+                        { q: "The formula for speed is \\( v = \\frac{d}{t} \\). Make \\( d \\) the subject.", q_trans: "Rumus kecepatan adalah \\( v = \\frac{d}{t} \\). Jadikan \\( d \\) subjek.", opts: ["\\( d = \\frac{v}{t} \\)", "\\( d = v - t \\)", "\\( d = vt \\)", "\\( d = \\frac{t}{v} \\)", "\\( d = v + t \\)"], correct: 2, exp: "<p>Multiply both sides by \\( t \\) to isolate \\( d \\): \\( d = vt \\).</p><p class='translation'>Kalikan kedua sisi dengan \\( t \\) untuk mengisolasi \\( d \\): \\( d = vt \\).</p>" },
+                        { q: "Rearrange \\( A = \\pi r^2 \\) to make \\( r \\) the subject.", q_trans: "Atur ulang \\( A = \\pi r^2 \\) untuk menjadikan \\( r \\) subjek.", opts: ["\\( r = \\sqrt{A\\pi} \\)", "\\( r = \\pi \\sqrt{A} \\)", "\\( r = \\frac{A}{\\pi} \\)", "\\( r = \\frac{\\sqrt{A}}{\\pi} \\)", "\\( r = \\sqrt{\\frac{A}{\\pi}} \\)"], correct: 4, exp: "<p>Divide by \\( \\pi \\): \\( \\frac{A}{\\pi} = r^2 \\). Square root both sides: \\( r = \\sqrt{\\frac{A}{\\pi}} \\).</p><p class='translation'>Bagi dengan \\( \\pi \\): \\( \\frac{A}{\\pi} = r^2 \\). Akar kuadrat kedua sisi: \\( r = \\sqrt{\\frac{A}{\\pi}} \\).</p>" },
+                        { q: "In the formula \\( C = \\frac{5}{9}(F - 32) \\), make \\( F \\) the subject.", q_trans: "Pada rumus \\( C = \\frac{5}{9}(F - 32) \\), jadikan \\( F \\) subjek.", opts: ["\\( F = \\frac{9}{5}C + 32 \\)", "\\( F = \\frac{5}{9}C + 32 \\)", "\\( F = \\frac{9}{5}(C + 32) \\)", "\\( F = \\frac{9C - 32}{5} \\)", "\\( F = C + 32 \\)"], correct: 0, exp: "<p>Multiply by \\( \\frac{9}{5} \\): \\( \\frac{9}{5}C = F - 32 \\). Add 32: \\( F = \\frac{9}{5}C + 32 \\).</p><p class='translation'>Kalikan dengan \\( \\frac{9}{5} \\): \\( \\frac{9}{5}C = F - 32 \\). Tambah 32: \\( F = \\frac{9}{5}C + 32 \\).</p>" }
+                    ]}
+                ]
+            },
+            independent: {
+                title: "Independent Practice",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-project-diagram mr-2"></i>Algebraic Modeling</h2>
+                            <p class="translation">Pemodelan Aljabar</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 100 L 50 50 L 80 100 L 110 40 L 140 100 L 170 30" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                <circle cx="170" cy="30" r="5" fill="#ef4444"/>
+                                <text x="100" y="130" font-size="12" text-anchor="middle">Modeling Trends</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Modeling means turning a real-world situation into math. We define variables, write an equation, and solve it.</p>
+                                <p class="translation">Pemodelan berarti mengubah situasi dunia nyata menjadi matematika. Kita mendefinisikan variabel, menulis persamaan, dan menyelesaikannya.</p>
+                                <p class="mt-2">Example: A phone plan costs $20/month plus $0.10/MB. Total cost for 500MB is \\( 20 + 0.10(500) = 70 \\).</p>
+                                <p class="translation">Contoh: Paket telepon berbiaya $20/bulan ditambah $0,10/MB. Total biaya untuk 500MB adalah \\( 20 + 0,10(500) = 70 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "A plumber charges $60 call-out fee plus $40 per hour. If the total bill is $180, how many hours did he work? (Let hours = \\( h \\))", q_trans: "Seorang tukang ledeng membebankan biaya panggilan $60 ditambah $40 per jam. Jika total tagihannya $180, berapa jam ia bekerja? (Misalkan jam = \\( h \\))", opts: ["\\( 2 \\text{ hrs} \\)", "\\( 3 \\text{ hrs} \\)", "\\( 4 \\text{ hrs} \\)", "\\( 5 \\text{ hrs} \\)", "\\( 6 \\text{ hrs} \\)"], correct: 1, exp: "<p>Equation: \\( 60 + 40h = 180 \\implies 40h = 120 \\implies h = 3 \\).</p><p class='translation'>Persamaan: \\( 60 + 40h = 180 \\implies 40h = 120 \\implies h = 3 \\).</p>" },
+                        { q: "A movie ticket costs $12 for an adult and $8 for a child. If 5 people go to the movies and pay $48 total, how many adults were there? (Let adults = \\( a \\))", q_trans: "Tiket bioskop berharga $12 untuk dewasa dan $8 untuk anak. Jika 5 orang nonton bioskop dan membayar total $48, berapa banyak dewasa yang ada? (Misalkan dewasa = \\( a \\))", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], correct: 1, exp: "<p>Equation: \\( 12a + 8(5 - a) = 48 \\implies 12a + 40 - 8a = 48 \\implies 4a = 8 \\implies a = 2 \\).</p><p class='translation'>Persamaan: \\( 12a + 8(5 - a) = 48 \\implies 12a + 40 - 8a = 48 \\implies 4a = 8 \\implies a = 2 \\).</p>" },
+                        { q: "John has twice as many marbles as Mark. If John gives Mark 5 marbles, they both have the same amount. How many did Mark start with? (Let Mark = \\( x \\))", q_trans: "John memiliki dua kali lipat kelereng Mark. Jika John memberi Mark 5 kelereng, mereka berdua memiliki jumlah yang sama. Berapa banyak kelereng Mark awalnya? (Misalkan Mark = \\( x \\))", opts: ["\\( 10 \\)", "\\( 15 \\)", "\\( 20 \\)", "\\( 25 \\)", "\\( 30 \\)"], correct: 0, exp: "<p>John = \\( 2x \\). After exchange: \\( 2x - 5 = x + 5 \\implies x = 10 \\).</p><p class='translation'>John = \\( 2x \\). Setelah pertukaran: \\( 2x - 5 = x + 5 \\implies x = 10 \\).</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-less-than mr-2"></i>Introduction to Inequalities</h2>
+                            <p class="translation">Pengantar Pertidaksamaan</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 30 100 L 170 100" stroke="#000" stroke-width="2"/>
+                                <path d="M 100 80 L 150 100 L 100 120 Z" fill="#3b82f6"/>
+                                <circle cx="100" cy="100" r="4" fill="#ef4444"/>
+                                <text x="70" y="60" font-size="16" text-anchor="middle">x > 3</text>
+                                <text x="100" y="140" font-size="12" text-anchor="middle">Number Line</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">An inequality tells us that two values are <strong>not equal</strong>. Symbols: \\( > \\) (greater than), \\( < \\) (less than), \\( \\ge \\) (greater or equal), \\( \\le \\) (less or equal).</p>
+                                <p class="translation">Pertidaksamaan memberi tahu kita bahwa dua nilai <strong>tidak sama</strong>. Simbol: \\( > \\) (lebih dari), \\( < \\) (kurang dari), \\( \\ge \\) (lebih dari atau sama dengan), \\( \\le \\) (kurang dari atau sama dengan).</p>
+                                <p class="mt-2">For example, \\( x > 3 \\) means \\( x \\) can be 4, 5, 6, etc., but not 3.</p>
+                                <p class="translation">Misalnya, \\( x > 3 \\) berarti \\( x \\) bisa bernilai 4, 5, 6, dst., tetapi tidak bisa 3.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { q: "Which value of \\( x \\) satisfies the inequality \\( x + 4 > 10 \\)?", q_trans: "Nilai \\( x \\) manakah yang memenuhi pertidaksamaan \\( x + 4 > 10 \\)?", opts: ["\\( 4 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( 7 \\)", "\\( 3 \\)"], correct: 3, exp: "<p>Subtract 4 from both sides: \\( x > 6 \\). The only option greater than 6 is 7.</p><p class='translation'>Kurangi 4 dari kedua sisi: \\( x > 6 \\). Satu-satunya pilihan yang lebih besar dari 6 adalah 7.</p>" },
+                        { q: "Solve the inequality: \\( 2x - 5 \\le 7 \\).", q_trans: "Selesaikan pertidaksamaan: \\( 2x - 5 \\le 7 \\).", opts: ["\\( x \\le 6 \\)", "\\( x \\le 5 \\)", "\\( x \\ge 6 \\)", "\\( x < 6 \\)", "\\( x \\le 12 \\)"], correct: 0, exp: "<p>Add 5: \\( 2x \\le 12 \\implies x \\le 6 \\).</p><p class='translation'>Tambah 5: \\( 2x \\le 12 \\implies x \\le 6 \\).</p>" },
+                        { q: "A car rental costs $30 per day plus $0.20 per km. If you have a budget of $100, what is the maximum distance you can drive? (Let distance = \\( d \\))", q_trans: "Biaya sewa mobil adalah $30 per hari ditambah $0,20 per km. Jika Anda memiliki anggaran $100, berapakah jarak maksimum yang dapat dikemudikan? (Misalkan jarak = \\( d \\))", opts: ["\\( 350 \\text{ km} \\)", "\\( 300 \\text{ km} \\)", "\\( 400 \\text{ km} \\)", "\\( 500 \\text{ km} \\)", "\\( 200 \\text{ km} \\)"], correct: 0, exp: "<p>Equation: \\( 30 + 0.20d \\le 100 \\implies 0.20d \\le 70 \\implies d \\le 350 \\) km.</p><p class='translation'>Persamaan: \\( 30 + 0,20d \\le 100 \\implies 0,20d \\le 70 \\implies d \\le 350 \\) km.</p>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-yellow-700 mb-2"><i class="fas fa-random mr-2"></i>Real-World Constraints</h2>
+                            <p class="translation">Batasan Dunia Nyata</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="30" y="60" width="100" height="60" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="10"/>
+                                <text x="80" y="95" font-size="40" text-anchor="middle">?</text>
+                                <text x="80" y="145" font-size="12" text-anchor="middle">Constraints</text>
+                                <path d="M 140 90 L 180 90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+                            </svg>
+                            <div>
+                                <p class="mb-2">In reality, variables often have upper or lower limits (constraints), like time, weight, or money.</p>
+                                <p class="translation">Pada kenyataannya, variabel sering kali memiliki batas atas atau bawah (batasan), seperti waktu, berat, atau uang.</p>
+                                <p class="mt-2">If a box holds 20 kg and books weigh 2 kg, \\( 2b \\le 20 \\implies b \\le 10 \\).</p>
+                                <p class="translation">Jika sebuah kotak muat 20 kg dan buku beratnya 2 kg, \\( 2b \\le 20 \\implies b \\le 10 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { q: "An elevator can hold a maximum of 500 kg. If the average person weighs 70 kg, what is the maximum number of people allowed? (Let people = \\( p \\))", q_trans: "Sebuah lift dapat menampung maksimal 500 kg. Jika rata-rata orang berbobot 70 kg, berapakah jumlah maksimum orang yang diperbolehkan? (Misalkan orang = \\( p \\))", opts: ["\\( 7 \\)", "\\( 8 \\)", "\\( 9 \\)", "\\( 6 \\)", "\\( 10 \\)"], correct: 0, exp: "<p>Inequality: \\( 70p \\le 500 \\implies p \\le 7.14 \\). Since we can't have a fraction of a person, the max integer is 7.</p><p class='translation'>Pertidaksamaan: \\( 70p \\le 500 \\implies p \\le 7,14 \\). Karena kita tidak bisa memiliki pecahan orang, jumlah maksimum bulatnya adalah 7.</p>" },
+                        { q: "A student needs at least 80 points on their final exam to pass the course. The exam has 40 questions, each worth 2 points. What is the minimum number of questions they must answer correctly? (Let correct = \\( c \\))", q_trans: "Seorang siswa membutuhkan setidaknya 80 poin di ujian akhir untuk lulus. Ujian tersebut memiliki 40 soal, masing-masing bernilai 2 poin. Berapakah jumlah minimum soal yang harus mereka jawab dengan benar? (Misalkan benar = \\( c \\))", opts: ["\\( 30 \\)", "\\( 35 \\)", "\\( 40 \\)", "\\( 25 \\)", "\\( 20 \\)"], correct: 2, exp: "<p>Equation: \\( 2c \\ge 80 \\implies c \\ge 40 \\). They must answer all 40 correctly.</p><p class='translation'>Persamaan: \\( 2c \\ge 80 \\implies c \\ge 40 \\). Mereka harus menjawab semua 40 soal dengan benar.</p>" },
+                        { q: "A cafe sells coffee for $3 and cakes for $4. If you buy 2 coffees, what is the maximum number of cakes you can buy with $20? (Let cakes = \\( k \\))", q_trans: "Sebuah kafe menjual kopi seharga $3 dan kue seharga $4. Jika Anda membeli 2 kopi, berapakah jumlah maksimum kue yang bisa Anda beli dengan $20? (Misalkan kue = \\( k \\))", opts: ["\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)", "\\( 6 \\)"], correct: 1, exp: "<p>Cost of 2 coffees = $6. Remaining money = $14. Inequality: \\( 4k \\le 14 \\implies k \\le 3.5 \\). Max integer is 3.</p><p class='translation'>Biaya 2 kopi = $6. Sisa uang = $14. Pertidaksamaan: \\( 4k \\le 14 \\implies k \\le 3,5 \\). Maksimum bilangan bulat adalah 3.</p>" },
+                        { q: "A runner's speed \\( s \\) must be greater than 5 m/s but less than 8 m/s. Which expression represents this?", q_trans: "Kecepatan pelari \\( s \\) harus lebih besar dari 5 m/s tetapi kurang dari 8 m/s. Ekspresi manakah yang mewakili ini?", opts: ["\\( 5 \\le s \\le 8 \\)", "\\( 5 < s < 8 \\)", "\\( 5 > s > 8 \\)", "\\( s < 5 \\text{ or } s > 8 \\)", "\\( s = 6.5 \\)"], correct: 1, exp: "<p>Greater than 5 is \\( > 5 \\). Less than 8 is \\( < 8 \\). Combined: \\( 5 < s < 8 \\).</p><p class='translation'>Lebih besar dari 5 adalah \\( > 5 \\). Kurang dari 8 adalah \\( < 8 \\). Gabungan: \\( 5 < s < 8 \\).</p>" }
+                    ]}
+                ]
+            },
+            consolidation: {
+                title: "Consolidation & Reflection",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-indigo-700 mb-2"><i class="fas fa-check-double mr-2"></i>Learning Summary</h2>
+                            <p class="translation">Rangkuman Pembelajaran</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="40" y="40" width="120" height="120" fill="#e0e7ff" stroke="#4f46e5" stroke-width="3" rx="15"/>
+                                <path d="M 60 100 L 90 130 L 140 70" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Today we learned how to use letters to represent unknown values and solve linear equations.</p>
+                                <p class="translation">Hari ini kita belajar bagaimana menggunakan huruf untuk mewakili nilai yang tidak diketahui dan menyelesaikan persamaan linear.</p>
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li><strong>Variables:</strong> Letters like \\( x \\) or \\( y \\).</li>
+                                    <li class="translation">Variabel: Huruf seperti \\( x \\) atau \\( y \\).</li>
+                                    <li><strong>Equations:</strong> Balancing two sides.</li>
+                                    <li class="translation">Persamaan: Menyeimbangkan dua sisi.</li>
+                                    <li><strong>Inequalities:</strong> Expressing ranges like \\( x > 5 \\).</li>
+                                    <li class="translation">Pertidaksamaan: Menyatakan rentang seperti \\( x > 5 \\).</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <p class="mb-4">Ready to test your skills further? Visit our learning platform for unlimited practice!</p>
+                            <p class="translation">Siap menguji kemampuanmu lebih jauh? Kunjungi platform pembelajaran kami untuk latihan tanpa batas!</p>
+                            <a href="https://learn.algonova.id" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md inline-flex items-center gap-2 mt-2">
+                                <i class="fas fa-rocket"></i> Continue to Algonova
+                                <span class="translation" style="color: #bfdbfe; display: inline;">Lanjut ke Algonova</span>
+                            </a>
+                        </div>
+                    `}
+                ]
+            },
+			
+            task1: {
+                title: "Task 1: Forming Expressions & Substitution",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { q: "Think of a number, multiply it by 2, and add 5. If the number is \\( n \\), what is the expression?", q_trans: "Pikirkan sebuah angka, kalikan dengan 2, dan tambahkan 5. Jika angkanya \\( n \\), apakah ekspresinya?", opts: ["\\( 2(n + 5) \\)", "\\( 5n + 2 \\)", "\\( 2n + 5 \\)", "\\( n + 7 \\)", "\\( \\frac{n}{2} + 5 \\)"], correct: 2, exp: "<p>Multiplying by 2 gives \\( 2n \\). Adding 5 gives \\( 2n + 5 \\).</p><p class='translation'>Mengalikan dengan 2 menghasilkan \\( 2n \\). Menambahkan 5 menghasilkan \\( 2n + 5 \\).</p>" },
+                        { q: "The sum of two numbers is 20. If one number is \\( x \\), what is the other number?", q_trans: "Jumlah dua angka adalah 20. Jika satu angka adalah \\( x \\), berapakah angka lainnya?", opts: ["\\( 20 + x \\)", "\\( 20 - x \\)", "\\( 20x \\)", "\\( \\frac{20}{x} \\)", "\\( x - 20 \\)"], correct: 1, exp: "<p>If the total is 20 and one part is \\( x \\), the other part is the total minus \\( x \\), which is \\( 20 - x \\).</p><p class='translation'>Jika totalnya 20 dan satu bagian adalah \\( x \\), bagian lainnya adalah total dikurangi \\( x \\), yaitu \\( 20 - x \\).</p>" },
+                        { q: "A baker has \\( 50 \\) kg of flour. He uses \\( x \\) kg per day. How much flour is left after 3 days?", q_trans: "Seorang tukang roti memiliki \\( 50 \\) kg tepung. Dia menggunakan \\( x \\) kg per hari. Berapa banyak tepung yang tersisa setelah 3 hari?", opts: ["\\( 50 - 3x \\)", "\\( 3x - 50 \\)", "\\( 50 + 3x \\)", "\\( 50x - 3 \\)", "\\( 50 - x^3 \\)"], correct: 0, exp: "<p>In 3 days, he uses \\( 3 \\times x = 3x \\) kg. Flour left is \\( 50 - 3x \\).</p><p class='translation'>Dalam 3 hari, dia menggunakan \\( 3 \\times x = 3x \\) kg. Tepung tersisa adalah \\( 50 - 3x \\).</p>" },
+                        { q: "If \\( x = 4 \\) and \\( y = 3 \\), evaluate \\( 2x + 3y \\).", q_trans: "Jika \\( x = 4 \\) dan \\( y = 3 \\), nilai dari \\( 2x + 3y \\) adalah.", opts: ["\\( 17 \\)", "\\( 14 \\)", "\\( 18 \\)", "\\( 24 \\)", "\\( 12 \\)"], correct: 0, exp: "<p>Substitute: \\( 2(4) + 3(3) = 8 + 9 = 17 \\).</p><p class='translation'>Substitusi: \\( 2(4) + 3(3) = 8 + 9 = 17 \\).</p>" },
+                        { q: "The cost of a taxi is \\( \\$3 \\) flag fall plus \\( \\$2 \\) per km. If you travel \\( k \\) km, what is the cost?", q_trans: "Biaya taksi adalah \\( \\$3 \\) tunggak ditambah \\( \\$2 \\) per km. Jika Anda menempuh \\( k \\) km, berapakah biayanya?", opts: ["\\( 3k + 2 \\)", "\\( 2k + 3 \\)", "\\( 5k \\)", "\\( 2(k + 3) \\)", "\\( 3 + k \\)"], correct: 1, exp: "<p>Cost per km is \\( 2k \\). Add the flat rate of 3. Total is \\( 2k + 3 \\).</p><p class='translation'>Biaya per km adalah \\( 2k \\). Tambahkan tarif tetap 3. Totalnya \\( 2k + 3 \\).</p>" },
+                        { q: "If \\( a = -2 \\), what is the value of \\( a^2 + 5 \\)?", q_trans: "Jika \\( a = -2 \\), berapakah nilai dari \\( a^2 + 5 \\)?", opts: ["\\( -1 \\)", "\\( 1 \\)", "\\( 9 \\)", "\\( 7 \\)", "\\( -9 \\)"], correct: 2, exp: "<p>Substitute: \\( (-2)^2 + 5 = 4 + 5 = 9 \\).</p><p class='translation'>Substitusi: \\( (-2)^2 + 5 = 4 + 5 = 9 \\).</p>" },
+                        { q: "A rectangle has length \\( 2x \\) and width \\( x + 3 \\). What is its area?", q_trans: "Sebuah persegi panjang memiliki panjang \\( 2x \\) dan lebar \\( x + 3 \\). Berapakah luasnya?", opts: ["\\( 2x^2 + 3 \\)", "\\( 2x^2 + 6x \\)", "\\( 4x + 3 \\)", "\\( 2x(x + 3) \\)", "\\( 2x^2 + 6 \\)"], correct: 1, exp: "<p>Area = length \\( \\times \\) width = \\( 2x(x + 3) \\). Expanding gives \\( 2x^2 + 6x \\).</p><p class='translation'>Luas = panjang \\( \\times \\) lebar = \\( 2x(x + 3) \\). Mengembangkan menghasilkan \\( 2x^2 + 6x \\).</p>" },
+                        { q: "Simplify: \\( 3(x - 2) + 2(x + 4) \\).", q_trans: "Sederhanakan: \\( 3(x - 2) + 2(x + 4) \\).", opts: ["\\( 5x + 2 \\)", "\\( 5x - 2 \\)", "\\( 5x + 14 \\)", "\\( 5x - 6 \\)", "\\( 6x + 2 \\)"], correct: 0, exp: "<p>Expand: \\( 3x - 6 + 2x + 8 \\). Collect like terms: \\( (3x + 2x) + (-6 + 8) = 5x + 2 \\).</p><p class='translation'>Kembangkan: \\( 3x - 6 + 2x + 8 \\). Kumpulkan suku sejenis: \\( (3x + 2x) + (-6 + 8) = 5x + 2 \\).</p>" },
+                        { q: "John is \\( y \\) years old. His father is 3 times his age minus 4. How old is his father?", q_trans: "John berusia \\( y \\) tahun. Ayahnya berusia 3 kali umurnya dikurangi 4. Berapakah umur ayahnya?", opts: ["\\( 3y - 4 \\)", "\\( 3y + 4 \\)", "\\( y - 12 \\)", "\\( \\frac{y}{3} - 4 \\)", "\\( 4y - 3 \\)"], correct: 0, exp: "<p>3 times \\( y \\) is \\( 3y \\). Minus 4 is \\( 3y - 4 \\).</p><p class='translation'>3 kali \\( y \\) adalah \\( 3y \\). Kurang 4 adalah \\( 3y - 4 \\).</p>" },
+                        { q: "If \\( P = 2(l + w) \\), and \\( l = 10 \\), \\( w = 5 \\), find \\( P \\).", q_trans: "Jika \\( P = 2(l + w) \\), dan \\( l = 10 \\), \\( w = 5 \\), carilah \\( P \\).", opts: ["\\( 15 \\)", "\\( 30 \\)", "\\( 50 \\)", "\\( 20 \\)", "\\( 25 \\)"], correct: 1, exp: "<p>Substitute: \\( P = 2(10 + 5) = 2(15) = 30 \\).</p><p class='translation'>Substitusi: \\( P = 2(10 + 5) = 2(15) = 30 \\).</p>" }
+                    ]}
+                ]
+            },
+            task2: {
+                title: "Task 2: Solving Linear Equations",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { q: "Solve for \\( x \\): \\( x + 8 = 15 \\).", q_trans: "Selesaikan untuk \\( x \\): \\( x + 8 = 15 \\).", opts: ["\\( x = 7 \\)", "\\( x = 8 \\)", "\\( x = 23 \\)", "\\( x = 15 \\)", "\\( x = 6 \\)"], correct: 0, exp: "<p>Subtract 8 from both sides: \\( x = 15 - 8 = 7 \\).</p><p class='translation'>Kurangi 8 dari kedua sisi: \\( x = 15 - 8 = 7 \\).</p>" },
+                        { q: "Solve for \\( y \\): \\( 4y = 24 \\).", q_trans: "Selesaikan untuk \\( y \\): \\( 4y = 24 \\).", opts: ["\\( y = 4 \\)", "\\( y = 6 \\)", "\\( y = 8 \\)", "\\( y = 20 \\)", "\\( y = 28 \\)"], correct: 1, exp: "<p>Divide by 4: \\( y = 24 / 4 = 6 \\).</p><p class='translation'>Bagi 4: \\( y = 24 / 4 = 6 \\).</p>" },
+                        { q: "Solve: \\( 3x - 5 = 16 \\).", q_trans: "Selesaikan: \\( 3x - 5 = 16 \\).", opts: ["\\( x = 6 \\)", "\\( x = 7 \\)", "\\( x = 8 \\)", "\\( x = 9 \\)", "\\( x = 5 \\)"], correct: 1, exp: "<p>Add 5: \\( 3x = 21 \\). Divide by 3: \\( x = 7 \\).</p><p class='translation'>Tambah 5: \\( 3x = 21 \\). Bagi 3: \\( x = 7 \\).</p>" },
+                        { q: "Solve: \\( \\frac{x}{4} = 9 \\).", q_trans: "Selesaikan: \\( \\frac{x}{4} = 9 \\).", opts: ["\\( x = 13 \\)", "\\( x = 36 \\)", "\\( x = 2.25 \\)", "\\( x = 5 \\)", "\\( x = 32 \\)"], correct: 1, exp: "<p>Multiply by 4: \\( x = 9 \\times 4 = 36 \\).</p><p class='translation'>Kalikan 4: \\( x = 9 \\times 4 = 36 \\).</p>" },
+                        { q: "Solve: \\( 2x + 7 = x + 15 \\).", q_trans: "Selesaikan: \\( 2x + 7 = x + 15 \\).", opts: ["\\( x = 8 \\)", "\\( x = 11 \\)", "\\( x = 22 \\)", "\\( x = 4 \\)", "\\( x = 6 \\)"], correct: 0, exp: "<p>Subtract \\( x \\): \\( x + 7 = 15 \\). Subtract 7: \\( x = 8 \\).</p><p class='translation'>Kurangi \\( x \\): \\( x + 7 = 15 \\). Kurangi 7: \\( x = 8 \\).</p>" },
+                        { q: "I think of a number, double it, and add 5. The result is 17. What is the number?", q_trans: "Saya memikirkan angka, mengalikannya dua kali, dan menambahkan 5. Hasilnya 17. Berapakah angkanya?", opts: ["\\( 4 \\)", "\\( 6 \\)", "\\( 8 \\)", "\\( 11 \\)", "\\( 12 \\)"], correct: 1, exp: "<p>Equation: \\( 2x + 5 = 17 \\implies 2x = 12 \\implies x = 6 \\).</p><p class='translation'>Persamaan: \\( 2x + 5 = 17 \\implies 2x = 12 \\implies x = 6 \\).</p>" },
+                        { q: "Solve: \\( 5(x - 2) = 20 \\).", q_trans: "Selesaikan: \\( 5(x - 2) = 20 \\).", opts: ["\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 6 \\)", "\\( x = 8 \\)", "\\( x = 2 \\)"], correct: 2, exp: "<p>Divide by 5: \\( x - 2 = 4 \\). Add 2: \\( x = 6 \\).</p><p class='translation'>Bagi 5: \\( x - 2 = 4 \\). Tambah 2: \\( x = 6 \\).</p>" },
+                        { q: "If \\( 3y + 4 = 19 \\), what is \\( y \\)?", q_trans: "Jika \\( 3y + 4 = 19 \\), berapakah \\( y \\)?", opts: ["\\( 3 \\)", "\\( 5 \\)", "\\( 7 \\)", "\\( 15 \\)", "\\( 6 \\)"], correct: 1, exp: "<p>Subtract 4: \\( 3y = 15 \\). Divide by 3: \\( y = 5 \\).</p><p class='translation'>Kurangi 4: \\( 3y = 15 \\). Bagi 3: \\( y = 5 \\).</p>" },
+                        { q: "The sum of two consecutive numbers is 15. What is the larger number? (Let smaller be \\( x \\))", q_trans: "Jumlah dua bilangan berurutan adalah 15. Berapakah bilangan yang lebih besar? (Misalkan yang kecil \\( x \\))", opts: ["\\( 7 \\)", "\\( 8 \\)", "\\( 9 \\)", "\\( 6 \\)", "\\( 10 \\)"], correct: 1, exp: "<p>Equation: \\( x + (x + 1) = 15 \\implies 2x + 1 = 15 \\implies 2x = 14 \\implies x = 7 \\). Larger is \\( x + 1 = 8 \\).</p><p class='translation'>Persamaan: \\( x + (x + 1) = 15 \\implies 2x + 1 = 15 \\implies 2x = 14 \\implies x = 7 \\). Yang lebih besar adalah \\( x + 1 = 8 \\).</p>" },
+                        { q: "Solve: \\( \\frac{2x}{3} = 8 \\).", q_trans: "Selesaikan: \\( \\frac{2x}{3} = 8 \\).", opts: ["\\( x = 12 \\)", "\\( x = 10 \\)", "\\( x = 14 \\)", "\\( x = 16 \\)", "\\( x = 24 \\)"], correct: 0, exp: "<p>Multiply by 3: \\( 2x = 24 \\). Divide by 2: \\( x = 12 \\).</p><p class='translation'>Kalikan 3: \\( 2x = 24 \\). Bagi 2: \\( x = 12 \\).</p>" }
+                    ]}
+                ]
+            },
+            task3: {
+                title: "Task 3: Brackets & Fractions",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { q: "Expand and simplify: \\( 4(x + 2) - 3(x - 1) \\).", q_trans: "Kembangkan dan sederhanakan: \\( 4(x + 2) - 3(x - 1) \\).", opts: ["\\( x + 5 \\)", "\\( x + 11 \\)", "\\( 7x + 5 \\)", "\\( 7x - 5 \\)", "\\( x - 5 \\)"], correct: 1, exp: "<p>Expand: \\( 4x + 8 - 3x + 3 \\). Simplify: \\( (4x - 3x) + (8 + 3) = x + 11 \\).</p><p class='translation'>Kembangkan: \\( 4x + 8 - 3x + 3 \\). Sederhanakan: \\( (4x - 3x) + (8 + 3) = x + 11 \\).</p>" },
+                        { q: "Solve: \\( 2(x + 5) = 18 \\).", q_trans: "Selesaikan: \\( 2(x + 5) = 18 \\).", opts: ["\\( x = 4 \\)", "\\( x = 9 \\)", "\\( x = 8 \\)", "\\( x = 13 \\)", "\\( x = 5 \\)"], correct: 0, exp: "<p>Divide by 2: \\( x + 5 = 9 \\). Subtract 5: \\( x = 4 \\).</p><p class='translation'>Bagi 2: \\( x + 5 = 9 \\). Kurangi 5: \\( x = 4 \\).</p>" },
+                        { q: "Solve: \\( \\frac{x}{3} + 1 = 5 \\).", q_trans: "Selesaikan: \\( \\frac{x}{3} + 1 = 5 \\).", opts: ["\\( x = 12 \\)", "\\( x = 15 \\)", "\\( x = 18 \\)", "\\( x = 14 \\)", "\\( x = 8 \\)"], correct: 0, exp: "<p>Subtract 1: \\( \\frac{x}{3} = 4 \\). Multiply by 3: \\( x = 12 \\).</p><p class='translation'>Kurangi 1: \\( \\frac{x}{3} = 4 \\). Kalikan 3: \\( x = 12 \\).</p>" },
+                        { q: "Solve: \\( 3(2x - 1) = 15 \\).", q_trans: "Selesaikan: \\( 3(2x - 1) = 15 \\).", opts: ["\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 6 \\)"], correct: 1, exp: "<p>Divide by 3: \\( 2x - 1 = 5 \\). Add 1: \\( 2x = 6 \\). Divide by 2: \\( x = 3 \\).</p><p class='translation'>Bagi 3: \\( 2x - 1 = 5 \\). Tambah 1: \\( 2x = 6 \\). Bagi 2: \\( x = 3 \\).</p>" },
+                        { q: "Solve: \\( \\frac{2x - 1}{4} = 3 \\).", q_trans: "Selesaikan: \\( \\frac{2x - 1}{4} = 3 \\).", opts: ["\\( x = 6.5 \\)", "\\( x = 7 \\)", "\\( x = 6 \\)", "\\( x = 12 \\)", "\\( x = 13 \\)"], correct: 0, exp: "<p>Multiply by 4: \\( 2x - 1 = 12 \\). Add 1: \\( 2x = 13 \\). Divide by 2: \\( x = 6.5 \\).</p><p class='translation'>Kalikan 4: \\( 2x - 1 = 12 \\). Tambah 1: \\( 2x = 13 \\). Bagi 2: \\( x = 6.5 \\).</p>" },
+                        { q: "Solve: \\( 5(x + 2) = 2(x + 11) \\).", q_trans: "Selesaikan: \\( 5(x + 2) = 2(x + 11) \\).", opts: ["\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 6 \\)", "\\( x = 7 \\)"], correct: 1, exp: "<p>Expand: \\( 5x + 10 = 2x + 22 \\). Subtract \\( 2x \\): \\( 3x + 10 = 22 \\). Subtract 10: \\( 3x = 12 \\implies x = 4 \\).</p><p class='translation'>Kembangkan: \\( 5x + 10 = 2x + 22 \\). Kurangi \\( 2x \\): \\( 3x + 10 = 22 \\). Kurangi 10: \\( 3x = 12 \\implies x = 4 \\).</p>" },
+                        { q: "Expand: \\( x(x - 4) \\).", q_trans: "Kembangkan: \\( x(x - 4) \\).", opts: ["\\( x^2 - 4 \\)", "\\( x^2 - 4x \\)", "\\( 2x - 4 \\)", "\\( x^2 + 4x \\)", "\\( x(x - 4)^2 \\)"], correct: 1, exp: "<p>Multiply \\( x \\) by both terms: \\( x \\times x = x^2 \\), \\( x \\times (-4) = -4x \\). Result: \\( x^2 - 4x \\).</p><p class='translation'>Kalikan \\( x \\) dengan kedua suku: \\( x \\times x = x^2 \\), \\( x \\times (-4) = -4x \\). Hasil: \\( x^2 - 4x \\).</p>" },
+                        { q: "Solve: \\( \\frac{x}{2} = \\frac{x}{3} + 2 \\).", q_trans: "Selesaikan: \\( \\frac{x}{2} = \\frac{x}{3} + 2 \\).", opts: ["\\( x = 6 \\)", "\\( x = 8 \\)", "\\( x = 10 \\)", "\\( x = 12 \\)", "\\( x = 4 \\)"], correct: 3, exp: "<p>Subtract \\( \\frac{x}{3} \\): \\( \\frac{x}{2} - \\frac{x}{3} = 2 \\implies \\frac{3x - 2x}{6} = 2 \\implies \\frac{x}{6} = 2 \\implies x = 12 \\).</p><p class='translation'>Kurangi \\( \\frac{x}{3} \\): \\( \\frac{x}{2} - \\frac{x}{3} = 2 \\implies \\frac{3x - 2x}{6} = 2 \\implies \\frac{x}{6} = 2 \\implies x = 12 \\).</p>" },
+                        { q: "A shop sells 3 pens and a ruler for $8. If a ruler costs $2, how much is a pen? (Let pen = \\( p \\))", q_trans: "Sebuah toko menjual 3 pulpen dan penggaris seharga $8. Jika penggaris berharga $2, berapakah harga satu pulpen? (Misalkan pulpen = \\( p \\))", opts: ["\\( \\$1 \\)", "\\( \\$2 \\)", "\\( \\$3 \\)", "\\( \\$4 \\)", "\\( \\$5 \\)"], correct: 1, exp: "<p>Equation: \\( 3p + 2 = 8 \\implies 3p = 6 \\implies p = 2 \\).</p><p class='translation'>Persamaan: \\( 3p + 2 = 8 \\implies 3p = 6 \\implies p = 2 \\).</p>" },
+                        { q: "Solve: \\( 4(2x - 3) = 2(x + 6) \\).", q_trans: "Selesaikan: \\( 4(2x - 3) = 2(x + 6) \\).", opts: ["\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 6 \\)"], correct: 2, exp: "<p>Expand: \\( 8x - 12 = 2x + 12 \\implies 6x = 24 \\implies x = 4 \\).</p><p class='translation'>Kembangkan: \\( 8x - 12 = 2x + 12 \\implies 6x = 24 \\implies x = 4 \\).</p>" }
+                    ]}
+                ]
+            },
+            task4: {
+                title: "Task 4: Changing the Subject",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { q: "Make \\( x \\) the subject: \\( y = x + 5 \\).", q_trans: "Jadikan \\( x \\) subjek: \\( y = x + 5 \\).", opts: ["\\( x = y + 5 \\)", "\\( x = y - 5 \\)", "\\( x = 5 - y \\)", "\\( x = \\frac{y}{5} \\)", "\\( x = 5y \\)"], correct: 1, exp: "<p>Subtract 5 from both sides: \\( x = y - 5 \\).</p><p class='translation'>Kurangi 5 dari kedua sisi: \\( x = y - 5 \\).</p>" },
+                        { q: "Make \\( r \\) the subject: \\( A = \\pi r^2 \\).", q_trans: "Jadikan \\( r \\) subjek: \\( A = \\pi r^2 \\).", opts: ["\\( r = \\sqrt{A\\pi} \\)", "\\( r = \\frac{A}{\\pi} \\)", "\\( r = \\pi \\sqrt{A} \\)", "\\( r = \\sqrt{\\frac{A}{\\pi}} \\)", "\\( r = A^2 / \\pi \\)"], correct: 3, exp: "<p>Divide by \\( \\pi \\): \\( \\frac{A}{\\pi} = r^2 \\). Square root: \\( r = \\sqrt{\\frac{A}{\\pi}} \\).</p><p class='translation'>Bagi dengan \\( \\pi \\): \\( \\frac{A}{\\pi} = r^2 \\). Akar kuadrat: \\( r = \\sqrt{\\frac{A}{\\pi}} \\).</p>" },
+                        { q: "Make \\( t \\) the subject: \\( v = u + at \\).", q_trans: "Jadikan \\( t \\) subjek: \\( v = u + at \\).", opts: ["\\( t = v - u \\)", "\\( t = \\frac{v - u}{a} \\)", "\\( t = v + u - a \\)", "\\( t = \\frac{v}{u + a} \\)", "\\( t = a(v - u) \\)"], correct: 1, exp: "<p>Subtract \\( u \\): \\( v - u = at \\). Divide by \\( a \\): \\( t = \\frac{v - u}{a} \\).</p><p class='translation'>Kurangi \\( u \\): \\( v - u = at \\). Bagi \\( a \\): \\( t = \\frac{v - u}{a} \\).</p>" },
+                        { q: "Make \\( u \\) the subject: \\( v = u + at \\).", q_trans: "Jadikan \\( u \\) subjek: \\( v = u + at \\).", opts: ["\\( u = v - at \\)", "\\( u = v + at \\)", "\\( u = \\frac{v}{at} \\)", "\\( u = at - v \\)", "\\( u = v(at) \\)"], correct: 0, exp: "<p>Subtract \\( at \\): \\( u = v - at \\).</p><p class='translation'>Kurangi \\( at \\): \\( u = v - at \\).</p>" },
+                        { q: "Make \\( h \\) the subject: \\( A = \\frac{1}{2}bh \\).", q_trans: "Jadikan \\( h \\) subjek: \\( A = \\frac{1}{2}bh \\).", opts: ["\\( h = \\frac{A}{2b} \\)", "\\( h = \\frac{2A}{b} \\)", "\\( h = \\frac{b}{2A} \\)", "\\( h = 2Ab \\)", "\\( h = \\frac{1}{2}Ab \\)"], correct: 1, exp: "<p>Multiply by 2: \\( 2A = bh \\). Divide by \\( b \\): \\( h = \\frac{2A}{b} \\).</p><p class='translation'>Kalikan 2: \\( 2A = bh \\). Bagi \\( b \\): \\( h = \\frac{2A}{b} \\).</p>" },
+                        { q: "Make \\( x \\) the subject: \\( y = \\frac{x}{3} - 4 \\).", q_trans: "Jadikan \\( x \\) subjek: \\( y = \\frac{x}{3} - 4 \\).", opts: ["\\( x = 3(y + 4) \\)", "\\( x = 3y - 4 \\)", "\\( x = \\frac{y + 4}{3} \\)", "\\( x = 3y + 12 \\)", "\\( x = y - 12 \\)"], correct: 0, exp: "<p>Add 4: \\( y + 4 = \\frac{x}{3} \\). Multiply by 3: \\( x = 3(y + 4) \\).</p><p class='translation'>Tambah 4: \\( y + 4 = \\frac{x}{3} \\). Kalikan 3: \\( x = 3(y + 4) \\).</p>" },
+                        { q: "Make \\( m \\) the subject: \\( E = mc^2 \\).", q_trans: "Jadikan \\( m \\) subjek: \\( E = mc^2 \\).", opts: ["\\( m = E c^2 \\)", "\\( m = \\frac{E}{c^2} \\)", "\\( m = \\frac{c^2}{E} \\)", "\\( m = \\sqrt{\\frac{E}{c}} \\)", "\\( m = c^2 - E \\)"], correct: 1, exp: "<p>Divide by \\( c^2 \\): \\( m = \\frac{E}{c^2} \\).</p><p class='translation'>Bagi dengan \\( c^2 \\): \\( m = \\frac{E}{c^2} \\).</p>" },
+                        { q: "Make \\( l \\) the subject: \\( P = 2(l + w) \\).", q_trans: "Jadikan \\( l \\) subjek: \\( P = 2(l + w) \\).", opts: ["\\( l = P - 2w \\)", "\\( l = \\frac{P}{2} - w \\)", "\\( l = \\frac{P - 2}{w} \\)", "\\( l = 2P - w \\)", "\\( l = P - w \\)"], correct: 1, exp: "<p>Divide by 2: \\( \\frac{P}{2} = l + w \\). Subtract \\( w \\): \\( l = \\frac{P}{2} - w \\).</p><p class='translation'>Bagi 2: \\( \\frac{P}{2} = l + w \\). Kurangi \\( w \\): \\( l = \\frac{P}{2} - w \\).</p>" },
+                        { q: "Make \\( C \\) the subject: \\( F = \\frac{9}{5}C + 32 \\).", q_trans: "Jadikan \\( C \\) subjek: \\( F = \\frac{9}{5}C + 32 \\).", opts: ["\\( C = \\frac{5}{9}(F - 32) \\)", "\\( C = \\frac{9}{5}(F + 32) \\)", "\\( C = F - 32 \\)", "\\( C = \\frac{5}{9}F - 32 \\)", "\\( C = \\frac{F - 32}{9} \\)"], correct: 0, exp: "<p>Subtract 32: \\( F - 32 = \\frac{9}{5}C \\). Multiply by \\( \\frac{5}{9} \\): \\( C = \\frac{5}{9}(F - 32) \\).</p><p class='translation'>Kurangi 32: \\( F - 32 = \\frac{9}{5}C \\). Kalikan \\( \\frac{5}{9} \\): \\( C = \\frac{5}{9}(F - 32) \\).</p>" },
+                        { q: "Make \\( x \\) the subject: \\( y = \\frac{2x + 1}{3} \\).", q_trans: "Jadikan \\( x \\) subjek: \\( y = \\frac{2x + 1}{3} \\).", opts: ["\\( x = \\frac{3y - 1}{2} \\)", "\\( x = \\frac{3y + 1}{2} \\)", "\\( x = 3y - \\frac{1}{2} \\)", "\\( x = \\frac{3}{2}y + 1 \\)", "\\( x = \\frac{2y - 1}{3} \\)"], correct: 0, exp: "<p>Multiply by 3: \\( 3y = 2x + 1 \\). Subtract 1: \\( 3y - 1 = 2x \\). Divide by 2: \\( x = \\frac{3y - 1}{2} \\).</p><p class='translation'>Kalikan 3: \\( 3y = 2x + 1 \\). Kurangi 1: \\( 3y - 1 = 2x \\). Bagi 2: \\( x = \\frac{3y - 1}{2} \\).</p>" }
+                    ]}
+                ]
+            },
+            task5: {
+                title: "Task 5: Real-World & Inequalities",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { q: "A phone plan costs $20 per month plus $0.10 per text. If the bill is $35, how many texts were sent? (Let texts = \\( t \\))", q_trans: "Paket telepon berbiaya $20 per bulan ditambah $0,10 per teks. Jika tagihannya $35, berapa banyak teks yang dikirim? (Misalkan teks = \\( t \\))", opts: ["\\( 100 \\)", "\\( 150 \\)", "\\( 200 \\)", "\\( 250 \\)", "\\( 300 \\)"], correct: 1, exp: "<p>Equation: \\( 20 + 0.10t = 35 \\implies 0.10t = 15 \\implies t = 150 \\).</p><p class='translation'>Persamaan: \\( 20 + 0.10t = 35 \\implies 0.10t = 15 \\implies t = 150 \\).</p>" },
+                        { q: "A father is 3 times as old as his son. In 10 years, the father will be twice as old. How old is the son now? (Let son = \\( x \\))", q_trans: "Seorang ayah berusia 3 kali lipat anaknya. Dalam 10 tahun, ayahnya akan berusia 2 kali lipat. Berapakah usia anak sekarang? (Misalkan anak = \\( x \\))", opts: ["\\( 10 \\)", "\\( 15 \\)", "\\( 20 \\)", "\\( 25 \\)", "\\( 30 \\)"], correct: 0, exp: "<p>Equation: \\( 3x + 10 = 2(x + 10) \\implies 3x + 10 = 2x + 20 \\implies x = 10 \\).</p><p class='translation'>Persamaan: \\( 3x + 10 = 2(x + 10) \\implies 3x + 10 = 2x + 20 \\implies x = 10 \\).</p>" },
+                        { q: "Solve the inequality: \\( 2x - 5 > 7 \\).", q_trans: "Selesaikan pertidaksamaan: \\( 2x - 5 > 7 \\).", opts: ["\\( x > 6 \\)", "\\( x > 1 \\)", "\\( x > 12 \\)", "\\( x < 6 \\)", "\\( x \\ge 6 \\)"], correct: 0, exp: "<p>Add 5: \\( 2x > 12 \\). Divide by 2: \\( x > 6 \\).</p><p class='translation'>Tambah 5: \\( 2x > 12 \\). Bagi 2: \\( x > 6 \\).</p>" },
+                        { q: "You have $50. You want to buy some books that cost $8 each. What is the maximum number of books you can buy? (Let books = \\( b \\))", q_trans: "Anda punya $50. Anda ingin membeli beberapa buku yang harganya $8 masing-masing. Berapakah jumlah maksimum buku yang bisa dibeli? (Misalkan buku = \\( b \\))", opts: ["\\( 5 \\)", "\\( 6 \\)", "\\( 7 \\)", "\\( 8 \\)", "\\( 4 \\)"], correct: 1, exp: "<p>Inequality: \\( 8b \\le 50 \\implies b \\le 6.25 \\). Since we can't buy 0.25 books, the max integer is 6.</p><p class='translation'>Pertidaksamaan: \\( 8b \\le 50 \\implies b \\le 6,25 \\). Karena kita tidak bisa membeli 0,25 buku, maksimum bilangan bulat adalah 6.</p>" },
+                        { q: "The perimeter of a rectangle must be less than 30 cm. If the width is 5 cm, what is the maximum length? (Let length = \\( l \\))", q_trans: "Keliling persegi panjang harus kurang dari 30 cm. Jika lebarnya 5 cm, berapakah panjang maksimumnya? (Misalkan panjang = \\( l \\))", opts: ["\\( 10 \\text{ cm} \\)", "\\( 9 \\text{ cm} \\)", "\\( 8 \\text{ cm} \\)", "\\( 7 \\text{ cm} \\)", "\\( 11 \\text{ cm} \\)"], correct: 1, exp: "<p>Inequality: \\( 2(l + 5) < 30 \\implies 2l + 10 < 30 \\implies 2l < 20 \\implies l < 10 \\). Max integer less than 10 is 9.</p><p class='translation'>Pertidaksamaan: \\( 2(l + 5) < 30 \\implies 2l + 10 < 30 \\implies 2l < 20 \\implies l < 10 \\). Maksimum bilangan bulat kurang dari 10 adalah 9.</p>" },
+                        { q: "Two numbers add to 20. One number is \\( x \\). Their product is \\( P \\). Express \\( P \\) in terms of \\( x \\).", q_trans: "Dua angka dijumlahkan menjadi 20. Satu angka adalah \\( x \\). Hasil kalinya adalah \\( P \\). Nyatakan \\( P \\) dalam \\( x \\).", opts: ["\\( P = x^2 - 20x \\)", "\\( P = 20 - x^2 \\)", "\\( P = 2x \\)", "\\( P = x(20 - x) \\)", "\\( P = x^2 + 20 \\)"], correct: 3, exp: "<p>The other number is \\( 20 - x \\). Product \\( P = x(20 - x) \\). This is also equal to \\( 20x - x^2 \\).</p><p class='translation'>Angka lainnya adalah \\( 20 - x \\). Hasil kali \\( P = x(20 - x) \\). Ini juga sama dengan \\( 20x - x^2 \\).</p>" },
+                        { q: "A car travels \\( d \\) km in \\( t \\) hours. If \\( d = 120 \\) and speed \\( v = 60 \\) km/h, find \\( t \\).", q_trans: "Sebuah mobil menempuh \\( d \\) km dalam \\( t \\) jam. Jika \\( d = 120 \\) dan kecepatan \\( v = 60 \\) km/jam, carilah \\( t \\).", opts: ["\\( 2 \\text{ hrs} \\)", "\\( 3 \\text{ hrs} \\)", "\\( 4 \\text{ hrs} \\)", "\\( 5 \\text{ hrs} \\)", "\\( 6 \\text{ hrs} \\)"], correct: 0, exp: "<p>Formula: \\( d = vt \\implies 120 = 60t \\implies t = 2 \\).</p><p class='translation'>Rumus: \\( d = vt \\implies 120 = 60t \\implies t = 2 \\).</p>" },
+                        { q: "The temperature in Celsius is \\( C \\). The temperature in Fahrenheit is \\( F \\). If \\( C = 20 \\), find \\( F \\) using \\( F = \\frac{9}{5}C + 32 \\).", q_trans: "Suhu dalam Celsius adalah \\( C \\). Suhu dalam Fahrenheit adalah \\( F \\). Jika \\( C = 20 \\), carilah \\( F \\) menggunakan \\( F = \\frac{9}{5}C + 32 \\).", opts: ["\\( 52 \\)", "\\( 68 \\)", "\\( 72 \\)", "\\( 45 \\)", "\\( 60 \\)"], correct: 1, exp: "<p>Substitute: \\( F = \\frac{9}{5}(20) + 32 = 36 + 32 = 68 \\).</p><p class='translation'>Substitusi: \\( F = \\frac{9}{5}(20) + 32 = 36 + 32 = 68 \\).</p>" },
+                        { q: "Solve: \\( 3(x + 2) \\le 15 \\).", q_trans: "Selesaikan: \\( 3(x + 2) \\le 15 \\).", opts: ["\\( x \\le 3 \\)", "\\( x \\le 5 \\)", "\\( x \\le 7 \\)", "\\( x < 3 \\)", "\\( x \\ge 3 \\)"], correct: 0, exp: "<p>Divide by 3: \\( x + 2 \\le 5 \\). Subtract 2: \\( x \\le 3 \\).</p><p class='translation'>Bagi 3: \\( x + 2 \\le 5 \\). Kurangi 2: \\( x \\le 3 \\).</p>" },
+                        { q: "You have $100. You buy 2 shirts for $s each and have $40 left. Form an equation to find \\( s \\).", q_trans: "Anda punya $100. Anda membeli 2 kemeja seharga $s masing-masing dan memiliki sisa $40. Bentuk persamaan untuk mencari \\( s \\).", opts: ["\\( 2s - 40 = 100 \\)", "\\( 2s + 40 = 100 \\)", "\\( s + 40 = 100 \\)", "\\( 100 - s = 40 \\)", "\\( 2s = 140 \\)"], correct: 1, exp: "<p>Money spent on shirts: \\( 2s \\). Money left: 40. Total: \\( 2s + 40 = 100 \\).</p><p class='translation'>Uang yang dihabiskan untuk kemeja: \\( 2s \\). Sisa uang: 40. Total: \\( 2s + 40 = 100 \\).</p>" }
+                    ]}
+                ]
+            }
+        };
+
+        // --- AUTO FIX KATEX ESCAPE SEQUENCE ---
+        (function() {
+            function fixString(str) {
+                if (typeof str !== 'string') return str;
+                str = str.replace(/\u000Crac/g, '\\frac');
+                str = str.replace(/\neq/g, '\\neq');
+                str = str.replace(/\u0009imes/g, '\\times');
+                str = str.replace(/\u0009ext/g, '\\text');
+                str = str.replace(/ pi\(/g, ' \\pi(');
+                str = str.replace(/ div /g, ' \\div ');
+                str = str.replace(/ cdot /g, ' \\cdot ');
+                str = str.replace(/ implies /g, ' \\implies ');
+                str = str.replace(/ pm /g, ' \\pm ');
+                str = str.replace(/ sqrt/g, ' \\sqrt');
+                str = str.replace(/ leq /g, ' \\leq ');
+                str = str.replace(/ geq /g, ' \\geq ');
+                str = str.replace(/ infty /g, ' \\infty ');
+                return str;
+            }
+            function processObject(obj) {
+                for (const key in obj) {
+                    if (typeof obj[key] === 'string') {
+                        obj[key] = fixString(obj[key]);
+                    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        processObject(obj[key]);
+                    }
+                }
+            }
+            processObject(contentData);
+        })();
+
+        // --- FUNCTIONS FOR MODAL ---
+        function openModal() { document.getElementById('rulesModal').classList.remove('hidden'); document.getElementById('rulesModal').classList.add('flex'); }
+        function closeModal() { document.getElementById('rulesModal').classList.add('hidden'); }
+
+        // --- NAVIGATION & PAGINATION ---
+        let currentSection = '';
+        let currentPage = 0;
+
+        function showSection(sectionId, pageIndex, event) {
+            currentSection = sectionId;
+            currentPage = pageIndex;
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            } else {
+                const activeItem = document.querySelector(`.sidebar-item[onclick*="${sectionId}"]`);
+                if(activeItem) activeItem.classList.add('active');
+            }
+            renderContent();
+        }
+
+        function renderContent() {
+            const section = contentData[currentSection];
+            const mainContent = document.getElementById('mainContent');
+            const page = section.pages[currentPage];
+            
+            let html = `<h2 class="text-3xl font-bold text-blue-800 mb-4">${section.title}</h2>`;
+            
+            if (currentSection.startsWith('task')) {
+                const taskNum = currentSection.replace('task', '');
+                html += `<div class="mb-4 no-print flex justify-end">
+                            <button onclick="printTask(${taskNum})" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-print"></i> Print Task ${taskNum}
+                            </button>
+                         </div>`;
+            }
+
+            if (page.type === 'theory') {
+                html += `<div class="bg-white p-6 rounded-lg shadow-md">${page.content}</div>`;
+            } else if (page.type === 'tasks') {
+                html += `<div class="bg-white p-6 rounded-lg shadow-md">`;
+                page.tasks.forEach((task, index) => {
+                    html += renderTask(task, index);
+                });
+                html += `</div>`;
+            }
+
+            html += `<div class="flex justify-between mt-6 no-print">`;
+            if (currentPage > 0) {
+                html += `<button onclick="prevPage()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"><i class="fas fa-arrow-left"></i> Prev</button>`;
+            } else {
+                html += `<div></div>`;
+            }
+            if (currentPage < section.pages.length - 1) {
+                html += `<button onclick="nextPage()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next <i class="fas fa-arrow-right"></i></button>`;
+            } else {
+                html += `<div></div>`;
+            }
+            html += `</div>`;
+
+            mainContent.innerHTML = html;
+            if (window.renderMathInElement) {
+                renderMathInElement(mainContent, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            }
+        }
+        
+        function prevPage() { currentPage--; renderContent(); }
+        function nextPage() { currentPage++; renderContent(); }
+
+        function renderTask(task, index) {
+            const taskId = `${currentSection}-${currentPage}-${index}`;
+            let opts = task.opts.map((opt, i) => ({ text: opt, isCorrect: i === task.correct }));
+            opts = shuffleArray(opts);
+
+            let optionsHtml = '';
+            opts.forEach((opt, i) => {
+                optionsHtml += `
+                    <button id="opt-${taskId}-${i}" onclick="checkAnswer('${taskId}', ${i}, ${opt.isCorrect})" class="option-btn w-full text-left p-3 border rounded-lg mb-2 flex items-center">
+                        <span class="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center mr-3 font-bold">${String.fromCharCode(65 + i)}</span>
+                        <span>${opt.text}</span>
+                    </button>
+                `;
+            });
+
+            let safeExp = task.exp ? task.exp.replace(/\\times/g, '×').replace(/<p>/g, '<div>').replace(/<\/p>/g, '</div>') : '';
+
+            return `
+                <div class="border-b border-gray-200 py-4">
+                    <p class="font-semibold mb-2">${index + 1}. ${task.q}</p>
+                    <p class="translation">${task.q_trans}</p>
+                    <div class="mt-4">
+                        ${optionsHtml}
+                    </div>
+                    <div id="feedback-${taskId}" class="mt-2"></div>
+                    <div id="collapse-${taskId}" class="collapse-content mt-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-blue-600 mb-2"><i class="fas fa-lightbulb mr-1"></i>Explanation</h4>
+                        <div>${safeExp}</div>
+                    </div>
+                    <div class="mt-2 no-print flex gap-2">
+                        <button id="reset-${taskId}" onclick="resetTask('${taskId}')" class="hidden bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-bold py-1 px-3 rounded"><i class="fas fa-redo mr-1"></i>Reset</button>
+                        <button onclick="toggleCollapse('${taskId}')" class="hidden bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-bold py-1 px-3 rounded"><i class="fas fa-chevron-down mr-1"></i>Show Explanation</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function checkAnswer(taskId, optIndex, isCorrect) {
+            const buttons = document.querySelectorAll(`[id^="opt-${taskId}-"]`);
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            const selectedBtn = document.getElementById(`opt-${taskId}-${optIndex}`);
+            const feedback = document.getElementById(`feedback-${taskId}`);
+            const resetBtn = document.getElementById(`reset-${taskId}`);
+            const explainBtn = document.querySelector(`#reset-${taskId}`).nextElementSibling;
+            
+            resetBtn.classList.remove('hidden');
+            explainBtn.classList.remove('hidden');
+
+            if (isCorrect) {
+                selectedBtn.classList.add('bg-green-200', 'border-green-500');
+                feedback.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Correct! (Benar!)</p>`;
+            } else {
+                selectedBtn.classList.add('bg-red-200', 'border-red-500');
+                feedback.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Incorrect. Check the explanation! (Salah. Cek penjelasannya!)</p>`;
+                document.getElementById(`collapse-${taskId}`).classList.add('open');
+            }
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            content.classList.toggle('open');
+        }
+
+        function resetTask(taskId) {
+            renderContent();
+        }
+        function printTask(taskNumber) {
+            const printArea = document.getElementById('printArea');
+            const date = new Date().toLocaleDateString('en-GB');
+            let taskContent = contentData['task' + taskNumber].pages[0]; 
+            
+            let tableRows = '';
+            let score = 0;
+
+            taskContent.tasks.forEach((task, index) => {
+                const taskId = `task${taskNumber}-0-${index}`;
+                const correctAnswerText = task.opts[task.correct];
+                
+                const selectedBtn = document.querySelector(`[id^="opt-${taskId}-"].bg-green-200, [id^="opt-${taskId}-"].bg-red-200`);
+                
+                let studentAnswerHtml = '<span style="color:#9ca3af; font-style:italic;">(Empty)</span>';
+                let noteHtml = '❌';
+                
+                if (selectedBtn) {
+                    const ann = selectedBtn.querySelector('.katex-mathml annotation');
+                    if (ann) {
+                        studentAnswerHtml = `\\( ${ann.textContent} \\)`;
+                    } else {
+                        const spans = selectedBtn.querySelectorAll('span');
+                        if (spans.length >= 2) {
+                            studentAnswerHtml = spans[1].innerText;
+                        } else {
+                            studentAnswerHtml = selectedBtn.innerText.substring(1).trim();
+                        }
+                    }
+                    
+                    if (selectedBtn.classList.contains('bg-green-200')) {
+                        noteHtml = '✔️';
+                        score++;
+                    } else {
+                        noteHtml = '❌';
+                    }
+                }
+                
+                tableRows += `
+                    <tr>
+                        <td style="text-align: center; vertical-align: top;">${index + 1}</td>
+                        <td style="vertical-align: top;">${task.q}</td>
+                        <td style="vertical-align: top;">${studentAnswerHtml}</td>
+                        <td style="vertical-align: top;">${correctAnswerText}</td>
+                        <td style="text-align: center; vertical-align: top; font-size: 16px;">${noteHtml}</td>
+                    </tr>
+                `;
+            });
+            printArea.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h1>Math Tutoring by Deni</h1>
+                    <p>Topic: Making Sense of Algebra</p>
+                    <p>Name: .........................</p>
+                    <p>Date: ${date}</p>
+                    <p>Task: ${taskNumber}/5</p>
+                    <p>Score: ${score} / 10</p>
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead>
+                        <tr style="border: 1px solid #000; background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000; padding: 5px; width: 5%;">No.</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 40%;">Question</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 20%;">Student Answer</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 25%;">Correct Answer</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 10%;">Note (❌/✔️)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+                <div style="margin-top: 40px; text-align: right;">
+                    <p>Checked by,</p>
+                    <br><br>
+                    <p><strong>Deni</strong></p>
+                </div>
+            `;
+            
+            if (window.renderMathInElement) {
+                renderMathInElement(printArea, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            }
+            
+            printArea.classList.remove('hidden');
+            window.print();
+            printArea.classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.renderMathInElement) {
+                document.querySelector('.sidebar-item').click();
+            } else {
+                window.addEventListener('load', () => {
+                    document.querySelector('.sidebar-item').click();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
