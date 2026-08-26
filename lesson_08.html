@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Completing the Square</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+        .translation { font-style: italic; font-size: 0.85em; color: #6b7280; display: block; margin-top: 4px; }
+        .main-content { min-height: 70vh; }
+        .sidebar-item.active { background-color: #3b82f6; color: white; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { background-color: #e0f2fe; }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .collapse-content.open { max-height: 1000px; }
+        @media print {
+            body > *:not(#printArea) { display: none !important; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            table { width: 100%; border-collapse: collapse; }
+            tr, td, th { page-break-inside: avoid; }
+            @page { size: A4; margin: 1cm; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold text-blue-600">Math Tutoring by Deni</h1>
+            <p class="text-sm text-gray-600">Topic: Completing the Square</p>
+            <p class="translation">Topik: Melengkapkan Kuadrat</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700">
+                <i class="fas fa-gavel"></i> Class Rules
+                <span class="translation" style="color: #bfdbfe;">Aturan Kelas</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Class Rules Modal -->
+    <div id="rulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-blue-600">Class Rules</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-blue-500 mt-1"></i>
+                    <div>
+                        <p>Take turns speaking.</p>
+                        <p class="translation">Berbicara secara bergantian.</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-blue-500 mt-1"></i>
+                    <div>
+                        <p>Ask for permission if you want to leave the class.</p>
+                        <p class="translation">Meminta izin jika ingin meninggalkan kelas.</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-blue-500 mt-1"></i>
+                    <div>
+                        <p>Turn on camera and microphone when needed.</p>
+                        <p class="translation">Menyalakan kamera dan microphone jika diperlukan.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg h-screen sticky top-0 overflow-y-auto no-print">
+            <ul class="py-4">
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('warmup', 0, event)">
+                    <i class="fas fa-fire mr-2"></i>Spiral Review Warm-up (00:00-00:10)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('intro', 0, event)">
+                    <i class="fas fa-bullhorn mr-2"></i>Introduction & Real-World (00:10-00:15)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('review', 0, event)">
+                    <i class="fas fa-history mr-2"></i>Review of Prior Knowledge (00:15-00:20)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('problem', 0, event)">
+                    <i class="fas fa-puzzle-piece mr-2"></i>Problem Introduction (00:20-00:30)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('guided', 0, event)">
+                    <i class="fas fa-hand-holding mr-2"></i>Guided Practice (00:30-00:45)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('independent', 0, event)">
+                    <i class="fas fa-user-graduate mr-2"></i>Independent Practice (00:45-00:55)
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('consolidation', 0, event)">
+                    <i class="fas fa-book-open mr-2"></i>Consolidation & Reflection (00:55-01:00)
+                </li>
+                <li class="border-t border-gray-200 mt-2"></li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task1', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 1
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task2', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 2
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task3', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 3
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task4', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 4
+                </li>
+                <li class="sidebar-item p-3 cursor-pointer hover:bg-blue-50" onclick="showSection('task5', 0, event)">
+                    <i class="fas fa-tasks mr-2"></i>Task 5
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8 main-content" id="mainContent">
+            <!-- Content will be injected here -->
+        </main>
+    </div>
+
+    <!-- Hidden Print Area -->
+    <div id="printArea" class="hidden"></div>
+
+    <script>
+        let contentData = {
+            warmup: {
+                title: "Spiral Review Warm-up",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-shapes mr-2"></i>Perfect Square Trinomials</h2>
+                            <p class="translation">Trinomial Kuadrat Sempurna</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <rect x="10" y="10" width="80" height="80" fill="#3b82f6" rx="5"/>
+                                <text x="50" y="55" font-size="20" fill="#fff" text-anchor="middle">x²</text>
+                                <rect x="90" y="10" width="40" height="80" fill="#fbbf24" rx="5"/>
+                                <text x="110" y="55" font-size="14" fill="#000" text-anchor="middle">4x</text>
+                                <rect x="10" y="90" width="80" height="40" fill="#fbbf24" rx="5"/>
+                                <text x="50" y="115" font-size="14" fill="#000" text-anchor="middle">4x</text>
+                                <rect x="90" y="90" width="40" height="40" fill="#10b981" rx="5"/>
+                                <text x="110" y="115" font-size="14" fill="#fff" text-anchor="middle">4</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">A perfect square trinomial is formed when we square a binomial. For example, \\( (x+2)^2 = x^2 + 4x + 4 \\).</p>
+                                <p class="translation">Trinomial kuadrat sempurna terbentuk ketika kita mengkuadratkan binomial. Misalnya, \\( (x+2)^2 = x^2 + 4x + 4 \\).</p>
+                                <p class="mt-2">The pattern is: \\( (x+a)^2 = x^2 + 2ax + a^2 \\). The last term is always the square of the middle coefficient divided by 2.</p>
+                                <p class="translation">Polanya adalah: \\( (x+a)^2 = x^2 + 2ax + a^2 \\). Suku terakhir selalu kuadrat dari koefisien tengah dibagi 2.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">(x+3)²</text></svg>`, q: "Expand \\( (x+3)^2 \\). What is the constant term?", q_trans: " Jabarkan \\( (x+3)^2 \\). Berapakah suku konstantanya?", opts: ["3", "6", "9", "12", "x²"], correct: 2, exp: "<div>\\( (x+3)^2 = x^2 + 2(3)x + 3^2 = x^2 + 6x + 9 \\). The constant is 9.</div><div class='translation'>\\( (x+3)^2 = x^2 + 2(3)x + 3^2 = x^2 + 6x + 9 \\). Konstantanya adalah 9.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">x² + 10x + ?</text></svg>`, q: "A perfect square trinomial starts with \\( x^2 + 10x \\). What is the missing constant?", q_trans: "Sebuah trinomial kuadrat sempurna dimulai dengan \\( x^2 + 10x \\). Berapakah konstanta yang hilang?", opts: ["10", "20", "25", "50", "100"], correct: 2, exp: "<div>\\( a = 5 \\) because \\( 2ax = 10x \\). So \\( a^2 = 5^2 = 25 \\).</div><div class='translation'>\\( a = 5 \\) karena \\( 2ax = 10x \\). Jadi \\( a^2 = 5^2 = 25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#e0e7ff" stroke="#3b82f6" stroke-width="2"/><text x="50" y="45" font-size="12" text-anchor="middle">(x-5)²</text></svg>`, q: "Expand \\( (x-5)^2 \\). What is the middle term?", q_trans: "Jabarkan \\( (x-5)^2 \\). Berapakah suku tengahnya?", opts: ["\\( 5x \\)", "\\( -5x \\)", "\\( 10x \\)", "\\( -10x \\)", "\\( -25x \\)"], correct: 3, exp: "<div>\\( (x-5)^2 = x^2 + 2(-5)x + (-5)^2 = x^2 - 10x + 25 \\). The middle term is -10x.</div><div class='translation'>\\( (x-5)^2 = x^2 + 2(-5)x + (-5)^2 = x^2 - 10x + 25 \\). Suku tengahnya adalah -10x.</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-puzzle-piece mr-2"></i>Solving by Factoring</h2>
+                            <p class="translation">Menyelesaikan dengan Memfaktorkan</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <rect x="20" y="40" width="160" height="60" fill="#f3f4f6" stroke="#000" rx="5"/>
+                                <text x="100" y="75" font-size="14" text-anchor="middle">x² - 5x + 6 = 0</text>
+                                <path d="M 100 100 L 50 130" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="30" y="145" font-size="12" text-anchor="middle" fill="#10b981">x=2</text>
+                                <path d="M 100 100 L 150 130" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="170" y="145" font-size="12" text-anchor="middle" fill="#ef4444">x=3</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">If a quadratic equation can be factored, we set each factor to zero to find the roots (solutions).</p>
+                                <p class="translation">Jika persamaan kuadrat dapat difaktorkan, kita samakan setiap faktor dengan nol untuk menemukan akar-akarnya (solusi).</p>
+                                <p class="mt-2">Example: \\( x^2 - 5x + 6 = 0 \\implies (x-2)(x-3) = 0 \\). So, \\( x=2 \\) or \\( x=3 \\).</p>
+                                <p class="translation">Contoh: \\( x^2 - 5x + 6 = 0 \\implies (x-2)(x-3) = 0 \\). Jadi, \\( x=2 \\) atau \\( x=3 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 4 = 0</text></svg>`, q: "Find the roots of \\( x^2 - 4 = 0 \\).", q_trans: "Temukan akar-akar dari \\( x^2 - 4 = 0 \\).", opts: ["\\( x = 2 \\) only", "\\( x = -2 \\) only", "\\( x = 2 \\) or \\( x = -2 \\)", "\\( x = 4 \\) or \\( x = -4 \\)", "No real roots"], correct: 2, exp: "<div>\\( x^2 = 4 \\implies x = \\pm\\sqrt{4} \\implies x = 2 \\) or \\( x = -2 \\).</div><div class='translation'>\\( x^2 = 4 \\implies x = \\pm\\sqrt{4} \\implies x = 2 \\) atau \\( x = -2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 3x - 10 = 0</text></svg>`, q: "Solve \\( x^2 + 3x - 10 = 0 \\). What are the roots?", q_trans: "Selesaikan \\( x^2 + 3x - 10 = 0 \\). Berapakah akar-akarnya?", opts: ["\\( 2, -5 \\)", "\\( -2, 5 \\)", "\\( -2, -5 \\)", "\\( 2, 5 \\)", "\\( 3, -10 \\)"], correct: 0, exp: "<div>Factors: \\( (x+5)(x-2) = 0 \\). So \\( x=-5 \\) or \\( x=2 \\).</div><div class='translation'>Faktor: \\( (x+5)(x-2) = 0 \\). Jadi \\( x=-5 \\) atau \\( x=2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#fbbf24"/><text x="50" y="45" font-size="12" text-anchor="middle">Area</text></svg>`, q: "A rectangle has length \\( x+2 \\) and width \\( x-3 \\). Its area is 10. Which equation represents this?", q_trans: "Sebuah persegi panjang memiliki panjang \\( x+2 \\) dan lebar \\( x-3 \\). Luasnya 10. Persamaan manakah yang mewakili ini?", opts: ["\\( x^2 - x - 6 = 10 \\)", "\\( x^2 - x + 6 = 10 \\)", "\\( x^2 + x - 6 = 10 \\)", "\\( x^2 - x - 16 = 0 \\)", "\\( 2x - 1 = 10 \\)"], correct: 0, exp: "<div>Area = \\( (x+2)(x-3) = x^2 - x - 6 \\). Set equal to 10: \\( x^2 - x - 6 = 10 \\).</div><div class='translation'>Luas = \\( (x+2)(x-3) = x^2 - x - 6 \\). Samakan dengan 10: \\( x^2 - x - 6 = 10 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-cube mr-2"></i>Vertex Form of a Parabola</h2>
+                            <p class="translation">Bentuk Titik Puncak Parabola</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 130 Q 100 -20 180 130" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                <circle cx="100" cy="30" r="4" fill="#ef4444"/>
+                                <text x="110" y="30" font-size="12">Vertex (h, k)</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">The vertex form of a quadratic function is \\( y = a(x-h)^2 + k \\), where \\( (h, k) \\) is the vertex.</p>
+                                <p class="translation">Bentuk titik puncak fungsi kuadrat adalah \\( y = a(x-h)^2 + k \\), di mana \\( (h, k) \\) adalah titik puncak.</p>
+                                <p class="mt-2">Completing the square helps us convert standard form \\( y = ax^2 + bx + c \\) into vertex form.</p>
+                                <p class="translation">Melengkapkan kuadrat membantu kita mengubah bentuk baku \\( y = ax^2 + bx + c \\) menjadi bentuk titik puncak.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = (x-2)² + 3</text></svg>`, q: "What is the vertex of \\( y = (x-2)^2 + 3 \\)?", q_trans: "Berapakah titik puncak dari \\( y = (x-2)^2 + 3 \\)?", opts: ["\\( (2, 3) \\)", "\\( (-2, 3) \\)", "\\( (2, -3) \\)", "\\( (3, 2) \\)", "\\( (-2, -3) \\)"], correct: 0, exp: "<div>In \\( y = a(x-h)^2 + k \\), \\( h=2 \\) and \\( k=3 \\). Vertex is \\( (h, k) = (2, 3) \\).</div><div class='translation'>Pada \\( y = a(x-h)^2 + k \\), \\( h=2 \\) dan \\( k=3 \\). Titik puncaknya adalah \\( (2, 3) \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 20 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/></svg>`, q: "Which direction does the parabola \\( y = -2(x+1)^2 - 4 \\) open?", q_trans: "Ke arah mana parabola \\( y = -2(x+1)^2 - 4 \\) terbuka?", opts: ["Upwards", "Downwards", "Left", "Right", "Sideways"], correct: 1, exp: "<div>Because \\( a = -2 \\) (negative), the parabola opens downwards.</div><div class='translation'>Karena \\( a = -2 \\) (negatif), parabola terbuka ke bawah.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² - 6x</text></svg>`, q: "What must be added to \\( x^2 - 6x \\) to make it a perfect square?", q_trans: "Apa yang harus ditambahkan ke \\( x^2 - 6x \\) agar menjadi kuadrat sempurna?", opts: ["3", "6", "9", "36", "-9"], correct: 2, exp: "<div>Take half of -6 (which is -3), then square it: \\( (-3)^2 = 9 \\).</div><div class='translation'>Ambil setengah dari -6 (yaitu -3), lalu kuadratkan: \\( (-3)^2 = 9 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#10b981"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Min</text></svg>`, q: "A ball is thrown and its height is \\( h = -t^2 + 4t \\). What value completes the square for \\( t \\)?", q_trans: "Bola dilempar dan ketinggiannya \\( h = -t^2 + 4t \\). Nilai berapa yang melengkapi kuadrat untuk \\( t \\)?", opts: ["2", "4", "8", "16", "-4"], correct: 1, exp: "<div>Half of 4 is 2. Square it: \\( 2^2 = 4 \\).</div><div class='translation'>Setengah dari 4 adalah 2. Kuadratkan: \\( 2^2 = 4 \\).</div>" }
+                    ]}
+                ]
+            },
+			
+            intro: {
+                title: "Introduction & Real-World Connection",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-rocket mr-2"></i>Why Do We Complete the Square?</h2>
+                            <p class="translation">Mengapa Kita Melengkapkan Kuadrat?</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 130 Q 100 -30 180 130" stroke="#3b82f6" stroke-width="3" fill="none" stroke-dasharray="5"/>
+                                <circle cx="100" cy="30" r="8" fill="#ef4444"/>
+                                <path d="M 100 38 L 100 80" stroke="#000" stroke-width="1" stroke-dasharray="2"/>
+                                <rect x="10" y="120" width="180" height="10" fill="#10b981"/>
+                                <text x="105" y="90" font-size="12" fill="#000">Max Height</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Imagine throwing a ball. Its path is a parabola. The highest point is the vertex.</p>
+                                <p class="translation">Bayangkan kamu melempar bola. Jalurnya adalah parabola. Titik tertingginya adalah titik puncak.</p>
+                                <p class="mt-2">If the equation is \\( y = x^2 - 4x + 1 \\), it's hard to see the highest point. By completing the square, we rewrite it as \\( y = (x-2)^2 - 3 \\), making it easy to graph!</p>
+                                <p class="translation">Jika persamaannya \\( y = x^2 - 4x + 1 \\), sulit untuk melihat titik tertingginya. Dengan melengkapkan kuadrat, kita menulisnya ulang menjadi \\( y = (x-2)^2 - 3 \\), sehingga mudah digambar!</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 10 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/><circle cx="50" cy="10" r="4" fill="#ef4444"/></svg>`, q: "A rocket's height is modeled by \\( h = -(t-5)^2 + 25 \\). What is the maximum height?", q_trans: "Ketinggian roket dimodelkan dengan \\( h = -(t-5)^2 + 25 \\). Berapakah ketinggian maksimumnya?", opts: ["5 meters", "10 meters", "25 meters", "50 meters", "Cannot be determined"], correct: 2, exp: "<div>In vertex form \\( y = a(x-h)^2 + k \\), \\( k \\) is the max/min value. Here \\( k = 25 \\).</div><div class='translation'>Pada bentuk titik puncak \\( y = a(x-h)^2 + k \\), \\( k \\) adalah nilai maks/min. Di sini \\( k = 25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = (x+2)² - 5</text></svg>`, q: "If a parabola is \\( y = (x+2)^2 - 5 \\), what is its vertex?", q_trans: "Jika parabola adalah \\( y = (x+2)^2 - 5 \\), berapakah titik puncaknya?", opts: ["\\( (2, 5) \\)", "\\( (-2, 5) \\)", "\\( (2, -5) \\)", "\\( (-2, -5) \\)", "\\( (0, -5) \\)"], correct: 3, exp: "<div>\\( h = -2 \\) and \\( k = -5 \\). Vertex is \\( (-2, -5) \\).</div><div class='translation'>\\( h = -2 \\) dan \\( k = -5 \\). Titik puncaknya adalah \\( (-2, -5) \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Profit</text></svg>`, q: "A business profit is \\( P = x^2 - 6x + 11 \\). To find the minimum profit, we complete the square. What is the first step?", q_trans: "Keuntungan bisnis adalah \\( P = x^2 - 6x + 11 \\). Untuk mencari keuntungan minimum, kita melengkapkan kuadrat. Apa langkah pertamanya?", opts: ["Add 11 to both sides", "Factor out x from first two terms", "Subtract 11", "Take half of -6 and square it", "Find the roots"], correct: 3, exp: "<div>The first step is finding the number to add: \\( (b/2)^2 = (-6/2)^2 = 9 \\).</div><div class='translation'>Langkah pertama adalah mencari angka yang ditambahkan: \\( (b/2)^2 = (-6/2)^2 = 9 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-th mr-2"></i>Geometric Meaning</h2>
+                            <p class="translation">Arti Geometris</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <rect x="20" y="20" width="60" height="60" fill="#3b82f6" rx="2"/>
+                                <text x="50" y="55" font-size="12" fill="#fff" text-anchor="middle">x²</text>
+                                <rect x="80" y="20" width="30" height="60" fill="#fbbf24" rx="2"/>
+                                <text x="95" y="55" font-size="10" text-anchor="middle">3x</text>
+                                <rect x="20" y="80" width="60" height="30" fill="#fbbf24" rx="2"/>
+                                <text x="50" y="100" font-size="10" text-anchor="middle">3x</text>
+                                <rect x="80" y="80" width="30" height="30" fill="#ef4444" rx="2" opacity="0.5"/>
+                                <text x="95" y="100" font-size="10" text-anchor="middle">?</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Imagine a square of side \\( x \\) (area \\( x^2 \\)) and a rectangle of \\( x \\) by 3. We want to make it a perfect square.</p>
+                                <p class="translation">Bayangkan persegi dengan sisi \\( x \\) (luas \\( x^2 \\)) dan persegi panjang \\( x \\) kali 3. Kita ingin menjadikannya kuadrat sempurna.</p>
+                                <p class="mt-2">Split the rectangle into two \\( (3x/2) \\) and move one to the bottom. We are missing a tiny square of \\( (3/2)^2 = 2.25 \\).</p>
+                                <p class="translation">Bagi persegi panjang menjadi dua \\( (3x/2) \\) dan pindahkan satu ke bawah. Kita kehilangan persegi kecil \\( (3/2)^2 = 2.25 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="40" height="40" fill="#3b82f6"/><rect x="60" y="20" width="20" height="40" fill="#fbbf24"/></svg>`, q: "Geometrically, to complete the square for \\( x^2 + 5x \\), we split 5x into two parts. What is the length of each part?", q_trans: "Secara geometris, untuk melengkapkan kuadrat \\( x^2 + 5x \\), kita bagi 5x menjadi dua bagian. Berapakah panjang setiap bagian?", opts: ["1", "2.5", "5", "10", "25"], correct: 1, exp: "<div>We divide the coefficient by 2: \\( 5 / 2 = 2.5 \\).</div><div class='translation'>Kita bagi koefisiennya dengan 2: \\( 5 / 2 = 2.5 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="40" height="40" fill="#3b82f6"/><rect x="60" y="20" width="20" height="40" fill="#fbbf24"/><rect x="60" y="60" width="20" height="20" fill="#ef4444" opacity="0.5"/></svg>`, q: "Using geometry, what area must be added to complete the square for \\( x^2 + 5x \\)?", q_trans: "Menggunakan geometri, berapakah luas yang harus ditambahkan untuk melengkapkan kuadrat \\( x^2 + 5x \\)?", opts: ["2.5", "5", "6.25", "25", "12.5"], correct: 2, exp: "<div>We square the side of the missing piece: \\( 2.5^2 = 6.25 \\).</div><div class='translation'>Kita kuadratkan sisi dari potongan yang hilang: \\( 2.5^2 = 6.25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">(x + 3)²</text></svg>`, q: "If \\( (x+3)^2 = x^2 + 6x + 9 \\), what is the missing piece added to \\( x^2 + 6x \\)?", q_trans: "Jika \\( (x+3)^2 = x^2 + 6x + 9 \\), apakah potongan yang hilang yang ditambahkan ke \\( x^2 + 6x \\)?", opts: ["3", "6", "9", "18", "x²"], correct: 2, exp: "<div>The last term is \\( 3^2 = 9 \\).</div><div class='translation'>Suku terakhir adalah \\( 3^2 = 9 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-calculator mr-2"></i>The Algebraic Shortcut</h2>
+                            <p class="translation">Jalan Pintas Aljabar</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="40" font-size="14" fill="#000">Step 1: Half of b</text>
+                                <path d="M 70 45 L 90 45" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+                                <rect x="90" y="30" width="60" height="30" fill="#fbbf24" rx="5"/>
+                                <text x="120" y="50" font-size="12" text-anchor="middle">b/2</text>
+                                
+                                <text x="20" y="80" font-size="14" fill="#000">Step 2: Square it</text>
+                                <path d="M 70 85 L 90 85" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+                                <rect x="90" y="70" width="60" height="30" fill="#ef4444" rx="5"/>
+                                <text x="120" y="90" font-size="12" text-anchor="middle">(b/2)²</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Algebraically, if you have \\( x^2 + bx \\), you add \\( (b/2)^2 \\) to complete the square.</p>
+                                <p class="translation">Secara aljabar, jika kamu punya \\( x^2 + bx \\), kamu menambahkan \\( (b/2)^2 \\) untuk melengkapkan kuadrat.</p>
+                                <p class="mt-2">Example: \\( x^2 + 8x \\). Half of 8 is 4. Square it to get 16. So we add 16: \\( x^2 + 8x + 16 = (x+4)^2 \\).</p>
+                                <p class="translation">Contoh: \\( x^2 + 8x \\). Setengah dari 8 adalah 4. Kuadratkan untuk mendapatkan 16. Jadi kita tambah 16: \\( x^2 + 8x + 16 = (x+4)^2 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">x² + 12x</text></svg>`, q: "What number must be added to \\( x^2 + 12x \\) to make it a perfect square?", q_trans: "Angka berapa yang harus ditambahkan ke \\( x^2 + 12x \\) agar menjadi kuadrat sempurna?", opts: ["6", "12", "24", "36", "144"], correct: 3, exp: "<div>Half of 12 is 6. \\( 6^2 = 36 \\).</div><div class='translation'>Setengah dari 12 adalah 6. \\( 6^2 = 36 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">x² - 10x</text></svg>`, q: "Complete the square for \\( x^2 - 10x \\).", q_trans: "Lengkapkan kuadrat untuk \\( x^2 - 10x \\).", opts: ["\\( (x-5)^2 \\)", "\\( (x+5)^2 \\)", "\\( (x-10)^2 \\)", "\\( (x+10)^2 \\)", "\\( (x-25)^2 \\)"], correct: 0, exp: "<div>Half of -10 is -5. \\( (-5)^2 = 25 \\). So \\( x^2 - 10x + 25 = (x-5)^2 \\).</div><div class='translation'>Setengah dari -10 adalah -5. \\( (-5)^2 = 25 \\). Jadi \\( x^2 - 10x + 25 = (x-5)^2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">x² + 7x</text></svg>`, q: "What is the value of \\( (b/2)^2 \\) for the expression \\( x^2 + 7x \\)?", q_trans: "Berapakah nilai \\( (b/2)^2 \\) untuk suku \\( x^2 + 7x \\)?", opts: ["3.5", "7", "12.25", "14", "49"], correct: 2, exp: "<div>\\( (7/2)^2 = 3.5^2 = 12.25 \\).</div><div class='translation'>\\( (7/2)^2 = 3.5^2 = 12.25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="30" width="60" height="30" fill="#e0e7ff" stroke="#3b82f6" stroke-width="2"/><text x="50" y="50" font-size="12" text-anchor="middle">x² + bx + 25</text></svg>`, q: "For \\( x^2 + bx + 25 \\) to be a perfect square, what could be the value of \\( b \\)?", q_trans: "Agar \\( x^2 + bx + 25 \\) menjadi kuadrat sempurna, berapakah nilai dari \\( b \\)?", opts: ["5", "10", "25", "50", "12.5"], correct: 1, exp: "<div>\\( b/2 = 5 \\implies b = 10 \\). (Or -10).</div><div class='translation'>\\( b/2 = 5 \\implies b = 10 \\). (Atau -10).</div>" }
+                    ]}
+                ]
+            },
+            review: {
+                title: "Review of Prior Knowledge",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-expand-arrows-alt mr-2"></i>Expanding Binomials</h2>
+                            <p class="translation">Mengalikan Dua Binomial</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="50" y="80" font-size="16" text-anchor="middle" fill="#000">(x + 3)</text>
+                                <text x="100" y="80" font-size="16" text-anchor="middle" fill="#000">(x + 3)</text>
+                                <path d="M 130 80 L 160 80" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="180" y="80" font-size="14" text-anchor="middle" fill="#3b82f6">x² + 6x + 9</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Before we can complete the square, we must know how to expand. \\( (x+a)(x+a) = x^2 + 2ax + a^2 \\).</p>
+                                <p class="translation">Sebelum melengkapkan kuadrat, kita harus tahu cara mengalikannya. \\( (x+a)(x+a) = x^2 + 2ax + a^2 \\).</p>
+                                <p class="mt-2">This is the reverse process of factoring. Recognizing perfect squares helps us work backwards.</p>
+                                <p class="translation">Ini adalah kebalikan dari memfaktorkan. Mengenali kuadrat sempurna membantu kita bekerja secara terbalik.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">(x+4)²</text></svg>`, q: "Expand \\( (x+4)^2 \\) completely.", q_trans: "Jabarkan \\( (x+4)^2 \\) secara lengkap.", opts: ["\\( x^2 + 16 \\)", "\\( x^2 + 4x + 16 \\)", "\\( x^2 + 8x + 16 \\)", "\\( x^2 + 8x + 4 \\)", "\\( x^2 - 8x + 16 \\)"], correct: 2, exp: "<div>\\( (x+4)(x+4) = x^2 + 4x + 4x + 16 = x^2 + 8x + 16 \\).</div><div class='translation'>\\( (x+4)(x+4) = x^2 + 4x + 4x + 16 = x^2 + 8x + 16 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="14" text-anchor="middle">x² - 14x + 49</text></svg>`, q: "Which expression is the factored form of \\( x^2 - 14x + 49 \\)?", q_trans: "Manakah bentuk faktor dari \\( x^2 - 14x + 49 \\)?", opts: ["\\( (x-7)^2 \\)", "\\( (x+7)^2 \\)", "\\( (x-14)^2 \\)", "\\( (x-7)(x+7) \\)", "\\( (x-49)^2 \\)"], correct: 0, exp: "<div>\\( 2(-7) = -14 \\) and \\( (-7)^2 = 49 \\). So it's \\( (x-7)^2 \\).</div><div class='translation'>\\( 2(-7) = -14 \\) dan \\( (-7)^2 = 49 \\). Jadi ini \\( (x-7)^2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="30" width="60" height="30" fill="#10b981" rx="5"/><text x="50" y="50" font-size="12" text-anchor="middle" fill="#fff">Area</text></svg>`, q: "A square garden has side \\( x+5 \\). What is the area of the garden?", q_trans: "Taman berbentuk persegi memiliki sisi \\( x+5 \\). Berapakah luas taman tersebut?", opts: ["\\( x^2 + 25 \\)", "\\( x^2 + 5x + 25 \\)", "\\( x^2 + 10x + 25 \\)", "\\( x^2 + 10x + 5 \\)", "\\( 2x + 10 \\)"], correct: 2, exp: "<div>Area = side × side = \\( (x+5)^2 = x^2 + 10x + 25 \\).</div><div class='translation'>Luas = sisi × sisi = \\( (x+5)^2 = x^2 + 10x + 25 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-balance-scale-right mr-2"></i>Solving \\( (x+a)^2 = k \\)</h2>
+                            <p class="translation">Menyelesaikan Persamaan \\( (x+a)^2 = k \\)</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="100" y="80" font-size="20" text-anchor="middle" fill="#000">(x-2)² = 25</text>
+                                <text x="100" y="110" font-size="14" text-anchor="middle" fill="#ef4444">x-2 = ±5</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Once we have a completed square, we set it equal to a number and take the square root of both sides.</p>
+                                <p class="translation">Setelah kita punya kuadrat sempurna, kita samakan dengan sebuah angka lalu ambil akar kuadrat dari kedua sisi.</p>
+                                <p class="mt-2">Remember the \\( \\pm \\) symbol! If \\( (x-2)^2 = 25 \\), then \\( x-2 = 5 \\) or \\( x-2 = -5 \\).</p>
+                                <p class="translation">Ingat simbol \\( \\pm \\)! Jika \\( (x-2)^2 = 25 \\), maka \\( x-2 = 5 \\) atau \\( x-2 = -5 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">(x+4)² = 9</text></svg>`, q: "Solve \\( (x+4)^2 = 9 \\). What are the two linear equations?", q_trans: "Selesaikan \\( (x+4)^2 = 9 \\). Apakah dua persamaan linear tersebut?", opts: ["\\( x+4 = 3 \\) and \\( x+4 = -3 \\)", "\\( x+4 = 9 \\) and \\( x+4 = -9 \\)", "\\( x+4 = 3 \\) only", "\\( x+4 = 81 \\)", "\\( x-4 = 3 \\) and \\( x-4 = -3 \\)"], correct: 0, exp: "<div>Take square root of both sides: \\( \\sqrt{9} = 3 \\). So \\( x+4 = \\pm 3 \\).</div><div class='translation'>Akar kuadrat kedua sisi: \\( \\sqrt{9} = 3 \\). Jadi \\( x+4 = \\pm 3 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x-3 = ±4</text></svg>`, q: "If \\( x-3 = \\pm 4 \\), what are the roots?", q_trans: "Jika \\( x-3 = \\pm 4 \\), berapakah akar-akarnya?", opts: ["1 and 7", "-1 and 7", "1 and -7", "3 and 4", "-3 and -4"], correct: 1, exp: "<div>\\( x = 3 + 4 = 7 \\) or \\( x = 3 - 4 = -1 \\).</div><div class='translation'>\\( x = 3 + 4 = 7 \\) atau \\( x = 3 - 4 = -1 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#8b5cf6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Target</text></svg>`, q: "An archer's arrow follows \\( (x-5)^2 = 0 \\). How many times does it hit the target (roots)?", q_trans: "Panah seorang pemanah mengikuti \\( (x-5)^2 = 0 \\). Berapa kali ia mengenai target (akar)?", opts: ["0", "1", "2", "Infinite", "Cannot be determined"], correct: 1, exp: "<div>\\( x-5 = 0 \\implies x = 5 \\). There is exactly one root (a repeated root).</div><div class='translation'>\\( x-5 = 0 \\implies x = 5 \\). Hanya ada satu akar (akar kembar).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-snowflake mr-2"></i>Isolating Variables</h2>
+                            <p class="translation">Mengisolasi Variabel</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="80" font-size="12" fill="#000">x² + 6x = -5</text>
+                                <path d="M 80 80 L 110 80" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="160" y="80" font-size="12" text-anchor="middle" fill="#ef4444">x² + 6x + 5 = 0</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">When solving equations, the first step is usually to move all constant terms to one side, leaving the \\( x^2 \\) and \\( x \\) terms on the other.</p>
+                                <p class="translation">Saat menyelesaikan persamaan, langkah pertama biasanya memindahkan semua konstanta ke satu sisi, menyisakan suku \\( x^2 \\) dan \\( x \\) di sisi lain.</p>
+                                <p class="mt-2">This groups the variable parts together so we can prepare to add our "magic number" to complete the square.</p>
+                                <p class="translation">Ini mengelompokkan bagian variabel bersama-sama agar kita siap menambahkan "angka ajaib" kita untuk melengkapkan kuadrat.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 8x = 3</text></svg>`, q: "In the equation \\( x^2 + 8x = 3 \\), what is the value of \\( b \\)?", q_trans: "Pada persamaan \\( x^2 + 8x = 3 \\), berapakah nilai \\( b \\)?", opts: ["3", "8", "4", "16", "64"], correct: 1, exp: "<div>The standard form is \\( x^2 + bx + c = 0 \\). Here \\( b = 8 \\).</div><div class='translation'>Bentuk baku adalah \\( x^2 + bx + c = 0 \\). Di sini \\( b = 8 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 4x + 5 = 0</text></svg>`, q: "To prepare to complete the square for \\( x^2 - 4x + 5 = 0 \\), what must you do first?", q_trans: "Untuk mempersiapkan melengkapkan kuadrat \\( x^2 - 4x + 5 = 0 \\), apa yang harus kamu lakukan pertama kali?", opts: ["Add 4 to both sides", "Subtract 5 from both sides", "Divide by -4", "Take the square root", "Factor out x"], correct: 1, exp: "<div>Move the constant (+5) to the other side: \\( x^2 - 4x = -5 \\).</div><div class='translation'>Pindahkan konstanta (+5) ke sisi lain: \\( x^2 - 4x = -5 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² = 2x + 1</text></svg>`, q: "Rearrange \\( x^2 = 2x + 1 \\) so it is ready for completing the square.", q_trans: "Atur ulang \\( x^2 = 2x + 1 \\) agar siap untuk dilengkapkan kuadratnya.", opts: ["\\( x^2 + 2x = -1 \\)", "\\( x^2 - 2x = 1 \\)", "\\( x^2 - 2x = -1 \\)", "\\( x^2 + 2x = 1 \\)", "\\( 1 = x^2 + 2x \\)"], correct: 1, exp: "<div>Subtract \\( 2x \\) from both sides to group the variables: \\( x^2 - 2x = 1 \\).</div><div class='translation'>Kurangi \\( 2x \\) dari kedua sisi untuk mengelompokkan variabel: \\( x^2 - 2x = 1 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Box</text></svg>`, q: "A box has volume \\( x^3 + 6x^2 = 10 \\). If we want to solve for x by completing the square, what is the main issue?", q_trans: "Sebuah kotak memiliki volume \\( x^3 + 6x^2 = 10 \\). Jika kita ingin menyelesaikan untuk x dengan melengkapkan kuadrat, apa masalah utamanya?", opts: ["1", "6", "3", "10", "Cannot be determined"], correct: 3, exp: "<div>This is a cubic equation (degree 3), not quadratic. Completing the square does not apply here directly!</div><div class='translation'>Ini adalah persamaan kubik (pangkat 3), bukan kuadrat. Melengkapkan kuadrat tidak bisa langsung diterapkan di sini!</div>" }
+                    ]}
+                ]
+            },
+            problem: {
+                title: "Problem Introduction",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-walking mr-2"></i>The 4-Step Method</h2>
+                            <p class="translation">Metode 4 Langkah</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="30" font-size="14" fill="#3b82f6">1. Move constant</text>
+                                <text x="20" y="60" font-size="14" fill="#10b981">2. Find (b/2)²</text>
+                                <text x="20" y="90" font-size="14" fill="#fbbf24">3. Add to both sides</text>
+                                <text x="20" y="120" font-size="14" fill="#ef4444">4. Factor & solve</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Let's solve \\( x^2 - 8x - 1 = 0 \\).</p>
+                                <p class="translation">Mari kita selesaikan \\( x^2 - 8x - 1 = 0 \\).</p>
+                                <p class="mt-2"><strong>Step 1:</strong> \\( x^2 - 8x = 1 \\).</p>
+                                <p class="translation"><strong>Langkah 1:</strong> \\( x^2 - 8x = 1 \\).</p>
+                                <p class="mt-2"><strong>Step 2:</strong> \\( b = -8 \\implies (-8/2)^2 = 16 \\).</p>
+                                <p class="translation"><strong>Langkah 2:</strong> \\( b = -8 \\implies (-8/2)^2 = 16 \\).</p>
+                                <p class="mt-2"><strong>Step 3:</strong> \\( x^2 - 8x + 16 = 1 + 16 \\).</p>
+                                <p class="translation"><strong>Langkah 3:</strong> \\( x^2 - 8x + 16 = 1 + 16 \\).</p>
+                                <p class="mt-2"><strong>Step 4:</strong> \\( (x-4)^2 = 17 \\implies x = 4 \\pm \\sqrt{17} \\).</p>
+                                <p class="translation"><strong>Langkah 4:</strong> \\( (x-4)^2 = 17 \\implies x = 4 \\pm \\sqrt{17} \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 6x = 0</text></svg>`, q: "For \\( x^2 - 6x = 0 \\), what is the value of \\( (b/2)^2 \\)?", q_trans: "Untuk \\( x^2 - 6x = 0 \\), berapakah nilai \\( (b/2)^2 \\)?", opts: ["3", "6", "9", "36", "12"], correct: 2, exp: "<div>\\( b = -6 \\implies (-6/2)^2 = (-3)^2 = 9 \\).</div><div class='translation'>\\( b = -6 \\implies (-6/2)^2 = (-3)^2 = 9 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 4x = 3</text></svg>`, q: "For \\( x^2 + 4x = 3 \\), what is the correct equation after adding \\( (b/2)^2 \\) to both sides?", q_trans: "Untuk \\( x^2 + 4x = 3 \\), manakah persamaan yang benar setelah menambahkan \\( (b/2)^2 \\) ke kedua sisi?", opts: ["\\( x^2 + 4x + 4 = 3 \\)", "\\( x^2 + 4x + 2 = 5 \\)", "\\( x^2 + 4x + 4 = 7 \\)", "\\( x^2 + 4x + 16 = 19 \\)", "\\( x^2 + 4x + 4 = 1 \\)"], correct: 2, exp: "<div>\\( (4/2)^2 = 4 \\). Add 4 to both sides: \\( x^2 + 4x + 4 = 3 + 4 = 7 \\).</div><div class='translation'>\\( (4/2)^2 = 4 \\). Tambah 4 ke kedua sisi: \\( x^2 + 4x + 4 = 3 + 4 = 7 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 4x + 4 = 7</text></svg>`, q: "Factor the left side of \\( x^2 + 4x + 4 = 7 \\).", q_trans: "Faktorkan sisi kiri dari \\( x^2 + 4x + 4 = 7 \\).", opts: ["\\( (x+2)^2 = 7 \\)", "\\( (x+4)^2 = 7 \\)", "\\( (x-2)^2 = 7 \\)", "\\( (x+2)(x-2) = 7 \\)", "\\( (x+1)^2 = 7 \\)"], correct: 0, exp: "<div>\\( x^2 + 4x + 4 = (x+2)^2 \\).</div><div class='translation'>\\( x^2 + 4x + 4 = (x+2)^2 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-shoe-prints mr-2"></i>Dealing with 'a' > 1</h2>
+                            <p class="translation">Menangani 'a' > 1</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="80" font-size="16" fill="#000">2x² + 12x</text>
+                                <path d="M 100 80 L 130 80" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="160" y="80" font-size="14" text-anchor="middle" fill="#ef4444">2(x² + 6x)</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">If \\( a \\neq 1 \\) (like \\( 2x^2 + 12x \\)), you must factor out \\( a \\) from the variable terms first.</p>
+                                <p class="translation">Jika \\( a \\neq 1 \\) (seperti \\( 2x^2 + 12x \\)), kamu harus memfaktorkan \\( a \\) dari variabelnya terlebih dahulu.</p>
+                                <p class="mt-2">Example: \\( 2x^2 + 12x = 2(x^2 + 6x) \\). Then complete the square inside the brackets.</p>
+                                <p class="translation">Contoh: \\( 2x^2 + 12x = 2(x^2 + 6x) \\). Lalu lengkapkan kuadrat di dalam kurung.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">3x² + 9x</text></svg>`, q: "Factor out the leading coefficient from \\( 3x^2 + 9x \\).", q_trans: "Faktorkan koefisien utama dari \\( 3x^2 + 9x \\).", opts: ["\\( 3(x^2 + 3x) \\)", "\\( 3(x^2 + 9x) \\)", "\\( 3(x^2 + 6x) \\)", "\\( 9(x^2 + x) \\)", "\\( x(3x + 9) \\)"], correct: 0, exp: "<div>Factor out 3: \\( 3(x^2 + 3x) \\).</div><div class='translation'>Faktorkan 3: \\( 3(x^2 + 3x) \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">2(x² + 5x)</text></svg>`, q: "For \\( 2(x^2 + 5x) \\), what number do we add inside the brackets to complete the square?", q_trans: "Untuk \\( 2(x^2 + 5x) \\), angka berapa yang kita tambahkan di dalam kurung untuk melengkapkan kuadrat?", opts: ["2.5", "5", "10", "6.25", "25"], correct: 3, exp: "<div>Inside, \\( b=5 \\). \\( (5/2)^2 = 6.25 \\).</div><div class='translation'>Di dalam, \\( b=5 \\). \\( (5/2)^2 = 6.25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Fence</text></svg>`, q: "A fence of length 40 encloses an area of \\( 2x^2 + 12x \\). What number should we factor out to prepare for completing the square?", q_trans: "Pagar sepanjang 40 menutup luas \\( 2x^2 + 12x \\). Angka apa yang harus kita keluarkan untuk mempersiapkan melengkapkan kuadrat?", opts: ["1", "2", "4", "12", "x²"], correct: 1, exp: "<div>Both terms are divisible by 2 and x. Factor out 2x, but for completing the square we just need 2: \\( 2(x^2 + 6x) \\).</div><div class='translation'>Kedua suku dapat dibagi 2 dan x. Faktorkan 2x, tapi untuk melengkapkan kuadrat kita hanya butuh 2: \\( 2(x^2 + 6x) \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-bezier-curve mr-2"></i>Solving Real-World Problems</h2>
+                            <p class="translation">Menyelesaikan Masalah Dunia Nyata</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 130 Q 100 -20 180 130" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                <circle cx="100" cy="30" r="4" fill="#ef4444"/>
+                                <text x="110" y="30" font-size="12">Vertex</text>
+                                <text x="20" y="145" font-size="10">Ground</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">A ball is thrown: \\( h = -5t^2 + 20t \\). How long is it in the air? It hits the ground when \\( h = 0 \\).</p>
+                                <p class="translation">Bola dilempar: \\( h = -5t^2 + 20t \\). Berapa lama di udara? Ia menyentuh tanah saat \\( h = 0 \\).</p>
+                                <p class="mt-2">Set to 0: \\( -5t^2 + 20t = 0 \\). We can factor here: \\( -5t(t - 4) = 0 \\). So \\( t = 0 \\) or \\( t = 4 \\). 4 seconds.</p>
+                                <p class="translation">Samakan dengan 0: \\( -5t^2 + 20t = 0 \\). Kita bisa memfaktorkan di sini: \\( -5t(t - 4) = 0 \\). Jadi \\( t = 0 \\) atau \\( t = 4 \\). 4 detik.</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#ef4444"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Ball</text></svg>`, q: "A ball's height is \\( h = -x^2 + 10x \\). Find when it hits the ground.", q_trans: "Ketinggian bola adalah \\( h = -x^2 + 10x \\). Temukan kapan ia menyentuh tanah.", opts: ["1 and 9", "0 and 10", "5", "2 and 8", "Never hits"], correct: 1, exp: "<div>Set \\( h = 0 \\implies -x(x-10) = 0 \\implies x = 0, 10 \\).</div><div class='translation'>Samakan \\( h = 0 \\implies -x(x-10) = 0 \\implies x = 0, 10 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#3b82f6" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Area</text></svg>`, q: "A rectangular pool has area \\( A = x^2 - 8x + 16 \\). What are its dimensions (length and width)?", q_trans: "Kolam persegi panjang memiliki luas \\( A = x^2 - 8x + 16 \\). Berapakah ukurannya (panjang dan lebar)?", opts: ["\\( x \\) and \\( x-8 \\)", "\\( x-4 \\) and \\( x-4 \\)", "\\( x-8 \\) and \\( x-8 \\)", "\\( x+4 \\) and \\( x+4 \\)", "\\( x \\) and \\( x-4 \\)"], correct: 1, exp: "<div>\\( x^2 - 8x + 16 = (x-4)^2 \\). It's a square pool of side \\( x-4 \\).</div><div class='translation'>\\( x^2 - 8x + 16 = (x-4)^2 \\). Itu kolam persegi dengan sisi \\( x-4 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 2x = 3</text></svg>`, q: "Solve \\( x^2 + 2x = 3 \\) by completing the square.", q_trans: "Selesaikan \\( x^2 + 2x = 3 \\) dengan melengkapkan kuadrat.", opts: ["\\( 1, -3 \\)", "\\( -1, 3 \\)", "\\( 1, 3 \\)", "\\( -1, -3 \\)", "\\( \\pm \\sqrt{3} \\)"], correct: 0, exp: "<div>Add 1: \\( x^2 + 2x + 1 = 4 \\implies (x+1)^2 = 4 \\implies x+1 = \\pm 2 \\). So \\( x = 1 \\) or \\( -3 \\).</div><div class='translation'>Tambah 1: \\( x^2 + 2x + 1 = 4 \\implies (x+1)^2 = 4 \\implies x+1 = \\pm 2 \\). Jadi \\( x = 1 \\) atau \\( -3 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 6x + 4 = 0</text></svg>`, q: "What are the roots of \\( x^2 - 6x + 4 = 0 \\)?", q_trans: "Berapakah akar-akar dari \\( x^2 - 6x + 4 = 0 \\)?", opts: ["\\( 3 \\pm \\sqrt{5} \\)", "\\( 6 \\pm \\sqrt{5} \\)", "\\( 3 \\pm \\sqrt{13} \\)", "\\( -3 \\pm \\sqrt{5} \\)", "\\( \\pm \\sqrt{5} \\)"], correct: 0, exp: "<div>\\( x^2 - 6x = -4 \\). Add \\( (-3)^2 = 9 \\): \\( (x-3)^2 = 5 \\implies x = 3 \\pm \\sqrt{5} \\).</div><div class='translation'>\\( x^2 - 6x = -4 \\). Tambah \\( (-3)^2 = 9 \\): \\( (x-3)^2 = 5 \\implies x = 3 \\pm \\sqrt{5} \\).</div>" }
+                    ]}
+                ]
+            },
+			
+            guided: {
+                title: "Guided Practice",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-walking mr-2"></i>Basic Completing the Square (a=1)</h2>
+                            <p class="translation">Melengkapkan Kuadrat Dasar (a=1)</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="30" font-size="14" fill="#3b82f6">x² + 6x - 1 = 0</text>
+                                <text x="20" y="60" font-size="14" fill="#10b981">x² + 6x = 1</text>
+                                <text x="20" y="90" font-size="14" fill="#fbbf24">x² + 6x + 9 = 1 + 9</text>
+                                <text x="20" y="120" font-size="14" fill="#ef4444">(x + 3)² = 10</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Let's solve \\( x^2 + 6x - 1 = 0 \\) step-by-step together.</p>
+                                <p class="translation">Mari kita selesaikan \\( x^2 + 6x - 1 = 0 \\) langkah demi langkah bersama-sama.</p>
+                                <p class="mt-2"><strong>Step 1:</strong> Move constant: \\( x^2 + 6x = 1 \\).</p>
+                                <p class="translation"><strong>Langkah 1:</strong> Pindahkan konstanta: \\( x^2 + 6x = 1 \\).</p>
+                                <p class="mt-2"><strong>Step 2:</strong> Find \\( (b/2)^2 \\). Half of 6 is 3, squared is 9.</p>
+                                <p class="translation"><strong>Langkah 2:</strong> Cari \\( (b/2)^2 \\). Setengah dari 6 adalah 3, dikuadratkan menjadi 9.</p>
+                                <p class="mt-2"><strong>Step 3:</strong> Add to both sides: \\( x^2 + 6x + 9 = 10 \\).</p>
+                                <p class="translation"><strong>Langkah 3:</strong> Tambahkan ke kedua sisi: \\( x^2 + 6x + 9 = 10 \\).</p>
+                                <p class="mt-2"><strong>Step 4:</strong> Factor: \\( (x+3)^2 = 10 \\implies x = -3 \\pm \\sqrt{10} \\).</p>
+                                <p class="translation"><strong>Langkah 4:</strong> Faktorkan: \\( (x+3)^2 = 10 \\implies x = -3 \\pm \\sqrt{10} \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 4x - 5 = 0</text></svg>`, q: "What is the completed square form of \\( x^2 + 4x - 5 = 0 \\)?", q_trans: "Berapakah bentuk kuadrat sempurna dari \\( x^2 + 4x - 5 = 0 \\)?", opts: ["\\( (x+2)^2 = 9 \\)", "\\( (x+2)^2 = 5 \\)", "\\( (x+4)^2 = 5 \\)", "\\( (x-2)^2 = 9 \\)", "\\( (x+2)^2 = 1 \\)"], correct: 0, exp: "<div>\\( x^2 + 4x = 5 \\). Add \\( (4/2)^2 = 4 \\). \\( x^2 + 4x + 4 = 9 \\implies (x+2)^2 = 9 \\).</div><div class='translation'>\\( x^2 + 4x = 5 \\). Tambah \\( (4/2)^2 = 4 \\). \\( x^2 + 4x + 4 = 9 \\implies (x+2)^2 = 9 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 8x + 3 = 0</text></svg>`, q: "For \\( x^2 - 8x + 3 = 0 \\), what number is added to both sides?", q_trans: "Untuk \\( x^2 - 8x + 3 = 0 \\), angka berapa yang ditambahkan ke kedua sisi?", opts: ["8", "16", "64", "4", "32"], correct: 1, exp: "<div>\\( (-8/2)^2 = (-4)^2 = 16 \\).</div><div class='translation'>\\( (-8/2)^2 = (-4)^2 = 16 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Garden</text></svg>`, q: "A square garden has area \\( x^2 + 10x + 25 \\). What is its side length?", q_trans: "Taman persegi memiliki luas \\( x^2 + 10x + 25 \\). Berapakah panjang sisinya?", opts: ["\\( x+5 \\)", "\\( x+25 \\)", "\\( x+10 \\)", "\\( x-5 \\)", "\\( x+2.5 \\)"], correct: 0, exp: "<div>\\( x^2 + 10x + 25 = (x+5)^2 \\). Side is \\( x+5 \\).</div><div class='translation'>\\( x^2 + 10x + 25 = (x+5)^2 \\). Sisinya adalah \\( x+5 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-route mr-2"></i>Finding the Roots</h2>
+                            <p class="translation">Mencari Akar-akar Persamaan</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="80" font-size="16" fill="#000">(x - 3)² = 5</text>
+                                <path d="M 90 80 L 120 80" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="160" y="70" font-size="14" text-anchor="middle" fill="#3b82f6">x - 3 = √5</text>
+                                <text x="160" y="100" font-size="14" text-anchor="middle" fill="#ef4444">x - 3 = -√5</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Once we have \\( (x-h)^2 = k \\), we take the square root of both sides. Remember the \\( \\pm \\) sign!</p>
+                                <p class="translation">Setelah kita dapat \\( (x-h)^2 = k \\), kita ambil akar kuadrat dari kedua sisi. Ingat tanda \\( \\pm \\)!</p>
+                                <p class="mt-2">Example: \\( (x-3)^2 = 5 \\implies x-3 = \\pm\\sqrt{5} \\implies x = 3 \\pm \\sqrt{5} \\).</p>
+                                <p class="translation">Contoh: \\( (x-3)^2 = 5 \\implies x-3 = \\pm\\sqrt{5} \\implies x = 3 \\pm \\sqrt{5} \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">(x-4)² = 16</text></svg>`, q: "Solve \\( (x-4)^2 = 16 \\). What are the roots?", q_trans: "Selesaikan \\( (x-4)^2 = 16 \\). Berapakah akar-akarnya?", opts: ["\\( 4, -4 \\)", "\\( 0, 8 \\)", "\\( 8, 0 \\)", "\\( 4, 8 \\)", "\\( -8, 0 \\)"], correct: 1, exp: "<div>\\( x-4 = \\pm 4 \\). \\( x = 4+4=8 \\) or \\( x = 4-4=0 \\).</div><div class='translation'>\\( x-4 = \\pm 4 \\). \\( x = 4+4=8 \\) atau \\( x = 4-4=0 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 2x - 2 = 0</text></svg>`, q: "Find the roots of \\( x^2 + 2x - 2 = 0 \\).", q_trans: "Temukan akar-akar dari \\( x^2 + 2x - 2 = 0 \\).", opts: ["\\( -1 \\pm \\sqrt{3} \\)", "\\( 1 \\pm \\sqrt{3} \\)", "\\( -1 \\pm \\sqrt{2} \\)", "\\( 2 \\pm \\sqrt{2} \\)", "\\( \\pm \\sqrt{2} \\)"], correct: 0, exp: "<div>\\( x^2 + 2x = 2 \\). Add 1: \\( (x+1)^2 = 3 \\implies x = -1 \\pm \\sqrt{3} \\).</div><div class='translation'>\\( x^2 + 2x = 2 \\). Tambah 1: \\( (x+1)^2 = 3 \\implies x = -1 \\pm \\sqrt{3} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#3b82f6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Diver</text></svg>`, q: "A diver's height is \\( h = -t^2 + 8t \\). When does he hit the water (h=0)?", q_trans: "Ketinggian penyelam adalah \\( h = -t^2 + 8t \\). Kapan ia menyentuh air (h=0)?", opts: ["0 and 8", "0 and -8", "4", "0 and 2", "Never"], correct: 0, exp: "<div>\\( -t(t-8) = 0 \\implies t = 0, 8 \\).</div><div class='translation'>\\( -t(t-8) = 0 \\implies t = 0, 8 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-layer-group mr-2"></i>Dealing with 'a' > 1</h2>
+                            <p class="translation">Menangani 'a' > 1</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="40" font-size="12" fill="#000">2x² - 12x + 4 = 0</text>
+                                <path d="M 80 45 L 100 45" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="130" y="40" font-size="12" fill="#3b82f6">2(x² - 6x) = -4</text>
+                                <text x="20" y="80" font-size="12" fill="#10b981">x² - 6x = -2</text>
+                                <text x="20" y="120" font-size="12" fill="#ef4444">(x-3)² = 7</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">If \\( a \\neq 1 \\), divide the whole equation by \\( a \\) first! It's much easier than factoring out.</p>
+                                <p class="translation">Jika \\( a \\neq 1 \\), bagi seluruh persamaan dengan \\( a \\) terlebih dahulu! Ini jauh lebih mudah daripada memfaktorkan.</p>
+                                <p class="mt-2">Example: \\( 2x^2 - 12x + 4 = 0 \\). Divide by 2: \\( x^2 - 6x + 2 = 0 \\).</p>
+                                <p class="translation">Contoh: \\( 2x^2 - 12x + 4 = 0 \\). Bagi 2: \\( x^2 - 6x + 2 = 0 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">3x² + 12x = 0</text></svg>`, q: "Simplify \\( 3x^2 + 12x = 0 \\) by dividing by 3. What do you get?", q_trans: "Sederhanakan \\( 3x^2 + 12x = 0 \\) dengan membagi 3. Apa hasilnya?", opts: ["\\( x^2 + 4x = 0 \\)", "\\( x^2 + 12x = 0 \\)", "\\( 3x^2 + 4x = 0 \\)", "\\( x^2 + 4 = 0 \\)", "\\( x + 4 = 0 \\)"], correct: 0, exp: "<div>Divide every term by 3: \\( x^2 + 4x = 0 \\).</div><div class='translation'>Bagi setiap suku dengan 3: \\( x^2 + 4x = 0 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">2x² + 8x = 0</text></svg>`, q: "Solve \\( 2x^2 + 8x = 0 \\). What are the roots?", q_trans: "Selesaikan \\( 2x^2 + 8x = 0 \\). Berapakah akar-akarnya?", opts: ["\\( 0, -4 \\)", "\\( 0, 4 \\)", "\\( 2, -4 \\)", "\\( -2, 4 \\)", "\\( \\pm 4 \\)"], correct: 0, exp: "<div>Divide by 2: \\( x^2 + 4x = 0 \\implies x(x+4) = 0 \\implies x = 0, -4 \\).</div><div class='translation'>Bagi 2: \\( x^2 + 4x = 0 \\implies x(x+4) = 0 \\implies x = 0, -4 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">2x² + 4x - 12 = 0</text></svg>`, q: "Convert \\( 2x^2 + 4x - 12 = 0 \\) to \\( (x-h)^2 = k \\) form.", q_trans: "Ubah \\( 2x^2 + 4x - 12 = 0 \\) ke bentuk \\( (x-h)^2 = k \\).", opts: ["\\( (x+1)^2 = 7 \\)", "\\( (x-1)^2 = 7 \\)", "\\( (x+2)^2 = 16 \\)", "\\( 2(x+1)^2 = 14 \\)", "\\( (x+1)^2 = -7 \\)"], correct: 0, exp: "<div>Divide by 2: \\( x^2 + 2x - 6 = 0 \\implies x^2 + 2x = 6 \\). Add 1: \\( (x+1)^2 = 7 \\).</div><div class='translation'>Bagi 2: \\( x^2 + 2x - 6 = 0 \\implies x^2 + 2x = 6 \\). Tambah 1: \\( (x+1)^2 = 7 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Cost</text></svg>`, q: "A cost function is \\( C = 2x^2 - 12x \\). Find x when C = 0.", q_trans: "Fungsi biaya adalah \\( C = 2x^2 - 12x \\). Temukan x saat C = 0.", opts: ["\\( 0, 6 \\)", "\\( 0, -6 \\)", "\\( 2, 6 \\)", "\\( 0, 12 \\)", "\\( \\pm 6 \\)"], correct: 0, exp: "<div>Divide by 2: \\( x^2 - 6x = 0 \\implies x(x-6) = 0 \\implies x = 0, 6 \\).</div><div class='translation'>Bagi 2: \\( x^2 - 6x = 0 \\implies x(x-6) = 0 \\implies x = 0, 6 \\).</div>" }
+                    ]}
+                ]
+            },
+            independent: {
+                title: "Independent Practice",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-blue-700 mb-2"><i class="fas fa-mountain mr-2"></i>Converting to Vertex Form</h2>
+                            <p class="translation">Mengubah ke Bentuk Titik Puncak</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 130 Q 100 10 180 130" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                                <circle cx="100" cy="30" r="5" fill="#ef4444"/>
+                                <text x="110" y="30" font-size="12">Vertex (-3, -10)</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Convert \\( y = x^2 + 6x - 1 \\) to vertex form.</p>
+                                <p class="translation">Ubah \\( y = x^2 + 6x - 1 \\) ke bentuk titik puncak.</p>
+                                <p class="mt-2"><strong>Step 1:</strong> Group x terms: \\( y = (x^2 + 6x) - 1 \\).</p>
+                                <p class="translation"><strong>Langkah 1:</strong> Kelompokkan suku x: \\( y = (x^2 + 6x) - 1 \\).</p>
+                                <p class="mt-2"><strong>Step 2:</strong> Add \\( (6/2)^2 = 9 \\) inside bracket, subtract 9 outside: \\( y = (x^2 + 6x + 9) - 1 - 9 \\).</p>
+                                <p class="translation"><strong>Langkah 2:</strong> Tambah \\( (6/2)^2 = 9 \\) di dalam kurung, kurangi 9 di luar: \\( y = (x^2 + 6x + 9) - 1 - 9 \\).</p>
+                                <p class="mt-2"><strong>Step 3:</strong> Factor: \\( y = (x+3)^2 - 10 \\). Vertex is \\( (-3, -10) \\).</p>
+                                <p class="translation"><strong>Langkah 3:</strong> Faktorkan: \\( y = (x+3)^2 - 10 \\). Titik puncak \\( (-3, -10) \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² - 4x + 1</text></svg>`, q: "Convert \\( y = x^2 - 4x + 1 \\) to vertex form.", q_trans: "Ubah \\( y = x^2 - 4x + 1 \\) ke bentuk titik puncak.", opts: ["\\( y = (x-2)^2 - 3 \\)", "\\( y = (x-2)^2 + 3 \\)", "\\( y = (x+2)^2 - 3 \\)", "\\( y = (x-4)^2 - 15 \\)", "\\( y = (x-2)^2 - 5 \\)"], correct: 0, exp: "<div>\\( y = (x^2 - 4x + 4) + 1 - 4 = (x-2)^2 - 3 \\).</div><div class='translation'>\\( y = (x^2 - 4x + 4) + 1 - 4 = (x-2)^2 - 3 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² + 8x - 2</text></svg>`, q: "What is the vertex of \\( y = x^2 + 8x - 2 \\)?", q_trans: "Berapakah titik puncak dari \\( y = x^2 + 8x - 2 \\)?", opts: ["\\( (4, -18) \\)", "\\( (-4, -18) \\)", "\\( (-4, -2) \\)", "\\( (8, -18) \\)", "\\( (-4, 14) \\)"], correct: 1, exp: "<div>\\( y = (x+4)^2 - 18 \\). Vertex is \\( (-4, -18) \\).</div><div class='translation'>\\( y = (x+4)^2 - 18 \\). Titik puncak \\( (-4, -18) \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#ef4444" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Profit</text></svg>`, q: "A business profit is \\( P = -x^2 + 10x \\). What is the maximum profit?", q_trans: "Keuntungan bisnis adalah \\( P = -x^2 + 10x \\). Berapakah keuntungan maksimumnya?", opts: ["10", "25", "50", "100", "5"], correct: 1, exp: "<div>\\( P = -(x^2 - 10x + 25) + 25 = -(x-5)^2 + 25 \\). Max profit is 25.</div><div class='translation'>\\( P = -(x^2 - 10x + 25) + 25 = -(x-5)^2 + 25 \\). Keuntungan maksimum adalah 25.</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-green-700 mb-2"><i class="fas fa-layer-group mr-2"></i>Vertex Form with 'a' > 1</h2>
+                            <p class="translation">Bentuk Titik Puncak dengan 'a' > 1</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <text x="20" y="40" font-size="14" fill="#3b82f6">y = 2x² + 8x - 1</text>
+                                <text x="20" y="70" font-size="14" fill="#10b981">y = 2(x² + 4x) - 1</text>
+                                <text x="20" y="100" font-size="14" fill="#fbbf24">y = 2(x² + 4x + 4) - 1 - 8</text>
+                                <text x="20" y="130" font-size="14" fill="#ef4444">y = 2(x+2)² - 9</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">If \\( a > 1 \\), factor \\( a \\) out of the x terms only. Do NOT move the constant outside!</p>
+                                <p class="translation">Jika \\( a > 1 \\), keluarkan faktor \\( a \\) dari suku x saja. JANGAN pindahkan konstanta ke luar!</p>
+                                <p class="mt-2">Example: \\( y = 2x^2 + 8x - 1 \\implies y = 2(x^2 + 4x) - 1 \\).</p>
+                                <p class="translation">Contoh: \\( y = 2x^2 + 8x - 1 \\implies y = 2(x^2 + 4x) - 1 \\).</p>
+                                <p class="mt-2">Add \\( 4 \\) inside bracket to complete square. But since it's multiplied by 2, we actually added \\( 8 \\). So we must subtract 8 outside: \\( y = 2(x+2)^2 - 9 \\).</p>
+                                <p class="translation">Tambah \\( 4 \\) di dalam kurung untuk melengkapkan kuadrat. Tapi karena dikali 2, kita sebenarnya menambah \\( 8 \\). Jadi kita harus kurangi 8 di luar: \\( y = 2(x+2)^2 - 9 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 3, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = 3x² + 12x</text></svg>`, q: "Factor out 'a' from \\( y = 3x^2 + 12x \\). What is the result?", q_trans: "Keluarkan 'a' dari \\( y = 3x^2 + 12x \\). Hasilnya apa?", opts: ["\\( y = 3(x^2 + 4x) \\)", "\\( y = 3(x^2 + 12x) \\)", "\\( y = 3x(x + 4) \\)", "\\( y = x(3x + 12) \\)", "\\( y = 3(x+4)^2 \\)"], correct: 0, exp: "<div>Factor 3 from x terms: \\( y = 3(x^2 + 4x) \\).</div><div class='translation'>Faktorkan 3 dari suku x: \\( y = 3(x^2 + 4x) \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = 2(x² + 4x)</text></svg>`, q: "For \\( y = 2(x^2 + 4x) \\), what do we add inside the bracket and subtract outside?", q_trans: "Untuk \\( y = 2(x^2 + 4x) \\), apa yang kita tambahkan di dalam kurung dan kurangi di luar?", opts: ["Add 4 inside, subtract 4 outside", "Add 4 inside, subtract 8 outside", "Add 2 inside, subtract 2 outside", "Add 2 inside, subtract 4 outside", "Add 16 inside, subtract 16 outside"], correct: 1, exp: "<div>Half of 4 is 2, square is 4. Add 4 inside. Since \\( a=2 \\), we subtract \\( 2 \\times 4 = 8 \\) outside.</div><div class='translation'>Setengah dari 4 adalah 2, kuadratnya 4. Tambah 4 di dalam. Karena \\( a=2 \\), kita kurangi \\( 2 \\times 4 = 8 \\) di luar.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = 3x² - 6x + 2</text></svg>`, q: "Convert \\( y = 3x^2 - 6x + 2 \\) to vertex form.", q_trans: "Ubah \\( y = 3x^2 - 6x + 2 \\) ke bentuk titik puncak.", opts: ["\\( y = 3(x-1)^2 - 1 \\)", "\\( y = 3(x-1)^2 + 1 \\)", "\\( y = 3(x+1)^2 - 1 \\)", "\\( y = (x-1)^2 - 1 \\)", "\\( y = 3(x-3)^2 - 7 \\)"], correct: 0, exp: "<div>\\( y = 3(x^2 - 2x) + 2 = 3(x^2 - 2x + 1) + 2 - 3 = 3(x-1)^2 - 1 \\).</div><div class='translation'>\\( y = 3(x^2 - 2x) + 2 = 3(x^2 - 2x + 1) + 2 - 3 = 3(x-1)^2 - 1 \\).</div>" }
+                    ]},
+                    { type: 'theory', content: `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-purple-700 mb-2"><i class="fas fa-symmetry-vertical mr-2"></i>Line of Symmetry</h2>
+                            <p class="translation">Sumbu Simetri</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="180" height="120" viewBox="0 0 200 150" class="flex-shrink-0">
+                                <path d="M 20 130 Q 100 20 180 130" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                <path d="M 100 10 L 100 130" stroke="#888" stroke-width="2" stroke-dasharray="5"/>
+                                <circle cx="100" cy="30" r="4" fill="#ef4444"/>
+                                <text x="110" y="30" font-size="12">x = h</text>
+                            </svg>
+                            <div>
+                                <p class="mb-2">The vertical line passing through the vertex is the axis of symmetry. Its equation is \\( x = h \\).</p>
+                                <p class="translation">Garis vertikal yang melewati titik puncak adalah sumbu simetri. Persamaannya adalah \\( x = h \\).</p>
+                                <p class="mt-2">Example: \\( y = (x-4)^2 + 2 \\) has vertex \\( (4, 2) \\). The line of symmetry is \\( x = 4 \\).</p>
+                                <p class="translation">Contoh: \\( y = (x-4)^2 + 2 \\) memiliki titik puncak \\( (4, 2) \\). Garis simetrinya adalah \\( x = 4 \\).</p>
+                            </div>
+                        </div>
+                    `},
+                    { type: 'tasks', count: 4, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = (x+5)² - 3</text></svg>`, q: "What is the equation of the line of symmetry for \\( y = (x+5)^2 - 3 \\)?", q_trans: "Berapakah persamaan garis simetri untuk \\( y = (x+5)^2 - 3 \\)?", opts: ["\\( x = 5 \\)", "\\( x = -5 \\)", "\\( x = 3 \\)", "\\( x = -3 \\)", "\\( y = -3 \\)"], correct: 1, exp: "<div>Vertex is \\( (-5, -3) \\). Line of symmetry is \\( x = -5 \\).</div><div class='translation'>Titik puncak \\( (-5, -3) \\). Garis simetrinya \\( x = -5 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² - 2x</text></svg>`, q: "Find the line of symmetry for \\( y = x^2 - 2x \\).", q_trans: "Temukan garis simetri untuk \\( y = x^2 - 2x \\).", opts: ["\\( x = 1 \\)", "\\( x = -1 \\)", "\\( x = 2 \\)", "\\( x = -2 \\)", "\\( x = 0 \\)"], correct: 0, exp: "<div>\\( y = (x-1)^2 - 1 \\). Vertex is \\( (1, -1) \\). Line is \\( x = 1 \\).</div><div class='translation'>\\( y = (x-1)^2 - 1 \\). Titik puncak \\( (1, -1) \\). Garisnya \\( x = 1 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 20 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/></svg>`, q: "A bridge is shaped like \\( y = -(x-10)^2 + 20 \\). At what x-value is the highest point?", q_trans: "Sebuah jembatan berbentuk \\( y = -(x-10)^2 + 20 \\). Di nilai x berapa titik tertingginya?", opts: ["10", "-10", "20", "-20", "0"], correct: 0, exp: "<div>Highest point is vertex \\( (10, 20) \\). x-value is 10.</div><div class='translation'>Titik tertinggi adalah titik puncak \\( (10, 20) \\). Nilai x adalah 10.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#3b82f6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Fountain</text></svg>`, q: "A water fountain shoots water along \\( y = -2x^2 + 8x \\). What is the equation of its axis of symmetry?", q_trans: "Air mancur memancurkan air sepanjang \\( y = -2x^2 + 8x \\). Berapakah persamaan sumbu simetrinya?", opts: ["\\( x = 2 \\)", "\\( x = -2 \\)", "\\( x = 4 \\)", "\\( x = 8 \\)", "\\( x = 0 \\)"], correct: 0, exp: "<div>\\( y = -2(x^2 - 4x) = -2(x-2)^2 + 8 \\). Vertex is \\( (2, 8) \\). Axis is \\( x = 2 \\).</div><div class='translation'>\\( y = -2(x^2 - 4x) = -2(x-2)^2 + 8 \\). Titik puncak \\( (2, 8) \\). Sumbunya \\( x = 2 \\).</div>" }
+                    ]}
+                ]
+            },
+            consolidation: {
+                title: "Consolidation & Reflection",
+                pages: [
+                    { type: 'theory', content: `
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg mb-6">
+                            <h2 class="text-2xl font-bold text-indigo-700 mb-2"><i class="fas fa-clipboard-check mr-2"></i>Summary: Completing the Square</h2>
+                            <p class="translation">Rangkuman: Melengkapkan Kuadrat</p>
+                        </div>
+                        <div class="flex gap-6 items-center mb-6">
+                            <svg width="150" height="150" viewBox="0 0 200 200" class="flex-shrink-0">
+                                <rect x="40" y="40" width="120" height="120" fill="#e0e7ff" stroke="#4f46e5" stroke-width="3" rx="15"/>
+                                <path d="M 60 100 L 90 130 L 140 70" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
+                            </svg>
+                            <div>
+                                <p class="mb-2">Today we learned how to complete the square to solve quadratic equations and convert to vertex form.</p>
+                                <p class="translation">Hari ini kita belajar cara melengkapkan kuadrat untuk menyelesaikan persamaan kuadrat dan mengubahnya ke bentuk titik puncak.</p>
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li><strong>Step 1:</strong> Move constant, divide if \\( a > 1 \\).</li>
+                                    <li class="translation"><strong>Langkah 1:</strong> Pindahkan konstanta, bagi jika \\( a > 1 \\).</li>
+                                    <li><strong>Step 2:</strong> Add \\( (b/2)^2 \\) to both sides.</li>
+                                    <li class="translation"><strong>Langkah 2:</strong> Tambahkan \\( (b/2)^2 \\) ke kedua sisi.</li>
+                                    <li><strong>Step 3:</strong> Factor the perfect square.</li>
+                                    <li class="translation"><strong>Langkah 3:</strong> Faktorkan kuadrat sempurna.</li>
+                                    <li><strong>Step 4:</strong> Take square root (remember \\( \\pm \\)) and solve.</li>
+                                    <li class="translation"><strong>Langkah 4:</strong> Ambil akar kuadrat (ingat \\( \\pm \\)) dan selesaikan.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <p class="mb-4">Ready to test your skills further? Visit our learning platform for unlimited practice!</p>
+                            <p class="translation">Siap menguji kemampuanmu lebih jauh? Kunjungi platform pembelajaran kami untuk latihan tanpa batas!</p>
+                            <a href="https://learn.algonova.id" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-md inline-flex items-center gap-2 mt-2">
+                                <i class="fas fa-rocket"></i> Continue to Algonova
+                                <span class="translation" style="color: #bfdbfe; display: inline;">Lanjut ke Algonova</span>
+                            </a>
+                        </div>
+                    `}
+                ]
+            },
+			
+            task1: {
+                title: "Task 1: Basic Completing the Square",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="12" text-anchor="middle">Path</text></svg>`, q: "A park path follows the equation \\( x^2 - 8x - 1 = 0 \\). To find where it intersects the main road, what is the first step to solve by completing the square?", q_trans: "Jalan taman mengikuti persamaan \\( x^2 - 8x - 1 = 0 \\). Untuk menemukan di ia memotong jalan utama, apa langkah pertama untuk menyelesaikannya dengan melengkapkan kuadrat?", opts: ["Add 1 to both sides", "Subtract 8x from both sides", "Divide by 8", "Take the square root of x²", "Add 8 to both sides"], correct: 0, exp: "<div>Move the constant to the other side: \\( x^2 - 8x = 1 \\).</div><div class='translation'>Pindahkan konstanta ke sisi lain: \\( x^2 - 8x = 1 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 8x = 1</text></svg>`, q: "For the path equation \\( x^2 - 8x = 1 \\), what is the value of \\( (b/2)^2 \\)?", q_trans: "Untuk persamaan jalan \\( x^2 - 8x = 1 \\), berapakah nilai \\( (b/2)^2 \\)?", opts: ["4", "8", "16", "64", "32"], correct: 2, exp: "<div>\\( b = -8 \\). \\( (-8/2)^2 = (-4)^2 = 16 \\).</div><div class='translation'>\\( b = -8 \\). \\( (-8/2)^2 = (-4)^2 = 16 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 8x + 16 = 17</text></svg>`, q: "After adding 16 to both sides of the path equation, we get \\( x^2 - 8x + 16 = 17 \\). Factor the left side.", q_trans: "Setelah menambahkan 16 ke kedua sisi persamaan jalan, kita dapat \\( x^2 - 8x + 16 = 17 \\). Faktorkan sisi kiri.", opts: ["\\( (x-4)^2 = 17 \\)", "\\( (x+4)^2 = 17 \\)", "\\( (x-8)^2 = 17 \\)", "\\( (x-4)(x+4) = 17 \\)", "\\( (x-2)^2 = 17 \\)"], correct: 0, exp: "<div>\\( x^2 - 8x + 16 = (x-4)^2 \\).</div><div class='translation'>\\( x^2 - 8x + 16 = (x-4)^2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#3b82f6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Root</text></svg>`, q: "Using \\( (x-4)^2 = 17 \\), find the roots of the park path equation.", q_trans: "Menggunakan \\( (x-4)^2 = 17 \\), temukan akar-akar persamaan jalan taman.", opts: ["\\( x = 4 \\pm \\sqrt{17} \\)", "\\( x = -4 \\pm \\sqrt{17} \\)", "\\( x = 8 \\pm \\sqrt{17} \\)", "\\( x = \\pm \\sqrt{17} \\)", "\\( x = 4 \\pm 17 \\)"], correct: 0, exp: "<div>Take square root: \\( x-4 = \\pm\\sqrt{17} \\implies x = 4 \\pm \\sqrt{17} \\).</div><div class='translation'>Akar kuadrat: \\( x-4 = \\pm\\sqrt{17} \\implies x = 4 \\pm \\sqrt{17} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Fence</text></svg>`, q: "A farmer builds a fence with area equation \\( 2x^2 - 6x + 1 = 0 \\). What is the first step to solve this?", q_trans: "Seorang petani membangun pagar dengan persamaan luas \\( 2x^2 - 6x + 1 = 0 \\). Apa langkah pertama untuk menyelesaikan ini?", opts: ["Factor out 2", "Divide the whole equation by 2", "Add 1 to both sides", "Take half of -6", "Subtract 6x"], correct: 1, exp: "<div>Since \\( a = 2 \\neq 1 \\), divide everything by 2: \\( x^2 - 3x + 0.5 = 0 \\).</div><div class='translation'>Karena \\( a = 2 \\neq 1 \\), bagi semua dengan 2: \\( x^2 - 3x + 0.5 = 0 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² - 3x = -0.5</text></svg>`, q: "After moving the constant in the fence equation, we have \\( x^2 - 3x = -0.5 \\). What is \\( (b/2)^2 \\)?", q_trans: "Setelah memindahkan konstanta pada persamaan pagar, kita punya \\( x^2 - 3x = -0.5 \\). Berapakah \\( (b/2)^2 \\)?", opts: ["1.5", "2.25", "3", "9", "0.75"], correct: 1, exp: "<div>\\( b = -3 \\implies (-3/2)^2 = (-1.5)^2 = 2.25 \\).</div><div class='translation'>\\( b = -3 \\implies (-3/2)^2 = (-1.5)^2 = 2.25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">(x - 1.5)² = 1.75</text></svg>`, q: "The completed square form is \\( (x - 1.5)^2 = 1.75 \\). What are the roots?", q_trans: "Bentuk kuadrat sempurnanya adalah \\( (x - 1.5)^2 = 1.75 \\). Berapakah akar-akarnya?", opts: ["\\( 1.5 \\pm \\sqrt{1.75} \\)", "\\( -1.5 \\pm \\sqrt{1.75} \\)", "\\( 3 \\pm \\sqrt{1.75} \\)", "\\( 1.5 \\pm 1.75 \\)", "\\( \\pm \\sqrt{1.75} \\)"], correct: 0, exp: "<div>\\( x - 1.5 = \\pm\\sqrt{1.75} \\implies x = 1.5 \\pm \\sqrt{1.75} \\).</div><div class='translation'>\\( x - 1.5 = \\pm\\sqrt{1.75} \\implies x = 1.5 \\pm \\sqrt{1.75} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 20 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/></svg>`, q: "A bridge arch is modeled by \\( y = x^2 + 6x - 1 \\). To find its vertex, convert to \\( y = a(x-h)^2 + k \\). What is \\( h \\)?", q_trans: "Sebuah lengkungan jembatan dimodelkan dengan \\( y = x^2 + 6x - 1 \\). Untuk menemukan titik puncaknya, ubah ke \\( y = a(x-h)^2 + k \\). Berapakah \\( h \\)?", opts: ["3", "-3", "6", "-6", "1"], correct: 1, exp: "<div>Add \\( (6/2)^2 = 9 \\) inside, subtract 9 outside: \\( y = (x^2 + 6x + 9) - 1 - 9 = (x+3)^2 - 10 \\). So \\( h = -3 \\).</div><div class='translation'>Tambah \\( (6/2)^2 = 9 \\) di dalam, kurangi 9 di luar: \\( y = (x^2 + 6x + 9) - 1 - 9 = (x+3)^2 - 10 \\). Jadi \\( h = -3 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#ef4444"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Vertex</text></svg>`, q: "Using \\( y = (x+3)^2 - 10 \\) for the bridge, what is the lowest point (vertex)?", q_trans: "Menggunakan \\( y = (x+3)^2 - 10 \\) untuk jembatan, berapakah titik terendah (puncak)?", opts: ["\\( (3, -10) \\)", "\\( (-3, -10) \\)", "\\( (3, 10) \\)", "\\( (-3, 10) \\)", "\\( (-1, -10) \\)"], correct: 1, exp: "<div>Vertex form is \\( y = a(x-h)^2 + k \\). Here \\( h = -3, k = -10 \\).</div><div class='translation'>Bentuk titik puncak \\( y = a(x-h)^2 + k \\). Di sini \\( h = -3, k = -10 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#8b5cf6" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Garden</text></svg>`, q: "A garden's area is \\( A = x^2 - 3x - 7 \\). By completing the square, what is the value of \\( k \\) in \\( A = (x-h)^2 + k \\)?", q_trans: "Luas taman adalah \\( A = x^2 - 3x - 7 \\). Dengan melengkapkan kuadrat, berapakah nilai \\( k \\) pada \\( A = (x-h)^2 + k \\)?", opts: ["\\( -7.25 \\)", "\\( -9.25 \\)", "\\( 2.25 \\)", "\\( -7 \\)", "\\( 7.25 \\)"], correct: 1, exp: "<div>\\( A = (x^2 - 3x + 2.25) - 7 - 2.25 = (x - 1.5)^2 - 9.25 \\). So \\( k = -9.25 \\).</div><div class='translation'>\\( A = (x^2 - 3x + 2.25) - 7 - 2.25 = (x - 1.5)^2 - 9.25 \\). Jadi \\( k = -9.25 \\).</div>" }
+                    ]}
+                ]
+            },
+            task2: {
+                title: "Task 2: Advanced 'a' > 1 & Applications",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">3x² - 18x - 27</text></svg>`, q: "A projectile's path is \\( y = 3x^2 - 18x - 27 \\). What is the first step to convert to vertex form?", q_trans: "Jalur proyektil adalah \\( y = 3x^2 - 18x - 27 \\). Apa langkah pertama untuk mengubahnya ke bentuk titik puncak?", opts: ["Add 27", "Divide by 3", "Factor 3 from x terms only", "Factor 3 from all terms", "Take half of -18"], correct: 2, exp: "<div>Factor \\( a=3 \\) from the x terms only: \\( y = 3(x^2 - 6x) - 27 \\).</div><div class='translation'>Faktorkan \\( a=3 \\) dari suku x saja: \\( y = 3(x^2 - 6x) - 27 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">3(x² - 6x) - 27</text></svg>`, q: "For \\( y = 3(x^2 - 6x) - 27 \\), what number is added inside the bracket?", q_trans: "Untuk \\( y = 3(x^2 - 6x) - 27 \\), angka berapa yang ditambahkan di dalam kurung?", opts: ["3", "6", "9", "18", "27"], correct: 2, exp: "<div>\\( b = -6 \\implies (-6/2)^2 = 9 \\).</div><div class='translation'>\\( b = -6 \\implies (-6/2)^2 = 9 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#fbbf24"/><text x="50" y="45" font-size="10" text-anchor="middle">Balance</text></svg>`, q: "For \\( y = 3(x^2 - 6x + 9) - 27 \\), what must be done to balance the equation?", q_trans: "Untuk \\( y = 3(x^2 - 6x + 9) - 27 \\), apa yang harus dilakukan untuk menyeimbangkan persamaan?", opts: ["Add 27 outside", "Add 9 outside", "Subtract 27 outside", "Subtract 9 outside", "Divide by 3"], correct: 2, exp: "<div>Since we added 9 inside, and it's multiplied by 3, we actually added 27. So subtract 27 outside.</div><div class='translation'>Karena kita menambah 9 di dalam, dan dikali 3, kita sebenarnya menambah 27. Jadi kurangi 27 di luar.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 10 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/></svg>`, q: "A jump is modeled by \\( y = 3x^2 - 18x - 27 \\). Find its vertex form.", q_trans: "Sebuah lompatan dimodelkan dengan \\( y = 3x^2 - 18x - 27 \\). Temukan bentuk titik puncaknya.", opts: ["\\( y = 3(x-3)^2 - 54 \\)", "\\( y = 3(x+3)^2 - 54 \\)", "\\( y = 3(x-3)^2 - 27 \\)", "\\( y = (x-3)^2 - 54 \\)", "\\( y = 3(x-9)^2 - 27 \\)"], correct: 0, exp: "<div>\\( y = 3(x^2 - 6x + 9) - 27 - 27 = 3(x-3)^2 - 54 \\).</div><div class='translation'>\\( y = 3(x^2 - 6x + 9) - 27 - 27 = 3(x-3)^2 - 54 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">8x² + 24x - 2</text></svg>`, q: "A cost function is \\( C = 8x^2 + 24x - 2 \\). Factoring out 8 from the x terms gives?", q_trans: "Fungsi biaya adalah \\( C = 8x^2 + 24x - 2 \\). Memfaktorkan 8 dari suku x menghasilkan?", opts: ["\\( 8(x^2 + 3x) - 2 \\)", "\\( 8(x^2 + 24x) - 2 \\)", "\\( 8(x^2 + 4x) - 2 \\)", "\\( 8x(x + 3) - 2 \\)", "\\( 8(x + 3)^2 - 2 \\)"], correct: 0, exp: "<div>Factor 8 out: \\( 8(x^2 + 3x) - 2 \\).</div><div class='translation'>Faktorkan 8: \\( 8(x^2 + 3x) - 2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Add</text></svg>`, q: "For \\( 8(x^2 + 3x) - 2 \\), what value is added inside the bracket?", q_trans: "Untuk \\( 8(x^2 + 3x) - 2 \\), nilai apa yang ditambahkan di dalam kurung?", opts: ["1.5", "2.25", "3", "9", "6"], correct: 1, exp: "<div>\\( b = 3 \\implies (3/2)^2 = 1.5^2 = 2.25 \\).</div><div class='translation'>\\( b = 3 \\implies (3/2)^2 = 1.5^2 = 2.25 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">8(x² + 3x + 2.25)</text></svg>`, q: "For \\( 8(x^2 + 3x + 2.25) - 2 \\), what must be subtracted outside?", q_trans: "Untuk \\( 8(x^2 + 3x + 2.25) - 2 \\), apa yang harus dikurangi di luar?", opts: ["2.25", "8", "18", "24", "2"], correct: 2, exp: "<div>\\( 8 \\times 2.25 = 18 \\). Subtract 18 outside.</div><div class='translation'>\\( 8 \\times 2.25 = 18 \\). Kurangi 18 di luar.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#ef4444"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Roots</text></svg>`, q: "A ball's height is \\( y = 8x^2 + 24x - 2 \\). Find the roots by setting \\( y = 0 \\).", q_trans: "Tinggi bola adalah \\( y = 8x^2 + 24x - 2 \\). Temukan akar-akarnya dengan menetapkan \\( y = 0 \\).", opts: ["\\( -1.5 \\pm \\sqrt{2.5} \\)", "\\( 1.5 \\pm \\sqrt{2.5} \\)", "\\( -3 \\pm \\sqrt{10} \\)", "\\( -1.5 \\pm \\sqrt{8} \\)", "\\( \\pm \\sqrt{2.5} \\)"], correct: 0, exp: "<div>\\( 8(x+1.5)^2 - 20 = 0 \\implies 8(x+1.5)^2 = 20 \\implies (x+1.5)^2 = 2.5 \\implies x = -1.5 \\pm \\sqrt{2.5} \\).</div><div class='translation'>\\( 8(x+1.5)^2 - 20 = 0 \\implies 8(x+1.5)^2 = 20 \\implies (x+1.5)^2 = 2.5 \\implies x = -1.5 \\pm \\sqrt{2.5} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">2x² + 4x - 12</text></svg>`, q: "A rectangle has area \\( 2x^2 + 4x - 12 \\). What is its vertex form?", q_trans: "Persegi panjang memiliki luas \\( 2x^2 + 4x - 12 \\). Berapakah bentuk titik puncaknya?", opts: ["\\( 2(x+1)^2 - 14 \\)", "\\( 2(x-1)^2 - 14 \\)", "\\( 2(x+2)^2 - 20 \\)", "\\( (x+1)^2 - 14 \\)", "\\( 2(x+1)^2 - 12 \\)"], correct: 0, exp: "<div>\\( 2(x^2 + 2x) - 12 = 2(x^2 + 2x + 1) - 12 - 2 = 2(x+1)^2 - 14 \\).</div><div class='translation'>\\( 2(x^2 + 2x) - 12 = 2(x^2 + 2x + 1) - 12 - 2 = 2(x+1)^2 - 14 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 20 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/><circle cx="50" cy="20" r="3" fill="#ef4444"/></svg>`, q: "For \\( y = 2x^2 + 4x - 12 \\), what are the coordinates of the vertex?", q_trans: "Untuk \\( y = 2x^2 + 4x - 12 \\), berapakah koordinat titik puncaknya?", opts: ["\\( (-1, -14) \\)", "\\( (1, -14) \\)", "\\( (-2, -20) \\)", "\\( (1, -6) \\)", "\\( (-1, -12) \\)"], correct: 0, exp: "<div>From \\( y = 2(x+1)^2 - 14 \\), vertex is \\( (-1, -14) \\).</div><div class='translation'>Dari \\( y = 2(x+1)^2 - 14 \\), titik puncaknya \\( (-1, -14) \\).</div>" }
+                    ]}
+                ]
+            },
+			
+            task3: {
+                title: "Task 3: Vertex Form & Graphs",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² - 12x + 30</text></svg>`, q: "A drone's path is \\( y = x^2 - 12x + 30 \\). What is the vertex form?", q_trans: "Jalur drone adalah \\( y = x^2 - 12x + 30 \\). Berapakah bentuk titik puncaknya?", opts: ["\\( y = (x-6)^2 - 6 \\)", "\\( y = (x+6)^2 - 6 \\)", "\\( y = (x-6)^2 + 6 \\)", "\\( y = (x-12)^2 - 114 \\)", "\\( y = (x-6)^2 - 30 \\)"], correct: 0, exp: "<div>Half of -12 is -6, square is 36. \\( y = (x^2 - 12x + 36) + 30 - 36 = (x-6)^2 - 6 \\).</div><div class='translation'>Setengah dari -12 adalah -6, kuadratnya 36. \\( y = (x^2 - 12x + 36) + 30 - 36 = (x-6)^2 - 6 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Profit</text></svg>`, q: "A business profit is \\( P = -x^2 + 8x - 5 \\). Convert to vertex form to find max profit.", q_trans: "Keuntungan bisnis adalah \\( P = -x^2 + 8x - 5 \\). Ubah ke bentuk titik puncak untuk mencari keuntungan maks.", opts: ["\\( P = -(x-4)^2 + 11 \\)", "\\( P = -(x+4)^2 + 11 \\)", "\\( P = -(x-4)^2 - 5 \\)", "\\( P = (x-4)^2 + 11 \\)", "\\( P = -(x-8)^2 + 59 \\)"], correct: 0, exp: "<div>Factor out -1: \\( P = -(x^2 - 8x) - 5 \\). Add 16 inside, subtract -16 outside (add 16): \\( P = -(x-4)^2 + 11 \\).</div><div class='translation'>Faktorkan -1: \\( P = -(x^2 - 8x) - 5 \\). Tambah 16 di dalam, kurangi -16 di luar (tambah 16): \\( P = -(x-4)^2 + 11 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 20 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/><path d="M 50 10 L 50 70" stroke="#888" stroke-dasharray="2"/></svg>`, q: "For \\( y = 2x^2 - 8x + 1 \\), what is the equation of the axis of symmetry?", q_trans: "Untuk \\( y = 2x^2 - 8x + 1 \\), berapakah persamaan sumbu simetrinya?", opts: ["\\( x = 2 \\)", "\\( x = -2 \\)", "\\( x = 4 \\)", "\\( x = 8 \\)", "\\( x = 1 \\)"], correct: 0, exp: "<div>\\( y = 2(x^2 - 4x) + 1 = 2(x-2)^2 - 7 \\). Axis is \\( x = 2 \\).</div><div class='translation'>\\( y = 2(x^2 - 4x) + 1 = 2(x-2)^2 - 7 \\). Sumbunya \\( x = 2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 10 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/><circle cx="50" cy="10" r="3" fill="#ef4444"/></svg>`, q: "A tent has shape \\( y = -(x-5)^2 + 9 \\). What is the maximum height?", q_trans: "Sebuah tenda memiliki bentuk \\( y = -(x-5)^2 + 9 \\). Berapakah tinggi maksimumnya?", opts: ["9", "5", "4", "14", "0"], correct: 0, exp: "<div>Vertex is \\( (5, 9) \\). The max height (k) is 9.</div><div class='translation'>Titik puncak \\( (5, 9) \\). Tinggi maks (k) adalah 9.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#10b981"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Min</text></svg>`, q: "A cost function is \\( y = x^2 + 10x - 5 \\). What is the minimum cost?", q_trans: "Fungsi biaya adalah \\( y = x^2 + 10x - 5 \\). Berapakah biaya minimumnya?", opts: ["-30", "-5", "20", "5", "-20"], correct: 0, exp: "<div>\\( y = (x+5)^2 - 30 \\). Min cost is -30.</div><div class='translation'>\\( y = (x+5)^2 - 30 \\). Biaya min adalah -30.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = 3x² + 18x</text></svg>`, q: "Convert \\( y = 3x^2 + 18x \\) to vertex form.", q_trans: "Ubah \\( y = 3x^2 + 18x \\) ke bentuk titik puncak.", opts: ["\\( y = 3(x+3)^2 - 27 \\)", "\\( y = 3(x-3)^2 - 27 \\)", "\\( y = 3(x+3)^2 + 27 \\)", "\\( y = 3(x+6)^2 - 108 \\)", "\\( y = (x+3)^2 - 27 \\)"], correct: 0, exp: "<div>\\( y = 3(x^2 + 6x) = 3(x+3)^2 - 27 \\).</div><div class='translation'>\\( y = 3(x^2 + 6x) = 3(x+3)^2 - 27 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#3b82f6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Ball</text></svg>`, q: "A ball is thrown: \\( y = -5(x-1)^2 + 20 \\). When does it land (y=0, x>0)?", q_trans: "Bola dilempar: \\( y = -5(x-1)^2 + 20 \\). Kapan ia mendarat (y=0, x>0)?", opts: ["x = 3", "x = 1", "x = 2", "x = 5", "x = 4"], correct: 0, exp: "<div>\\( -5(x-1)^2 = -20 \\implies (x-1)^2 = 4 \\implies x-1 = 2 \\implies x = 3 \\).</div><div class='translation'>\\( -5(x-1)^2 = -20 \\implies (x-1)^2 = 4 \\implies x-1 = 2 \\implies x = 3 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#ef4444" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Bridge</text></svg>`, q: "A bridge arch is \\( y = x^2 - 4x \\). What is the x-coordinate of the lowest point?", q_trans: "Lengkungan jembatan adalah \\( y = x^2 - 4x \\). Berapakah koordinat x dari titik terendah?", opts: ["2", "-2", "4", "0", "1"], correct: 0, exp: "<div>\\( y = (x-2)^2 - 4 \\). x-coordinate is 2.</div><div class='translation'>\\( y = (x-2)^2 - 4 \\). Koordinat x adalah 2.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = -(x+6)² + 4</text></svg>`, q: "What happens to the graph of \\( y = -(x+6)^2 + 4 \\)?", q_trans: "Apa yang terjadi pada grafik \\( y = -(x+6)^2 + 4 \\)?", opts: ["Opens downwards, max at 4", "Opens upwards, min at 4", "Opens downwards, max at -6", "Shifts right by 6", "Opens upwards, min at -6"], correct: 0, exp: "<div>Since \\( a = -1 \\) (negative), it opens downwards. The max value (k) is 4.</div><div class='translation'>Karena \\( a = -1 \\) (negatif), ia terbuka ke bawah. Nilai maks (k) adalah 4.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² + 2x - 3</text></svg>`, q: "What is the y-intercept of \\( y = x^2 + 2x - 3 \\)?", q_trans: "Berapakah titik potong sumbu y dari \\( y = x^2 + 2x - 3 \\)?", opts: ["-3", "3", "0", "2", "1"], correct: 0, exp: "<div>Set \\( x = 0 \\). \\( y = 0^2 + 2(0) - 3 = -3 \\).</div><div class='translation'>Samakan \\( x = 0 \\). \\( y = 0^2 + 2(0) - 3 = -3 \\).</div>" }
+                    ]}
+                ]
+            },
+            task4: {
+                title: "Task 4: Solving Equations",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 4x - 3 = 0</text></svg>`, q: "A rectangle has area \\( x^2 + 4x - 3 = 0 \\). What are the roots?", q_trans: "Persegi panjang memiliki luas \\( x^2 + 4x - 3 = 0 \\). Berapakah akar-akarnya?", opts: ["\\( -2 \\pm \\sqrt{7} \\)", "\\( 2 \\pm \\sqrt{7} \\)", "\\( -2 \\pm \\sqrt{3} \\)", "\\( -1 \\pm \\sqrt{7} \\)", "\\( \\pm \\sqrt{7} \\)"], correct: 0, exp: "<div>\\( x^2 + 4x = 3 \\). Add 4: \\( (x+2)^2 = 7 \\implies x = -2 \\pm \\sqrt{7} \\).</div><div class='translation'>\\( x^2 + 4x = 3 \\). Tambah 4: \\( (x+2)^2 = 7 \\implies x = -2 \\pm \\sqrt{7} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#ef4444"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Rocket</text></svg>`, q: "A rocket's height is \\( x^2 - 10x + 7 = 0 \\). Solve for x.", q_trans: "Ketinggian roket adalah \\( x^2 - 10x + 7 = 0 \\). Selesaikan untuk x.", opts: ["\\( 5 \\pm 3\\sqrt{2} \\)", "\\( -5 \\pm 3\\sqrt{2} \\)", "\\( 5 \\pm \\sqrt{18} \\)", "\\( 5 \\pm \\sqrt{7} \\)", "\\( 10 \\pm \\sqrt{7} \\)"], correct: 0, exp: "<div>Add 25: \\( (x-5)^2 = 18 \\implies x = 5 \\pm \\sqrt{18} = 5 \\pm 3\\sqrt{2} \\).</div><div class='translation'>Tambah 25: \\( (x-5)^2 = 18 \\implies x = 5 \\pm \\sqrt{18} = 5 \\pm 3\\sqrt{2} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 2x = 2</text></svg>`, q: "What is the sum of the roots of \\( x^2 + 2x = 2 \\)?", q_trans: "Berapakah jumlah akar-akar dari \\( x^2 + 2x = 2 \\)?", opts: ["-2", "2", "0", "1", "Cannot be determined"], correct: 0, exp: "<div>Roots are \\( -1 \\pm \\sqrt{3} \\). Sum is \\( -1+\\sqrt{3} + -1-\\sqrt{3} = -2 \\).</div><div class='translation'>Akar-akarnya \\( -1 \\pm \\sqrt{3} \\). Jumlahnya \\( -1+\\sqrt{3} + -1-\\sqrt{3} = -2 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Garden</text></svg>`, q: "A garden area is \\( x^2 - 8x + 5 = 0 \\). Find the positive root.", q_trans: "Luas taman adalah \\( x^2 - 8x + 5 = 0 \\). Temukan akar positifnya.", opts: ["\\( 4 + \\sqrt{11} \\)", "\\( 4 - \\sqrt{11} \\)", "\\( 8 + \\sqrt{11} \\)", "\\( 4 + \\sqrt{5} \\)", "\\( \\sqrt{11} \\)"], correct: 0, exp: "<div>Add 16: \\( (x-4)^2 = 11 \\implies x = 4 \\pm \\sqrt{11} \\). Positive root is \\( 4 + \\sqrt{11} \\).</div><div class='translation'>Tambah 16: \\( (x-4)^2 = 11 \\implies x = 4 \\pm \\sqrt{11} \\). Akar positifnya \\( 4 + \\sqrt{11} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">2x² + 6x - 3 = 0</text></svg>`, q: "A cost equation is \\( 2x^2 + 6x - 3 = 0 \\). Find the roots.", q_trans: "Persamaan biaya adalah \\( 2x^2 + 6x - 3 = 0 \\). Temukan akar-akarnya.", opts: ["\\( \\frac{-3 \\pm \\sqrt{15}}{2} \\)", "\\( \\frac{3 \\pm \\sqrt{15}}{2} \\)", "\\( -3 \\pm \\sqrt{15} \\)", "\\( \\frac{-3 \\pm \\sqrt{3}}{2} \\)", "\\( \\frac{-3 \\pm \\sqrt{11}}{2} \\)"], correct: 0, exp: "<div>Div by 2: \\( x^2 + 3x - 1.5 = 0 \\). Add \\( 1.5^2 = 2.25 \\): \\( (x+1.5)^2 = 3.75 \\). \\( x = -1.5 \\pm \\sqrt{3.75} = \\frac{-3 \\pm \\sqrt{15}}{2} \\).</div><div class='translation'>Bagi 2: \\( x^2 + 3x - 1.5 = 0 \\). Tambah \\( 1.5^2 = 2.25 \\): \\( (x+1.5)^2 = 3.75 \\). \\( x = -1.5 \\pm \\sqrt{3.75} = \\frac{-3 \\pm \\sqrt{15}}{2} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#8b5cf6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Ball</text></svg>`, q: "A ball's path is \\( x^2 - 2x - 1 = 0 \\). Solve for x.", q_trans: "Jalur bola adalah \\( x^2 - 2x - 1 = 0 \\). Selesaikan untuk x.", opts: ["\\( 1 \\pm \\sqrt{2} \\)", "\\( -1 \\pm \\sqrt{2} \\)", "\\( 2 \\pm \\sqrt{2} \\)", "\\( 1 \\pm \\sqrt{1} \\)", "\\( 1 \\pm 2 \\)"], correct: 0, exp: "<div>Add 1: \\( (x-1)^2 = 2 \\implies x = 1 \\pm \\sqrt{2} \\).</div><div class='translation'>Tambah 1: \\( (x-1)^2 = 2 \\implies x = 1 \\pm \\sqrt{2} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#3b82f6" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Target</text></svg>`, q: "An archer's arrow hits \\( x^2 - 6x + 2 = 0 \\). What are the roots?", q_trans: "Panah pemanah mengenai \\( x^2 - 6x + 2 = 0 \\). Berapakah akar-akarnya?", opts: ["\\( 3 \\pm \\sqrt{7} \\)", "\\( -3 \\pm \\sqrt{7} \\)", "\\( 3 \\pm \\sqrt{2} \\)", "\\( 6 \\pm \\sqrt{2} \\)", "\\( 3 \\pm \\sqrt{11} \\)"], correct: 0, exp: "<div>Add 9: \\( (x-3)^2 = 7 \\implies x = 3 \\pm \\sqrt{7} \\).</div><div class='translation'>Tambah 9: \\( (x-3)^2 = 7 \\implies x = 3 \\pm \\sqrt{7} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">x² + 12x + 36</text></svg>`, q: "A square has area \\( x^2 + 12x + 36 \\). What is x if area is 100?", q_trans: "Sebuah persegi memiliki luas \\( x^2 + 12x + 36 \\). Berapakah x jika luasnya 100?", opts: ["4", "6", "8", "10", "2"], correct: 0, exp: "<div>\\( (x+6)^2 = 100 \\implies x+6 = 10 \\implies x = 4 \\).</div><div class='translation'>\\( (x+6)^2 = 100 \\implies x+6 = 10 \\implies x = 4 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">3x² - 12x + 6 = 0</text></svg>`, q: "Solve \\( 3x^2 - 12x + 6 = 0 \\).", q_trans: "Selesaikan \\( 3x^2 - 12x + 6 = 0 \\).", opts: ["\\( 2 \\pm \\sqrt{2} \\)", "\\( -2 \\pm \\sqrt{2} \\)", "\\( 2 \\pm \\sqrt{6} \\)", "\\( 4 \\pm \\sqrt{2} \\)", "\\( 2 \\pm 1 \\)"], correct: 0, exp: "<div>Div by 3: \\( x^2 - 4x + 2 = 0 \\). Add 4: \\( (x-2)^2 = 2 \\implies x = 2 \\pm \\sqrt{2} \\).</div><div class='translation'>Bagi 3: \\( x^2 - 4x + 2 = 0 \\). Tambah 4: \\( (x-2)^2 = 2 \\implies x = 2 \\pm \\sqrt{2} \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 Q 50 20 80 60" stroke="#3b82f6" stroke-width="3" fill="none"/></svg>`, q: "A bridge is \\( y = -x^2 + 4x \\). Find x when y = 0.", q_trans: "Sebuah jembatan adalah \\( y = -x^2 + 4x \\). Temukan x saat y = 0.", opts: ["0, 4", "0, -4", "2", "0, 2", "4, -4"], correct: 0, exp: "<div>\\( -x(x-4) = 0 \\implies x = 0, 4 \\).</div><div class='translation'>\\( -x(x-4) = 0 \\implies x = 0, 4 \\).</div>" }
+                    ]}
+                ]
+            },
+            task5: {
+                title: "Task 5: Real-World Optimization",
+                pages: [
+                    { type: 'tasks', count: 10, tasks: [
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Profit</text></svg>`, q: "A business profit is \\( P = -x^2 + 12x - 5 \\). Find the maximum profit.", q_trans: "Keuntungan bisnis adalah \\( P = -x^2 + 12x - 5 \\). Temukan keuntungan maksimumnya.", opts: ["31", "5", "36", "41", "-5"], correct: 0, exp: "<div>\\( P = -(x-6)^2 + 31 \\). Max profit is 31.</div><div class='translation'>\\( P = -(x-6)^2 + 31 \\). Keuntungan maks adalah 31.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#ef4444"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Ball</text></svg>`, q: "A ball is thrown: \\( h = -5t^2 + 20t \\). Find the max height.", q_trans: "Bola dilempar: \\( h = -5t^2 + 20t \\). Temukan tinggi maksimumnya.", opts: ["20", "5", "4", "25", "100"], correct: 0, exp: "<div>\\( h = -5(t-2)^2 + 20 \\). Max height is 20.</div><div class='translation'>\\( h = -5(t-2)^2 + 20 \\). Tinggi maks adalah 20.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Fence</text></svg>`, q: "A farmer has 40m of fence. Area is \\( A = x(20-x) \\). What is the max area?", q_trans: "Petani punya pagar 40m. Luasnya \\( A = x(20-x) \\). Berapakah luas maksimumnya?", opts: ["100", "20", "400", "10", "200"], correct: 0, exp: "<div>\\( A = -x^2 + 20x = -(x-10)^2 + 100 \\). Max area is 100.</div><div class='translation'>\\( A = -x^2 + 20x = -(x-10)^2 + 100 \\). Luas maks adalah 100.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">y = x² + 8x + 12</text></svg>`, q: "A graph is \\( y = x^2 + 8x + 12 \\). Find the x-intercepts.", q_trans: "Grafik \\( y = x^2 + 8x + 12 \\). Temukan titik potong sumbu x.", opts: ["-6, -2", "6, 2", "-4, 0", "4, 12", "-2, 4"], correct: 0, exp: "<div>\\( y = (x+6)(x+2) \\). Set y=0, roots are -6, -2.</div><div class='translation'>\\( y = (x+6)(x+2) \\). Samakan y=0, akar-akarnya -6, -2.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#3b82f6" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Profit</text></svg>`, q: "A business breaks even (P=0) at \\( P = x^2 - 4x - 5 \\). Find the break-even points.", q_trans: "Bisnis mencapai titik impas (P=0) pada \\( P = x^2 - 4x - 5 \\). Temukan titik impasnya.", opts: ["5, -1", "1, -5", "2, -3", "4, -5", "5, 1"], correct: 0, exp: "<div>\\( P = (x-5)(x+1) \\). Roots are 5, -1. (Ignore negative x).</div><div class='translation'>\\( P = (x-5)(x+1) \\). Akar-akarnya 5, -1. (Abaikan x negatif).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><text x="50" y="40" font-size="12" text-anchor="middle">C = 2x² - 12x + 20</text></svg>`, q: "A cost function is \\( C = 2x^2 - 12x + 20 \\). Find the minimum cost.", q_trans: "Fungsi biaya adalah \\( C = 2x^2 - 12x + 20 \\). Temukan biaya minimumnya.", opts: ["2", "0", "20", "-16", "4"], correct: 0, exp: "<div>\\( C = 2(x-3)^2 + 2 \\). Min cost is 2.</div><div class='translation'>\\( C = 2(x-3)^2 + 2 \\). Biaya min adalah 2.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><path d="M 20 60 L 80 20" stroke="#3b82f6" stroke-width="3" fill="none"/><path d="M 20 20 L 80 60" stroke="#ef4444" stroke-width="3" fill="none"/></svg>`, q: "Two cars move: Car A \\( y = x^2 - 5x + 6 \\), Car B \\( y = 0 \\). When do they meet?", q_trans: "Dua mobil bergerak: Mobil A \\( y = x^2 - 5x + 6 \\), Mobil B \\( y = 0 \\). Kapan mereka bertemu?", opts: ["x = 2, 3", "x = -2, -3", "x = 0, 5", "x = 1, 6", "x = 2.5"], correct: 0, exp: "<div>Solve \\( x^2 - 5x + 6 = 0 \\implies (x-2)(x-3) = 0 \\). Meet at x=2, 3.</div><div class='translation'>Selesaikan \\( x^2 - 5x + 6 = 0 \\implies (x-2)(x-3) = 0 \\). Bertemu di x=2, 3.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="20" y="20" width="60" height="40" fill="#fbbf24" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle">Box</text></svg>`, q: "A box base is \\( x \\) by \\( x+5 \\). Area is 75. Find x.", q_trans: "Alas kotak \\( x \\) kali \\( x+5 \\). Luasnya 75. Temukan x.", opts: ["5", "10", "15", "3", "25"], correct: 0, exp: "<div>\\( x(x+5) = 75 \\implies x^2 + 5x - 75 = 0 \\). \\( x = 5 \\).</div><div class='translation'>\\( x(x+5) = 75 \\implies x^2 + 5x - 75 = 0 \\). \\( x = 5 \\).</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><circle cx="50" cy="40" r="20" fill="#8b5cf6"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Arch</text></svg>`, q: "An arch is \\( y = -(x-10)^2 + 25 \\). Find the width at the base (y=0).", q_trans: "Sebuah lengkungan adalah \\( y = -(x-10)^2 + 25 \\). Temukan lebarnya di alas (y=0).", opts: ["10", "5", "25", "20", "50"], correct: 0, exp: "<div>\\( -(x-10)^2 = -25 \\implies x-10 = 5 \\implies x = 5, 15 \\). Width = 15 - 5 = 10.</div><div class='translation'>\\( -(x-10)^2 = -25 \\implies x-10 = 5 \\implies x = 5, 15 \\). Lebar = 15 - 5 = 10.</div>" },
+                        { svg: `<svg width="100" height="80" viewBox="0 0 100 80"><rect x="30" y="20" width="40" height="40" fill="#10b981" rx="5"/><text x="50" y="45" font-size="10" text-anchor="middle" fill="#fff">Garden</text></svg>`, q: "A garden area is \\( A = 2x^2 + 8x \\). Find the minimum area.", q_trans: "Luas taman adalah \\( A = 2x^2 + 8x \\). Temukan luas minimumnya.", opts: ["-8", "0", "8", "-4", "2"], correct: 0, exp: "<div>\\( A = 2(x+2)^2 - 8 \\). Min area is -8. (If area must be positive, min is 0 at x=0).</div><div class='translation'>\\( A = 2(x+2)^2 - 8 \\). Luas min adalah -8. (Jika luas harus positif, min adalah 0 di x=0).</div>" }
+                    ]}
+                ]
+            }
+        };
+
+        // --- AUTO FIX KATEX ESCAPE SEQUENCE ---
+        (function() {
+            function fixString(str) {
+                if (typeof str !== 'string') return str;
+                str = str.replace(/\u000Crac/g, '\\frac');
+                str = str.replace(/\neq/g, '\\neq');
+                str = str.replace(/\u0009imes/g, '\\times');
+                str = str.replace(/\u0009ext/g, '\\text');
+                str = str.replace(/ pi\(/g, ' \\pi(');
+                str = str.replace(/ div /g, ' \\div ');
+                str = str.replace(/ cdot /g, ' \\cdot ');
+                str = str.replace(/ implies /g, ' \\implies ');
+                str = str.replace(/ pm /g, ' \\pm ');
+                str = str.replace(/ sqrt/g, ' \\sqrt');
+                str = str.replace(/ leq /g, ' \\leq ');
+                str = str.replace(/ geq /g, ' \\geq ');
+                str = str.replace(/ infty /g, ' \\infty ');
+                return str;
+            }
+            function processObject(obj) {
+                for (const key in obj) {
+                    if (typeof obj[key] === 'string') {
+                        obj[key] = fixString(obj[key]);
+                    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        processObject(obj[key]);
+                    }
+                }
+            }
+            processObject(contentData);
+        })();
+
+        // --- FUNCTIONS FOR MODAL ---
+        function openModal() { document.getElementById('rulesModal').classList.remove('hidden'); document.getElementById('rulesModal').classList.add('flex'); }
+        function closeModal() { document.getElementById('rulesModal').classList.add('hidden'); }
+
+        // --- NAVIGATION & PAGINATION ---
+        let currentSection = '';
+        let currentPage = 0;
+
+        function showSection(sectionId, pageIndex, event) {
+            currentSection = sectionId;
+            currentPage = pageIndex;
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            } else {
+                const activeItem = document.querySelector(`.sidebar-item[onclick*="${sectionId}"]`);
+                if(activeItem) activeItem.classList.add('active');
+            }
+            renderContent();
+        }
+
+        function renderContent() {
+            const section = contentData[currentSection];
+            const mainContent = document.getElementById('mainContent');
+            
+            if (!section) {
+                mainContent.innerHTML = `<div class="text-center text-gray-500 mt-20"><i class="fas fa-spinner fa-spin text-4xl mb-4"></i><p>Loading content... Please wait for the next part of the code.</p></div>`;
+                return;
+            }
+
+            const page = section.pages[currentPage];
+            if (!page) return;
+            
+            let html = `<h2 class="text-3xl font-bold text-blue-800 mb-4">${section.title}</h2>`;
+            
+            if (currentSection.startsWith('task')) {
+                const taskNum = currentSection.replace('task', '');
+                html += `<div class="mb-4 no-print flex justify-end">
+                            <button onclick="printTask(${taskNum})" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-print"></i> Print Task ${taskNum}
+                            </button>
+                         </div>`;
+            }
+
+            if (page.type === 'theory') {
+                html += `<div class="bg-white p-6 rounded-lg shadow-md">${page.content}</div>`;
+            } else if (page.type === 'tasks') {
+                html += `<div class="bg-white p-6 rounded-lg shadow-md">`;
+                page.tasks.forEach((task, index) => {
+                    html += renderTask(task, index);
+                });
+                html += `</div>`;
+            }
+
+            html += `<div class="flex justify-between mt-6 no-print">`;
+            if (currentPage > 0) {
+                html += `<button onclick="prevPage()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"><i class="fas fa-arrow-left"></i> Prev</button>`;
+            } else {
+                html += `<div></div>`;
+            }
+            if (currentPage < section.pages.length - 1) {
+                html += `<button onclick="nextPage()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next <i class="fas fa-arrow-right"></i></button>`;
+            } else {
+                html += `<div></div>`;
+            }
+            html += `</div>`;
+
+            mainContent.innerHTML = html;
+            if (window.renderMathInElement) {
+                renderMathInElement(mainContent, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            }
+        }
+        
+        function prevPage() { currentPage--; renderContent(); }
+        function nextPage() { currentPage++; renderContent(); }
+
+        function renderTask(task, index) {
+            const taskId = `${currentSection}-${currentPage}-${index}`;
+            let opts = task.opts.map((opt, i) => ({ text: opt, isCorrect: i === task.correct }));
+            opts = shuffleArray(opts);
+
+            let optionsHtml = '';
+            opts.forEach((opt, i) => {
+                optionsHtml += `
+                    <button id="opt-${taskId}-${i}" onclick="checkAnswer('${taskId}', ${i}, ${opt.isCorrect})" class="option-btn w-full text-left p-3 border rounded-lg mb-2 flex items-center">
+                        <span class="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center mr-3 font-bold flex-shrink-0">${String.fromCharCode(65 + i)}</span>
+                        <span class="flex-1">${opt.text}</span>
+                    </button>
+                `;
+            });
+
+            let safeExp = task.exp ? task.exp.replace(/\\times/g, '×').replace(/<p>/g, '<div>').replace(/<\/p>/g, '</div>') : '';
+            let svgHtml = task.svg ? `<div class="mb-3 flex justify-center bg-blue-50 p-3 rounded-lg">${task.svg}</div>` : '';
+
+            return `
+                <div class="border-b border-gray-200 py-4">
+                    ${svgHtml}
+                    <p class="font-semibold mb-2">${index + 1}. ${task.q}</p>
+                    <p class="translation">${task.q_trans}</p>
+                    <div class="mt-4">
+                        ${optionsHtml}
+                    </div>
+                    <div id="feedback-${taskId}" class="mt-2"></div>
+                    <div id="collapse-${taskId}" class="collapse-content mt-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-blue-600 mb-2"><i class="fas fa-lightbulb mr-1"></i>Explanation</h4>
+                        <div>${safeExp}</div>
+                    </div>
+                    <div class="mt-2 no-print flex gap-2">
+                        <button id="reset-${taskId}" onclick="resetTask('${taskId}')" class="hidden bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-bold py-1 px-3 rounded"><i class="fas fa-redo mr-1"></i>Reset</button>
+                        <button onclick="toggleCollapse('${taskId}')" class="hidden bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-bold py-1 px-3 rounded"><i class="fas fa-chevron-down mr-1"></i>Show Explanation</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        function checkAnswer(taskId, optIndex, isCorrect) {
+            const buttons = document.querySelectorAll(`[id^="opt-${taskId}-"]`);
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            const selectedBtn = document.getElementById(`opt-${taskId}-${optIndex}`);
+            const feedback = document.getElementById(`feedback-${taskId}`);
+            const resetBtn = document.getElementById(`reset-${taskId}`);
+            const explainBtn = document.querySelector(`#reset-${taskId}`).nextElementSibling;
+            
+            resetBtn.classList.remove('hidden');
+            explainBtn.classList.remove('hidden');
+
+            if (isCorrect) {
+                selectedBtn.classList.add('bg-green-200', 'border-green-500');
+                feedback.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Correct! (Benar!)</p>`;
+            } else {
+                selectedBtn.classList.add('bg-red-200', 'border-red-500');
+                feedback.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Incorrect. Check the explanation! (Salah. Cek penjelasannya!)</p>`;
+                document.getElementById(`collapse-${taskId}`).classList.add('open');
+            }
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            content.classList.toggle('open');
+        }
+
+        function resetTask(taskId) {
+            renderContent();
+        }
+
+        function printTask(taskNumber) {
+            const printArea = document.getElementById('printArea');
+            const date = new Date().toLocaleDateString('en-GB');
+            let taskContent = contentData['task' + taskNumber].pages[0]; 
+            
+            let tableRows = '';
+            let score = 0;
+
+            taskContent.tasks.forEach((task, index) => {
+                const taskId = `task${taskNumber}-0-${index}`;
+                const correctAnswerText = task.opts[task.correct];
+                
+                const selectedBtn = document.querySelector(`[id^="opt-${taskId}-"].bg-green-200, [id^="opt-${taskId}-"].bg-red-200`);
+                
+                let studentAnswerHtml = '<span style="color:#9ca3af; font-style:italic;">(Empty)</span>';
+                let noteHtml = '❌';
+                
+				if (selectedBtn) {
+					const ann = selectedBtn.querySelector('.katex-mathml annotation');
+					if (ann) {
+						studentAnswerHtml = `\\( ${ann.textContent} \\)`;
+					} else {
+						// PERBAIKAN: Ambil teks dari elemen flex-1 agar pasti mendapatkan tulisan opsi, bukan elemen ikon
+						const textContainer = selectedBtn.querySelector('.flex-1');
+						if (textContainer) {
+							studentAnswerHtml = textContainer.innerText;
+						} else {
+							studentAnswerHtml = selectedBtn.innerText.substring(1).trim();
+						}
+					}
+					
+					if (selectedBtn.classList.contains('bg-green-200')) {
+						noteHtml = '✔️';
+						score++;
+					} else {
+						noteHtml = '❌';
+					}
+				}
+                
+                tableRows += `
+                    <tr>
+                        <td style="text-align: center; vertical-align: top;">${index + 1}</td>
+                        <td style="vertical-align: top;">${task.q}</td>
+                        <td style="vertical-align: top;">${studentAnswerHtml}</td>
+                        <td style="vertical-align: top;">${correctAnswerText}</td>
+                        <td style="text-align: center; vertical-align: top; font-size: 16px;">${noteHtml}</td>
+                    </tr>
+                `;
+            });
+            printArea.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h1>Math Tutoring by Deni</h1>
+                    <p>Topic: Completing the Square</p>
+                    <p>Name: .........................</p>
+                    <p>Date: ${date}</p>
+                    <p>Task: ${taskNumber}/5</p>
+                    <p>Score: ${score} / 10</p>
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead>
+                        <tr style="border: 1px solid #000; background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000; padding: 5px; width: 5%;">No.</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 40%;">Question</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 20%;">Student Answer</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 25%;">Correct Answer</th>
+                            <th style="border: 1px solid #000; padding: 5px; width: 10%;">Note (❌/✔️)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+                <div style="margin-top: 40px; text-align: right;">
+                    <p>Checked by,</p>
+                    <br><br>
+                    <p><strong>Deni</strong></p>
+                </div>
+            `;
+            
+            if (window.renderMathInElement) {
+                renderMathInElement(printArea, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            }
+            
+            printArea.classList.remove('hidden');
+            window.print();
+            printArea.classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.renderMathInElement) {
+                document.querySelector('.sidebar-item').click();
+            } else {
+                window.addEventListener('load', () => {
+                    document.querySelector('.sidebar-item').click();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
