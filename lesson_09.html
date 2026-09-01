@@ -51,10 +51,10 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
 
     <!-- Header -->
-    <header class="bg-blue-800 text-white p-4 flex justify-between items-center shadow-md no-print">
+    <header class="bg-blue-800 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
         <div>
             <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
             <p class="text-sm">Topic: Solving Quadratic Equations by Completing the Square</p>
@@ -92,24 +92,112 @@
     </div>
 
     <!-- Main Layout -->
-    <div class="flex flex-1">
+    <div class="flex flex-1 overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg no-print">
-            <ul class="space-y-1 p-2">
-                <li><a href="javascript:void(0)" onclick="showSection('warmup')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Spiral Review Warm-up (00:00-00:10)</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('intro')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Introduction & Real-World Connection (00:10-00:15)</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('review')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Review of Prior Knowledge (00:15-00:20)</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('problem')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Problem Introduction (00:20-00:30)</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('guided')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Guided Practice (00:30-00:45)</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('independent')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Independent Practice (00:45-00:55)</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('consolidation')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm">Consolidation & Reflection (00:55-01:00)</a></li>
-                <hr class="my-2">
-                <li><a href="javascript:void(0)" onclick="showSection('task1')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm font-bold text-blue-800">Task 1</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('task2')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm font-bold text-blue-800">Task 2</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('task3')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm font-bold text-blue-800">Task 3</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('task4')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm font-bold text-blue-800">Task 4</a></li>
-                <li><a href="javascript:void(0)" onclick="showSection('task5')" class="block px-4 py-2 rounded hover:bg-blue-100 text-sm font-bold text-blue-800">Task 5</a></li>
-            </ul>
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-blue-800 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-blue-200 mt-1">Select a topic to navigate</p>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="warmup">
+                            <div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:00 - 00:10
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="intro">
+                            <div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:10 - 00:15
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="review">
+                            <div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:15 - 00:20
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="problem">
+                            <div class="font-semibold text-sm text-gray-800">Problem Introduction</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:20 - 00:30
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="guided">
+                            <div class="font-semibold text-sm text-gray-800">Guided Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:30 - 00:45
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="independent">
+                            <div class="font-semibold text-sm text-gray-800">Independent Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:45 - 00:55
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="consolidation">
+                            <div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                <i class="far fa-clock"></i> 00:55 - 01:00
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <hr class="my-3 border-gray-200">
+                    
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
         </aside>
 
         <!-- Main Content -->
@@ -140,10 +228,6 @@
                         <p>Example: <span class="katex">\( 3 \times 3 = 3^2 = 9 \)</span>. <span class="translation">Contoh: 3 dikali 3 sama dengan 3 pangkat 2 sama dengan 9.</span></p>
                         <p class="mt-2">In math, we call this "squaring" a number. <span class="translation">Dalam matematika, kita menyebut ini "mem Kuadratkan" sebuah angka.</span></p>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded" disabled>Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 2-4: TASKS 1-3 (Generated by JS) -->
@@ -170,10 +254,6 @@
                         <p>Example: <span class="katex">\( \sqrt{9} = 3 \)</span> because <span class="katex">\( 3 \times 3 = 9 \)</span>. <span class="translation">Contoh: akar 9 sama dengan 3 karena 3 dikali 3 sama dengan 9.</span></p>
                         <p class="mt-2">Remember: <span class="katex">\( \sqrt{16} = 4 \)</span>, <span class="katex">\( \sqrt{25} = 5 \)</span>. <span class="translation">Ingat: akar 16 sama dengan 4, akar 25 sama dengan 5.</span></p>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 6-8: TASKS 4-6 (Generated by JS) -->
@@ -199,10 +279,6 @@
                         </div>
                         <p>If we say <span class="katex">\( x^2 = 4 \)</span>, it means "what number multiplied by itself equals 4?". <span class="translation">Jika kita bilang x kuadrat = 4, itu artinya "angka apa yang dikalikan dengan dirinya sendiri sama dengan 4?".</span></p>
                         <p class="mt-2">The answer is <span class="katex">\( x = 2 \)</span> or <span class="katex">\( x = -2 \)</span>. <span class="translation">Jawabannya adalah x = 2 atau x = -2.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -241,10 +317,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded" disabled>Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 2-4: TASKS 1-3 -->
@@ -271,10 +343,6 @@
                             <p>When you throw a ball in the air, it goes up, reaches a highest point, and falls down. This is a parabola! <span class="translation">Saat kamu melempar bola ke udara, bola itu naik, mencapai titik tertinggi, lalu jatuh. Ini adalah parabola!</span></p>
                         </div>
                         <p>The equation \( h = -5t^2 + 20t \) can tell us the height (\( h \)) of the ball at time (\( t \)). <span class="translation">Persamaan h = -5t kuadrat + 20t bisa memberitahu kita ketinggian (h) bola pada waktu (t).</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -304,10 +372,6 @@
                             <p>The standard form looks like this: \( ax^2 + bx + c = 0 \). <span class="translation">Bentuk standar terlihat seperti ini: ax kuadrat + bx + c = 0.</span></p>
                         </div>
                         <p>\( a \), \( b \), and \( c \) are just regular numbers. \( a \) cannot be 0. <span class="translation">a, b, dan c hanyalah angka biasa. a tidak boleh 0.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -342,10 +406,6 @@
                         </div>
                         <p>Example: \( 2(x + 3) = (2 \times x) + (2 \times 3) = 2x + 6 \). <span class="translation">Contoh: 2(x + 3) = (2 x x) + (2 x 3) = 2x + 6.</span></p>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded" disabled>Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 2-4: TASKS 1-3 -->
@@ -373,10 +433,6 @@
                             <p>To multiply two brackets like \( (x+2)(x+4) \), we use FOIL: First, Outer, Inner, Last. <span class="translation">Untuk mengalikan dua kurung seperti (x+2)(x+4), kita gunakan FOIL: First (Pertama), Outer (Luar), Inner (Dalam), Last (Terakhir).</span></p>
                         </div>
                         <p>\( \text{First} = x \times x = x^2 \)<br>\( \text{Outer} = x \times 4 = 4x \)<br>\( \text{Inner} = 2 \times x = 2x \)<br>\( \text{Last} = 2 \times 4 = 8 \)<br>Result: \( x^2 + 6x + 8 \). <span class="translation">Hasil: x kuadrat + 6x + 8.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -408,10 +464,6 @@
                             <p>When we expand \( (x+a)^2 \), it always makes a perfect pattern: \( x^2 + 2ax + a^2 \). <span class="translation">Saat kita perluas (x+a) kuadrat, itu selalu membuat pola sempurna: x kuadrat + 2ax + a kuadrat.</span></p>
                         </div>
                         <p>Example: \( (x+3)^2 = x^2 + 2(3)(x) + 3^2 = x^2 + 6x + 9 \). <span class="translation">Contoh: (x+3) kuadrat = x kuadrat + 2(3)(x) + 3 kuadrat = x kuadrat + 6x + 9.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -453,10 +505,6 @@
                         </div>
                         <p>This process of finding the missing piece to make a perfect square is called <strong>Completing the Square</strong>. <span class="translation">Proses mencari bagian yang hilang untuk membuat persegi sempurna ini disebut Melengkapkan Kuadrat.</span></p>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded" disabled>Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 2-4: TASKS 1-3 -->
@@ -481,10 +529,6 @@
                             <p>For an expression like \( x^2 + bx \), the missing piece is always found by taking half of \( b \), then squaring it. <span class="translation">Untuk ekspresi seperti x kuadrat + bx, bagian yang hilang selalu ditemukan dengan mengambil setengah dari b, lalu dikuadratkan.</span></p>
                         </div>
                         <p>Example: \( x^2 + 6x \). Half of 6 is 3. Square it: \( 3^2 = 9 \). The missing piece is 9! <span class="translation">Contoh: x kuadrat + 6x. Setengah dari 6 adalah 3. Dikuadratkan: 3 kuadrat = 9. Bagian yang hilang adalah 9!</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -519,10 +563,6 @@
                             </div>
                         </div>
                         <p>So, \( x^2 + 6x + 9 = (x+3)^2 \). <span class="translation">Jadi, x kuadrat + 6x + 9 = (x+3) kuadrat.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -563,10 +603,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded" disabled>Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 2-4: TASKS 1-3 -->
@@ -592,10 +628,6 @@
                             <p>We must add 9 to BOTH sides to keep the balance. Left side becomes \( (x+3)^2 \). Right side becomes 16. <span class="translation">Kita harus menambahkan 9 ke KEDUA sisi untuk menjaga keseimbangan. Sisi kiri menjadi (x+3) kuadrat. Sisi kanan menjadi 16.</span></p>
                         </div>
                         <p>Now we have \( (x+3)^2 = 16 \). <span class="translation">Sekarang kita punya (x+3) kuadrat = 16.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -627,10 +659,6 @@
                                 <p class="mt-2">Path 1: \( x+3 = 4 \rightarrow x = 1 \). Path 2: \( x+3 = -4 \rightarrow x = -7 \). <span class="translation">Jalur 1: x+3 = 4 -> x = 1. Jalur 2: x+3 = -4 -> x = -7.</span></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -664,10 +692,6 @@
                         </div>
                         <p>It becomes \( x^2 + 6x = 4 \). Now you can do the normal steps. <span class="translation">Itu berubah menjadi x kuadrat + 6x = 4. Sekarang kamu bisa melakukan langkah normal.</span></p>
                     </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded" disabled>Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
-                    </div>
                 </div>
 
                 <!-- PAGES 2-4: TASKS 1-3 -->
@@ -692,10 +716,6 @@
                             <p>What if \( b \) is negative, like in \( x^2 - 8x = 9 \)? <span class="translation">Bagaimana jika b itu negatif, seperti di x kuadrat - 8x = 9?</span></p>
                         </div>
                         <p>Just follow the formula! Half of -8 is -4. Square it: \( (-4)^2 = 16 \). Add 16 to both sides. <span class="translation">Ikuti saja rumusnya! Setengah dari -8 adalah -4. Dikuadratkan: (-4) kuadrat = 16. Tambahkan 16 ke kedua sisi.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -722,10 +742,6 @@
                             <p>If you got \( x = 1 \) and \( x = -7 \), you can check! Put 1 back into the original equation. <span class="translation">Jika kamu mendapat x = 1 dan x = -7, kamu bisa memeriksanya! Masukkan 1 kembali ke persamaan asli.</span></p>
                         </div>
                         <p>\( 1^2 + 6(1) - 7 = 1 + 6 - 7 = 0 \). It works! Always check if you have time. <span class="translation">1 kuadrat + 6(1) - 7 = 1 + 6 - 7 = 0. Itu berhasil! Selalu periksa jika kamu punya waktu.</span></p>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 </div>
 
@@ -814,7 +830,8 @@
                 <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
                 <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
             </div>
-
+            <!-- Pagination Bar -->
+            <div id="paginationBar" class="sticky bottom-0 mt-6 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
         </main>
     </div>
 
@@ -1420,6 +1437,20 @@
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-blue-100', 'text-blue-800', 'font-bold', 'bg-orange-100');
+                item.classList.add('text-gray-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100');
+                } else {
+                    activeLink.classList.add('bg-blue-100', 'text-blue-800', 'font-bold');
+                }
+            }
+            
             // Reset to page 1 on section change
             currentPage = 1;
             currentTaskSection = sectionId;
@@ -1429,6 +1460,7 @@
             if(firstPage) firstPage.classList.add('active');
             
             renderMath();
+			renderPagination(sectionId, currentPage);
         }
 
         function changePage(direction) {
@@ -1443,8 +1475,64 @@
                 pages[newPage - 1].classList.add('active');
                 currentPage = newPage;
                 renderMath();
+                renderPagination(currentTaskSection, currentPage);
                 window.scrollTo(0, 0);
             }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; // Halaman teori untuk warmup sampai independent
+            
+            // Tombol Previous
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                
+                // Warna dasar (Teori vs Task)
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-blue-100 hover:bg-blue-200 text-blue-800'; // Teori (Biru)
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; // Task (Oranye)
+                }
+                
+                // Warna saat halaman sedang aktif (sedang dibuka)
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-blue-600 text-white shadow-md'; // Teori Aktif
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; // Task Aktif
+                    }
+                }
+                
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            // Tombol Next
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            
+            document.getElementById('paginationBar').innerHTML = html;
         }
 
         function shuffleArray(array) {
@@ -1514,10 +1602,6 @@
                                 <p class="translation">${data.exp_trans}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex justify-between mt-4 no-print">
-                        <button onclick="changePage(-1)" class="bg-gray-300 px-4 py-2 rounded">Previous</button>
-                        <button onclick="changePage(1)" class="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
                     </div>
                 `;
             });
@@ -1634,6 +1718,7 @@
         window.onload = () => {
             renderTasks();
             renderMath();
+			renderPagination('warmup', 1);
         };
     </script>
 </body>
