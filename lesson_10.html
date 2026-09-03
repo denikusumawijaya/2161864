@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; 
+            padding: 0; 
+            border: 0;
+            background: transparent;
+        }
+        .collapse-content.open { 
+            max-height: 2000px; 
+            padding: 1.5rem; 
+            border: 1px solid #bfdbfe; 
+            background: #eff6ff; 
+            border-radius: 0.5rem;
+            margin-top: 1rem; 
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            .no-print { display: none !important; }
+            @page { size: A4; margin: 10mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-blue-800 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Quadratic Equations</p>
+            <p class="translation text-blue-200">Topik: Persamaan Kuadrat</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-blue-800">Class Rules <br><span class="translation text-gray-500">Aturan Kelas</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-blue-500 mt-1"></i>
+                    <div>Take turns speaking. <span class="translation">Berbicara secara bergantian.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-blue-500 mt-1"></i>
+                    <div>Ask permission if you want to leave the class. <span class="translation">Meminta izin jika ingin meninggalkan kelas.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-blue-500 mt-1"></i>
+                    <div>Turn on camera and microphone if needed. <span class="translation">Menyalakan kamera dan microphone jika diperlukan.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-blue-800 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-blue-200 mt-1">Select a topic to navigate</p>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="warmup">
+                            <div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="intro">
+                            <div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="review">
+                            <div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="problem">
+                            <div class="font-semibold text-sm text-gray-800">Problem Introduction</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="guided">
+                            <div class="font-semibold text-sm text-gray-800">Guided Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="independent">
+                            <div class="font-semibold text-sm text-gray-800">Independent Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="consolidation">
+                            <div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div>
+                        </a>
+                    </li>
+                    
+                    <hr class="my-3 border-gray-200">
+                    
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+            
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">What is a Variable?</h2>
+                        <p class="translation">Apa itu Variabel?</p>
+                        
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded flex justify-center">
+                                <svg width="150" height="120" viewBox="0 0 150 120">
+                                    <!-- Box representing variable x -->
+                                    <rect x="20" y="40" width="40" height="40" fill="#3b82f6" rx="5"/>
+                                    <text x="40" y="65" font-size="20" fill="white" text-anchor="middle" font-weight="bold">x</text>
+                                    <text x="40" y="100" font-size="12" fill="#333" text-anchor="middle">Unknown</text>
+                                    <text x="40" y="115" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Tidak diketahui</text>
+                                    
+                                    <!-- Equals sign -->
+                                    <text x="80" y="65" font-size="20" fill="#333" text-anchor="middle">=</text>
+                                    
+                                    <!-- Box representing number 5 -->
+                                    <rect x="90" y="40" width="40" height="40" fill="#10b981" rx="5"/>
+                                    <text x="110" y="65" font-size="20" fill="white" text-anchor="middle" font-weight="bold">5</text>
+                                    <text x="110" y="100" font-size="12" fill="#333" text-anchor="middle">Value</text>
+                                    <text x="110" y="115" font-size="10" fill="#666" text-anchor="middle" font-style="italic">Nilai</text>
+                                </svg>
+                            </div>
+                            <p>In math, a variable is a letter (like \( x \)) that represents a number we don't know yet. <span class="translation">Dalam matematika, variabel adalah huruf (seperti \( x \)) yang mewakili angka yang belum kita ketahui.</span></p>
+                        </div>
+                        <p>If we say \( x = 5 \), it means the letter \( x \) holds the value of 5. <span class="translation">Jika kita bilang \( x = 5 \), artinya huruf \( x \) menyimpan nilai 5.</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Solving Simple Equations</h2>
+                        <p class="translation">Menyelesaikan Persamaan Sederhana</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex items-center">
+                                <svg width="150" height="100" viewBox="0 0 150 100">
+                                    <!-- Balance Scale -->
+                                    <line x1="75" y1="20" x2="75" y2="80" stroke="#333" stroke-width="2"/>
+                                    <line x1="30" y1="30" x2="120" y2="30" stroke="#333" stroke-width="2"/>
+                                    <rect x="10" y="30" width="40" height="30" fill="#10b981" rx="3"/>
+                                    <text x="30" y="50" font-size="14" fill="white" text-anchor="middle">x + 2</text>
+                                    <rect x="100" y="30" width="40" height="30" fill="#f59e0b" rx="3"/>
+                                    <text x="120" y="50" font-size="14" fill="white" text-anchor="middle">7</text>
+                                    <path d="M70,80 L80,80 L75,90 Z" fill="#333"/>
+                                </svg>
+                            </div>
+                            <p>To find \( x \), we must keep the scale balanced. What we do to one side, we do to the other. <span class="translation">Untuk menemukan \( x \), kita harus menjaga timbangan tetap seimbang. Apa yang kita lakukan di satu sisi, kita lakukan di sisi lainnya.</span></p>
+                        </div>
+                        <p>Example: \( x + 2 = 7 \). Subtract 2 from both sides. \( x = 7 - 2 \). So, \( x = 5 \). <span class="translation">Contoh: \( x + 2 = 7 \). Kurangi 2 dari kedua sisi. \( x = 7 - 2 \). Jadi, \( x = 5 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Squares and Square Roots</h2>
+                        <p class="translation">Kuadrat dan Akar Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Square shape -->
+                                    <rect x="20" y="10" width="80" height="80" fill="#8b5cf6" rx="5"/>
+                                    <text x="60" y="50" font-size="20" fill="white" text-anchor="middle">3 x 3</text>
+                                    <text x="60" y="70" font-size="14" fill="white" text-anchor="middle">= 9</text>
+                                    <text x="120" y="50" font-size="20" fill="#333" text-anchor="middle">⇨</text>
+                                    <text x="135" y="50" font-size="14" fill="#333" text-anchor="middle" transform="rotate(10 135 50)">√9=3</text>
+                                </svg>
+                            </div>
+                            <p>Squaring a number means multiplying it by itself. \( 3^2 = 9 \). The square root is the opposite. \( \sqrt{9} = 3 \). <span class="translation">Mengkuadratkan angka berarti mengalikannya dengan dirinya sendiri. \( 3^2 = 9 \). Akar kuadrat adalah kebalikannya. \( \sqrt{9} = 3 \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Throwing a Ball in the Air</h2>
+                        <p class="translation">Melempar Bola ke Udara</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="150" height="120" viewBox="0 0 150 120">
+                                    <!-- Parabola trajectory -->
+                                    <path d="M10,110 Q75,-20 140,110" stroke="#3b82f6" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                                    <circle cx="75" cy="0" r="8" fill="#ef4444"/>
+                                    <circle cx="20" cy="105" r="8" fill="#ef4444"/>
+                                    <circle cx="130" cy="105" r="8" fill="#ef4444"/>
+                                    <line x1="0" y1="110" x2="150" y2="110" stroke="#333" stroke-width="2"/>
+                                    <text x="75" y="115" font-size="10" text-anchor="middle" fill="#333">Ground (Tanah)</text>
+                                </svg>
+                            </div>
+                            <p>When you throw a ball, it goes up, slows down, and falls back down. The path looks like a "U" shape called a parabola. <span class="translation">Saat kamu melempar bola, ia naik, melambat, dan jatuh kembali. Jalurnya terlihat seperti bentuk "U" yang disebut parabola.</span></p>
+                        </div>
+                        <p>This real-world movement is calculated using Quadratic Equations. <span class="translation">Pergerakan dunia nyata ini dihitung menggunakan Persamaan Kuadrat.</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Building a Garden</h2>
+                        <p class="translation">Membangun Taman</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <rect x="20" y="20" width="100" height="60" fill="#10b981" rx="5" stroke="#333" stroke-width="2"/>
+                                    <text x="70" y="50" font-size="14" fill="white" text-anchor="middle">Area = 50</text>
+                                    <text x="70" y="65" font-size="10" fill="white" text-anchor="middle">x * (x+5)</text>
+                                    <text x="70" y="90" font-size="10" text-anchor="middle" fill="#333">Length (Panjang)</text>
+                                </svg>
+                            </div>
+                            <p>If you want to build a rectangular garden and you know the area, you need math to find the length. <span class="translation">Jika kamu ingin membuat taman persegi panjang dan kamu tahu luasnya, kamu butuh matematika untuk mencari panjangnya.</span></p>
+                        </div>
+                        <p>If length is \( x+5 \) and width is \( x \), the area is \( x(x+5) \). This creates a quadratic equation! <span class="translation">Jika panjangnya \( x+5 \) dan lebarnya \( x \), luasnya adalah \( x(x+5) \). Ini membuat persamaan kuadrat!</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">The Shape of Curves</h2>
+                        <p class="translation">Bentuk Lengkungan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <path d="M10,10 Q75,120 140,10" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                    <text x="70" y="90" font-size="12" text-anchor="middle" fill="#333">Smiling Curve</text>
+                                    <path d="M10,90 Q75,-20 140,90" stroke="#ef4444" stroke-width="3" fill="none" transform="translate(0, 10)"/>
+                                    <text x="70" y="60" font-size="12" text-anchor="middle" fill="#333">Frowning Curve</text>
+                                </svg>
+                            </div>
+                            <p>Quadratic equations draw curves. If \( x^2 \) is positive, it smiles (\(\cup\)). If \( x^2 \) is negative, it frowns (\(\cap\)). <span class="translation">Persamaan kuadrat menggambar lengkungan. Jika \( x^2 \) positif, ia tersenyum (\(\cup\)). Jika \( x^2 \) negatif, ia mengernyit (\(\cap\)).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Expanding Brackets</h2>
+                        <p class="translation">Menguraikan Kurung</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="150" height="100" viewBox="0 0 150 100">
+                                    <rect x="10" y="20" width="40" height="60" fill="#3b82f6" rx="3" opacity="0.7"/>
+                                    <text x="30" y="55" font-size="14" fill="white" text-anchor="middle">x</text>
+                                    <rect x="50" y="20" width="40" height="60" fill="#10b981" rx="3" opacity="0.7"/>
+                                    <text x="70" y="55" font-size="14" fill="white" text-anchor="middle">+3</text>
+                                    <text x="100" y="55" font-size="20" fill="#333" text-anchor="middle">x</text>
+                                </svg>
+                            </div>
+                            <p>If we have \( x(x + 3) \), it means \( x \) multiplies everything inside the bracket. <span class="translation">Jika kita punya \( x(x + 3) \), artinya \( x \) dikalikan dengan semua di dalam kurung.</span></p>
+                        </div>
+                        <p>So, \( x \cdot x = x^2 \) and \( x \cdot 3 = 3x \). The result is \( x^2 + 3x \). <span class="translation">Jadi, \( x \cdot x = x^2 \) dan \( x \cdot 3 = 3x \). Hasilnya \( x^2 + 3x \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">What is a Quadratic?</h2>
+                        <p class="translation">Apa itu Kuadrat?</p>
+                        <p>A quadratic equation has a variable squared (like \( x^2 \)). The standard form is: <span class="translation">Persamaan kuadrat memiliki variabel yang dikuadratkan (seperti \( x^2 \)). Bentuk standarnya adalah:</span></p>
+                        <p class="text-center text-xl my-4"><span class="katex">\( ax^2 + bx + c = 0 \)</span></p>
+                        <p>Where \( a, b, \) and \( c \) are numbers, and \( a \) cannot be 0. <span class="translation">Di mana \( a, b, \) dan \( c \) adalah angka, dan \( a \) tidak boleh 0.</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Finding the Roots</h2>
+                        <p class="translation">Mencari Akar</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <path d="M10,10 Q75,120 140,10" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                    <line x1="0" y1="90" x2="140" y2="90" stroke="#333" stroke-width="2"/>
+                                    <circle cx="30" cy="90" r="5" fill="#ef4444"/>
+                                    <circle cx="120" cy="90" r="5" fill="#ef4444"/>
+                                    <text x="30" y="80" font-size="10" text-anchor="middle" fill="#333">Root 1</text>
+                                    <text x="120" y="80" font-size="10" text-anchor="middle" fill="#333">Root 2</text>
+                                </svg>
+                            </div>
+                            <p>The "roots" are the points where the curve hits the ground (the x-axis). At these points, \( y = 0 \). <span class="translation">"Akar" adalah titik di mana lengkungan menyentuh tanah (sumbu-x). Pada titik ini, \( y = 0 \).</span></p>
+                        </div>
+                        <p>So, finding the roots means solving \( ax^2 + bx + c = 0 \). <span class="translation">Jadi, mencari akar berarti menyelesaikan \( ax^2 + bx + c = 0 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Factoring (Puzzle Method)</h2>
+                        <p class="translation">Faktorisasi (Metode Puzzle)</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="150" height="100" viewBox="0 0 150 100">
+                                    <!-- Puzzle pieces -->
+                                    <path d="M20,20 H60 V40 C55,40 55,55 60,55 V70 H20 C20,65 5,65 5,70 V20 Z" fill="#3b82f6"/>
+                                    <path d="M70,20 H110 V40 C115,40 115,55 110,55 V70 H70 C70,65 55,65 55,70 V20 Z" fill="#10b981" transform="translate(15, 15)"/>
+                                    <text x="35" y="50" font-size="14" fill="white" text-anchor="middle">(x+2)</text>
+                                    <text x="100" y="50" font-size="14" fill="white" text-anchor="middle">(x+3)</text>
+                                </svg>
+                            </div>
+                            <p>Factoring is like solving a puzzle. We want to break \( x^2 + 5x + 6 \) into two parts that multiply together. <span class="translation">Faktorisasi seperti memecahkan teka-teki. Kita ingin memecah \( x^2 + 5x + 6 \) menjadi dua bagian yang dikalikan.</span></p>
+                        </div>
+                        <p>We look for two numbers that multiply to 6 and add to 5. Those numbers are 2 and 3! So, it becomes \( (x+2)(x+3) = 0 \). <span class="translation">Kita mencari dua angka yang jika dikali hasilnya 6 dan jika ditambah hasilnya 5. Angka itu adalah 2 dan 3! Jadi, berubah menjadi \( (x+2)(x+3) = 0 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">The Zero Rule</h2>
+                        <p class="translation">Aturan Nol</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <circle cx="70" cy="50" r="40" fill="#10b981" opacity="0.2"/>
+                                    <text x="70" y="60" font-size="40" fill="#10b981" text-anchor="middle" font-weight="bold">0</text>
+                                </svg>
+                            </div>
+                            <p>If two things multiply to equal zero, then at least one of them MUST be zero. <span class="translation">Jika dua hal dikalikan sama dengan nol, maka setidaknya salah satunya HARUS nol.</span></p>
+                        </div>
+                        <p>If \( (x+2)(x+3) = 0 \), then either \( x+2 = 0 \) or \( x+3 = 0 \). <span class="translation">Jika \( (x+2)(x+3) = 0 \), maka bisa \( x+2 = 0 \) atau \( x+3 = 0 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Difference of Two Squares</h2>
+                        <p class="translation">Selisih Dua Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <rect x="10" y="10" width="60" height="60" fill="#8b5cf6" opacity="0.7"/>
+                                    <text x="40" y="45" font-size="14" fill="white" text-anchor="middle">x²</text>
+                                    <rect x="40" y="40" width="30" height="30" fill="white" stroke="#333"/>
+                                    <text x="55" y="60" font-size="10" fill="#333" text-anchor="middle">-</text>
+                                    <rect x="70" y="40" width="30" height="30" fill="#ef4444" opacity="0.7"/>
+                                    <text x="85" y="60" font-size="10" fill="white" text-anchor="middle">9</text>
+                                </svg>
+                            </div>
+                            <p>A special puzzle is \( x^2 - 9 \). This is a square minus a square. It factors into \( (x-3)(x+3) \). <span class="translation">Teka-teki khusus adalah \( x^2 - 9 \). Ini adalah kuadrat dikurangi kuadrat. Faktornya menjadi \( (x-3)(x+3) \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">The Magic Formula</h2>
+                        <p class="translation">Rumus Ajaib</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="120" height="100" viewBox="0 0 120 100">
+                                    <!-- Magic wand -->
+                                    <rect x="20" y="60" width="80" height="10" fill="#3b82f6" transform="rotate(-45 60 65)"/>
+                                    <polygon points="80,20 90,40 110,40 95,55 100,75 80,65 60,75 70,55 55,40 75,40" fill="#f59e0b" transform="rotate(-45 80 40)"/>
+                                </svg>
+                            </div>
+                            <p>When factoring is too hard, we use the Quadratic Formula. It works for ANY quadratic equation! <span class="translation">Ketika faktorisasi terlalu sulit, kita gunakan Rumus Kuadrat. Ini berlaku untuk SEMUA persamaan kuadrat!</span></p>
+                        </div>
+                        <p class="text-center text-2xl my-4"><span class="katex">\( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \)</span></p>
+                        <p>Don't worry, it looks scary but it's just a recipe! <span class="translation">Jangan khawatir, terlihat menakutkan tapi itu hanya resep!</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Finding a, b, and c</h2>
+                        <p class="translation">Mencari a, b, dan c</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="150" height="80" viewBox="0 0 150 80">
+                                    <rect x="10" y="20" width="40" height="40" fill="#10b981" rx="5"/>
+                                    <text x="30" y="45" font-size="16" fill="white" text-anchor="middle">a</text>
+                                    <rect x="60" y="20" width="40" height="40" fill="#3b82f6" rx="5"/>
+                                    <text x="80" y="45" font-size="16" fill="white" text-anchor="middle">b</text>
+                                    <rect x="110" y="20" width="40" height="40" fill="#8b5cf6" rx="5"/>
+                                    <text x="130" y="45" font-size="16" fill="white" text-anchor="middle">c</text>
+                                </svg>
+                            </div>
+                            <p>Before using the formula, we label the numbers. <span class="translation">Sebelum menggunakan rumus, kita memberi label pada angka.</span></p>
+                        </div>
+                        <p>For \( 2x^2 + 3x - 5 = 0 \): \( a = 2 \), \( b = 3 \), \( c = -5 \). <span class="translation">Untuk \( 2x^2 + 3x - 5 = 0 \): \( a = 2 \), \( b = 3 \), \( c = -5 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">The Plus/Minus (±) Magic</h2>
+                        <p class="translation">Keajaiban Plus/Minus (±)</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="100" height="100" viewBox="0 0 100 100">
+                                    <text x="50" y="60" font-size="40" fill="#8b5cf6" text-anchor="middle">±</text>
+                                </svg>
+                            </div>
+                            <p>The symbol \( \pm \) means we get TWO answers. One using plus (+), one using minus (-). <span class="translation">Simbol \( \pm \) berarti kita mendapat DUA jawaban. Satu menggunakan plus (+), satu menggunakan minus (-).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Setting Up Word Problems</h2>
+                        <p class="translation">Menyusun Soal Cerita</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="120" height="100" viewBox="0 0 120 100">
+                                    <!-- Notebook -->
+                                    <rect x="20" y="10" width="80" height="80" fill="#fff" stroke="#3b82f6" stroke-width="3" rx="5"/>
+                                    <line x1="30" y1="30" x2="90" y2="30" stroke="#ef4444" stroke-width="2"/>
+                                    <line x1="30" y1="50" x2="90" y2="50" stroke="#ef4444" stroke-width="2"/>
+                                    <line x1="30" y1="70" x2="70" y2="70" stroke="#ef4444" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <p>Read the story carefully. Identify the numbers and what "x" represents. <span class="translation">Baca cerita dengan teliti. Identifikasi angka dan apa yang diwakili "x".</span></p>
+                        </div>
+                        <p>"The length is \( x \), width is \( x-2 \), area is 15." Equation: \( x(x-2) = 15 \). <span class="translation">"Panjangnya \( x \), lebarnya \( x-2 \), luasnya 15." Persamaan: \( x(x-2) = 15 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Checking Your Answers</h2>
+                        <p class="translation">Mengecek Jawabanmu</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="100" height="100" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="#10b981" opacity="0.2"/>
+                                    <path d="M30,50 L45,65 L70,35" stroke="#10b981" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <p>Always check! If you found \( x = 3 \), put it back in the equation. \( 3^2 + 2(3) = 9 + 6 = 15 \). Correct! <span class="translation">Selalu cek! Jika kamu menemukan \( x = 3 \), masukkan kembali ke persamaan. \( 3^2 + 2(3) = 9 + 6 = 15 \). Benar!</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Real-World Meaning of Roots</h2>
+                        <p class="translation">Arti Akar di Dunia Nyata</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <path d="M10,10 Q75,120 140,10" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                    <line x1="0" y1="90" x2="140" y2="90" stroke="#333" stroke-width="2"/>
+                                    <circle cx="30" cy="90" r="5" fill="#ef4444"/>
+                                    <text x="30" y="105" font-size="10" text-anchor="middle" fill="#333">Start (Mulai)</text>
+                                    <circle cx="120" cy="90" r="5" fill="#ef4444"/>
+                                    <text x="120" y="105" font-size="10" text-anchor="middle" fill="#333">Land (Mendarat)</text>
+                                </svg>
+                            </div>
+                            <p>In a throw ball problem, the roots are the times when the ball is on the ground. <span class="translation">Pada masalah melempar bola, akar adalah waktu ketika bola berada di tanah.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: CONSOLIDATION & REFLECTION         -->
+            <!-- ========================================== -->
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Consolidation & Reflection</h2>
+                    <p class="translation">Konsolidasi & Refleksi</p>
+                    <p>You have finished the learning journey about Quadratic Equations. <span class="translation">Anda telah menyelesaikan perjalanan belajar tentang Persamaan Kuadrat.</span></p>
+                    <p class="mt-2">Remember: <span class="katex">\( ax^2 + bx + c = 0 \)</span>. <span class="translation">Ingat: \( ax^2 + bx + c = 0 \).</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Go to learn.algonova.id <span class="translation text-sm italic">Pergi ke learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+
+            <!-- Pagination Bar -->
+			</div>
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Quadratic Equations</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+    
+    <script>
+        // ====== MATH QUESTIONS DATA (PART 1) ======
+        const questions = {
+            // SPIRAL REVIEW WARM-UP TASKS (Variables & Linear Equations)
+            "w-task1": { q: "If \\( x = 5 \\), what is the value of \\( x + 3 \\)?", q_trans: "Jika \\( x = 5 \\), berapakah nilai dari \\( x + 3 \\)?", opts: ["\\( 2 \\)", "\\( 5 \\)", "\\( 8 \\)", "\\( 15 \\)", "\\( 53 \\)"], ans: "\\( 8 \\)", exp: "Substitute \\( x \\) with 5. The equation becomes \\( 5 + 3 \\). Adding them together gives 8.", exp_trans: "Ganti \\( x \\) dengan 5. Persamaannya menjadi \\( 5 + 3 \\). Menambahkan mereka menghasilkan 8." },
+            "w-task2": { q: "Solve for \\( x \\): \\( x - 4 = 10 \\).", q_trans: "Selesaikan untuk \\( x \\): \\( x - 4 = 10 \\).", opts: ["\\( 6 \\)", "\\( 14 \\)", "\\( 40 \\)", "\\( -6 \\)", "\\( -14 \\)"], ans: "\\( 14 \\)", exp: "To find \\( x \\), we must cancel the -4. We do this by adding 4 to both sides. \\( x = 10 + 4 \\). So, \\( x = 14 \\).", exp_trans: "Untuk mencari \\( x \\), kita harus menghilangkan -4. Lakukan dengan menambahkan 4 ke kedua sisi. \\( x = 10 + 4 \\). Jadi, \\( x = 14 \\)." },
+            "w-task3": { q: "Ali has some marbles. He buys 5 more. Now he has 12. Which equation shows this?", q_trans: "Ali punya beberapa kelereng. Dia membeli 5 lagi. Sekarang dia punya 12. Persamaan manakah yang menunjukkan ini?", opts: ["\\( x - 5 = 12 \\)", "\\( x + 5 = 12 \\)", "\\( 5x = 12 \\)", "\\( x / 5 = 12 \\)", "\\( x = 5 + 12 \\)"], ans: "\\( x + 5 = 12 \\)", exp: "Let initial marbles be \\( x \\). He adds 5 (\\( x + 5 \\)). The total is 12. So, \\( x + 5 = 12 \\).", exp_trans: "Misalkan kelereng awal adalah \\( x \\). Dia menambah 5 (\\( x + 5 \\)). Totalnya 12. Jadi, \\( x + 5 = 12 \\)." },
+            "w-task4": { q: "Solve for \\( x \\): \\( 2x = 10 \\).", q_trans: "Selesaikan untuk \\( x \\): \\( 2x = 10 \\).", opts: ["\\( 5 \\)", "\\( 8 \\)", "\\( 12 \\)", "\\( 20 \\)", "\\( 2 \\)"], ans: "\\( 5 \\)", exp: "Since \\( 2 \\times x = 10 \\), we must divide both sides by 2 to isolate \\( x \\). \\( x = 10 / 2 \\). So, \\( x = 5 \\).", exp_trans: "Karena \\( 2 \\times x = 10 \\), kita harus membagi kedua sisi dengan 2 untuk mengisolasi \\( x \\). \\( x = 10 / 2 \\). Jadi, \\( x = 5 \\)." },
+            "w-task5": { q: "A box weighs \\( y \\) kg. Another box weighs 3 kg. Total weight is 15 kg. What is \\( y \\)?", q_trans: "Sebuah kotak beratnya \\( y \\) kg. Kotak lain beratnya 3 kg. Total berat 15 kg. Berapakah \\( y \\)?", opts: ["\\( 5 \\text{ kg} \\)", "\\( 12 \\text{ kg} \\)", "\\( 18 \\text{ kg} \\)", "\\( 45 \\text{ kg} \\)", "\\( 10 \\text{ kg} \\)"], ans: "\\( 12 \\text{ kg} \\)", exp: "The equation is \\( y + 3 = 15 \\). Subtract 3 from both sides: \\( y = 15 - 3 \\). \\( y = 12 \\) kg.", exp_trans: "Persamaannya \\( y + 3 = 15 \\). Kurangi 3 dari kedua sisi: \\( y = 15 - 3 \\). \\( y = 12 \\) kg." },
+            "w-task6": { q: "What is the value of \\( 4^2 \\) (four squared)?", q_trans: "Berapakah nilai dari \\( 4^2 \\) (empat kuadrat)?", opts: ["\\( 8 \\)", "\\( 16 \\)", "\\( 12 \\)", "\\( 64 \\)", "\\( 2 \\)"], ans: "\\( 16 \\)", exp: "Squaring a number means multiplying it by itself. \\( 4^2 = 4 \\times 4 = 16 \\).", exp_trans: "Mengkuadratkan angka berarti mengalikannya dengan dirinya sendiri. \\( 4^2 = 4 \\times 4 = 16 \\)." },
+            "w-task7": { q: "A square garden has a side length of 5 meters. What is its area?", q_trans: "Taman berbentuk persegi memiliki panjang sisi 5 meter. Berapakah luasnya?", opts: ["\\( 10 \\text{ m}^2 \\)", "\\( 20 \\text{ m}^2 \\)", "\\( 25 \\text{ m}^2 \\)", "\\( 50 \\text{ m}^2 \\)", "\\( 5 \\text{ m}^2 \\)"], ans: "\\( 25 \\text{ m}^2 \\)", exp: "Area of a square = side \\( \\times \\) side. Area = \\( 5 \\times 5 = 5^2 = 25 \\) m\\( ^2 \\).", exp_trans: "Luas persegi = sisi \\( \\times \\) sisi. Luas = \\( 5 \\times 5 = 5^2 = 25 \\) m\\( ^2 \\)." },
+            "w-task8": { q: "What is the square root of 36? (\\( \\sqrt{36} \\))", q_trans: "Berapakah akar kuadrat dari 36? (\\( \\sqrt{36} \\))", opts: ["\\( 6 \\)", "\\( 12 \\)", "\\( 18 \\)", "\\( 9 \\)", "\\( 4 \\)"], ans: "\\( 6 \\)", exp: "Square root asks: 'What number times itself equals 36?'. Since \\( 6 \\times 6 = 36 \\), the square root is 6.", exp_trans: "Akar kuadrat bertanya: 'Angka berapa kali dirinya sendiri sama dengan 36?'. Karena \\( 6 \\times 6 = 36 \\), akar kuadratnya adalah 6." },
+            "w-task9": { q: "A square room has an area of 49 m\\( ^2 \\). What is the length of one side?", q_trans: "Ruang persegi memiliki luas 49 m\\( ^2 \\). Berapakah panjang satu sisinya?", opts: ["\\( 6 \\text{ m} \\)", "\\( 7 \\text{ m} \\)", "\\( 8 \\text{ m} \\)", "\\( 9 \\text{ m} \\)", "\\( 12 \\text{ m} \\)"], ans: "\\( 7 \\text{ m} \\)", exp: "Area = side\\( ^2 \\). So, side = \\( \\sqrt{\\text{Area}} \\). Side = \\( \\sqrt{49} = 7 \\) m. (Because \\( 7 \\times 7 = 49 \\)).", exp_trans: "Luas = sisi\\( ^2 \\). Jadi, sisi = \\( \\sqrt{\\text{Luas}} \\). Sisi = \\( \\sqrt{49} = 7 \\) m. (Karena \\( 7 \\times 7 = 49 \\))." },
+            "w-task10": { q: "If \\( y = x^2 \\), find \\( y \\) when \\( x = 3 \\).", q_trans: "Jika \\( y = x^2 \\), temukan \\( y \\) ketika \\( x = 3 \\).", opts: ["\\( 6 \\)", "\\( 9 \\)", "\\( 12 \\)", "\\( 3 \\)", "\\( 27 \\)"], ans: "\\( 9 \\)", exp: "Substitute \\( x = 3 \\) into the equation. \\( y = 3^2 \\). \\( y = 3 \\times 3 = 9 \\).", exp_trans: "Substitusi \\( x = 3 \\) ke dalam persamaan. \\( y = 3^2 \\). \\( y = 3 \\times 3 = 9 \\)." },
+
+            // INTRODUCTION & REAL-WORLD TASKS (Parabolas & Areas)
+            "i-task1": { q: "When you throw a ball in the air, what shape does its path make?", q_trans: "Saat kamu melempar bola ke udara, bentuk apa yang dibuat oleh jalurnya?", opts: ["A straight line", "A circle", "A triangle", "A parabola (U-shape)", "A square"], ans: "A parabola (U-shape)", exp: "Gravity pulls the ball down, making it slow down, stop, and fall. This curved path is called a parabola.", exp_trans: "Gravitasi menarik bola ke bawah, membuatnya melambat, berhenti, dan jatuh. Jalur melengkung ini disebut parabola." },
+            "i-task2": { q: "If a ball's height is given by a curve, when does it hit the ground? (Let height be y)", q_trans: "Jika ketinggian bola diberikan oleh lengkungan, kapan ia menyentuh tanah? (Misalkan ketinggian adalah y)", opts: ["When \\( y \\) is highest", "When \\( y = 0 \\)", "When \\( y = 10 \\)", "When \\( y \\) is negative", "Never"], ans: "When \\( y = 0 \\)", exp: "The ground represents zero height. So, the ball hits the ground when its height \\( y \\) equals 0.", exp_trans: "Tanah mewakili ketinggian nol. Jadi, bola menyentuh tanah saat ketinggiannya \\( y \\) sama dengan 0." },
+            "i-task3": { q: "A rectangle has length \\( x \\) and width \\( x \\). What is the area?", q_trans: "Persegi panjang memiliki panjang \\( x \\) dan lebar \\( x \\). Berapakah luasnya?", opts: ["\\( 2x \\)", "\\( x^2 \\)", "\\( x^3 \\)", "\\( 4x \\)", "\\( x/2 \\)"], ans: "\\( x^2 \\)", exp: "Area of rectangle = length \\( \\times \\) width. Here, Area = \\( x \\times x = x^2 \\). This is a quadratic relationship.", exp_trans: "Luas persegi panjang = panjang \\( \\times \\) lebar. Di sini, Luas = \\( x \\times x = x^2 \\). Ini adalah hubungan kuadrat." },
+            "i-task4": { q: "A rectangle has length \\( x+2 \\) and width \\( x \\). Which expression gives the area?", q_trans: "Persegi panjang memiliki panjang \\( x+2 \\) dan lebar \\( x \\). Ekspresi manakah yang memberikan luasnya?", opts: ["\\( x + 2 \\)", "\\( 2x + 2 \\)", "\\( x^2 + 2 \\)", "\\( x^2 + 2x \\)", "\\( x(x-2) \\)"], ans: "\\( x^2 + 2x \\)", exp: "Area = \\( \\text{length} \\times \\text{width} = (x+2) \\times x \\). Using the distributive property (rainbow method), \\( x \\cdot x = x^2 \\) and \\( 2 \\cdot x = 2x \\). So, Area = \\( x^2 + 2x \\).", exp_trans: "Luas = \\( \\text{panjang} \\times \\text{lebar} = (x+2) \\times x \\). Menggunakan sifat distributif (metode pelangi), \\( x \\cdot x = x^2 \\) dan \\( 2 \\cdot x = 2x \\). Jadi, Luas = \\( x^2 + 2x \\)." },
+            "i-task5": { q: "If the area of a rectangle is \\( x^2 + 2x \\) and \\( x = 3 \\), what is the area?", q_trans: "Jika luas persegi panjang adalah \\( x^2 + 2x \\) dan \\( x = 3 \\), berapakah luasnya?", opts: ["\\( 9 \\)", "\\( 12 \\)", "\\( 15 \\)", "\\( 6 \\)", "\\( 5 \\)"], ans: "\\( 15 \\)", exp: "Substitute \\( x = 3 \\). Area = \\( 3^2 + 2(3) = 9 + 6 = 15 \\).", exp_trans: "Substitusi \\( x = 3 \\). Luas = \\( 3^2 + 2(3) = 9 + 6 = 15 \\)." },
+            "i-task6": { q: "Look at the equation \\( y = x^2 \\). Is the curve a smile (\\(\\cup\\)) or a frown (\\(\\cap\\))?", q_trans: "Lihat persamaan \\( y = x^2 \\). Apakah lengkungnya tersenyum (\\(\\cup\\)) atau mengernyit (\\(\\cap\\))?", opts: ["Frown (\\(\\cap\\))", "Smile (\\(\\cup\\))", "Flat line", "Circle", "Zigzag"], ans: "Smile (\\(\\cup\\))", exp: "Because the \\( x^2 \\) term is positive (\\( +1x^2 \\)), the parabola opens upwards, looking like a smile.", exp_trans: "Karena suku \\( x^2 \\) positif (\\( +1x^2 \\)), parabola terbuka ke atas, terlihat seperti senyum." },
+            "i-task7": { q: "Look at the equation \\( y = -x^2 \\). Is the curve a smile (\\(\\cup\\)) or a frown (\\(\\cap\\))?", q_trans: "Lihat persamaan \\( y = -x^2 \\). Apakah lengkungnya tersenyum (\\(\\cup\\)) atau mengernyit (\\(\\cap\\))?", opts: ["Frown (\\(\\cap\\))", "Smile (\\(\\cup\\))", "Flat line", "Circle", "Vertical line"], ans: "Frown (\\(\\cap\\))", exp: "Because the \\( x^2 \\) term is negative (\\( -1x^2 \\)), the parabola opens downwards, looking like a frown.", exp_trans: "Karena suku \\( x^2 \\) negatif (\\( -1x^2 \\)), parabola terbuka ke bawah, terlihat seperti mengernyit." },
+            "i-task8": { q: "A rocket's height is \\( y = -x^2 + 10x \\). What kind of curve does it make?", q_trans: "Ketinggian roket adalah \\( y = -x^2 + 10x \\). Lengkungan apa yang dibuatnya?", opts: ["Smile", "Frown", "Straight line up", "Straight line down", "Circle"], ans: "Frown", exp: "The number in front of \\( x^2 \\) is negative (-1). So, it makes a frown shape. This makes sense as the rocket goes up, then falls down.", exp_trans: "Angka di depan \\( x^2 \\) negatif (-1). Jadi, ia membuat bentuk mengernyit. Ini masuk akal karena roket naik, lalu jatuh." },
+            "i-task9": { q: "If a ball is thrown and its path is \\( y = -x^2 + 4 \\). What is the value of \\( y \\) when it hits the ground?", q_trans: "Jika sebuah bola dilempar dan jalurnya \\( y = -x^2 + 4 \\). Berapakah nilai \\( y \\) saat menyentuh tanah?", opts: ["\\( 4 \\)", "\\( 2 \\)", "\\( -2 \\)", "\\( 0 \\)", "\\( 1 \\)"], ans: "\\( 0 \\)", exp: "When any object hits the ground, its height is 0. So \\( y = 0 \\).", exp_trans: "Saat benda menyentuh tanah, ketinggiannya adalah 0. Jadi \\( y = 0 \\)." },
+            "i-task10": { q: "Which of the following equations represents a parabola?", q_trans: "Manakah dari persamaan berikut yang mewakili parabola?", opts: ["\\( y = 2x + 1 \\)", "\\( y = x^2 - 5 \\)", "\\( y = 1/x \\)", "\\( x + y = 10 \\)", "\\( y = 5 \\)"], ans: "\\( y = x^2 - 5 \\)", exp: "A parabola is represented by a quadratic equation. A quadratic equation must have an \\( x^2 \\) term. Only \\( y = x^2 - 5 \\) has it.", exp_trans: "Parabola diwakili oleh persamaan kuadrat. Persamaan kuadrat harus memiliki suku \\( x^2 \\). Hanya \\( y = x^2 - 5 \\) yang memilikinya." },
+
+            // REVIEW OF PRIOR KNOWLEDGE TASKS (Expanding & Standard Form)
+            "r-task1": { q: "Expand \\( x(x + 4) \\).", q_trans: "Uraikan \\( x(x + 4) \\).", opts: ["\\( x^2 + 4 \\)", "\\( 2x + 4 \\)", "\\( x^2 + 4x \\)", "\\( x^2 - 4x \\)", "\\( x^2 + 16 \\)"], ans: "\\( x^2 + 4x \\)", exp: "Multiply \\( x \\) by everything inside the bracket. \\( x \\cdot x = x^2 \\). \\( x \\cdot 4 = 4x \\). Result: \\( x^2 + 4x \\).", exp_trans: "Kalikan \\( x \\) dengan semua di dalam kurung. \\( x \\cdot x = x^2 \\). \\( x \\cdot 4 = 4x \\). Hasil: \\( x^2 + 4x \\)." },
+            "r-task2": { q: "Expand \\( 2x(x - 3) \\).", q_trans: "Uraikan \\( 2x(x - 3) \\).", opts: ["\\( 2x^2 - 3 \\)", "\\( 2x^2 - 6x \\)", "\\( 2x^2 + 6x \\)", "\\( x^2 - 6 \\)", "\\( 2x - 6 \\)"], ans: "\\( 2x^2 - 6x \\)", exp: "Multiply \\( 2x \\) by \\( x \\) to get \\( 2x^2 \\). Multiply \\( 2x \\) by \\( -3 \\) to get \\( -6x \\). Result: \\( 2x^2 - 6x \\).", exp_trans: "Kalikan \\( 2x \\) dengan \\( x \\) untuk mendapat \\( 2x^2 \\). Kalikan \\( 2x \\) dengan \\( -3 \\) untuk mendapat \\( -6x \\). Hasil: \\( 2x^2 - 6x \\)." },
+            "r-task3": { q: "A rectangle has width \\( x \\) and length \\( x+5 \\). What is the expanded form of its area?", q_trans: "Persegi panjang memiliki lebar \\( x \\) dan panjang \\( x+5 \\). Berapakah bentuk luasnya yang diuraikan?", opts: ["\\( x^2 + 5 \\)", "\\( 2x + 5 \\)", "\\( x^2 + 5x \\)", "\\( x^2 - 5x \\)", "\\( x^2 + 25 \\)"], ans: "\\( x^2 + 5x \\)", exp: "Area = width \\( \\times \\) length = \\( x(x+5) \\). Multiply \\( x \\cdot x = x^2 \\) and \\( x \\cdot 5 = 5x \\). Area = \\( x^2 + 5x \\).", exp_trans: "Luas = lebar \\( \\times \\) panjang = \\( x(x+5) \\). Kalikan \\( x \\cdot x = x^2 \\) dan \\( x \\cdot 5 = 5x \\). Luas = \\( x^2 + 5x \\)." },
+            "r-task4": { q: "Which of the following is a quadratic equation?", q_trans: "Manakah dari berikut ini yang merupakan persamaan kuadrat?", opts: ["\\( 3x - 5 = 10 \\)", "\\( x^2 + 5x + 6 = 0 \\)", "\\( y = 1/x \\)", "\\( x^3 - 2x = 0 \\)", "\\( 2(x + 1) = 4 \\)"], ans: "\\( x^2 + 5x + 6 = 0 \\)", exp: "A quadratic equation must have a variable squared (like \\( x^2 \\)) as its highest power, and it must equal something (usually 0).", exp_trans: "Persamaan kuadrat harus memiliki variabel yang dikuadratkan (seperti \\( x^2 \\)) sebagai pangkat tertingginya, dan harus sama dengan sesuatu (biasanya 0)." },
+            "r-task5": { q: "In the equation \\( 3x^2 + 2x - 7 = 0 \\), what is the value of \\( a \\)?", q_trans: "Pada persamaan \\( 3x^2 + 2x - 7 = 0 \\), berapakah nilai \\( a \\)?", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( -7 \\)", "\\( 0 \\)"], ans: "\\( 3 \\)", exp: "The standard form is \\( ax^2 + bx + c = 0 \\). \\( a \\) is the number in front of \\( x^2 \\). Here, it is 3.", exp_trans: "Bentuk standarnya \\( ax^2 + bx + c = 0 \\). \\( a \\) adalah angka di depan \\( x^2 \\). Di sini, angkanya 3." },
+            "r-task6": { q: "In the equation \\( 5x^2 - 4x = 0 \\), what is the value of \\( b \\)?", q_trans: "Pada persamaan \\( 5x^2 - 4x = 0 \\), berapakah nilai \\( b \\)?", opts: ["\\( 5 \\)", "\\( 4 \\)", "\\( -4 \\)", "\\( 0 \\)", "\\( -5 \\)"], ans: "\\( -4 \\)", exp: "\\( b \\) is the number in front of \\( x \\). Don't forget the negative sign! Since it is \\( -4x \\), \\( b = -4 \\).", exp_trans: "\\( b \\) adalah angka di depan \\( x \\). Jangan lupa tanda negatifnya! Karena itu \\( -4x \\), maka \\( b = -4 \\)." },
+            "r-task7": { q: "In the equation \\( x^2 - 9 = 0 \\), what is the value of \\( c \\)?", q_trans: "Pada persamaan \\( x^2 - 9 = 0 \\), berapakah nilai \\( c \\)?", opts: ["\\( 1 \\)", "\\( 0 \\)", "\\( 9 \\)", "\\( -9 \\)", "\\( -1 \\)"], ans: "\\( -9 \\)", exp: "\\( c \\) is the constant (the number without any \\( x \\)). Here, the number is -9. \\( b \\) is 0 because there is no \\( x \\) term.", exp_trans: "\\( c \\) adalah konstanta (angka tanpa \\( x \\)). Di sini, angkanya -9. \\( b \\) adalah 0 karena tidak ada suku \\( x \\)." },
+            "r-task8": { q: "Rearrange \\( x^2 + 5x = 10 \\) into standard form (\\( ax^2 + bx + c = 0 \\)).", q_trans: "Susun ulang \\( x^2 + 5x = 10 \\) menjadi bentuk standar (\\( ax^2 + bx + c = 0 \\)).", opts: ["\\( x^2 + 5x + 10 = 0 \\)", "\\( x^2 + 5x - 10 = 0 \\)", "\\( 10 = x^2 + 5x \\)", "\\( x^2 - 5x = 10 \\)", "\\( x^2 + 15 = 0 \\)"], ans: "\\( x^2 + 5x - 10 = 0 \\)", exp: "To make the right side 0, subtract 10 from both sides. \\( x^2 + 5x - 10 = 0 \\).", exp_trans: "Untuk membuat sisi kanan menjadi 0, kurangi 10 dari kedua sisi. \\( x^2 + 5x - 10 = 0 \\)." },
+            "r-task9": { q: "A field has area \\( x(x+3) = 10 \\). Expanded and set to 0, what is the equation?", q_trans: "Lapangan memiliki luas \\( x(x+3) = 10 \\). Diuraikan dan diset ke 0, apakah persamaannya?", opts: ["\\( x^2 + 3 = 10 \\)", "\\( x^2 + 3x - 10 = 0 \\)", "\\( x^2 + 3x + 10 = 0 \\)", "\\( x^2 - 3x - 10 = 0 \\)", "\\( x^2 + 13x = 0 \\)"], ans: "\\( x^2 + 3x - 10 = 0 \\)", exp: "First expand: \\( x^2 + 3x = 10 \\). Then subtract 10 from both sides to make it 0: \\( x^2 + 3x - 10 = 0 \\).", exp_trans: "Pertama uraikan: \\( x^2 + 3x = 10 \\). Lalu kurangi 10 dari kedua sisi untuk menjadikannya 0: \\( x^2 + 3x - 10 = 0 \\)." },
+            "r-task10": { q: "The roots of an equation are the points where the curve crosses the x-axis. What is the y-value at these points?", q_trans: "Akar persamaan adalah titik di mana lengkungan memotong sumbu-x. Berapakah nilai y pada titik-titik ini?", opts: ["\\( y = 1 \\)", "\\( y = -1 \\)", "\\( y = 0 \\)", "\\( y = 10 \\)", "\\( y \\text{ is max} \\)"], ans: "\\( y = 0 \\)", exp: "The x-axis is the line where y = 0. So roots are found by setting \\( y = 0 \\), which means solving \\( ax^2 + bx + c = 0 \\).", exp_trans: "Sumbu-x adalah garis di mana y = 0. Jadi akar ditemukan dengan menetapkan \\( y = 0 \\), yang berarti menyelesaikan \\( ax^2 + bx + c = 0 \\)." },
+
+            // PROBLEM INTRODUCTION TASKS (Factoring & Zero Rule)
+            "p-task1": { q: "Factor \\( x^2 + 5x + 6 \\). (Find two numbers that multiply to 6 and add to 5).", q_trans: "Faktorkan \\( x^2 + 5x + 6 \\). (Cari dua angka yang jika dikali hasilnya 6 dan jika ditambah hasilnya 5).", opts: ["\\( (x+1)(x+6) \\)", "\\( (x+2)(x+3) \\)", "\\( (x-2)(x-3) \\)", "\\( (x+5)(x+1) \\)", "\\( (x+2)(x+4) \\)"], ans: "\\( (x+2)(x+3) \\)", exp: "The numbers 2 and 3 work because \\( 2 \\times 3 = 6 \\) and \\( 2 + 3 = 5 \\). So the factors are \\( (x+2)(x+3) \\).", exp_trans: "Angka 2 dan 3 cocok karena \\( 2 \\times 3 = 6 \\) dan \\( 2 + 3 = 5 \\). Jadi faktornya \\( (x+2)(x+3) \\)." },
+            "p-task2": { q: "Factor \\( x^2 + 7x + 12 \\).", q_trans: "Faktorkan \\( x^2 + 7x + 12 \\).", opts: ["\\( (x+1)(x+12) \\)", "\\( (x+2)(x+6) \\)", "\\( (x+3)(x+4) \\)", "\\( (x-3)(x-4) \\)", "\\( (x+5)(x+2) \\)"], ans: "\\( (x+3)(x+4) \\)", exp: "We need numbers that multiply to 12 and add to 7. \\( 3 \\times 4 = 12 \\) and \\( 3 + 4 = 7 \\). Factors are \\( (x+3)(x+4) \\).", exp_trans: "Kita butuh angka yang dikali 12 dan ditambah 7. \\( 3 \\times 4 = 12 \\) dan \\( 3 + 4 = 7 \\). Faktornya \\( (x+3)(x+4) \\)." },
+            "p-task3": { q: "A rectangle has area \\( x^2 + 8x + 15 \\). What are the length and width?", q_trans: "Persegi panjang memiliki luas \\( x^2 + 8x + 15 \\). Berapakah panjang dan lebarnya?", opts: ["\\( x+1 \\text{ and } x+15 \\)", "\\( x+3 \\text{ and } x+5 \\)", "\\( x+2 \\text{ and } x+6 \\)", "\\( x-3 \\text{ and } x-5 \\)", "\\( x+4 \\text{ and } x+4 \\)"], ans: "\\( x+3 \\text{ and } x+5 \\)", exp: "We factor \\( x^2 + 8x + 15 \\). Numbers that multiply to 15 and add to 8 are 3 and 5. So the sides are \\( (x+3) \\) and \\( (x+5) \\).", exp_trans: "Kita faktorkan \\( x^2 + 8x + 15 \\). Angka yang dikali 15 dan ditambah 8 adalah 3 dan 5. Jadi sisinya \\( (x+3) \\) dan \\( (x+5) \\)." },
+            "p-task4": { q: "If \\( (x-2)(x+5) = 0 \\), what are the possible values of \\( x \\)? (Zero rule)", q_trans: "Jika \\( (x-2)(x+5) = 0 \\), apakah nilai \\( x \\) yang mungkin? (Aturan nol)", opts: ["\\( x = 2 \\text{ or } x = 5 \\)", "\\( x = -2 \\text{ or } x = -5 \\)", "\\( x = 2 \\text{ or } x = -5 \\)", "\\( x = -2 \\text{ or } x = 5 \\)", "\\( x = 0 \\)"], ans: "\\( x = 2 \\text{ or } x = -5 \\)", exp: "If things multiply to 0, one must be 0. Set each bracket to 0: \\( x-2=0 \\Rightarrow x=2 \\). \\( x+5=0 \\Rightarrow x=-5 \\).", exp_trans: "Jika perkalian sama dengan 0, salah satunya harus 0. Setiap kurung menjadi 0: \\( x-2=0 \\Rightarrow x=2 \\). \\( x+5=0 \\Rightarrow x=-5 \\)." },
+            "p-task5": { q: "Solve \\( x^2 - 4x + 4 = 0 \\) by factoring. (Clue: What multiplies to 4 and adds to -4?)", q_trans: "Selesaikan \\( x^2 - 4x + 4 = 0 \\) dengan faktorisasi. (Petunjuk: Apa yang jika dikali 4 dan ditambah -4?)", opts: ["\\( x = 2 \\text{ or } x = -2 \\)", "\\( x = 4 \\text{ or } x = 1 \\)", "\\( x = 2 \\text{ (only one answer)} \\)", "\\( x = -2 \\text{ (only one answer)} \\)", "\\( x = 0 \\)"], ans: "\\( x = 2 \\text{ (only one answer)} \\)", exp: "The numbers are -2 and -2. \\( (-2) \\times (-2) = 4 \\), \\( (-2) + (-2) = -4 \\). So \\( (x-2)(x-2)=0 \\). Both give \\( x=2 \\).", exp_trans: "Angkanya -2 dan -2. \\( (-2) \\times (-2) = 4 \\), \\( (-2) + (-2) = -4 \\). Jadi \\( (x-2)(x-2)=0 \\). Keduanya memberi \\( x=2 \\)." },
+            "p-task6": { q: "A ball's path is given by \\( (x-1)(x-3) = 0 \\) (where x is time). When does it hit the ground?", q_trans: "Jalur bola diberikan oleh \\( (x-1)(x-3) = 0 \\) (x adalah waktu). Kapan ia menyentuh tanah?", opts: ["\\( 1 \\text{ sec and } 3 \\text{ sec} \\)", "\\( -1 \\text{ sec and } -3 \\text{ sec} \\)", "\\( 2 \\text{ sec only} \\)", "\\( 0 \\text{ sec} \\)", "\\( 4 \\text{ sec} \\)"], ans: "\\( 1 \\text{ sec and } 3 \\text{ sec} \\)", exp: "Set each bracket to 0. \\( x-1=0 \\Rightarrow x=1 \\). \\( x-3=0 \\Rightarrow x=3 \\). The ball is on the ground at 1 second and 3 seconds.", exp_trans: "Setiap kurung jadi 0. \\( x-1=0 \\Rightarrow x=1 \\). \\( x-3=0 \\Rightarrow x=3 \\). Bola di tanah pada detik 1 dan detik 3." },
+            "p-task7": { q: "Factor \\( x^2 - 16 \\) (Difference of two squares).", q_trans: "Faktorkan \\( x^2 - 16 \\) (Selisih dua kuadrat).", opts: ["\\( (x-4)(x-4) \\)", "\\( (x+4)(x+4) \\)", "\\( (x-4)(x+4) \\)", "\\( (x-8)(x+2) \\)", "\\( (x-16)(x+1) \\)"], ans: "\\( (x-4)(x+4) \\)", exp: "Both \\( x^2 \\) and 16 are perfect squares. \\( \\sqrt{x^2}=x \\), \\( \\sqrt{16}=4 \\). The formula is \\( a^2-b^2 = (a-b)(a+b) \\). So it is \\( (x-4)(x+4) \\).", exp_trans: "Baik \\( x^2 \\) maupun 16 adalah kuadrat sempurna. \\( \\sqrt{x^2}=x \\), \\( \\sqrt{16}=4 \\). Rumusnya \\( a^2-b^2 = (a-b)(a+b) \\). Jadi \\( (x-4)(x+4) \\)." },
+            "p-task8": { q: "Solve \\( x^2 - 25 = 0 \\).", q_trans: "Selesaikan \\( x^2 - 25 = 0 \\).", opts: ["\\( x = 5 \\text{ only} \\)", "\\( x = -5 \\text{ only} \\)", "\\( x = 5 \\text{ or } x = -5 \\)", "\\( x = 12.5 \\)", "\\( x = 0 \\)"], ans: "\\( x = 5 \\text{ or } x = -5 \\)", exp: "Factor it to \\( (x-5)(x+5)=0 \\). Setting each to zero gives \\( x=5 \\) and \\( x=-5 \\).", exp_trans: "Faktorkan menjadi \\( (x-5)(x+5)=0 \\). Menetapkan masing-masing ke nol memberikan \\( x=5 \\) dan \\( x=-5 \\)." },
+            "p-task9": { q: "A square garden of area \\( x^2 \\) is reduced by 49 m\\( ^2 \\). The equation is \\( x^2 - 49 = 0 \\). What is \\( x \\)?", q_trans: "Taman persegi luas \\( x^2 \\) dikurangi 49 m\\( ^2 \\). Persamaannya \\( x^2 - 49 = 0 \\). Berapakah \\( x \\)?", opts: ["\\( 7 \\text{ m} \\)", "\\( -7 \\text{ m} \\)", "\\( 49 \\text{ m} \\)", "\\( 7 \\text{ m or } -7 \\text{ m} \\)", "\\( 0 \\text{ m} \\)"], ans: "\\( 7 \\text{ m} \\)", exp: "Mathematically, \\( x \\) can be 7 or -7. However, in real life, a garden length cannot be negative. So we only take \\( x = 7 \\) m.", exp_trans: "Secara matematis, \\( x \\) bisa 7 atau -7. Namun, di dunia nyata, panjang taman tidak bisa negatif. Jadi kita ambil \\( x = 7 \\) m." },
+            "p-task10": { q: "Factor \\( x^2 - 9 = 0 \\) and find the roots.", q_trans: "Faktorkan \\( x^2 - 9 = 0 \\) dan temukan akarnya.", opts: ["\\( (x-3)(x-3), x=3 \\)", "\\( (x+3)(x+3), x=-3 \\)", "\\( (x-3)(x+3), x=3 \\text{ or } -3 \\)", "\\( (x-9)(x+1), x=9 \\text{ or } -1 \\)", "\\( (x-9)(x-1), x=9 \\text{ or } 1 \\)"], ans: "\\( (x-3)(x+3), x=3 \\text{ or } -3 \\)", exp: "It's a difference of squares: \\( x^2 - 3^2 \\). Factors are \\( (x-3)(x+3) \\). Roots are \\( x=3 \\) and \\( x=-3 \\).", exp_trans: "Ini selisih dua kuadrat: \\( x^2 - 3^2 \\). Faktornya \\( (x-3)(x+3) \\). Akarnya \\( x=3 \\) dan \\( x=-3 \\)." },
+
+            // GUIDED PRACTICE TASKS (Quadratic Formula)
+            "g-task1": { q: "Which of the following is the Quadratic Formula?", q_trans: "Manakah dari berikut ini yang merupakan Rumus Kuadrat?", opts: ["\\( x = -b \\pm \\sqrt{b^2 - 4ac} \\)", "\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", "\\( x = \\frac{-b \\pm \\sqrt{b - 4ac}}{2a} \\)", "\\( x = \\frac{-b \\pm b^2 - 4ac}{2a} \\)", "\\( x = \\frac{-b + \\sqrt{b^2 - 4ac}}{a} \\)"], ans: "\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", exp: "The correct formula is \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\). It solves any equation in the form \\( ax^2 + bx + c = 0 \\).", exp_trans: "Rumus yang benar adalah \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\). Ini menyelesaikan persamaan berbentuk \\( ax^2 + bx + c = 0 \\)." },
+            "g-task2": { q: "In the equation \\( 2x^2 + 3x - 5 = 0 \\), what are \\( a, b, \\) and \\( c \\)?", q_trans: "Pada persamaan \\( 2x^2 + 3x - 5 = 0 \\), berapakah \\( a, b, \\) dan \\( c \\)?", opts: ["\\( a=2, b=3, c=5 \\)", "\\( a=2, b=-3, c=-5 \\)", "\\( a=2, b=3, c=-5 \\)", "\\( a=3, b=2, c=-5 \\)", "\\( a=-5, b=3, c=2 \\)"], ans: "\\( a=2, b=3, c=-5 \\)", exp: "\\( a \\) is in front of \\( x^2 \\) (so 2). \\( b \\) is in front of \\( x \\) (so 3). \\( c \\) is the constant (so -5, don't forget the minus).", exp_trans: "\\( a \\) di depan \\( x^2 \\) (jadi 2). \\( b \\) di depan \\( x \\) (jadi 3). \\( c \\) adalah konstanta (jadi -5, jangan lupa minusnya)." },
+            "g-task3": { q: "For a bridge's path \\( x^2 + 5x + 6 = 0 \\), what is the value of \\( a \\)?", q_trans: "Untuk jalur jembatan \\( x^2 + 5x + 6 = 0 \\), berapakah nilai \\( a \\)?", opts: ["\\( 0 \\)", "\\( 1 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( -1 \\)"], ans: "\\( 1 \\)", exp: "If there is no number in front of \\( x^2 \\), it means there is an invisible 1. So \\( a = 1 \\).", exp_trans: "Jika tidak ada angka di depan \\( x^2 \\), berarti ada angka 1 yang tidak terlihat. Jadi \\( a = 1 \\)." },
+            "g-task4": { q: "Calculate the discriminant (\\( b^2 - 4ac \\)) for \\( x^2 + 5x + 6 = 0 \\).", q_trans: "Hitung diskriminan (\\( b^2 - 4ac \\)) untuk \\( x^2 + 5x + 6 = 0 \\).", opts: ["\\( 25 - 24 = 1 \\)", "\\( 5 - 24 = -19 \\)", "\\( 25 + 24 = 49 \\)", "\\( 25 \\)", "\\( 0 \\)"], ans: "\\( 25 - 24 = 1 \\)", exp: "Here \\( a=1, b=5, c=6 \\). Discriminant = \\( 5^2 - 4(1)(6) = 25 - 24 = 1 \\).", exp_trans: "Di sini \\( a=1, b=5, c=6 \\). Diskriminan = \\( 5^2 - 4(1)(6) = 25 - 24 = 1 \\)." },
+            "g-task5": { q: "What does the \\( \\pm \\) symbol mean in the quadratic formula?", q_trans: "Apa arti dari simbol \\( \\pm \\) dalam rumus kuadrat?", opts: ["You can choose plus or minus to get two answers", "It means plus or minus zero", "It means the answer is positive", "It means the answer is negative", "It is a typo"], ans: "You can choose plus or minus to get two answers", exp: "\\( \\pm \\) means 'plus or minus'. We calculate it twice: once with +, once with -. This gives us two roots.", exp_trans: "\\( \\pm \\) berarti 'plus atau minus'. Kita hitung dua kali: sekali dengan +, sekali dengan -. Ini memberi kita dua akar." },
+            "g-task6": { q: "Solve \\( x^2 + 4x - 5 = 0 \\) using the formula. What are the roots?", q_trans: "Selesaikan \\( x^2 + 4x - 5 = 0 \\) menggunakan rumus. Berapakah akarnya?", opts: ["\\( 1, -5 \\)", "\\( -1, 5 \\)", "\\( 1, 5 \\)", "\\( -1, -5 \\)", "\\( 2, -2.5 \\)"], ans: "\\( 1, -5 \\)", exp: "Here \\( a=1, b=4, c=-5 \\). Formula: \\( x = \\frac{-4 \\pm \\sqrt{16 - 4(1)(-5)}}{2} = \\frac{-4 \\pm \\sqrt{36}}{2} = \\frac{-4 \\pm 6}{2} \\). Plus: \\( 2/2=1 \\). Minus: \\( -10/2=-5 \\). Roots are 1 and -5.", exp_trans: "Di sini \\( a=1, b=4, c=-5 \\). Rumus: \\( x = \\frac{-4 \\pm \\sqrt{16 - 4(1)(-5)}}{2} = \\frac{-4 \\pm \\sqrt{36}}{2} = \\frac{-4 \\pm 6}{2} \\). Plus: \\( 2/2=1 \\). Minus: \\( -10/2=-5 \\). Akarnya 1 dan -5." },
+            "g-task7": { q: "A ball is thrown. Its height is \\( -x^2 + 2x + 3 = 0 \\). Find the roots (times it hits ground).", q_trans: "Bola dilempar. Ketinggiannya \\( -x^2 + 2x + 3 = 0 \\). Temukan akarnya (waktu saat menyentuh tanah).", opts: ["\\( 3, -1 \\)", "\\( -3, 1 \\)", "\\( 3, 1 \\)", "\\( -3, -1 \\)", "\\( 0, 2 \\)"], ans: "\\( 3, -1 \\)", exp: "\\( a=-1, b=2, c=3 \\). \\( x = \\frac{-2 \\pm \\sqrt{4 - 4(-1)(3)}}{-2} = \\frac{-2 \\pm \\sqrt{16}}{-2} = \\frac{-2 \\pm 4}{-2} \\). Plus: \\( 2/-2 = -1 \\). Minus: \\( -6/-2 = 3 \\). Roots are 3 and -1.", exp_trans: "\\( a=-1, b=2, c=3 \\). \\( x = \\frac{-2 \\pm \\sqrt{4 - 4(-1)(3)}}{-2} = \\frac{-2 \\pm \\sqrt{16}}{-2} = \\frac{-2 \\pm 4}{-2} \\). Plus: \\( 2/-2 = -1 \\). Minus: \\( -6/-2 = 3 \\). Akarnya 3 dan -1." },
+            "g-task8": { q: "Solve \\( 2x^2 - 8 = 0 \\) using the formula. What are the roots?", q_trans: "Selesaikan \\( 2x^2 - 8 = 0 \\) menggunakan rumus. Berapakah akarnya?", opts: ["\\( 2, -2 \\)", "\\( 4, -4 \\)", "\\( 8, -8 \\)", "\\( 0, 2 \\)", "\\( 2 \\text{ only} \\)"], ans: "\\( 2, -2 \\)", exp: "\\( a=2, b=0, c=-8 \\). \\( x = \\frac{0 \\pm \\sqrt{0 - 4(2)(-8)}}{4} = \\frac{\\pm \\sqrt{64}}{4} = \\frac{\\pm 8}{4} \\). Roots are \\( 2 \\) and \\( -2 \\).", exp_trans: "\\( a=2, b=0, c=-8 \\). \\( x = \\frac{0 \\pm \\sqrt{0 - 4(2)(-8)}}{4} = \\frac{\\pm \\sqrt{64}}{4} = \\frac{\\pm 8}{4} \\). Akarnya \\( 2 \\) dan \\( -2 \\)." },
+            "g-task9": { q: "Calculate the discriminant for \\( x^2 - 4x + 4 = 0 \\). What does it mean?", q_trans: "Hitung diskriminan untuk \\( x^2 - 4x + 4 = 0 \\). Apa artinya?", opts: ["\\( 0 \\text{, means two real roots} \\)", "\\( 16 - 16 = 0 \\text{, means one real root} \\)", "\\( 16 - 16 = 0 \\text{, means two real roots} \\)", "\\( 16 \\text{, means two real roots} \\)", "\\( -16 \\text{, means no real roots} \\)"], ans: "\\( 16 - 16 = 0 \\text{, means one real root} \\)", exp: "\\( a=1, b=-4, c=4 \\). Discriminant = \\( (-4)^2 - 4(1)(4) = 16 - 16 = 0 \\). A discriminant of 0 means there is exactly ONE real root (the curve just touches the x-axis).", exp_trans: "\\( a=1, b=-4, c=4 \\). Diskriminan = \\( (-4)^2 - 4(1)(4) = 16 - 16 = 0 \\). Diskriminan 0 berarti ada SATU akar real (lengkungan hanya menyentuh sumbu-x)." },
+            "g-task10": { q: "Solve \\( x^2 - 6x + 9 = 0 \\). What is \\( x \\)?", q_trans: "Selesaikan \\( x^2 - 6x + 9 = 0 \\). Berapakah \\( x \\)?", opts: ["\\( 3 \\text{ and } -3 \\)", "\\( 3 \\text{ only} \\)", "\\( -3 \\text{ only} \\)", "\\( 9 \\text{ only} \\)", "\\( 6 \\text{ and } -6 \\)"], ans: "\\( 3 \\text{ only} \\)", exp: "As seen in the previous question, the discriminant is 0, so there is only one root. \\( x = \\frac{6 \\pm \\sqrt{0}}{2} = \\frac{6}{2} = 3 \\). So \\( x = 3 \\) only.", exp_trans: "Seperti yang terlihat di pertanyaan sebelumnya, diskriminannya 0, jadi hanya ada satu akar. \\( x = \\frac{6 \\pm \\sqrt{0}}{2} = \\frac{6}{2} = 3 \\). Jadi \\( x = 3 \\) saja." }
+        };
+
+        // ====== MATH QUESTIONS DATA (PART 2) ======
+        Object.assign(questions, {
+            // INDEPENDENT PRACTICE TASKS (Word Problems & Checking)
+            "ind-task1": { q: "A rectangle has width \\( x \\) and length \\( x+3 \\). The area is 28. What is the equation?", q_trans: "Persegi panjang memiliki lebar \\( x \\) dan panjang \\( x+3 \\). Luasnya 28. Berapakah persamaannya?", opts: ["\\( x + x + 3 = 28 \\)", "\\( x(x+3) = 28 \\)", "\\( 2x + 3 = 28 \\)", "\\( x^2 + 3 = 28 \\)", "\\( 3x = 28 \\)"], ans: "\\( x(x+3) = 28 \\)", exp: "Area = length \\( \\times \\) width. So, \\( x \\times (x+3) = 28 \\). This is the equation before expanding.", exp_trans: "Luas = panjang \\( \\times \\) lebar. Jadi, \\( x \\times (x+3) = 28 \\). Ini adalah persamaan sebelum diuraikan." },
+            "ind-task2": { q: "Expand and set to 0: \\( x(x+3) = 28 \\).", q_trans: "Uraikan dan set ke 0: \\( x(x+3) = 28 \\).", opts: ["\\( x^2 + 3x - 28 = 0 \\)", "\\( x^2 + 3x + 28 = 0 \\)", "\\( x^2 - 3x - 28 = 0 \\)", "\\( x^2 + 3 = 0 \\)", "\\( x^2 - 28 = 0 \\)"], ans: "\\( x^2 + 3x - 28 = 0 \\)", exp: "Expand: \\( x^2 + 3x = 28 \\). Subtract 28 from both sides: \\( x^2 + 3x - 28 = 0 \\).", exp_trans: "Uraikan: \\( x^2 + 3x = 28 \\). Kurangi 28 dari kedua sisi: \\( x^2 + 3x - 28 = 0 \\)." },
+            "ind-task3": { q: "Factor \\( x^2 + 3x - 28 = 0 \\). (Numbers that multiply to -28 and add to 3)", q_trans: "Faktorkan \\( x^2 + 3x - 28 = 0 \\). (Angka yang dikali -28 dan ditambah 3)", opts: ["\\( (x-4)(x+7) \\)", "\\( (x+4)(x-7) \\)", "\\( (x-4)(x-7) \\)", "\\( (x+4)(x+7) \\)", "\\( (x-1)(x+28) \\)"], ans: "\\( (x-4)(x+7) \\)", exp: "We need factors of -28 that add to 3. \\( -4 \\times 7 = -28 \\) and \\( -4 + 7 = 3 \\). So, \\( (x-4)(x+7) = 0 \\).", exp_trans: "Kita butuh faktor dari -28 yang jika ditambah hasilnya 3. \\( -4 \\times 7 = -28 \\) dan \\( -4 + 7 = 3 \\). Jadi, \\( (x-4)(x+7) = 0 \\)." },
+            "ind-task4": { q: "Solve \\( (x-4)(x+7) = 0 \\). What are the roots?", q_trans: "Selesaikan \\( (x-4)(x+7) = 0 \\). Berapakah akarnya?", opts: ["\\( 4, -7 \\)", "\\( -4, 7 \\)", "\\( 4, 7 \\)", "\\( -4, -7 \\)", "\\( 4, 0 \\)"], ans: "\\( 4, -7 \\)", exp: "Set each bracket to 0. \\( x-4=0 \\Rightarrow x=4 \\). \\( x+7=0 \\Rightarrow x=-7 \\).", exp_trans: "Setiap kurung jadi 0. \\( x-4=0 \\Rightarrow x=4 \\). \\( x+7=0 \\Rightarrow x=-7 \\)." },
+            "ind-task5": { q: "For the rectangle (area=28), if roots are \\( x=4 \\) and \\( x=-7 \\), which one is the actual width?", q_trans: "Untuk persegi panjang (luas=28), jika akarnya \\( x=4 \\) dan \\( x=-7 \\), manakah yang menjadi lebar sebenarnya?", opts: ["\\( -7 \\)", "\\( 4 \\)", "\\( 11 \\)", "\\( 0 \\)", "\\( \\text{Both} \\)"], ans: "\\( 4 \\)", exp: "In real life, length or width cannot be negative. So we reject \\( x = -7 \\). The width must be 4.", exp_trans: "Di dunia nyata, panjang atau lebar tidak bisa negatif. Jadi kita buang \\( x = -7 \\). Lebarnya pasti 4." },
+            "ind-task6": { q: "Check if \\( x = 3 \\) is a root of \\( x^2 - 5x + 6 = 0 \\).", q_trans: "Cek apakah \\( x = 3 \\) adalah akar dari \\( x^2 - 5x + 6 = 0 \\).", opts: ["Yes, because \\( 9 - 15 + 6 = 0 \\)", "No, because \\( 3 - 5 + 6 = 4 \\)", "Yes, because \\( 3^2 = 9 \\)", "No, because \\( 3 \\neq 0 \\)", "Cannot be determined"], ans: "Yes, because \\( 9 - 15 + 6 = 0 \\)", exp: "Substitute \\( x = 3 \\). \\( (3)^2 - 5(3) + 6 = 9 - 15 + 6 = -6 + 6 = 0 \\). Since it equals 0, it is a root.", exp_trans: "Substitusi \\( x = 3 \\). \\( (3)^2 - 5(3) + 6 = 9 - 15 + 6 = -6 + 6 = 0 \\). Karena sama dengan 0, ini adalah akar." },
+            "ind-task7": { q: "A ball's height is \\( y = x^2 - 6x + 8 \\). What does \\( x=2 \\) and \\( x=4 \\) represent?", q_trans: "Ketinggian bola adalah \\( y = x^2 - 6x + 8 \\). Apa yang diwakili \\( x=2 \\) dan \\( x=4 \\)?", opts: ["Max height", "Times the ball is on the ground", "Starting point", "Speed of the ball", "Color of the ball"], ans: "Times the ball is on the ground", exp: "The roots are 2 and 4. Roots mean \\( y=0 \\). \\( y \\) is height. So height is 0 at times \\( x=2 \\) and \\( x=4 \\) seconds.", exp_trans: "Akarnya 2 dan 4. Akar berarti \\( y=0 \\). \\( y \\) adalah ketinggian. Jadi ketinggian 0 pada waktu \\( x=2 \\) dan \\( x=4 \\) detik." },
+            "ind-task8": { q: "A photo frame is \\( x \\) cm wide and \\( x+2 \\) cm long. Area is 24 cm\\( ^2 \\). Find \\( x \\).", q_trans: "Bingkai foto lebar \\( x \\) cm dan panjang \\( x+2 \\) cm. Luasnya 24 cm\\( ^2 \\). Temukan \\( x \\).", opts: ["\\( 4 \\text{ cm} \\)", "\\( 6 \\text{ cm} \\)", "\\( 3 \\text{ cm} \\)", "\\( 8 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)"], ans: "\\( 4 \\text{ cm} \\)", exp: "Equation: \\( x(x+2) = 24 \\Rightarrow x^2 + 2x - 24 = 0 \\). Factors of -24 that add to 2 are 6 and -4. \\( (x+6)(x-4)=0 \\). Roots are -6 and 4. Width must be positive, so \\( x=4 \\) cm.", exp_trans: "Persamaan: \\( x(x+2) = 24 \\Rightarrow x^2 + 2x - 24 = 0 \\). Faktor dari -24 yang ditambah 2 adalah 6 dan -4. \\( (x+6)(x-4)=0 \\). Akar -6 dan 4. Lebar harus positif, jadi \\( x=4 \\) cm." },
+            "ind-task9": { q: "Which equation has NO real roots? (Hint: check discriminant \\( b^2-4ac \\))", q_trans: "Persamaan manakah yang TIDAK memiliki akar real? (Petunjuk: cek diskriminan \\( b^2-4ac \\))", opts: ["\\( x^2 - 4 = 0 \\)", "\\( x^2 + 5x + 6 = 0 \\)", "\\( x^2 + 1 = 0 \\)", "\\( x^2 - 5x = 0 \\)", "\\( x^2 = 0 \\)"], ans: "\\( x^2 + 1 = 0 \\)", exp: "For \\( x^2 + 1 = 0 \\), \\( a=1, b=0, c=1 \\). Discriminant = \\( 0^2 - 4(1)(1) = -4 \\). A negative discriminant means no real roots (the curve never touches the x-axis).", exp_trans: "Untuk \\( x^2 + 1 = 0 \\), \\( a=1, b=0, c=1 \\). Diskriminan = \\( 0^2 - 4(1)(1) = -4 \\). Diskriminan negatif berarti tidak ada akar real (lengkungan tidak pernah menyentuh sumbu-x)." },
+            "ind-task10": { q: "If the discriminant of a quadratic equation is 0, what does the parabola do?", q_trans: "Jika diskriminan persamaan kuadrat adalah 0, apa yang dilakukan parabola?", opts: ["Crosses the x-axis twice", "Never touches the x-axis", "Touches the x-axis exactly once", "Becomes a straight line", "Disappears"], ans: "Touches the x-axis exactly once", exp: "A discriminant of 0 means there is exactly one root. Graphically, the curve sits on the x-axis, touching it at its lowest/highest point.", exp_trans: "Diskriminan 0 berarti ada tepat satu akar. Secara grafis, lengkungan berada di sumbu-x, menyentuhnya di titik terendah/tertingginya." },
+
+            // TASK 1: BASIC CONCEPTS & IDENTIFICATION
+            "t1-task1": { q: "Which of the following is a quadratic equation?", q_trans: "Manakah dari berikut ini yang merupakan persamaan kuadrat?", opts: ["\\( y = 3x + 2 \\)", "\\( x^2 - 5x + 6 = 0 \\)", "\\( y = 1/x \\)", "\\( x^3 = 8 \\)", "\\( 2x - 4 = 10 \\)"], ans: "\\( x^2 - 5x + 6 = 0 \\)", exp: "A quadratic equation must have a variable squared (like \\( x^2 \\)) as its highest power, and equal zero (or another value).", exp_trans: "Persamaan kuadrat harus memiliki variabel berpangkat dua (seperti \\( x^2 \\)) sebagai pangkat tertingginya, dan sama dengan nol (atau nilai lain)." },
+            "t1-task2": { q: "In \\( 4x^2 + 7x - 3 = 0 \\), what is \\( a \\)?", q_trans: "Pada \\( 4x^2 + 7x - 3 = 0 \\), berapakah \\( a \\)?", opts: ["\\( 7 \\)", "\\( -3 \\)", "\\( 4 \\)", "\\( 2 \\)", "\\( 0 \\)"], ans: "\\( 4 \\)", exp: "In standard form \\( ax^2 + bx + c = 0 \\), \\( a \\) is the coefficient of \\( x^2 \\). Here it is 4.", exp_trans: "Pada bentuk standar \\( ax^2 + bx + c = 0 \\), \\( a \\) adalah koefisien dari \\( x^2 \\). Di sini angkanya 4." },
+            "t1-task3": { q: "In \\( x^2 - 8x = 0 \\), what is \\( c \\)?", q_trans: "Pada \\( x^2 - 8x = 0 \\), berapakah \\( c \\)?", opts: ["\\( 1 \\)", "\\( -8 \\)", "\\( 8 \\)", "\\( 0 \\)", "\\( -1 \\)"], ans: "\\( 0 \\)", exp: "\\( c \\) is the constant term (no \\( x \\)). Since there is no number at the end, \\( c = 0 \\).", exp_trans: "\\( c \\) adalah suku konstanta (tanpa \\( x \\)). Karena tidak ada angka di akhir, \\( c = 0 \\)." },
+            "t1-task4": { q: "Rearrange \\( x^2 = 5x - 6 \\) into standard form.", q_trans: "Susun ulang \\( x^2 = 5x - 6 \\) ke bentuk standar.", opts: ["\\( x^2 - 5x + 6 = 0 \\)", "\\( x^2 + 5x - 6 = 0 \\)", "\\( x^2 - 5x - 6 = 0 \\)", "\\( 0 = x^2 + 5x + 6 \\)", "\\( x^2 + 6 = 5x \\)"], ans: "\\( x^2 - 5x + 6 = 0 \\)", exp: "Move everything to the left side. Subtract \\( 5x \\) and add 6. \\( x^2 - 5x + 6 = 0 \\).", exp_trans: "Pindahkan semuanya ke sisi kiri. Kurangi \\( 5x \\) dan tambah 6. \\( x^2 - 5x + 6 = 0 \\)." },
+            "t1-task5": { q: "What is the highest power of \\( x \\) in a quadratic equation?", q_trans: "Berapakah pangkat tertinggi dari \\( x \\) pada persamaan kuadrat?", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 0 \\)", "\\( 4 \\)"], ans: "\\( 2 \\)", exp: "The word 'quadratic' comes from 'quad' meaning square, so the highest power is 2 (\\( x^2 \\)).", exp_trans: "Kata 'kuadrat' berasal dari 'quad' yang berarti persegi, jadi pangkat tertingginya adalah 2 (\\( x^2 \\))." },
+            "t1-task6": { q: "Expand \\( x(x-4) \\).", q_trans: "Uraikan \\( x(x-4) \\).", opts: ["\\( x^2 - 4 \\)", "\\( x^2 + 4x \\)", "\\( 2x - 4 \\)", "\\( x^2 - 4x \\)", "\\( x^2 - 16 \\)"], ans: "\\( x^2 - 4x \\)", exp: "Multiply \\( x \\) by \\( x \\) to get \\( x^2 \\). Multiply \\( x \\) by \\( -4 \\) to get \\( -4x \\). Result: \\( x^2 - 4x \\).", exp_trans: "Kalikan \\( x \\) dengan \\( x \\) untuk dapat \\( x^2 \\). Kalikan \\( x \\) dengan \\( -4 \\) untuk dapat \\( -4x \\). Hasil: \\( x^2 - 4x \\)." },
+            "t1-task7": { q: "The graph of a quadratic equation is called a?", q_trans: "Grafik dari persamaan kuadrat disebut?", opts: ["Line", "Circle", "Parabola", "Triangle", "Square"], ans: "Parabola", exp: "The U-shaped curve (smile or frown) drawn by a quadratic equation is called a parabola.", exp_trans: "Lengkungan berbentuk U (senyum atau mengernyit) yang digambar oleh persamaan kuadrat disebut parabola." },
+            "t1-task8": { q: "If \\( a > 0 \\) (positive), the parabola looks like a?", q_trans: "Jika \\( a > 0 \\) (positif), parabola terlihat seperti?", opts: ["Frown (\\(\\cap\\))", "Smile (\\(\\cup\\))", "Straight line", "Zigzag", "Circle"], ans: "Smile (\\(\\cup\\))", exp: "A positive \\( x^2 \\) means the parabola opens upwards, looking like a smile.", exp_trans: "Jika \\( x^2 \\) positif, parabola terbuka ke atas, terlihat seperti senyum." },
+            "t1-task9": { q: "If \\( a < 0 \\) (negative), the parabola looks like a?", q_trans: "Jika \\( a < 0 \\) (negatif), parabola terlihat seperti?", opts: ["Frown (\\(\\cap\\))", "Smile (\\(\\cup\\))", "Vertical line", "Flat line", "W shape"], ans: "Frown (\\(\\cap\\))", exp: "A negative \\( x^2 \\) means the parabola opens downwards, looking like a frown.", exp_trans: "Jika \\( x^2 \\) negatif, parabola terbuka ke bawah, terlihat seperti mengernyit." },
+            "t1-task10": { q: "The roots of a quadratic equation are the points where the parabola crosses the...?", q_trans: "Akar persamaan kuadrat adalah titik di mana parabola memotong...?", opts: ["y-axis", "x-axis", "Origin only", "Top point", "Bottom point"], ans: "x-axis", exp: "Roots are where \\( y = 0 \\). The x-axis is the line where \\( y = 0 \\). So the roots are where the curve hits the x-axis.", exp_trans: "Akar adalah di mana \\( y = 0 \\). Sumbu-x adalah garis di mana \\( y = 0 \\). Jadi akar adalah di mana lengkungan menyentuh sumbu-x." },
+
+            // TASK 2: FACTORING & ZERO RULE
+            "t2-task1": { q: "Factor \\( x^2 + 6x + 8 \\).", q_trans: "Faktorkan \\( x^2 + 6x + 8 \\).", opts: ["\\( (x+1)(x+8) \\)", "\\( (x+2)(x+4) \\)", "\\( (x-2)(x-4) \\)", "\\( (x+3)(x+3) \\)", "\\( (x+5)(x+1) \\)"], ans: "\\( (x+2)(x+4) \\)", exp: "Numbers that multiply to 8 and add to 6 are 2 and 4. \\( 2 \\times 4 = 8 \\), \\( 2 + 4 = 6 \\).", exp_trans: "Angka yang dikali 8 dan ditambah 6 adalah 2 dan 4. \\( 2 \\times 4 = 8 \\), \\( 2 + 4 = 6 \\)." },
+            "t2-task2": { q: "Factor \\( x^2 - 7x + 12 \\).", q_trans: "Faktorkan \\( x^2 - 7x + 12 \\).", opts: ["\\( (x-3)(x-4) \\)", "\\( (x+3)(x+4) \\)", "\\( (x-2)(x-6) \\)", "\\( (x-1)(x-12) \\)", "\\( (x+2)(x-6) \\)"], ans: "\\( (x-3)(x-4) \\)", exp: "Numbers that multiply to +12 and add to -7 are -3 and -4. \\( -3 \\times -4 = 12 \\), \\( -3 + -4 = -7 \\).", exp_trans: "Angka yang dikali +12 dan ditambah -7 adalah -3 dan -4. \\( -3 \\times -4 = 12 \\), \\( -3 + -4 = -7 \\)." },
+            "t2-task3": { q: "Factor \\( x^2 - 36 \\).", q_trans: "Faktorkan \\( x^2 - 36 \\).", opts: ["\\( (x-6)(x-6) \\)", "\\( (x+6)(x+6) \\)", "\\( (x-6)(x+6) \\)", "\\( (x-18)(x+2) \\)", "\\( (x-4)(x+9) \\)"], ans: "\\( (x-6)(x+6) \\)", exp: "Difference of two squares. \\( \\sqrt{36} = 6 \\). It factors to \\( (x-6)(x+6) \\).", exp_trans: "Selisih dua kuadrat. \\( \\sqrt{36} = 6 \\). Faktornya \\( (x-6)(x+6) \\)." },
+            "t2-task4": { q: "Solve \\( x^2 - 5x + 6 = 0 \\).", q_trans: "Selesaikan \\( x^2 - 5x + 6 = 0 \\).", opts: ["\\( x = 2, x = 3 \\)", "\\( x = -2, x = -3 \\)", "\\( x = 1, x = 6 \\)", "\\( x = -1, x = -6 \\)", "\\( x = 5, x = 1 \\)"], ans: "\\( x = 2, x = 3 \\)", exp: "Factor: numbers that multiply to 6 and add to -5 are -2 and -3. \\( (x-2)(x-3)=0 \\). So \\( x=2 \\) or \\( x=3 \\).", exp_trans: "Faktor: angka yang dikali 6 dan ditambah -5 adalah -2 dan -3. \\( (x-2)(x-3)=0 \\). Jadi \\( x=2 \\) atau \\( x=3 \\)." },
+            "t2-task5": { q: "Solve \\( x^2 - 9 = 0 \\).", q_trans: "Selesaikan \\( x^2 - 9 = 0 \\).", opts: ["\\( x = 3 \\text{ only} \\)", "\\( x = -3 \\text{ only} \\)", "\\( x = 3 \\text{ or } -3 \\)", "\\( x = 9 \\text{ or } -9 \\)", "\\( x = 0 \\)"], ans: "\\( x = 3 \\text{ or } -3 \\)", exp: "Factor to \\( (x-3)(x+3) = 0 \\). Set each to 0: \\( x=3 \\) and \\( x=-3 \\).", exp_trans: "Faktorkan menjadi \\( (x-3)(x+3) = 0 \\). Setiap jadi 0: \\( x=3 \\) dan \\( x=-3 \\)." },
+            "t2-task6": { q: "Solve \\( (x-4)(x+2) = 0 \\).", q_trans: "Selesaikan \\( (x-4)(x+2) = 0 \\).", opts: ["\\( 4, -2 \\)", "\\( -4, 2 \\)", "\\( 4, 2 \\)", "\\( -4, -2 \\)", "\\( 4, 0 \\)"], ans: "\\( 4, -2 \\)", exp: "Zero rule: set each bracket to 0. \\( x-4=0 \\Rightarrow x=4 \\). \\( x+2=0 \\Rightarrow x=-2 \\).", exp_trans: "Aturan nol: setiap kurung jadi 0. \\( x-4=0 \\Rightarrow x=4 \\). \\( x+2=0 \\Rightarrow x=-2 \\)." },
+            "t2-task7": { q: "A field has length \\( x \\) and width \\( x-4 \\). Area is 0. What are the roots?", q_trans: "Lapangan panjang \\( x \\) dan lebar \\( x-4 \\). Luasnya 0. Berapakah akarnya?", opts: ["\\( 0, -4 \\)", "\\( 0, 4 \\)", "\\( 4, 4 \\)", "\\( 0, 0 \\)", "\\( -4, -4 \\)"], ans: "\\( 0, 4 \\)", exp: "Equation: \\( x(x-4) = 0 \\). Set each to 0: \\( x=0 \\) and \\( x-4=0 \\Rightarrow x=4 \\). Roots are 0 and 4.", exp_trans: "Persamaan: \\( x(x-4) = 0 \\). Setiap jadi 0: \\( x=0 \\) dan \\( x-4=0 \\Rightarrow x=4 \\). Akar 0 dan 4." },
+            "t2-task8": { q: "Factor \\( x^2 + 2x - 8 \\).", q_trans: "Faktorkan \\( x^2 + 2x - 8 \\).", opts: ["\\( (x+4)(x-2) \\)", "\\( (x-4)(x+2) \\)", "\\( (x+1)(x-8) \\)", "\\( (x+8)(x-1) \\)", "\\( (x-4)(x-2) \\)"], ans: "\\( (x+4)(x-2) \\)", exp: "Numbers that multiply to -8 and add to 2 are 4 and -2. \\( 4 \\times -2 = -8 \\), \\( 4 + -2 = 2 \\).", exp_trans: "Angka yang dikali -8 dan ditambah 2 adalah 4 dan -2. \\( 4 \\times -2 = -8 \\), \\( 4 + -2 = 2 \\)." },
+            "t2-task9": { q: "Solve \\( x^2 + 2x - 8 = 0 \\).", q_trans: "Selesaikan \\( x^2 + 2x - 8 = 0 \\).", opts: ["\\( 4, -2 \\)", "\\( -4, 2 \\)", "\\( 4, 2 \\)", "\\( -4, -2 \\)", "\\( 1, -8 \\)"], ans: "\\( -4, 2 \\)", exp: "From previous question, factors are \\( (x+4)(x-2) = 0 \\). Set to 0: \\( x=-4 \\) and \\( x=2 \\).", exp_trans: "Dari pertanyaan sebelumnya, faktornya \\( (x+4)(x-2) = 0 \\). Set jadi 0: \\( x=-4 \\) dan \\( x=2 \\)." },
+            "t2-task10": { q: "If one root of \\( x^2 - 7x + k = 0 \\) is 5, what is \\( k \\)?", q_trans: "Jika satu akar \\( x^2 - 7x + k = 0 \\) adalah 5, berapakah \\( k \\)?", opts: ["\\( 2 \\)", "\\( 5 \\)", "\\( 10 \\)", "\\( 12 \\)", "\\( 35 \\)"], ans: "\\( 10 \\)", exp: "If 5 is a root, substitute \\( x=5 \\): \\( (5)^2 - 7(5) + k = 0 \\). \\( 25 - 35 + k = 0 \\). \\( -10 + k = 0 \\). So \\( k=10 \\).", exp_trans: "Jika 5 adalah akar, substitusi \\( x=5 \\): \\( (5)^2 - 7(5) + k = 0 \\). \\( 25 - 35 + k = 0 \\). \\( -10 + k = 0 \\). Jadi \\( k=10 \\)." },
+
+            // TASK 3: QUADRATIC FORMULA
+            "t3-task1": { q: "Write the quadratic formula.", q_trans: "Tulis rumus kuadrat.", opts: ["\\( x = -b \\pm \\sqrt{b^2 - 4ac} \\)", "\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", "\\( x = \\frac{-b \\pm b^2 - 4ac}{2} \\)", "\\( x = \\frac{b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", "\\( x = \\frac{-b \\pm \\sqrt{b + 4ac}}{2a} \\)"], ans: "\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", exp: "The formula is \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\). Used when factoring is impossible.", exp_trans: "Rumusnya \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\). Digunakan saat faktorisasi tidak mungkin." },
+            "t3-task2": { q: "In \\( 3x^2 - 6x + 2 = 0 \\), what are \\( a, b, c \\)?", q_trans: "Pada \\( 3x^2 - 6x + 2 = 0 \\), berapakah \\( a, b, c \\)?", opts: ["\\( a=3, b=6, c=2 \\)", "\\( a=3, b=-6, c=2 \\)", "\\( a=3, b=-6, c=-2 \\)", "\\( a=-6, b=3, c=2 \\)", "\\( a=3, b=2, c=-6 \\)"], ans: "\\( a=3, b=-6, c=2 \\)", exp: "\\( a=3 \\) (in front of \\( x^2 \\)). \\( b=-6 \\) (in front of \\( x \\), keep the minus). \\( c=2 \\) (constant).", exp_trans: "\\( a=3 \\) (di depan \\( x^2 \\)). \\( b=-6 \\) (di depan \\( x \\), tetap minusnya). \\( c=2 \\) (konstanta)." },
+            "t3-task3": { q: "What is the discriminant of \\( x^2 + 4x + 3 = 0 \\)?", q_trans: "Berapakah diskriminan dari \\( x^2 + 4x + 3 = 0 \\)?", opts: ["\\( 16 - 12 = 4 \\)", "\\( 16 + 12 = 28 \\)", "\\( 4 - 12 = -8 \\)", "\\( 4 - 3 = 1 \\)", "\\( 16 \\)"], ans: "\\( 16 - 12 = 4 \\)", exp: "Discriminant is \\( b^2 - 4ac \\). \\( a=1, b=4, c=3 \\). \\( 4^2 - 4(1)(3) = 16 - 12 = 4 \\).", exp_trans: "Diskriminan adalah \\( b^2 - 4ac \\). \\( a=1, b=4, c=3 \\). \\( 4^2 - 4(1)(3) = 16 - 12 = 4 \\)." },
+            "t3-task4": { q: "If the discriminant is positive, how many real roots are there?", q_trans: "Jika diskriminan positif, berapa banyak akar real yang ada?", opts: ["0 roots", "1 root", "2 roots", "3 roots", "Infinite roots"], ans: "2 roots", exp: "Positive discriminant (\\( >0 \\)) means the square root exists and the \\( \\pm \\) gives two distinct answers (two roots).", exp_trans: "Diskriminan positif (\\( >0 \\)) berarti akar kuadrat ada dan \\( \\pm \\) memberikan dua jawaban berbeda (dua akar)." },
+            "t3-task5": { q: "Solve \\( x^2 + 5x + 6 = 0 \\) using the formula. What is one root?", q_trans: "Selesaikan \\( x^2 + 5x + 6 = 0 \\) dengan rumus. Berapakah satu akarnya?", opts: ["\\( -2 \\)", "\\( 2 \\)", "\\( -5 \\)", "\\( 5 \\)", "\\( 6 \\)"], ans: "\\( -2 \\)", exp: "\\( a=1, b=5, c=6 \\). \\( x = \\frac{-5 \\pm \\sqrt{25 - 24}}{2} = \\frac{-5 \\pm 1}{2} \\). Minus: \\( -6/2 = -3 \\). Plus: \\( -4/2 = -2 \\). One root is -2.", exp_trans: "\\( a=1, b=5, c=6 \\). \\( x = \\frac{-5 \\pm \\sqrt{25 - 24}}{2} = \\frac{-5 \\pm 1}{2} \\). Minus: \\( -6/2 = -3 \\). Plus: \\( -4/2 = -2 \\). Satu akar -2." },
+            "t3-task6": { q: "Solve \\( 2x^2 - 4x = 0 \\). What are the roots?", q_trans: "Selesaikan \\( 2x^2 - 4x = 0 \\). Berapakah akarnya?", opts: ["\\( 0, 2 \\)", "\\( 0, -2 \\)", "\\( 2, 2 \\)", "\\( 0, 4 \\)", "\\( -2, -2 \\)"], ans: "\\( 0, 2 \\)", exp: "Factor out \\( x \\): \\( x(2x - 4) = 0 \\). So \\( x=0 \\) or \\( 2x=4 \\Rightarrow x=2 \\). Roots are 0 and 2.", exp_trans: "Keluarkan \\( x \\): \\( x(2x - 4) = 0 \\). Jadi \\( x=0 \\) atau \\( 2x=4 \\Rightarrow x=2 \\). Akar 0 dan 2." },
+            "t3-task7": { q: "Use the formula for \\( x^2 - 6x + 9 = 0 \\). What is \\( x \\)?", q_trans: "Gunakan rumus untuk \\( x^2 - 6x + 9 = 0 \\). Berapakah \\( x \\)?", opts: ["\\( 3 \\text{ only} \\)", "\\( 3, -3 \\)", "\\( 9, -9 \\)", "\\( -3 \\text{ only} \\)", "\\( 0, 6 \\)"], ans: "\\( 3 \\text{ only} \\)", exp: "\\( a=1, b=-6, c=9 \\). Disc = \\( 36 - 36 = 0 \\). \\( x = \\frac{6 \\pm \\sqrt{0}}{2} = \\frac{6}{2} = 3 \\). Only one root.", exp_trans: "\\( a=1, b=-6, c=9 \\). Disk = \\( 36 - 36 = 0 \\). \\( x = \\frac{6 \\pm \\sqrt{0}}{2} = \\frac{6}{2} = 3 \\). Hanya satu akar." },
+            "t3-task8": { q: "Solve \\( x^2 + 1 = 0 \\). What happens?", q_trans: "Selesaikan \\( x^2 + 1 = 0 \\). Apa yang terjadi?", opts: ["\\( x = 1 \\)", "\\( x = -1 \\)", "\\( \\text{No real roots} \\)", "\\( x = 0 \\)", "\\( x = 1 \\text{ and } -1 \\)"], ans: "\\( \\text{No real roots} \\)", exp: "Disc = \\( 0 - 4(1)(1) = -4 \\). You cannot take the square root of a negative number in real math. So no real roots.", exp_trans: "Disk = \\( 0 - 4(1)(1) = -4 \\). Anda tidak bisa mengakarkan angka negatif di matematika real. Jadi tidak ada akar real." },
+            "t3-task9": { q: "A rocket path is \\( -x^2 + 16 = 0 \\). When does it hit the ground?", q_trans: "Jalur roket \\( -x^2 + 16 = 0 \\). Kapan ia menyentuh tanah?", opts: ["\\( 4 \\text{ sec} \\)", "\\( -4 \\text{ sec} \\)", "\\( 4 \\text{ and } -4 \\text{ sec} \\)", "\\( 16 \\text{ sec} \\)", "\\( 0 \\text{ sec} \\)"], ans: "\\( 4 \\text{ and } -4 \\text{ sec} \\)", exp: "\\( -x^2 = -16 \\Rightarrow x^2 = 16 \\Rightarrow x = \\pm 4 \\). Math gives 4 and -4. (In reality, time can't be negative, so it hits at 4 sec).", exp_trans: "\\( -x^2 = -16 \\Rightarrow x^2 = 16 \\Rightarrow x = \\pm 4 \\). Matematika memberi 4 dan -4. (Nyatanya, waktu tidak bisa negatif, jadi menyentuh di 4 detik)." },
+            "t3-task10": { q: "Using formula on \\( 2x^2 + 3x - 5 = 0 \\), what is the discriminant?", q_trans: "Menggunakan rumus pada \\( 2x^2 + 3x - 5 = 0 \\), berapakah diskriminannya?", opts: ["\\( 9 - 40 = -31 \\)", "\\( 9 + 40 = 49 \\)", "\\( 9 - 20 = -11 \\)", "\\( 3 - 5 = -2 \\)", "\\( 25 \\)"], ans: "\\( 9 + 40 = 49 \\)", exp: "\\( a=2, b=3, c=-5 \\). Disc = \\( 3^2 - 4(2)(-5) = 9 - (-40) = 9 + 40 = 49 \\).", exp_trans: "\\( a=2, b=3, c=-5 \\). Disk = \\( 3^2 - 4(2)(-5) = 9 - (-40) = 9 + 40 = 49 \\)." },
+
+            // TASK 4: REAL-WORLD APPLICATIONS
+            "t4-task1": { q: "A rectangle has length \\( x+5 \\) and width \\( x \\). Area is 36. Find \\( x \\).", q_trans: "Persegi panjang panjang \\( x+5 \\) dan lebar \\( x \\). Luasnya 36. Temukan \\( x \\).", opts: ["\\( 4 \\)", "\\( 9 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( 3 \\)"], ans: "\\( 4 \\)", exp: "Eq: \\( x(x+5) = 36 \\Rightarrow x^2 + 5x - 36 = 0 \\). Factors: \\( (x+9)(x-4)=0 \\). Roots: -9 and 4. Length must be positive, so \\( x=4 \\).", exp_trans: "Pers: \\( x(x+5) = 36 \\Rightarrow x^2 + 5x - 36 = 0 \\). Faktor: \\( (x+9)(x-4)=0 \\). Akar: -9 dan 4. Panjang harus positif, jadi \\( x=4 \\)." },
+            "t4-task2": { q: "A ball is thrown up. Its height \\( h = -x^2 + 5x \\). At what times is it on the ground (\\( h=0 \\))?", q_trans: "Bola dilempar ke atas. Ketinggiannya \\( h = -x^2 + 5x \\). Kapankah menyentuh tanah (\\( h=0 \\))?", opts: ["\\( 0 \\text{ and } 5 \\text{ sec} \\)", "\\( 5 \\text{ and } -5 \\text{ sec} \\)", "\\( 0 \\text{ and } -5 \\text{ sec} \\)", "\\( 2.5 \\text{ sec only} \\)", "\\( 1 \\text{ and } 4 \\text{ sec} \\)"], ans: "\\( 0 \\text{ and } 5 \\text{ sec} \\)", exp: "Set \\( h=0 \\): \\( -x^2 + 5x = 0 \\). Factor: \\( -x(x - 5) = 0 \\). Roots are \\( x=0 \\) and \\( x=5 \\). It is on ground at 0 sec (start) and 5 sec (lands).", exp_trans: "Set \\( h=0 \\): \\( -x^2 + 5x = 0 \\). Faktor: \\( -x(x - 5) = 0 \\). Akar \\( x=0 \\) dan \\( x=5 \\). Di tanah pada 0 detik (mulai) dan 5 detik (mendarat)." },
+            "t4-task3": { q: "Two numbers add up to 10. Their product is 21. What are the numbers?", q_trans: "Dua angka jika dijumlahkan 10. Hasil kalinya 21. Berapakah angkanya?", opts: ["\\( 3 \\text{ and } 7 \\)", "\\( 1 \\text{ and } 9 \\)", "\\( 2 \\text{ and } 8 \\)", "\\( -3 \\text{ and } -7 \\)", "\\( 5 \\text{ and } 5 \\)"], ans: "\\( 3 \\text{ and } 7 \\)", exp: "Let numbers be \\( x \\) and \\( 10-x \\). Product: \\( x(10-x) = 21 \\Rightarrow 10x - x^2 = 21 \\Rightarrow x^2 - 10x + 21 = 0 \\). Factors \\( (x-3)(x-7)=0 \\). Numbers are 3 and 7.", exp_trans: "Misal angka \\( x \\) dan \\( 10-x \\). Kali: \\( x(10-x) = 21 \\Rightarrow 10x - x^2 = 21 \\Rightarrow x^2 - 10x + 21 = 0 \\). Faktor \\( (x-3)(x-7)=0 \\). Angka 3 dan 7." },
+            "t4-task4": { q: "A garden is 5m longer than it is wide. Area is 84 m\\( ^2 \\). What is the width?", q_trans: "Taman 5m lebih panjang dari lebarnya. Luas 84 m\\( ^2 \\). Berapakah lebarnya?", opts: ["\\( 7 \\text{ m} \\)", "\\( 12 \\text{ m} \\)", "\\( 8 \\text{ m} \\)", "\\( 6 \\text{ m} \\)", "\\( 5 \\text{ m} \\)"], ans: "\\( 7 \\text{ m} \\)", exp: "Let width \\( x \\), length \\( x+5 \\). Area: \\( x(x+5) = 84 \\Rightarrow x^2 + 5x - 84 = 0 \\). Factors \\( (x+12)(x-7)=0 \\). Width must be positive, so \\( x=7 \\).", exp_trans: "Misal lebar \\( x \\), panjang \\( x+5 \\). Luas: \\( x(x+5) = 84 \\Rightarrow x^2 + 5x - 84 = 0 \\). Faktor \\( (x+12)(x-7)=0 \\). Lebar positif, jadi \\( x=7 \\)." },
+            "t4-task5": { q: "A photo is \\( x \\) cm by \\( x \\) cm. A frame adds 2 cm to the total length and width. Total area is 81. Find \\( x \\).", q_trans: "Foto \\( x \\) cm kali \\( x \\) cm. Bingkai menambah 2 cm pada total panjang dan lebar. Total luas 81. Temukan \\( x \\).", opts: ["\\( 5 \\text{ cm} \\)", "\\( 7 \\text{ cm} \\)", "\\( 9 \\text{ cm} \\)", "\\( 3 \\text{ cm} \\)", "\\( 8 \\text{ cm} \\)"], ans: "\\( 7 \\text{ cm} \\)", exp: "The frame adds 2 cm to the total dimensions, so the new length is \\( x+2 \\). Area: \\( (x+2)^2 = 81 \\). Take the square root: \\( x+2 = 9 \\). Subtract 2: \\( x = 7 \\) cm.", exp_trans: "Bingkai menambah 2 cm ke dimensi total, jadi panjang baru \\( x+2 \\). Luas: \\( (x+2)^2 = 81 \\). Akar: \\( x+2 = 9 \\). Kurangi 2: \\( x = 7 \\) cm." },
+            "t4-task6": { q: "A ball's height is \\( h = -x^2 + 4x \\). When does it hit the ground?", q_trans: "Ketinggian bola \\( h = -x^2 + 4x \\). Kapan ia menyentuh tanah?", opts: ["\\( 4 \\text{ sec} \\)", "\\( 2 \\text{ sec} \\)", "\\( 0 \\text{ and } 4 \\text{ sec} \\)", "\\( 1 \\text{ and } 3 \\text{ sec} \\)", "\\( 0 \\text{ and } 2 \\text{ sec} \\)"], ans: "\\( 0 \\text{ and } 4 \\text{ sec} \\)", exp: "Set \\( h=0 \\): \\( -x^2 + 4x = 0 \\). Factor \\( -x(x - 4) = 0 \\). Roots are 0 and 4. It hits ground at 0 (start) and 4 sec (end).", exp_trans: "Set \\( h=0 \\): \\( -x^2 + 4x = 0 \\). Faktor \\( -x(x - 4) = 0 \\). Akar 0 dan 4. Menyentuh tanah di 0 (mulai) dan 4 detik (akhir)." },
+            "t4-task7": { q: "The length of a rectangle is twice its width \\( 2x \\). Area is 50. Find width \\( x \\).", q_trans: "Panjang persegi panjang dua kali lebarnya \\( 2x \\). Luas 50. Temukan lebar \\( x \\).", opts: ["\\( 5 \\)", "\\( 10 \\)", "\\( 25 \\)", "\\( 2.5 \\)", "\\( 7 \\)"], ans: "\\( 5 \\)", exp: "Area = \\( x \\cdot 2x = 2x^2 \\). Equation: \\( 2x^2 = 50 \\). Divide by 2: \\( x^2 = 25 \\). Square root: \\( x=5 \\) (must be positive).", exp_trans: "Luas = \\( x \\cdot 2x = 2x^2 \\). Persamaan: \\( 2x^2 = 50 \\). Bagi 2: \\( x^2 = 25 \\). Akar kuadrat: \\( x=5 \\) (harus positif)." },
+            "t4-task8": { q: "A picture frame has area \\( x^2 - 3x - 18 \\). What are its dimensions?", q_trans: "Bingkai foto memiliki luas \\( x^2 - 3x - 18 \\). Berapakah ukurannya?", opts: ["\\( x-6 \\text{ and } x+3 \\)", "\\( x+6 \\text{ and } x-3 \\)", "\\( x-6 \\text{ and } x-3 \\)", "\\( x+6 \\text{ and } x+3 \\)", "\\( x-9 \\text{ and } x+2 \\)"], ans: "\\( x-6 \\text{ and } x+3 \\)", exp: "Factor \\( x^2 - 3x - 18 \\). Numbers that multiply to -18 and add to -3 are -6 and 3. So dimensions are \\( (x-6) \\) and \\( (x+3) \\).", exp_trans: "Faktor \\( x^2 - 3x - 18 \\). Angka yang dikali -18 dan ditambah -3 adalah -6 dan 3. Jadi ukurannya \\( (x-6) \\) dan \\( (x+3) \\)." },
+            "t4-task9": { q: "A company's profit \\( P \\) is \\( -x^2 + 12x - 20 \\). When is profit zero (\\( P=0 \\))?", q_trans: "Keuntungan perusahaan \\( P \\) adalah \\( -x^2 + 12x - 20 \\). Kapan keuntungan nol (\\( P=0 \\))?", opts: ["\\( x = 2, 10 \\)", "\\( x = -2, -10 \\)", "\\( x = 6 \\text{ only} \\)", "\\( x = 12, 20 \\)", "\\( x = 1, 20 \\)"], ans: "\\( x = 2, 10 \\)", exp: "Factor: \\( - (x^2 - 12x + 20) = 0 \\). Need numbers that multiply to 20 and add to 12: 2 and 10. So \\( x=2 \\) and \\( x=10 \\).", exp_trans: "Faktor: \\( - (x^2 - 12x + 20) = 0 \\). Butuh angka yang dikali 20 dan ditambah 12: 2 dan 10. Jadi \\( x=2 \\) dan \\( x=10 \\)." },
+            "t4-task10": { q: "If a triangle has base \\( x \\) and height \\( x+4 \\). Area is 30. What is the base?", q_trans: "Jika segitiga memiliki alas \\( x \\) dan tinggi \\( x+4 \\). Luasnya 30. Berapakah alasnya?", opts: ["\\( 5 \\)", "\\( 6 \\)", "\\( 10 \\)", "\\( 3 \\)", "\\( 7 \\)"], ans: "\\( 6 \\)", exp: "Triangle Area = \\( \\frac{1}{2} \\text{base} \\times \\text{height} \\). \\( \\frac{1}{2} x(x+4) = 30 \\Rightarrow x^2 + 4x - 60 = 0 \\). Factors \\( (x+10)(x-6)=0 \\). Base must be positive: \\( x=6 \\).", exp_trans: "Luas Segitiga = \\( \\frac{1}{2} \\text{alas} \\times \\text{tinggi} \\). \\( \\frac{1}{2} x(x+4) = 30 \\Rightarrow x^2 + 4x - 60 = 0 \\). Faktor \\( (x+10)(x-6)=0 \\). Alas harus positif: \\( x=6 \\)." },
+            
+            // TASK 5: MIXED ADVANCED PROBLEMS
+            "t5-task1": { q: "Solve \\( x^2 - 10x + 25 = 0 \\).", q_trans: "Selesaikan \\( x^2 - 10x + 25 = 0 \\).", opts: ["\\( 5 \\text{ and } -5 \\)", "\\( 5 \\text{ only} \\)", "\\( -5 \\text{ only} \\)", "\\( 10 \\text{ and } 25 \\)", "\\( 2 \\text{ and } 5 \\)"], ans: "\\( 5 \\text{ only} \\)", exp: "This is a perfect square: \\( (x-5)^2 = 0 \\). So \\( x-5 = 0 \\), which means \\( x=5 \\). Only one root.", exp_trans: "Ini kuadrat sempurna: \\( (x-5)^2 = 0 \\). Jadi \\( x-5 = 0 \\), berarti \\( x=5 \\). Hanya satu akar." },
+            "t5-task2": { q: "Which equation has exactly one root?", q_trans: "Persamaan manakah yang memiliki tepat satu akar?", opts: ["\\( x^2 - 4 = 0 \\)", "\\( x^2 + 6x + 9 = 0 \\)", "\\( x^2 + 5 = 0 \\)", "\\( x^2 - 5x + 6 = 0 \\)", "\\( x^2 = x \\)"], ans: "\\( x^2 + 6x + 9 = 0 \\)", exp: "Discriminant of \\( x^2 + 6x + 9 \\): \\( 36 - 36 = 0 \\). A discriminant of 0 means exactly one root. (It is \\( (x+3)^2 = 0 \\)).", exp_trans: "Diskriminan dari \\( x^2 + 6x + 9 \\): \\( 36 - 36 = 0 \\). Diskriminan 0 berarti tepat satu akar. (Yaitu \\( (x+3)^2 = 0 \\))." },
+            "t5-task3": { q: "If \\( x^2 + 2x - 8 = 0 \\), find the sum of the roots.", q_trans: "Jika \\( x^2 + 2x - 8 = 0 \\), temukan jumlah akarnya.", opts: ["\\( 2 \\)", "\\( -2 \\)", "\\( 8 \\)", "\\( -8 \\)", "\\( 0 \\)"], ans: "\\( -2 \\)", exp: "Factors are \\( (x+4)(x-2)=0 \\). Roots are -4 and 2. Sum: \\( -4 + 2 = -2 \\). (Shortcut: sum of roots = \\( -b/a = -2/1 = -2 \\)).", exp_trans: "Faktor \\( (x+4)(x-2)=0 \\). Akar -4 dan 2. Jumlah: \\( -4 + 2 = -2 \\). (Jalan pintas: jumlah akar = \\( -b/a = -2/1 = -2 \\))." },
+            "t5-task4": { q: "If \\( x^2 + 2x - 8 = 0 \\), find the product of the roots.", q_trans: "Jika \\( x^2 + 2x - 8 = 0 \\), temukan hasil kali akarnya.", opts: ["\\( -8 \\)", "\\( 8 \\)", "\\( -2 \\)", "\\( 2 \\)", "\\( 4 \\)"], ans: "\\( -8 \\)", exp: "Roots are -4 and 2. Product: \\( -4 \\times 2 = -8 \\). (Shortcut: product of roots = \\( c/a = -8/1 = -8 \\)).", exp_trans: "Akar -4 dan 2. Kali: \\( -4 \\times 2 = -8 \\). (Jalan pintas: kali akar = \\( c/a = -8/1 = -8 \\))." },
+            "t5-task5": { q: "Simplify \\( \\sqrt{-16} \\). (What is it in terms of \\( i \\)?)", q_trans: "Sederhanakan \\( \\sqrt{-16} \\). (Apa itu dalam bentuk \\( i \\)?)", opts: ["\\( 4 \\)", "\\( -4 \\)", "\\( 4i \\)", "\\( -4i \\)", "\\( 16i \\)"], ans: "\\( 4i \\)", exp: "We cannot take the square root of a negative number. So we use \\( i \\) where \\( i = \\sqrt{-1} \\). \\( \\sqrt{-16} = \\sqrt{16 \\times -1} = \\sqrt{16} \\times \\sqrt{-1} = 4i \\).", exp_trans: "Kita tidak bisa mengakarkan angka negatif. Jadi kita pakai \\( i \\) di mana \\( i = \\sqrt{-1} \\). \\( \\sqrt{-16} = \\sqrt{16 \\times -1} = \\sqrt{16} \\times \\sqrt{-1} = 4i \\)." },
+            "t5-task6": { q: "Solve \\( x^2 + 4 = 0 \\). What are the roots?", q_trans: "Selesaikan \\( x^2 + 4 = 0 \\). Berapakah akarnya?", opts: ["\\( 2, -2 \\)", "\\( 4, -4 \\)", "\\( 2i, -2i \\)", "\\( 4i, -4i \\)", "\\( \\text{No roots} \\)"], ans: "\\( 2i, -2i \\)", exp: "\\( x^2 = -4 \\). Take square root: \\( x = \\pm \\sqrt{-4} \\). Since \\( \\sqrt{-4} = 2i \\), the roots are \\( 2i \\) and \\( -2i \\).", exp_trans: "\\( x^2 = -4 \\). Akar kuadrat: \\( x = \\pm \\sqrt{-4} \\). Karena \\( \\sqrt{-4} = 2i \\), akarnya \\( 2i \\) dan \\( -2i \\)." },
+            "t5-task7": { q: "A rectangle has area \\( x^2 + x - 12 \\). If one side is \\( x+4 \\), what is the other?", q_trans: "Persegi panjang luas \\( x^2 + x - 12 \\). Jika satu sisi \\( x+4 \\), berapakah sisi lainnya?", opts: ["\\( x-3 \\)", "\\( x+3 \\)", "\\( x-4 \\)", "\\( x-12 \\)", "\\( x+1 \\)"], ans: "\\( x-3 \\)", exp: "To find the other side, divide Area by one side: \\( (x^2 + x - 12) / (x+4) \\). Factoring Area gives \\( (x+4)(x-3) \\). So the other side is \\( x-3 \\).", exp_trans: "Untuk cari sisi lain, bagi Luas dengan satu sisi: \\( (x^2 + x - 12) / (x+4) \\). Faktor Luas menjadi \\( (x+4)(x-3) \\). Jadi sisi lain \\( x-3 \\)." },
+            "t5-task8": { q: "The sum of a number \\( x \\) and its square is 12. Find \\( x \\). (Positive value)", q_trans: "Jumlah angka \\( x \\) dan kuadratnya adalah 12. Temukan \\( x \\). (Nilai positif)", opts: ["\\( 3 \\)", "\\( 4 \\)", "\\( 2 \\)", "\\( 5 \\)", "\\( 6 \\)"], ans: "\\( 3 \\)", exp: "Equation: \\( x + x^2 = 12 \\Rightarrow x^2 + x - 12 = 0 \\). Factors: \\( (x+4)(x-3)=0 \\). Roots are -4 and 3. Positive value is 3.", exp_trans: "Persamaan: \\( x + x^2 = 12 \\Rightarrow x^2 + x - 12 = 0 \\). Faktor: \\( (x+4)(x-3)=0 \\). Akar -4 dan 3. Nilai positif 3." },
+            "t5-task9": { q: "Using formula on \\( 3x^2 - 2x - 1 = 0 \\), find the roots.", q_trans: "Gunakan rumus pada \\( 3x^2 - 2x - 1 = 0 \\), temukan akarnya.", opts: ["\\( 1, -1/3 \\)", "\\( -1, 1/3 \\)", "\\( 1, 3 \\)", "\\( -1, -3 \\)", "\\( 1/3, 3 \\)"], ans: "\\( 1, -1/3 \\)", exp: "\\( a=3, b=-2, c=-1 \\). Disc = \\( 4 - 4(3)(-1) = 16 \\). \\( x = \\frac{2 \\pm \\sqrt{16}}{6} = \\frac{2 \\pm 4}{6} \\). Plus: \\( 6/6=1 \\). Minus: \\( -2/6 = -1/3 \\).", exp_trans: "\\( a=3, b=-2, c=-1 \\). Disk = \\( 4 - 4(3)(-1) = 16 \\). \\( x = \\frac{2 \\pm \\sqrt{16}}{6} = \\frac{2 \\pm 4}{6} \\). Plus: \\( 6/6=1 \\). Minus: \\( -2/6 = -1/3 \\)." },
+            "t5-task10": { q: "A ball goes up according to \\( h = -x^2 + 10x \\). What is the maximum height? (Hint: find the midpoint of roots)", q_trans: "Bola naik sesuai \\( h = -x^2 + 10x \\). Berapakah ketinggian maksimum? (Petunjuk: cari titik tengah akar)", opts: ["\\( 10 \\)", "\\( 25 \\)", "\\( 5 \\)", "\\( 50 \\)", "\\( 100 \\)"], ans: "\\( 25 \\)", exp: "Roots are \\( x=0 \\) and \\( x=10 \\). Midpoint (vertex) is \\( x=5 \\). Put \\( x=5 \\) back into equation: \\( h = -(5)^2 + 10(5) = -25 + 50 = 25 \\).", exp_trans: "Akar \\( x=0 \\) dan \\( x=10 \\). Titik tengah (puncak) \\( x=5 \\). Masukkan \\( x=5 \\): \\( h = -(5)^2 + 10(5) = -25 + 50 = 25 \\)." }
+        });
+
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-blue-100', 'text-blue-800', 'font-bold', 'bg-orange-100');
+                item.classList.add('text-gray-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100');
+                } else {
+                    activeLink.classList.add('bg-blue-100', 'text-blue-800', 'font-bold');
+                }
+            }
+            
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-blue-100 hover:bg-blue-200 text-blue-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-blue-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                const data = questions[taskId];
+                if(!data) return;
+
+                const shuffledOpts = shuffleArray([...data.opts]);
+                const isMainTask = taskId.startsWith('t');
+                const taskNum = isMainTask ? taskId[1] : 0;
+                
+                div.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                        <div class="flex justify-between items-center mb-4 no-print">
+                            <h2 class="text-xl font-bold text-orange-600">${isMainTask ? `Task ${taskNum}` : 'Task'} <span class="translation text-gray-500 text-sm">Tugas</span></h2>
+                            <div class="flex gap-2">
+                                <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                                ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                    <i class="fas fa-print"></i> Print
+                                </button>` : ''}
+                            </div>
+                        </div>
+                        <div class="mb-6 flex gap-4 items-start">
+                            <div class="bg-orange-100 p-3 rounded-full">
+                                <i class="fas fa-question text-orange-500 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-lg">${data.q}</p>
+                                <p class="translation">${data.q_trans}</p>
+                            </div>
+                        </div>
+
+                        <div id="options-${taskId}" class="space-y-3">
+                            ${shuffledOpts.map((opt, i) => `
+                                <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'))" 
+                                        class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                        data-opt="${opt}">
+                                    <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold">${String.fromCharCode(65 + i)}</span>
+                                    <span class="katex">${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                        <div class="mt-4 no-print">
+                            <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                                Show Explanation <span class="translation text-gray-500 text-xs">Tampilkan Penjelasan</span>
+                            </button>
+                            <div id="collapse-${taskId}" class="collapse-content w-full">
+                                <h3 class="font-bold text-blue-800">Explanation: <span class="translation text-gray-500 text-sm">Penjelasan:</span></h3>
+                                <p class="mt-2">${data.exp}</p>
+                                <p class="translation">${data.exp_trans}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            renderMath();
+        }
+
+        function checkAnswer(taskId, selectedOpt) {
+            studentAnswers[taskId] = selectedOpt; 
+            
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const buttons = document.querySelectorAll(`#options-${taskId} button`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+                if(btn.getAttribute('data-opt') === data.ans) {
+                    btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                    btn.classList.add('border-green-500', 'bg-green-50');
+                } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                    btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                    btn.classList.add('border-red-500', 'bg-red-50');
+                }
+            });
+
+            if(selectedOpt === data.ans) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Correct! <span class="translation text-gray-600 font-normal">Benar!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Wrong! The correct answer is ${data.ans}. <span class="translation text-gray-600 font-normal">Salah! Jawaban yang benar adalah ${data.ans}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Hide Explanation <span class="translation text-gray-500 text-xs">Sembunyikan Penjelasan</span>';
+            
+            renderMath();
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                const studentAns = studentAnswers[taskId] || 'Not Answered';
+                const correctAns = data.ans;
+                let note = '❌';
+                if(studentAns === correctAns) { score++; note = '✔️'; }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${data.q}</td>
+                    <td class="border border-black p-1">${studentAns}</td>
+                    <td class="border border-black p-1">${correctAns}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Hide Explanation <span class="translation text-gray-500 text-xs">Sembunyikan Penjelasan</span>';
+            } else {
+                btn.innerHTML = 'Show Explanation <span class="translation text-gray-500 text-xs">Tampilkan Penjelasan</span>';
+            }
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            renderTasks(); 
+            const activeSection = document.querySelector('.content-section.active');
+            if(activeSection) {
+                const pageToActivate = activeSection.querySelector(`.page[data-page="${currentPage}"]`);
+                if(pageToActivate) pageToActivate.classList.add('active');
+            }
+        }
+
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+        }
+
+        window.onload = () => {
+            renderTasks();
+            renderMath();
+            showSection('warmup');
+        };
+    </script>
+</body>
+</html>
