@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Simultaneous Equations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        .prompt-box { max-width: 650px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; text-align: left; }
+        .prompt-box p { width: 100%; }
+        .prompt-box img { width: 100%; height: auto; max-width: 300px; display: block; margin-top: 0.5rem; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; padding: 0; border: 0; background: transparent; }
+        .collapse-content.open { max-height: 2000px; padding: 1.5rem; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 0.5rem; margin-top: 1rem; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            #printArea table { table-layout: fixed; width: 100%; font-size: 9px; }
+            #printArea td, #printArea th { word-wrap: break-word; padding: 2px !important; }
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <marker id="arr1" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+            </marker>
+            <marker id="arr2" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Simultaneous Equations</p>
+            <p class="translation text-indigo-200">Topik: Persamaan Simultan</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">Class Rules <br><span class="translation text-gray-500">Aturan Kelas</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-indigo-500 mt-1"></i>
+                    <div>Take turns speaking. <span class="translation">Berbicara secara bergantian.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-indigo-500 mt-1"></i>
+                    <div>Ask permission if you want to leave the class. <span class="translation">Meminta izin jika ingin meninggalkan kelas.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-indigo-500 mt-1"></i>
+                    <div>Turn on camera and microphone if needed. <span class="translation">Menyalakan kamera dan microphone jika diperlukan.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-indigo-200 mt-1">Select topic to navigate <span class="translation text-indigo-300 block">Pilih topik untuk navigasi</span></p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="warmup">
+                            <div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="intro">
+                            <div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="review">
+                            <div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="problem">
+                            <div class="font-semibold text-sm text-gray-800">Problem Introduction</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="guided">
+                            <div class="font-semibold text-sm text-gray-800">Guided Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="independent">
+                            <div class="font-semibold text-sm text-gray-800">Independent Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="consolidation">
+                            <div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div>
+                        </a>
+                    </li>
+                    <hr class="my-3 border-gray-200">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Quick Review: Quadratic Equations</h2>
+                        <p class="translation">Ulasan Singkat: Persamaan Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <line x1="20" y1="90" x2="180" y2="90" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="100" y1="10" x2="100" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <path d="M 35 135 Q 100 -15, 165 135" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                                    <circle cx="100" cy="25" r="4" fill="#ef4444"/>
+                                    <text x="108" y="22" font-size="9" fill="#ef4444">vertex</text>
+                                    <text x="170" y="85" font-size="10" fill="#666">x</text>
+                                    <text x="92" y="15" font-size="10" fill="#666">y</text>
+                                    <text x="120" y="100" font-size="10" fill="#3b82f6" font-style="italic">y = ax²+bx+c</text>
+                                    <circle cx="58" cy="80" r="3" fill="#10b981"/>
+                                    <text x="42" y="72" font-size="8" fill="#10b981">root 1</text>
+                                    <circle cx="142" cy="80" r="3" fill="#10b981"/>
+                                    <text x="138" y="72" font-size="8" fill="#10b981">root 2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Before we explore Simultaneous Equations, let's recall Quadratic Equations from our previous topic. A quadratic equation has the form \( ax^2 + bx + c = 0 \), where \( a \neq 0 \). <span class="translation">Sebelum kita menjelajahi Persamaan Simultan, mari kita ingat Persamaan Kuadrat dari topik sebelumnya. Persamaan kuadrat memiliki bentuk \( ax^2 + bx + c = 0 \), di mana \( a \neq 0 \).</span></p>
+                                <p class="mt-2">We can solve quadratics by factoring, completing the square, or using the quadratic formula. The roots are the x-values where the parabola crosses the x-axis. <span class="translation">Kita dapat menyelesaikan kuadrat dengan pemfaktoran, melengkapkan kuadrat, atau menggunakan rumus kuadrat. Akar-akarnya adalah nilai x di mana parabola memotong sumbu x.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The Discriminant</p>
+                            <p class="mt-1">The discriminant \( \Delta = b^2 - 4ac \) tells you the number of real solutions: \( \Delta > 0 \) means 2 real roots, \( \Delta = 0 \) means 1 repeated root, \( \Delta < 0 \) means no real roots. <span class="translation">Diskriminan \( \Delta = b^2 - 4ac \) memberi tahu jumlah solusi real: \( \Delta > 0 \) berarti 2 akar real, \( \Delta = 0 \) berarti 1 akar berulang, \( \Delta < 0 \) berarti tidak ada akar real.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">From Single Equations to Systems</h2>
+                        <p class="translation">Dari Persamaan Tunggal ke Sistem</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="140" viewBox="0 0 200 140">
+                                    <rect x="10" y="20" width="80" height="100" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="50" y="45" font-size="11" text-anchor="middle" fill="#3b82f6" font-weight="bold">ONE</text>
+                                    <text x="50" y="62" font-size="10" text-anchor="middle" fill="#666">Equation</text>
+                                    <text x="50" y="80" font-size="10" text-anchor="middle" fill="#666">One</text>
+                                    <text x="50" y="95" font-size="10" text-anchor="middle" fill="#666">Unknown</text>
+                                    <text x="50" y="110" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">x = 3</text>
+                                    <path d="M 95 70 L 115 70" stroke="#ef4444" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <rect x="120" y="20" width="70" height="100" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="155" y="40" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">TWO</text>
+                                    <text x="155" y="57" font-size="10" text-anchor="middle" fill="#666">Equations</text>
+                                    <text x="155" y="75" font-size="10" text-anchor="middle" fill="#666">Two</text>
+                                    <text x="155" y="93" font-size="10" text-anchor="middle" fill="#666">Unknowns</text>
+                                    <text x="155" y="112" font-size="11" text-anchor="middle" fill="#3b82f6" font-weight="bold">x=2, y=1</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>So far, we've solved equations with one unknown, like \( 2x + 3 = 7 \), giving us \( x = 2 \). But what if we have TWO unknowns? We need TWO equations to find them both. <span class="translation">Sejauh ini, kita telah menyelesaikan persamaan dengan satu variabel, seperti \( 2x + 3 = 7 \), memberikan \( x = 2 \). Tapi bagaimana jika kita punya DUA variabel? Kita butuh DUA persamaan untuk menemukan keduanya.</span></p>
+                                <p class="mt-2">A set of two or more equations with the same variables is called a <strong>system of simultaneous equations</strong>. The word "simultaneous" means "at the same time" — the solution must satisfy all equations simultaneously. <span class="translation">Sekumpulan dua atau lebih persamaan dengan variabel yang sama disebut <strong>sistem persamaan simultan</strong>. Kata "simultan" berarti "pada saat yang sama" — solusinya harus memenuhi semua persamaan secara bersamaan.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Why Two Equations?</p>
+                            <p class="mt-1">Think of it like a balance: each equation gives you one piece of information. To find two unknowns, you need two pieces of information. <span class="translation">Bayangkan seperti timbangan: setiap persamaan memberi satu informasi. Untuk menemukan dua variabel, kamu butuh dua informasi.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: 2 unknowns \( \rightarrow \) need 2 equations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">What are Simultaneous Equations?</h2>
+                        <p class="translation">Apa itu Persamaan Simultan?</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <line x1="10" y1="10" x2="10" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="10" y1="140" x2="190" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="20" y1="130" x2="180" y2="30" stroke="#3b82f6" stroke-width="2.5"/>
+                                    <text x="160" y="45" font-size="10" fill="#3b82f6">y = 2x + 1</text>
+                                    <line x1="20" y1="20" x2="180" y2="120" stroke="#ef4444" stroke-width="2.5"/>
+                                    <text x="130" y="135" font-size="10" fill="#ef4444">y = -x + 8</text>
+                                    <circle cx="60" cy="100" r="5" fill="#10b981" stroke="#333" stroke-width="1.5"/>
+                                    <text x="70" y="95" font-size="10" fill="#10b981" font-weight="bold">(2, 5)</text>
+                                    <text x="175" y="135" font-size="9" fill="#666">x</text>
+                                    <text x="3" y="15" font-size="9" fill="#666">y</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Simultaneous equations are a set of equations with the same variables. The solution is the pair \( (x, y) \) that satisfies ALL equations at the same time. <span class="translation">Persamaan simultan adalah sekumpulan persamaan dengan variabel yang sama. Solusinya adalah pasangan \( (x, y) \) yang memenuhi SEMUA persamaan pada saat yang sama.</span></p>
+                                <p class="mt-2">For example: \( y = 2x + 1 \) and \( y = -x + 8 \). The point \( (2, 5) \) satisfies both: \( 5 = 2(2)+1 \) ✓ and \( 5 = -(2)+8 \) ✓. So \( x = 2, y = 5 \) is the solution! <span class="translation">Contohnya: \( y = 2x + 1 \) dan \( y = -x + 8 \). Titik \( (2, 5) \) memenuhi keduanya: \( 5 = 2(2)+1 \) ✓ dan \( 5 = -(2)+8 \) ✓. Jadi \( x = 2, y = 5 \) adalah solusinya!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The Intersection Point</p>
+                            <p class="mt-1">Graphically, the solution of a simultaneous system is where the lines (or curves) intersect. That point lies on BOTH lines! <span class="translation">Secara grafis, solusi sistem simultan adalah titik di mana garis (atau kurva) berpotongan. Titik itu berada pada KEDUA garis!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Solution = Intersection point \( (x, y) \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Real-World Connection: The Shopping Problem</h2>
+                        <p class="translation">Koneksi Dunia Nyata: Soal Belanja</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="140" viewBox="0 0 200 140">
+                                    <ellipse cx="100" cy="70" rx="60" ry="25" fill="#fbbf24" stroke="#333" stroke-width="2"/>
+                                    <rect x="50" y="45" width="100" height="10" rx="3" fill="#f59e0b" stroke="#333"/>
+                                    <circle cx="65" cy="65" r="12" fill="#ef4444" stroke="#333" stroke-width="1.5"/>
+                                    <text x="65" y="69" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">🍎</text>
+                                    <circle cx="100" cy="65" r="12" fill="#8b5cf6" stroke="#333" stroke-width="1.5"/>
+                                    <text x="100" y="69" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">🍌</text>
+                                    <circle cx="135" cy="65" r="12" fill="#10b981" stroke="#333" stroke-width="1.5"/>
+                                    <text x="135" y="69" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">🍊</text>
+                                    <text x="100" y="115" font-size="9" text-anchor="middle" fill="#666">2 apples + 3 bananas = $8</text>
+                                    <text x="100" y="130" font-size="9" text-anchor="middle" fill="#666">1 apple + 2 bananas = $5</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Imagine you go shopping: 2 apples and 3 bananas cost $8. Another day, 1 apple and 2 bananas cost $5. What is the price of each? <span class="translation">Bayangkan kamu pergi belanja: 2 apel dan 3 pisang harganya $8. Lain hari, 1 apel dan 2 pisang harganya $5. Berapa harga masing-masing?</span></p>
+                                <p class="mt-2">Let \( x \) = price of an apple, \( y \) = price of a banana. Then: \( 2x + 3y = 8 \) and \( x + 2y = 5 \). This is a system of simultaneous equations! <span class="translation">Misalkan \( x \) = harga apel, \( y \) = harga pisang. Maka: \( 2x + 3y = 8 \) dan \( x + 2y = 5 \). Ini adalah sistem persamaan simultan!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Define Your Variables</p>
+                            <p class="mt-1">Always start by clearly defining what each variable represents. Write "Let \( x \) = ..." so you don't get confused later. <span class="translation">Selalu mulai dengan mendefinisikan dengan jelas apa yang diwakili setiap variabel. Tulis "Misalkan \( x \) = ..." agar kamu tidak bingung nanti.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Let \( x \) = ..., \( y \) = ... → Set up 2 equations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Types of Simultaneous Equations</h2>
+                        <p class="translation">Jenis-jenis Persamaan Simultan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <!-- Linear-linear -->
+                                    <text x="50" y="15" font-size="9" text-anchor="middle" fill="#10b981" font-weight="bold">Linear + Linear</text>
+                                    <line x1="15" y1="20" x2="85" y2="70" stroke="#3b82f6" stroke-width="2"/>
+                                    <line x1="15" y1="70" x2="85" y2="20" stroke="#ef4444" stroke-width="2"/>
+                                    <circle cx="50" cy="45" r="3" fill="#10b981"/>
+                                    <text x="55" y="50" font-size="8" fill="#10b981">1 solution</text>
+                                    <!-- Linear-quadratic -->
+                                    <text x="150" y="15" font-size="9" text-anchor="middle" fill="#8b5cf6" font-weight="bold">Linear + Quadratic</text>
+                                    <line x1="115" y1="25" x2="185" y2="65" stroke="#3b82f6" stroke-width="2"/>
+                                    <path d="M 115 65 Q 150 5, 185 65" stroke="#ef4444" stroke-width="2" fill="none"/>
+                                    <circle cx="128" cy="35" r="3" fill="#10b981"/>
+                                    <circle cx="172" cy="35" r="3" fill="#10b981"/>
+                                    <text x="150" y="80" font-size="8" text-anchor="middle" fill="#10b981">2 solutions</text>
+                                    <!-- Divider -->
+                                    <line x1="100" y1="10" x2="100" y2="85" stroke="#ccc" stroke-width="1" stroke-dasharray="3,3"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>There are two main types of simultaneous equations you'll encounter in Cambridge IGCSE: <strong>Linear-Linear</strong> (two straight lines) and <strong>Linear-Quadratic</strong> (a line and a parabola). <span class="translation">Ada dua jenis utama persamaan simultan yang akan kamu temui di Cambridge IGCSE: <strong>Linear-Linear</strong> (dua garis lurus) dan <strong>Linear-Kuadrat</strong> (satu garis dan satu parabola).</span></p>
+                                <p class="mt-2">Linear-linear systems have exactly 1 solution (the lines cross once). Linear-quadratic systems can have 0, 1, or 2 solutions depending on how the line cuts the parabola. <span class="translation">Sistem linear-linear memiliki tepat 1 solusi (garis berpotongan sekali). Sistem linear-kuadrat dapat memiliki 0, 1, atau 2 solusi tergantung bagaimana garis memotong parabola.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Count the Solutions</p>
+                            <p class="mt-1">Linear + Linear = 1 solution. Linear + Quadratic = 0, 1, or 2 solutions. Sketching a quick graph helps you predict! <span class="translation">Linear + Linear = 1 solusi. Linear + Kuadrat = 0, 1, atau 2 solusi. Sketsa grafis cepat membantu kamu memprediksi!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Linear: \( y = mx + c \); Quadratic: \( y = ax^2 + bx + c \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Three Methods to Solve</h2>
+                        <p class="translation">Tiga Metode Penyelesaian</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <!-- Three method icons -->
+                                    <rect x="10" y="15" width="55" height="50" rx="8" fill="#3b82f6" opacity="0.2" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="37" y="35" font-size="18" text-anchor="middle" fill="#3b82f6">🔄</text>
+                                    <text x="37" y="55" font-size="8" text-anchor="middle" fill="#3b82f6" font-weight="bold">Substitute</text>
+                                    <rect x="72" y="15" width="55" height="50" rx="8" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="2"/>
+                                    <text x="99" y="35" font-size="18" text-anchor="middle" fill="#10b981">➖</text>
+                                    <text x="99" y="55" font-size="8" text-anchor="middle" fill="#10b981" font-weight="bold">Eliminate</text>
+                                    <rect x="134" y="15" width="55" height="50" rx="8" fill="#ef4444" opacity="0.2" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="161" y="35" font-size="18" text-anchor="middle" fill="#ef4444">📈</text>
+                                    <text x="161" y="55" font-size="8" text-anchor="middle" fill="#ef4444" font-weight="bold">Graphical</text>
+                                    <!-- Arrows down -->
+                                    <path d="M 37 70 L 37 85" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <path d="M 99 70 L 99 85" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <path d="M 161 70 L 161 85" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <!-- Result -->
+                                    <rect x="60" y="90" width="80" height="40" rx="8" fill="#fbbf24" opacity="0.3" stroke="#f59e0b" stroke-width="2"/>
+                                    <text x="100" y="115" font-size="11" text-anchor="middle" fill="#333" font-weight="bold">x = ?, y = ?</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>There are three main methods to solve simultaneous equations: <strong>Substitution</strong> (replace one variable), <strong>Elimination</strong> (add/subtract equations to cancel a variable), and <strong>Graphical</strong> (find where lines intersect on a graph). <span class="translation">Ada tiga metode utama untuk menyelesaikan persamaan simultan: <strong>Substitusi</strong> (ganti satu variabel), <strong>Eliminasi</strong> (tambah/kurangi persamaan untuk menghilangkan variabel), dan <strong>Grafis</strong> (cari titik potong garis pada grafik).</span></p>
+                                <p class="mt-2">Each method has its strengths. We'll learn all three and know when to use which! <span class="translation">Setiap metode memiliki kelebihannya. Kita akan mempelajari ketiganya dan tahu kapan menggunakan yang mana!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Which Method?</p>
+                            <p class="mt-1">If one equation is already \( y = \ldots \) or \( x = \ldots \), use substitution. If both equations have similar coefficients, use elimination. If asked to solve graphically, plot both lines! <span class="translation">Jika satu persamaan sudah \( y = \ldots \) atau \( x = \ldots \), gunakan substitusi. Jika keduanya memiliki koefisien serupa, gunakan eliminasi. Jika diminta menyelesaikan secara grafis, gambar kedua garis!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Substitution, Elimination, Graphical — pick the best tool!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Linear Equations: \( y = mx + c \)</h2>
+                        <p class="translation">Persamaan Linear: \( y = mx + c \)</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <line x1="10" y1="10" x2="10" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="10" y1="140" x2="190" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="10" y1="120" x2="180" y2="30" stroke="#3b82f6" stroke-width="2.5"/>
+                                    <circle cx="10" cy="120" r="4" fill="#ef4444"/>
+                                    <text x="15" y="135" font-size="9" fill="#ef4444" font-weight="bold">c (y-intercept)</text>
+                                    <path d="M 50 100 L 50 90 L 60 90" stroke="#10b981" stroke-width="1.5" fill="none"/>
+                                    <text x="62" y="93" font-size="9" fill="#10b981">m (slope = rise/run)</text>
+                                    <text x="120" y="40" font-size="10" fill="#3b82f6" font-weight="bold">y = mx + c</text>
+                                    <text x="180" y="135" font-size="9" fill="#666">x</text>
+                                    <text x="2" y="15" font-size="9" fill="#666">y</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>A linear equation in the form \( y = mx + c \) represents a straight line. Here, \( m \) is the slope (steepness) and \( c \) is the y-intercept (where the line crosses the y-axis). <span class="translation">Persamaan linear dalam bentuk \( y = mx + c \) merepresentasikan garis lurus. Di sini, \( m \) adalah gradien (kemiringan) dan \( c \) adalah perpotongan-y (di mana garis memotong sumbu y).</span></p>
+                                <p class="mt-2">For example, \( y = 2x + 1 \): slope \( m = 2 \) (rises 2 for every 1 across), y-intercept \( c = 1 \) (crosses y-axis at \( y = 1 \)). <span class="translation">Contohnya, \( y = 2x + 1 \): gradien \( m = 2 \) (naik 2 untuk setiap 1 ke samping), perpotongan-y \( c = 1 \) (memotong sumbu y di \( y = 1 \)).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Quick Slope Reading</p>
+                            <p class="mt-1">Positive \( m \): line goes up ↗. Negative \( m \): line goes down ↘. \( m = 0 \): horizontal line →. <span class="translation">\( m \) positif: garis naik ↗. \( m \) negatif: garis turun ↘. \( m = 0 \): garis horizontal →.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( m = \frac{\text{rise}}{\text{run}} = \frac{y_2 - y_1}{x_2 - x_1} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Rearranging Equations</h2>
+                        <p class="translation">Menyusun Ulang Persamaan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="130" viewBox="0 0 200 130">
+                                    <rect x="10" y="40" width="70" height="50" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="45" y="60" font-size="10" text-anchor="middle" fill="#333">2x + 3y</text>
+                                    <text x="45" y="75" font-size="10" text-anchor="middle" fill="#333">= 12</text>
+                                    <path d="M 85 65 L 115 65" stroke="#ef4444" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="100" y="58" font-size="8" text-anchor="middle" fill="#ef4444" font-weight="bold">make y</text>
+                                    <text x="100" y="70" font-size="8" text-anchor="middle" fill="#ef4444" font-weight="bold">subject</text>
+                                    <rect x="120" y="40" width="70" height="50" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="155" y="55" font-size="9" text-anchor="middle" fill="#10b981" font-weight="bold">y =</text>
+                                    <text x="155" y="72" font-size="9" text-anchor="middle" fill="#333">(12-2x)/3</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Often, equations are given in the form \( ax + by = c \). To use substitution, we need to rearrange for one variable. For example, from \( 2x + 3y = 12 \), we can make \( y \) the subject: \( 3y = 12 - 2x \), so \( y = \frac{12 - 2x}{3} \). <span class="translation">Seringkali, persamaan diberikan dalam bentuk \( ax + by = c \). Untuk menggunakan substitusi, kita perlu menyusun ulang untuk satu variabel. Contohnya, dari \( 2x + 3y = 12 \), kita bisa menjadikan \( y \) sebagai subjek: \( 3y = 12 - 2x \), jadi \( y = \frac{12 - 2x}{3} \).</span></p>
+                                <p class="mt-2">Whatever you do to one side, you must do to the other! Move terms by adding/subtracting, then divide by the coefficient. <span class="translation">Apa pun yang kamu lakukan pada satu sisi, harus kamu lakukan pada sisi lainnya! Pindahkan suku dengan menambah/mengurangi, lalu bagi dengan koefisiennya.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Isolate Step-by-Step</p>
+                            <p class="mt-1">Step 1: Move the term with the OTHER variable to the right side. Step 2: Divide by the coefficient of your target variable. <span class="translation">Langkah 1: Pindahkan suku dengan variabel LAIN ke sisi kanan. Langkah 2: Bagi dengan koefisien variabel targetmu.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( ax + by = c \implies y = \frac{c - ax}{b} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Intersection Points</h2>
+                        <p class="translation">Titik Potong</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <line x1="10" y1="10" x2="10" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="10" y1="140" x2="190" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="20" y1="120" x2="170" y2="30" stroke="#3b82f6" stroke-width="2.5"/>
+                                    <text x="140" y="35" font-size="9" fill="#3b82f6">y = 2x+1</text>
+                                    <line x1="20" y1="30" x2="170" y2="120" stroke="#ef4444" stroke-width="2.5"/>
+                                    <text x="30" y="40" font-size="9" fill="#ef4444">y = -x+8</text>
+                                    <circle cx="60" cy="100" r="5" fill="#10b981" stroke="#333" stroke-width="1.5"/>
+                                    <text x="68" y="100" font-size="10" fill="#10b981" font-weight="bold">(2, 5)</text>
+                                    <path d="M 60 100 L 60 140" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <path d="M 10 100 L 60 100" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>When two lines cross on a graph, that crossing point is called the <strong>intersection point</strong>. The coordinates of this point \( (x, y) \) satisfy BOTH equations simultaneously. <span class="translation">Ketika dua garis bersilangan pada grafik, titik persilangan itu disebut <strong>titik potong</strong>. Koordinat titik ini \( (x, y) \) memenuhi KEDUA persamaan secara simultan.</span></p>
+                                <p class="mt-2">Algebraically, at the intersection point, both equations have the same \( y \)-value for the same \( x \)-value. So we can set \( f(x) = g(x) \) to find \( x \), then substitute back to find \( y \). <span class="translation">Secara aljabar, pada titik potong, kedua persamaan memiliki nilai \( y \) yang sama untuk nilai \( x \) yang sama. Jadi kita bisa set \( f(x) = g(x) \) untuk mencari \( x \), lalu substitusi kembali untuk mencari \( y \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Set Them Equal</p>
+                            <p class="mt-1">If both equations are in the form \( y = \ldots \), simply set the right sides equal: \( mx + c = px + q \), then solve for \( x \). <span class="translation">Jika kedua persamaan dalam bentuk \( y = \ldots \), set sisi kanannya sama: \( mx + c = px + q \), lalu selesaikan untuk \( x \).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( f(x) = g(x) \) at the intersection point.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+			
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Method 1: Substitution</h2>
+                        <p class="translation">Metode 1: Substitusi</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <rect x="10" y="20" width="80" height="40" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="50" y="45" font-size="11" text-anchor="middle" fill="#333">y = 2x</text>
+                                    <rect x="110" y="20" width="80" height="40" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="150" y="45" font-size="11" text-anchor="middle" fill="#333">x + y = 6</text>
+                                    <path d="M 50 65 L 50 80" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <path d="M 150 65 L 150 80" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <path d="M 50 80 L 150 80" stroke="#666" stroke-width="1.5" stroke-dasharray="4,4"/>
+                                    <rect x="50" y="95" width="100" height="40" rx="5" fill="#fef9c3" stroke="#eab308" stroke-width="2"/>
+                                    <text x="100" y="115" font-size="10" text-anchor="middle" fill="#333">x + (2x) = 6</text>
+                                    <text x="100" y="128" font-size="10" text-anchor="middle" fill="#10b981" font-weight="bold">Substitute y in!</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>The substitution method involves replacing one variable with an equivalent expression from the other equation. If you know \( y = 2x \), you can substitute this \( 2x \) into the other equation wherever you see \( y \). <span class="translation">Metode substitusi melibatkan penggantian satu variabel dengan ekspresi ekuivalen dari persamaan lain. Jika kamu tahu \( y = 2x \), kamu bisa mengganti \( 2x \) ini ke persamaan lain di mana pun kamu melihat \( y \).</span></p>
+                                <p class="mt-2">For example, if \( y = 2x \) and \( x + y = 6 \), substitute to get \( x + 2x = 6 \implies 3x = 6 \implies x = 2 \). Then find \( y \). <span class="translation">Contohnya, jika \( y = 2x \) dan \( x + y = 6 \), substitusi untuk mendapatkan \( x + 2x = 6 \implies 3x = 6 \implies x = 2 \). Lalu cari \( y \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: When to Substitute</p>
+                            <p class="mt-1">Substitution is easiest when one equation is already solved for a variable (e.g., \( y = \ldots \) or \( x = \ldots \)). <span class="translation">Substitusi paling mudah jika salah satu persamaan sudah diselesaikan untuk satu variabel (misalnya \( y = \ldots \) atau \( x = \ldots \)).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Plug \( y = \dots \) into the other equation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Method 2: Elimination</h2>
+                        <p class="translation">Metode 2: Eliminasi</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="140" viewBox="0 0 200 140">
+                                    <rect x="10" y="20" width="80" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="50" y="40" font-size="11" text-anchor="middle" fill="#333">2x + y = 10</text>
+                                    <text x="100" y="62" font-size="14" text-anchor="middle" fill="#ef4444" font-weight="bold">+</text>
+                                    <rect x="10" y="70" width="80" height="30" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="50" y="90" font-size="11" text-anchor="middle" fill="#333">2x - y = 2</text>
+                                    <path d="M 100 105 L 140 105" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <rect x="145" y="45" width="45" height="30" rx="5" fill="#fef9c3" stroke="#eab308" stroke-width="2"/>
+                                    <text x="167" y="65" font-size="10" text-anchor="middle" fill="#333">4x = 12</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Elimination involves adding or subtracting the equations to eliminate one of the variables. If the coefficients of \( x \) or \( y \) are the same (with opposite signs), adding the equations will cancel them out. <span class="translation">Eliminasi melibatkan penjumlahan atau pengurangan persamaan untuk menghilangkan salah satu variabel. Jika koefisien \( x \) atau \( y \) sama (dengan tanda berlawanan), menjumlahkan persamaan akan menghapusnya.</span></p>
+                                <p class="mt-2">For example: \( 2x + y = 10 \) and \( 2x - y = 2 \). Add them: \( 4x = 12 \implies x = 3 \). <span class="translation">Contohnya: \( 2x + y = 10 \) dan \( 2x - y = 2 \). Jumlahkan: \( 4x = 12 \implies x = 3 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Matching Coefficients</p>
+                            <p class="mt-1">If coefficients aren't the same, multiply one or both equations by a number to make them match before eliminating! <span class="translation">Jika koefisiennya tidak sama, kalikan satu atau kedua persamaan dengan suatu angka agar cocok sebelum mengeliminasi!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Eq1 + Eq2 (cancel y) or Eq1 - Eq2 (cancel x).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Method 3: Graphical Solution</h2>
+                        <p class="translation">Metode 3: Solusi Grafis</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <line x1="10" y1="10" x2="10" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="10" y1="140" x2="190" y2="140" stroke="#666" stroke-width="1.5"/>
+                                    <line x1="20" y1="120" x2="180" y2="30" stroke="#3b82f6" stroke-width="2.5"/>
+                                    <text x="150" y="35" font-size="10" fill="#3b82f6">y = x + 2</text>
+                                    <line x1="30" y1="30" x2="170" y2="120" stroke="#ef4444" stroke-width="2.5"/>
+                                    <text x="30" y="45" font-size="10" fill="#ef4444">y = -2x + 5</text>
+                                    <circle cx="80" cy="90" r="5" fill="#10b981" stroke="#333" stroke-width="1.5"/>
+                                    <text x="90" y="88" font-size="10" fill="#10b981" font-weight="bold">x=1, y=3</text>
+                                    <path d="M 80 90 L 80 140" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <path d="M 10 90 L 80 90" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>To solve graphically, plot both equations on the same set of axes. The coordinates of the point where the two lines intersect give the solution \( (x, y) \). <span class="translation">Untuk menyelesaikan secara grafis, gambar kedua persamaan pada sumbu yang sama. Koordinat titik di mana kedua garis berpotongan memberikan solusi \( (x, y) \).</span></p>
+                                <p class="mt-2">This method is visual and great for checking if your algebraic solution is correct. If the lines are parallel, there is no solution! <span class="translation">Metode ini visual dan bagus untuk mengecek apakah solusi aljabarmu benar. Jika garisnya sejajar, tidak ada solusi!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Parallel Lines</p>
+                            <p class="mt-1">If two lines have the same slope (\( m \)) but different y-intercepts (\( c \)), they are parallel and never intersect — no solution! <span class="translation">Jika dua garis memiliki gradien (\( m \)) sama tapi perpotongan-y (\( c \)) berbeda, mereka sejajar dan tidak pernah berpotongan — tidak ada solusi!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Solution = Intersection coordinates.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Guided Example: Substitution Method</h2>
+                        <p class="translation">Contoh Terbimbing: Metode Substitusi</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="10" y="15" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#ccc" stroke-width="2"/>
+                                    <text x="90" y="40" font-size="12" text-anchor="middle" fill="#3b82f6" font-weight="bold">Eq 1: y = 3x - 2</text>
+                                    <text x="90" y="60" font-size="12" text-anchor="middle" fill="#10b981" font-weight="bold">Eq 2: x + y = 8</text>
+                                    <line x1="20" y1="70" x2="160" y2="70" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <text x="90" y="90" font-size="11" text-anchor="middle" fill="#ef4444">Substitute Eq 1 into Eq 2:</text>
+                                    <text x="90" y="110" font-size="11" text-anchor="middle" fill="#333">x + (3x - 2) = 8</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Let's solve: \( y = 3x - 2 \) and \( x + y = 8 \). <span class="translation">Mari kita selesaikan: \( y = 3x - 2 \) dan \( x + y = 8 \).</span></p>
+                                <p class="mt-2"><strong>Step 1:</strong> Substitute \( y \) in Eq 2: \( x + (3x - 2) = 8 \). <br><strong>Step 2:</strong> Simplify: \( 4x - 2 = 8 \implies 4x = 10 \implies x = 2.5 \). <br><strong>Step 3:</strong> Find \( y \): \( y = 3(2.5) - 2 = 7.5 - 2 = 5.5 \). <span class="translation"><strong>Langkah 1:</strong> Substitusi \( y \) di Eq 2: \( x + (3x - 2) = 8 \). <br><strong>Langkah 2:</strong> Sederhanakan: \( 4x - 2 = 8 \implies 4x = 10 \implies x = 2.5 \). <br><strong>Langkah 3:</strong> Cari \( y \): \( y = 3(2.5) - 2 = 7.5 - 2 = 5.5 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Don't Forget the Brackets</p>
+                            <p class="mt-1">When substituting, always put brackets around the expression. \( x + (3x - 2) \) is safer than \( x + 3x - 2 \), especially if negative signs are involved! <span class="translation">Saat substitusi, selalu gunakan kurung. \( x + (3x - 2) \) lebih aman daripada \( x + 3x - 2 \), terutama jika ada tanda negatif!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Substitute \( \rightarrow \) Solve for \( x \) \( \rightarrow \) Solve for \( y \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Guided Example: Elimination Method</h2>
+                        <p class="translation">Contoh Terbimbing: Metode Eliminasi</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="10" y="15" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#ccc" stroke-width="2"/>
+                                    <text x="90" y="35" font-size="12" text-anchor="middle" fill="#3b82f6" font-weight="bold">3x + 2y = 12</text>
+                                    <text x="90" y="55" font-size="12" text-anchor="middle" fill="#10b981" font-weight="bold">3x - y = 6</text>
+                                    <line x1="20" y1="65" x2="160" y2="65" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <text x="90" y="85" font-size="11" text-anchor="middle" fill="#ef4444">Subtract Eq 2 from Eq 1:</text>
+                                    <text x="90" y="105" font-size="11" text-anchor="middle" fill="#333">(3x+2y) - (3x-y) = 12 - 6</text>
+                                    <text x="90" y="118" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">3y = 6</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Let's solve: \( 3x + 2y = 12 \) and \( 3x - y = 6 \). <span class="translation">Mari kita selesaikan: \( 3x + 2y = 12 \) dan \( 3x - y = 6 \).</span></p>
+                                <p class="mt-2">Since the \( x \) coefficients are the same (3), subtract Eq 2 from Eq 1: \( (3x+2y) - (3x-y) = 12 - 6 \implies 3y = 6 \implies y = 2 \). Then substitute \( y=2 \) back to find \( x = \frac{8}{3} \). <span class="translation">Karena koefisien \( x \) sama (3), kurangi Eq 2 dari Eq 1: \( (3x+2y) - (3x-y) = 12 - 6 \implies 3y = 6 \implies y = 2 \). Lalu substitusi \( y=2 \) untuk mencari \( x = \frac{8}{3} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Mind the Signs!</p>
+                            <p class="mt-1">When subtracting equations, the sign of EVERY term in the second equation changes. \( -(3x - y) \) becomes \( -3x + y \). <span class="translation">Saat mengurangi persamaan, tanda SETIAP suku di persamaan kedua berubah. \( -(3x - y) \) menjadi \( -3x + y \).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Same signs \( \rightarrow \) Subtract; Opposite signs \( \rightarrow \) Add.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Guided Example: Linear & Quadratic</h2>
+                        <p class="translation">Contoh Terbimbing: Linear dan Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="10" y="15" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#ccc" stroke-width="2"/>
+                                    <text x="90" y="35" font-size="11" text-anchor="middle" fill="#3b82f6" font-weight="bold">y = x - 1 (Line)</text>
+                                    <text x="90" y="55" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">y = x² - 3x + 1 (Parabola)</text>
+                                    <line x1="20" y1="65" x2="160" y2="65" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <text x="90" y="85" font-size="11" text-anchor="middle" fill="#ef4444">Set them equal:</text>
+                                    <text x="90" y="105" font-size="11" text-anchor="middle" fill="#333">x - 1 = x² - 3x + 1</text>
+                                    <text x="90" y="118" font-size="10" text-anchor="middle" fill="#10b981" font-weight="bold">Rearrange to ax²+bx+c=0</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>When solving a linear and a quadratic equation simultaneously, substitution is the best method. Set \( y \) from the line equal to \( y \) from the parabola. <span class="translation">Saat menyelesaikan persamaan linear dan kuadrat secara simultan, substitusi adalah metode terbaik. Set \( y \) dari garis sama dengan \( y \) dari parabola.</span></p>
+                                <p class="mt-2">For example: \( y = x - 1 \) and \( y = x^2 - 3x + 1 \). Set equal: \( x - 1 = x^2 - 3x + 1 \implies x^2 - 4x + 2 = 0 \). Solve using the quadratic formula! <span class="translation">Contohnya: \( y = x - 1 \) dan \( y = x^2 - 3x + 1 \). Set sama: \( x - 1 = x^2 - 3x + 1 \implies x^2 - 4x + 2 = 0 \). Selesaikan pakai rumus kuadrat!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Always Rearrange to Standard Form</p>
+                            <p class="mt-1">Move all terms to one side to get \( ax^2 + bx + c = 0 \). Then you can factor or use the quadratic formula. <span class="translation">Pindahkan semua suku ke satu sisi untuk mendapatkan \( ax^2 + bx + c = 0 \). Lalu kamu bisa memfaktorkan atau menggunakan rumus kuadrat.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Substitute linear into quadratic \( \rightarrow \) \( ax^2+bx+c=0 \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Handling Fractions in Equations</h2>
+                        <p class="translation">Menangani Pecahan dalam Persamaan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="10" y="15" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#ccc" stroke-width="2"/>
+                                    <text x="90" y="40" font-size="12" text-anchor="middle" fill="#3b82f6" font-weight="bold">x/2 + y/3 = 4</text>
+                                    <path d="M 90 50 L 90 75" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                    <text x="90" y="70" font-size="9" text-anchor="middle" fill="#ef4444">Multiply by LCM (6)</text>
+                                    <text x="90" y="95" font-size="12" text-anchor="middle" fill="#10b981" font-weight="bold">3x + 2y = 24</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sometimes equations contain fractions. To solve them, multiply every term by the Lowest Common Multiple (LCM) of the denominators to eliminate the fractions. <span class="translation">Kadang persamaan mengandung pecahan. Untuk menyelesaikannya, kalikan setiap suku dengan Kelipatan Persekutuan Terkecil (KPK) dari penyebutnya untuk menghilangkan pecahan.</span></p>
+                                <p class="mt-2">For example: \( \frac{x}{2} + \frac{y}{3} = 4 \). The LCM of 2 and 3 is 6. Multiply the whole equation by 6: \( 3x + 2y = 24 \). Now it's much easier to solve! <span class="translation">Contohnya: \( \frac{x}{2} + \frac{y}{3} = 4 \). KPK dari 2 dan 3 adalah 6. Kalikan seluruh persamaan dengan 6: \( 3x + 2y = 24 \). Sekarang jauh lebih mudah diselesaikan!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Multiply EVERY Term</p>
+                            <p class="mt-1">When clearing fractions, ensure you multiply every single term on both sides of the equals sign. <span class="translation">Saat menghilangkan pecahan, pastikan kamu mengalikan setiap suku di kedua sisi tanda sama dengan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Multiply by LCM \( \rightarrow \) Clear fractions \( \rightarrow \) Solve.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Setting Up Word Problems</h2>
+                        <p class="translation">Menyusun Soal Cerita</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="10" y="15" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#ccc" stroke-width="2"/>
+                                    <text x="90" y="35" font-size="11" text-anchor="middle" fill="#3b82f6" font-weight="bold">"Sum of two numbers is 10"</text>
+                                    <text x="90" y="55" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">x + y = 10</text>
+                                    <text x="90" y="80" font-size="11" text-anchor="middle" fill="#3b82f6" font-weight="bold">"Their difference is 4"</text>
+                                    <text x="90" y="100" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">x - y = 4</text>
+                                    <path d="M 90 110 L 90 125" stroke="#666" stroke-width="1.5" marker-end="url(#arr1)"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Translating words to math is key. "Sum" means addition (\( x + y \)), "Difference" means subtraction (\( x - y \)), "Twice" means multiply by 2 (\( 2x \)). <span class="translation">Menerjemahkan kata ke matematika adalah kunci. "Jumlah" berarti penjumlahan (\( x + y \)), "Selisih" berarti pengurangan (\( x - y \)), "Dua kali" berarti dikalikan 2 (\( 2x \)).</span></p>
+                                <p class="mt-2">If a problem says "The sum of two numbers is 10, and their difference is 4", let the numbers be \( x \) and \( y \). You get: \( x + y = 10 \) and \( x - y = 4 \). <span class="translation">Jika soal mengatakan "Jumlah dua bilangan adalah 10, dan selisihnya 4", misalkan bilangannya \( x \) dan \( y \). Kamu dapat: \( x + y = 10 \) dan \( x - y = 4 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Define Variables Clearly</p>
+                            <p class="mt-1">Write: "Let \( x \) be the larger number, \( y \) be the smaller number." This prevents mixing them up when setting up the equations. <span class="translation">Tulis: "Misalkan \( x \) adalah bilangan yang lebih besar, \( y \) adalah yang lebih kecil." Ini mencegah tertukar saat menyusun persamaan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Identify unknowns \( \rightarrow \) assign variables \( \rightarrow \) translate sentences.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Verifying Your Solution</h2>
+                        <p class="translation">Memverifikasi Solusi</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="10" y="15" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#ccc" stroke-width="2"/>
+                                    <text x="90" y="35" font-size="12" text-anchor="middle" fill="#3b82f6" font-weight="bold">Solution: x=2, y=3</text>
+                                    <text x="90" y="60" font-size="11" text-anchor="middle" fill="#666">Check in 2x + y = 7</text>
+                                    <text x="90" y="80" font-size="11" text-anchor="middle" fill="#333">2(2) + 3 = 4 + 3 = 7</text>
+                                    <text x="90" y="100" font-size="12" text-anchor="middle" fill="#10b981" font-weight="bold">✔️ Correct!</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Always check your answers! Substitute your \( x \) and \( y \) values back into BOTH original equations. If both sides equal, your solution is correct. <span class="translation">Selalu periksa jawabanmu! Substitusi nilai \( x \) dan \( y \) kembali ke KEDUA persamaan asli. Jika kedua sisi sama, solusimu benar.</span></p>
+                                <p class="mt-2">If you found \( x=2, y=3 \) for \( 2x + y = 7 \), check: \( 2(2) + 3 = 4 + 3 = 7 \). It matches! Do this for the second equation too. <span class="translation">Jika kamu menemukan \( x=2, y=3 \) untuk \( 2x + y = 7 \), cek: \( 2(2) + 3 = 4 + 3 = 7 \). Cocok! Lakukan ini untuk persamaan kedua juga.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Catch Silly Mistakes</p>
+                            <p class="mt-1">Checking takes 10 seconds but saves you from losing marks due to a simple sign error earlier in the calculation. <span class="translation">Mengecek memakan waktu 10 detik tapi menyelamatkanmu dari kehilangan nilai karena kesalahan tanda sederhana dalam perhitungan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Plug \( (x,y) \) into Eq 1 and Eq 2 \( \rightarrow \) LHS = RHS.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: CONSOLIDATION & REFLECTION         -->
+            <!-- ========================================== -->
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Consolidation & Reflection</h2>
+                    <p class="translation">Konsolidasi & Refleksi</p>
+                    <p>You have successfully mastered Simultaneous Equations! Remember the three methods (Substitution, Elimination, Graphical) and how to apply them to both linear and quadratic systems. <span class="translation">Anda telah berhasil menguasai Persamaan Simultan! Ingat tiga metode (Substitusi, Eliminasi, Grafis) dan cara menerapkannya pada sistem linear dan kuadrat.</span></p>
+                    <p class="mt-2">Always define your variables clearly in word problems and verify your solutions by substituting them back. <span class="translation">Selalu definisikan variabel Anda dengan jelas dalam soal cerita dan verifikasi solusi Anda dengan substitusi kembali.</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Go to learn.algonova.id <span class="translation text-sm italic">Pergi ke learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+            <!-- Pagination Bar -->
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Simultaneous Equations</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+	
+    <script>
+        // ====== MATH QUESTIONS DATA (PART 1: WARMUP, INTRO, REVIEW, PROBLEM) ======
+        const questions = {};
+        Object.assign(questions, {
+            // SPIRAL REVIEW WARM-UP
+            "w-task1": { type: "single", q: "Which of the following is the quadratic formula used to find the roots of \\( ax^2 + bx + c = 0 \\)? <i class='fas fa-rocket text-blue-500 ml-2'></i>", q_trans: "Mana dari berikut ini adalah rumus kuadrat untuk mencari akar dari \\( ax^2 + bx + c = 0 \\)?", opts: ["\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", "\\( x = -b \\pm \\frac{\\sqrt{b^2 - 4ac}}{2a} \\)", "\\( x = \\frac{b \\pm \\sqrt{b^2 - 4ac}}{a} \\)", "\\( x = \\frac{-b \\pm \\sqrt{b^2 + 4ac}}{2a} \\)", "\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4c}}{2a} \\)"], ans: "\\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)", exp: "The quadratic formula is derived by completing the square. The standard form is \\( ax^2 + bx + c = 0 \\), and the roots are given by \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\).", exp_trans: "Rumus kuadrat diturunkan dengan melengkapkan kuadrat. Bentuk standarnya adalah \\( ax^2 + bx + c = 0 \\), dan akarnya diberikan oleh \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)." },
+            "w-task2": { type: "fill", q: "Find the root of the quadratic equation \\( x^2 - 4x + 4 = 0 \\). <i class='fas fa-search text-blue-500 ml-2'></i>", q_trans: "Temukan akar dari persamaan kuadrat \\( x^2 - 4x + 4 = 0 \\).", ans: "2", exp: "We can factor the equation: \\( x^2 - 4x + 4 = 0 \\implies (x - 2)^2 = 0 \\). So the only root is \\( x = 2 \\).", exp_trans: "Kita dapat memfaktorkan persamaan: \\( x^2 - 4x + 4 = 0 \\implies (x - 2)^2 = 0 \\). Jadi satu-satunya akar adalah \\( x = 2 \\)." },
+            "w-task3": { type: "tf_table", q: "Evaluate the following statements regarding linear equations in the form \\( y = mx + c \\). <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Evaluasi pernyataan berikut mengenai persamaan linear dalam bentuk \\( y = mx + c \\).", opts: ["\\( m \\) represents the slope or gradient of the line", "\\( c \\) represents the x-intercept", "If \\( m > 0 \\), the line slopes upwards from left to right", "If \\( m = 0 \\), the line is vertical"], ans: ["B", "S", "B", "S"], exp: "1. B, \\( m \\) is the slope. 2. S, \\( c \\) is the y-intercept, not x. 3. B, positive slope goes up. 4. S, if \\( m = 0 \\), the line is horizontal.", exp_trans: "1. B, \\( m \\) adalah gradien. 2. S, \\( c \\) adalah perpotongan-y, bukan x. 3. B, gradien positif naik. 4. S, jika \\( m = 0 \\), garisnya horizontal." },
+            "w-task4": { type: "single", q: "Which of the following pairs of equations is a system of simultaneous equations? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Manakah dari pasangan persamaan berikut yang merupakan sistem persamaan simultan?", opts: ["\\( y = 2x \\) and \\( z = 3x \\)", "\\( 2x + y = 8 \\) and \\( x - y = 1 \\)", "\\( x^2 = 4 \\) and \\( y = 3 \\)", "\\( a + b = 5 \\) and \\( c - d = 2 \\)"], ans: "\\( 2x + y = 8 \\) and \\( x - y = 1 \\)", exp: "Simultaneous equations must share the same variables. The pair \\( 2x + y = 8 \\) and \\( x - y = 1 \\) both contain the variables \\( x \\) and \\( y \\), and they can be solved together to find a unique solution \\( (x, y) \\).", exp_trans: "Persamaan simultan harus memiliki variabel yang sama. Pasangan \\( 2x + y = 8 \\) dan \\( x - y = 1 \\) keduanya memuat variabel \\( x \\) dan \\( y \\), dan dapat diselesaikan bersama untuk menemukan solusi unik \\( (x, y) \\)." },
+            "w-task5": { type: "complex", q: "Which of the following represent a valid system of simultaneous equations with two variables \\( x \\) and \\( y \\)? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Manakah dari berikut ini yang mewakili sistem persamaan simultan yang valid dengan dua variabel \\( x \\) dan \\( y \\)?", opts: ["\\( y = 2x + 1 \\) and \\( y = -x + 4 \\)", "\\( x + 3y = 5 \\) and \\( 2x - y = 1 \\)", "\\( x + y = 5 \\) and \\( x + z = 5 \\)", "\\( y = x^2 \\) and \\( y = 2x \\)"], ans: [0, 1, 3], exp: "A system of simultaneous equations must involve the same set of variables. Options 1, 2, and 4 all use only \\( x \\) and \\( y \\). Option 3 introduces \\( z \\), so it's not a 2-variable system of \\( x \\) and \\( y \\).", exp_trans: "Sistem persamaan simultan harus melibatkan himpunan variabel yang sama. Opsi 1, 2, dan 4 semuanya hanya menggunakan \\( x \\) dan \\( y \\). Opsi 3 memperkenalkan \\( z \\), sehingga bukan sistem dua variabel \\( x \\) dan \\( y \\)." },
+            "w-task6": { type: "fill", q: "Given the equation \\( y = 3x - 2 \\), what is the value of \\( y \\) when \\( x = 4 \\)? <i class='fas fa-ruler-horizontal text-blue-500 ml-2'></i>", q_trans: "Diketahui persamaan \\( y = 3x - 2 \\), berapakah nilai \\( y \\) saat \\( x = 4 \\)?", ans: "10", exp: "Substitute \\( x = 4 \\) into the equation: \\( y = 3(4) - 2 = 12 - 2 = 10 \\).", exp_trans: "Substitusikan \\( x = 4 \\) ke dalam persamaan: \\( y = 3(4) - 2 = 12 - 2 = 10 \\)." },
+            "w-task7": { type: "single", q: "Graphically, what does the solution to a system of simultaneous linear equations represent? <i class='fas fa-infinity text-blue-500 ml-2'></i>", q_trans: "Secara grafis, apa yang diwakili oleh solusi dari sistem persamaan linear simultan?", opts: ["The area between two lines", "The point where the two lines intersect", "The y-intercepts of the two lines", "The slopes of the two lines", "The origin"], ans: "The point where the two lines intersect", exp: "The solution \\( (x, y) \\) to a system of simultaneous equations is the coordinate pair that satisfies both equations. On a graph, this is the exact point where the two lines cross (intersect).", exp_trans: "Solusi \\( (x, y) \\) dari sistem persamaan simultan adalah pasangan koordinat yang memenuhi kedua persamaan. Pada grafik, ini adalah titik tepat di mana dua garis saling berpotongan." },
+            "w-task8": { type: "tf_table", q: "Consider a system of one linear equation and one quadratic equation. <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Perhatikan sistem dengan satu persamaan linear dan satu persamaan kuadrat.", opts: ["The system can have 0, 1, or 2 real solutions", "Graphically, it involves a straight line and a parabola", "The line can intersect the parabola at most twice", "The system always has exactly one solution"], ans: ["B", "B", "B", "S"], exp: "1. B, a line can miss, touch, or cross a parabola twice. 2. B, linear is a line, quadratic is a parabola. 3. B, maximum 2 intersections. 4. S, it doesn't always have exactly one; it can have 0 or 2.", exp_trans: "1. B, sebuah garis bisa tidak memotong, menyinggung, atau memotong parabola dua kali. 2. B, linear adalah garis, kuadrat adalah parabola. 3. B, maksimal 2 perpotongan. 4. S, tidak selalu tepat satu; bisa 0 atau 2." },
+            "w-task9": { type: "fill", q: "Solve the simple linear equation for \\( x \\): \\( 2x + 5 = 11 \\). <i class='fas fa-calculator text-blue-500 ml-2'></i>", q_trans: "Selesaikan persamaan linear sederhana untuk \\( x \\): \\( 2x + 5 = 11 \\).", ans: "3", exp: "Subtract 5 from both sides: \\( 2x = 6 \\). Divide by 2: \\( x = 3 \\).", exp_trans: "Kurangi 5 dari kedua sisi: \\( 2x = 6 \\). Bagi dengan 2: \\( x = 3 \\)." },
+            "w-task10": { type: "complex", q: "Which of the following are valid methods to solve simultaneous equations algebraically? <i class='fas fa-plus-circle text-blue-500 ml-2'></i>", q_trans: "Manakah dari berikut ini yang merupakan metode aljabar yang valid untuk menyelesaikan persamaan simultan?", opts: ["Substitution", "Elimination", "Factorization of the discriminant", "Graphing the lines and finding the intersection"], ans: [0, 1], exp: "Algebraic methods involve manipulating symbols and equations. Substitution and Elimination are the two primary algebraic methods. Graphing is a graphical method, not purely algebraic, though it uses algebra to plot.", exp_trans: "Metode aljabar melibatkan manipulasi simbol dan persamaan. Substitusi dan Eliminasi adalah dua metode aljabar utama. Penggambaran grafik adalah metode grafis, bukan murni aljabar, meskipun menggunakan aljabar untuk memplot." },
+
+            // INTRODUCTION & REAL-WORLD
+            "i-task1": { type: "single", q: "A bakery sells cupcakes and cookies. 2 cupcakes and 3 cookies cost $8. 1 cupcake and 2 cookies cost $5. If \\( c \\) is the price of a cupcake and \\( k \\) is the price of a cookie, which system of equations models this? <i class='fas fa-cookie-bite text-green-500 ml-2'></i>", q_trans: "Sebuah toko roti menjual cupcake dan kue. 2 cupcake dan 3 kue berharga $8. 1 cupcake dan 2 kue berharga $5. Jika \\( c \\) adalah harga cupcake dan \\( k \\) adalah harga kue, sistem persamaan manakah yang memodelkan ini?", opts: ["\\( 2c + 3k = 8 \\) and \\( c + 2k = 5 \\)", "\\( 3c + 2k = 8 \\) and \\( 2c + k = 5 \\)", "\\( 2c + 3k = 5 \\) and \\( c + 2k = 8 \\)", "\\( c + k = 8 \\) and \\( c - k = 5 \\)", "\\( 2c + k = 8 \\) and \\( c + 2k = 5 \\)"], ans: "\\( 2c + 3k = 8 \\) and \\( c + 2k = 5 \\)", exp: "Translate the words directly: '2 cupcakes and 3 cookies cost 8' means \\( 2c + 3k = 8 \\). '1 cupcake and 2 cookies cost 5' means \\( 1c + 2k = 5 \\).", exp_trans: "Terjemahkan kata-katanya langsung: '2 cupcake dan 3 kue berharga 8' berarti \\( 2c + 3k = 8 \\). '1 cupcake dan 2 kue berharga 5' berarti \\( 1c + 2k = 5 \\)." },
+            "i-task2": { type: "fill", q: "The sum of two numbers, \\( x \\) and \\( y \\), is 15. Express this as an equation (e.g., x+y=15). <i class='fas fa-equals text-green-500 ml-2'></i>", q_trans: "Jumlah dari dua bilangan, \\( x \\) dan \\( y \\), adalah 15. Nyatakan ini sebagai persamaan (misalnya x+y=15).", ans: "x+y=15", exp: "'Sum' means addition. The sum of \\( x \\) and \\( y \\) being 15 is written as \\( x + y = 15 \\).", exp_trans: "'Jumlah' berarti penjumlahan. Jumlah \\( x \\) dan \\( y \\) adalah 15 ditulis sebagai \\( x + y = 15 \\)." },
+            "i-task3": { type: "tf_table", q: "Match the word phrases to their mathematical translations. <i class='fas fa-language text-green-500 ml-2'></i>", q_trans: "Cocokkan frasa kata dengan terjemahan matematisnya.", opts: ["'Twice the number \\( x \\)' means \\( 2x \\)", "'The difference between \\( x \\) and \\( y \\)' means \\( x - y \\) or \\( y - x \\)", "'The product of \\( x \\) and \\( y \\)' means \\( x + y \\)", "'15 less than \\( x \\)' means \\( 15 - x \\)"], ans: ["B", "B", "S", "S"], exp: "1. B, twice means multiply by 2. 2. B, difference is subtraction. 3. S, product is multiplication \\( xy \\). 4. S, '15 less than x' is \\( x - 15 \\), not \\( 15 - x \\).", exp_trans: "1. B, dua kali berarti dikalikan 2. 2. B, selisih adalah pengurangan. 3. S, perkalian adalah \\( xy \\). 4. S, '15 kurangnya x' adalah \\( x - 15 \\), bukan \\( 15 - x \\)." },
+            "i-task4": { type: "single", q: "A movie theater sold 100 tickets. Adult tickets cost $10 and child tickets cost $5. Total revenue was $800. If \\( a \\) is adult tickets and \\( c \\) is child tickets, which system models this? <i class='fas fa-film text-green-500 ml-2'></i>", q_trans: "Sebuah bioskop menjual 100 tiket. Tiket dewasa berharga $10 dan tiket anak berharga $5. Total pendapatan adalah $800. Jika \\( a \\) adalah tiket dewasa dan \\( c \\) adalah tiket anak, sistem manakah yang memodelkan ini?", opts: ["\\( a + c = 100 \\) and \\( 10a + 5c = 800 \\)", "\\( a + c = 800 \\) and \\( 10a + 5c = 100 \\)", "\\( a - c = 100 \\) and \\( 10a - 5c = 800 \\)", "\\( 10a + 5c = 100 \\) and \\( a + c = 800 \\)", "\\( a + c = 100 \\) and \\( 10a + c = 800 \\)"], ans: "\\( a + c = 100 \\) and \\( 10a + 5c = 800 \\)", exp: "The total number of tickets is 100: \\( a + c = 100 \\). The total revenue is 10 dollars per adult and 5 per child: \\( 10a + 5c = 800 \\).", exp_trans: "Jumlah total tiket adalah 100: \\( a + c = 100 \\). Total pendapatan adalah 10 dolar per dewasa dan 5 per anak: \\( 10a + 5c = 800 \\)." },
+            "i-task5": { type: "complex", q: "Which of the following real-world scenarios can be modeled by a system of simultaneous equations? <i class='fas fa-project-diagram text-green-500 ml-2'></i>", q_trans: "Skenario dunia nyata mana saja yang bisa dimodelkan dengan sistem persamaan simultan?", opts: ["Finding two numbers given their sum and difference", "Calculating the area of a rectangle", "Determining the speed of two cars if we know their relative speed and distance", "Finding the intersection point of two roads on a map"], ans: [0, 2, 3], exp: "Simultaneous equations are used when two unknowns are related by two pieces of information. Options 1, 3, and 4 involve finding unknowns based on intersecting conditions. Area of a rectangle requires only one formula.", exp_trans: "Persamaan simultan digunakan ketika dua variabel yang tidak diketahui dikaitkan oleh dua informasi. Opsi 1, 3, dan 4 melibatkan pencarian variabel berdasarkan kondisi yang berpotongan. Luas persegi panjang hanya membutuhkan satu rumus." },
+            "i-task6": { type: "fill", q: "By inspection, what is the value of \\( x \\) in the system: \\( x = 2y \\) and \\( x + y = 6 \\)? <i class='fas fa-eye text-green-500 ml-2'></i>", q_trans: "Dengan inspeksi, berapakah nilai \\( x \\) pada sistem: \\( x = 2y \\) dan \\( x + y = 6 \\)?", ans: "4", exp: "Substitute \\( x = 2y \\) into \\( x + y = 6 \\implies 2y + y = 6 \\implies 3y = 6 \\implies y = 2 \\). Then \\( x = 2(2) = 4 \\).", exp_trans: "Substitusikan \\( x = 2y \\) ke \\( x + y = 6 \\implies 3y = 6 \\implies y = 2 \\). Lalu \\( x = 2(2) = 4 \\)." },
+            "i-task7": { type: "single", q: "Two planes are flying towards each other. Plane A travels at 500 mph and Plane B at 700 mph. They start 3600 miles apart. How long until they meet? <i class='fas fa-plane text-green-500 ml-2'></i>", q_trans: "Dua pesawat terbang saling mendekati. Pesawat A melakukan perjalanan 500 mph dan Pesawat B 700 mph. Mereka mulai berjarak 3600 mil. Berapa lama sampai mereka bertemu?", opts: ["2 hours", "3 hours", "4 hours", "5 hours", "6 hours"], ans: "3 hours", exp: "Their relative speed is \\( 500 + 700 = 1200 \\) mph. Distance is 3600. \\( 1200t = 3600 \\implies t = 3 \\). We can also set \\( d_A = 500t \\) and \\( d_B = 700t \\), \\( d_A + d_B = 3600 \\).", exp_trans: "Kecepatan relatif mereka adalah \\( 500 + 700 = 1200 \\) mph. Jaraknya 3600. \\( 1200t = 3600 \\implies t = 3 \\). Kita bisa set \\( d_A = 500t \\) dan \\( d_B = 700t \\), \\( d_A + d_B = 3600 \\)." },
+            "i-task8": { type: "tf_table", q: "Verify if the point \\( (3, 1) \\) is a solution to the system: \\( x + y = 4 \\) and \\( x - 2y = 1 \\). <i class='fas fa-clipboard-check text-green-500 ml-2'></i>", q_trans: "Verifikasi apakah titik \\( (3, 1) \\) adalah solusi dari sistem: \\( x + y = 4 \\) dan \\( x - 2y = 1 \\).", opts: ["Substitute \\( (3, 1) \\) into \\( x + y = 4 \\implies 3 + 1 = 4 \\) which is True", "Substitute \\( (3, 1) \\) into \\( x - 2y = 1 \\implies 3 - 2(1) = 1 \\) which is True", "The point \\( (3, 1) \\) satisfies both equations", "The point \\( (3, 1) \\) is not a solution to the system"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, because it satisfies both. 4. S, because it IS a solution.", exp_trans: "1. B. 2. B. 3. B, karena memenuhi keduanya. 4. S, karena itu ADALAH solusi." },
+            "i-task9": { type: "single", q: "On a graph, line A has equation \\( y = 2x + 1 \\) and line B has equation \\( y = -x + 4 \\). What is the x-coordinate of their intersection? <i class='fas fa-map-marker-alt text-green-500 ml-2'></i>", q_trans: "Pada grafik, garis A memiliki persamaan \\( y = 2x + 1 \\) dan garis B memiliki persamaan \\( y = -x + 4 \\). Berapakah koordinat x dari perpotongannya?", opts: ["\\( x = 1 \\)", "\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = -1 \\)", "\\( x = 0 \\)"], ans: "\\( x = 1 \\)", exp: "Set the equations equal: \\( 2x + 1 = -x + 4 \\implies 3x = 3 \\implies x = 1 \\).", exp_trans: "Setarakan persamaannya: \\( 2x + 1 = -x + 4 \\implies 3x = 3 \\implies x = 1 \\)." },
+            "i-task10": { type: "complex", q: "A farmer has chickens and cows. There are 30 heads and 80 legs. Let \\( c \\) be chickens and \\( w \\) be cows. Which statements are true? <i class='fas fa-tractor text-green-500 ml-2'></i>", q_trans: "Seorang peternak memiliki ayam dan sapi. Ada 30 kepala dan 80 kaki. Misalkan \\( c \\) ayam dan \\( w \\) sapi. Pernyataan mana yang benar?", opts: ["\\( c + w = 30 \\)", "\\( 2c + 4w = 80 \\)", "\\( 4c + 2w = 80 \\)", "Solving gives \\( c = 20 \\) and \\( w = 10 \\)"], ans: [0, 1, 3], exp: "1. B, each animal has 1 head. 2. B, chickens have 2 legs, cows have 4. 3. S, legs are reversed. 4. B, solving \\( c+w=30 \\) and \\( 2c+4w=80 \\) yields \\( c=20, w=10 \\).", exp_trans: "1. B, setiap hewan punya 1 kepala. 2. B, ayam punya 2 kaki, sapi 4. 3. S, kakinya terbalik. 4. B, menyelesaikan \\( c+w=30 \\) dan \\( 2c+4w=80 \\) menghasilkan \\( c=20, w=10 \\)." },
+
+            // REVIEW OF PRIOR KNOWLEDGE
+            "r-task1": { type: "single", q: "Rearrange the equation \\( 3x + 2y = 12 \\) to make \\( y \\) the subject. <i class='fas fa-arrows-alt text-purple-500 ml-2'></i>", q_trans: "Susun ulang persamaan \\( 3x + 2y = 12 \\) untuk menjadikan \\( y \\) sebagai subjek.", opts: ["\\( y = \\frac{12 - 3x}{2} \\)", "\\( y = \\frac{12 + 3x}{2} \\)", "\\( y = 12 - \\frac{3x}{2} \\)", "\\( y = 6 - 3x \\)", "\\( y = \\frac{3x - 12}{2} \\)"], ans: "\\( y = \\frac{12 - 3x}{2} \\)", exp: "Subtract \\( 3x \\): \\( 2y = 12 - 3x \\). Divide by 2: \\( y = \\frac{12 - 3x}{2} \\).", exp_trans: "Kurangi \\( 3x \\): \\( 2y = 12 - 3x \\). Bagi 2: \\( y = \\frac{12 - 3x}{2} \\)." },
+            "r-task2": { type: "fill", q: "Find the slope (gradient) of the line passing through the points \\( (1, 2) \\) and \\( (3, 8) \\). <i class='fas fa-chart-line text-purple-500 ml-2'></i>", q_trans: "Temukan gradien garis yang melalui titik \\( (1, 2) \\) dan \\( (3, 8) \\).", ans: "3", exp: "Slope \\( m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{8 - 2}{3 - 1} = \\frac{6}{2} = 3 \\).", exp_trans: "Gradien \\( m = \\frac{8 - 2}{3 - 1} = \\frac{6}{2} = 3 \\)." },
+            "r-task3": { type: "tf_table", q: "Analyze the properties of slopes for linear equations. <i class='fas fa-brain text-purple-500 ml-2'></i>", q_trans: "Analisis sifat gradien untuk persamaan linear.", opts: ["A positive slope means the line goes up from left to right", "A slope of 0 means the line is horizontal", "An undefined slope means the line is horizontal", "Parallel lines have the same slope"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, undefined slope means vertical. 4. B, parallel lines have identical slopes.", exp_trans: "1. B. 2. B. 3. S, gradien tidak terdefinisi berarti vertikal. 4. B, garis sejajar memiliki gradien yang identik." },
+            "r-task4": { type: "single", q: "What are the x and y intercepts of the equation \\( 2x + 3y = 6 \\)? <i class='fas fa-circle-notch text-purple-500 ml-2'></i>", q_trans: "Berapakah perpotongan x dan y dari persamaan \\( 2x + 3y = 6 \\)?", opts: ["x-int = 3, y-int = 2", "x-int = 2, y-int = 3", "x-int = 6, y-int = 6", "x-int = -3, y-int = -2", "x-int = 0, y-int = 0"], ans: "x-int = 3, y-int = 2", exp: "For x-intercept, set \\( y = 0 \\implies 2x = 6 \\implies x = 3 \\). For y-intercept, set \\( x = 0 \\implies 3y = 6 \\implies y = 2 \\).", exp_trans: "Untuk perpotongan x, set \\( y = 0 \\implies 2x = 6 \\implies x = 3 \\). Untuk perpotongan y, set \\( x = 0 \\implies 3y = 6 \\implies y = 2 \\)." },
+            "r-task5": { type: "complex", q: "Which of the following equations are equivalent to \\( y = 2x - 4 \\)? <i class='fas fa-equals text-purple-500 ml-2'></i>", q_trans: "Manakah persamaan berikut yang ekuivalen dengan \\( y = 2x - 4 \\)?", opts: ["\\( 2x - y = 4 \\)", "\\( y - 2x = -4 \\)", "\\( x = \\frac{y + 4}{2} \\)", "\\( y + 2 = 2x - 2 \\)"], ans: [0, 1, 2, 3], exp: "1. B, rearranged. 2. B, rearranged. 3. B, rearranged for x. 4. B, simplifying gives \\( y = 2x - 4 \\). All are equivalent.", exp_trans: "1. B, disusun ulang. 2. B, disusun ulang. 3. B, disusun ulang untuk x. 4. B, disederhanakan menjadi \\( y = 2x - 4 \\). Semuanya ekuivalen." },
+            "r-task6": { type: "fill", q: "Given \\( y = -2x + 5 \\), find the value of \\( y \\) when \\( x = -1 \\). <i class='fas fa-superscript text-purple-500 ml-2'></i>", q_trans: "Diketahui \\( y = -2x + 5 \\), cari nilai \\( y \\) saat \\( x = -1 \\).", ans: "7", exp: "\\( y = -2(-1) + 5 = 2 + 5 = 7 \\).", exp_trans: "\\( y = -2(-1) + 5 = 2 + 5 = 7 \\)." },
+            "r-task7": { type: "single", q: "Write the equation of a line that passes through \\( (0, 3) \\) and has a slope of \\( -2 \\). <i class='fas fa-pen text-purple-500 ml-2'></i>", q_trans: "Tulis persamaan garis yang melalui \\( (0, 3) \\) dan memiliki gradien \\( -2 \\).", opts: ["\\( y = -2x + 3 \\)", "\\( y = 2x + 3 \\)", "\\( y = -2x - 3 \\)", "\\( y = 3x - 2 \\)", "\\( y = -3x + 2 \\)"], ans: "\\( y = -2x + 3 \\)", exp: "Using \\( y = mx + c \\), the slope \\( m = -2 \\) and y-intercept \\( c = 3 \\). So \\( y = -2x + 3 \\).", exp_trans: "Menggunakan \\( y = mx + c \\), gradien \\( m = -2 \\) dan perpotongan-y \\( c = 3 \\). Jadi \\( y = -2x + 3 \\)." },
+            "r-task8": { type: "tf_table", q: "Given the line \\( 4x - y = 8 \\). <i class='fas fa-clipboard-list text-purple-500 ml-2'></i>", q_trans: "Diketahui garis \\( 4x - y = 8 \\).", opts: ["The y-intercept is \\( -8 \\)", "The x-intercept is \\( 2 \\)", "The slope is \\( 4 \\)", "The line passes through \\( (1, -4) \\)"], ans: ["B", "B", "B", "B"], exp: "1. B, set \\( x=0 \\implies -y=8 \\implies y=-8 \\). 2. B, set \\( y=0 \\implies 4x=8 \\implies x=2 \\). 3. B, rearrange to \\( y=4x-8 \\implies m=4 \\). 4. B, check: \\( 4(1) - (-4) = 8 \\). All true.", exp_trans: "1. B. 2. B. 3. B. 4. B. Semua benar." },
+            "r-task9": { type: "single", q: "What is the equation of a horizontal line passing through \\( y = -5 \\)? <i class='fas fa-grip-lines text-purple-500 ml-2'></i>", q_trans: "Apa persamaan garis horizontal yang melalui \\( y = -5 \\)?", opts: ["\\( y = -5 \\)", "\\( x = -5 \\)", "\\( y = 0 \\)", "\\( y = x - 5 \\)", "\\( x = 0 \\)"], ans: "\\( y = -5 \\)", exp: "A horizontal line has the form \\( y = c \\). Since it passes through \\( y = -5 \\), the equation is \\( y = -5 \\).", exp_trans: "Garis horizontal memiliki bentuk \\( y = c \\). Karena melalui \\( y = -5 \\), persamaannya adalah \\( y = -5 \\)." },
+            "r-task10": { type: "complex", q: "Which of the following linear equations pass through the point \\( (2, 5) \\)? <i class='fas fa-check-circle text-purple-500 ml-2'></i>", q_trans: "Manakah persamaan linear berikut yang melalui titik \\( (2, 5) \\)?", opts: ["\\( y = 2x + 1 \\)", "\\( y = -x + 7 \\)", "\\( 2x + y = 9 \\)", "\\( y = 3x - 1 \\)"], ans: [0, 1, 2, 3], exp: "1. B, \\( 5 = 2(2)+1 \\). 2. B, \\( 5 = -(2)+7 \\). 3. B, \\( 2(2)+5=9 \\). 4. B, \\( 5 = 3(2)-1 \\). All are true.", exp_trans: "1. B. 2. B. 3. B. 4. B, karena \\( 3(2)-1 = 5 \\). Semua pernyataan benar." },
+
+            // PROBLEM INTRODUCTION (Methods)
+            "p-task1": { type: "single", q: "Using substitution, solve: \\( y = 3x \\) and \\( x + y = 8 \\). <i class='fas fa-sync text-orange-500 ml-2'></i>", q_trans: "Menggunakan substitusi, selesaikan: \\( y = 3x \\) dan \\( x + y = 8 \\).", opts: ["\\( x = 2, y = 6 \\)", "\\( x = 6, y = 2 \\)", "\\( x = 1, y = 7 \\)", "\\( x = 4, y = 4 \\)", "\\( x = 8, y = 0 \\)"], ans: "\\( x = 2, y = 6 \\)", exp: "Substitute \\( y = 3x \\) into \\( x + y = 8 \\implies x + 3x = 8 \\implies 4x = 8 \\implies x = 2 \\). Then \\( y = 3(2) = 6 \\).", exp_trans: "Substitusi \\( y = 3x \\) ke \\( x + y = 8 \\implies 4x = 8 \\implies x = 2 \\). Lalu \\( y = 3(2) = 6 \\)." },
+            "p-task2": { type: "fill", q: "Solve by substitution: \\( x = 4 \\) and \\( 2x + 3y = 20 \\). Find the value of \\( y \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan dengan substitusi: \\( x = 4 \\) dan \\( 2x + 3y = 20 \\). Cari nilai \\( y \\).", ans: "4", exp: "Substitute \\( x = 4 \\implies 2(4) + 3y = 20 \\implies 8 + 3y = 20 \\implies 3y = 12 \\implies y = 4 \\).", exp_trans: "Substitusi \\( x = 4 \\implies 8 + 3y = 20 \\implies 3y = 12 \\implies y = 4 \\)." },
+            "p-task3": { type: "tf_table", q: "To eliminate a variable from \\( 2x + y = 10 \\) and \\( 2x - y = 2 \\): <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Untuk mengeliminasi variabel dari \\( 2x + y = 10 \\) dan \\( 2x - y = 2 \\):", opts: ["We can add the two equations to eliminate \\( y \\)", "Adding them gives \\( 4x = 12 \\)", "Subtracting the equations eliminates \\( x \\)", "We cannot eliminate any variable from these equations"], ans: ["B", "B", "B", "S"], exp: "1. B, signs of \\( y \\) are opposite. 2. B, \\( 2x+2x = 4x \\), \\( y-y=0 \\), \\( 10+2=12 \\). 3. B, subtracting cancels \\( x \\). 4. S, we can eliminate both.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "p-task4": { type: "single", q: "Solve using elimination: \\( 3x + 2y = 12 \\) and \\( x - 2y = -4 \\). What is \\( x \\)? <i class='fas fa-times-circle text-orange-500 ml-2'></i>", q_trans: "Selesaikan menggunakan eliminasi: \\( 3x + 2y = 12 \\) dan \\( x - 2y = -4 \\). Berapakah \\( x \\)?", opts: ["\\( x = 1 \\)", "\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 8 \\)"], ans: "\\( x = 2 \\)", exp: "Add the equations to eliminate \\( y \\): \\( (3x + 2y) + (x - 2y) = 12 - 4 \\implies 4x = 8 \\implies x = 2 \\).", exp_trans: "Jumlahkan persamaan untuk mengeliminasi \\( y \\): \\( 4x = 8 \\implies x = 2 \\)." },
+            "p-task5": { type: "complex", q: "Which method is BEST for solving: \\( y = 2x - 3 \\) and \\( 3x + 2y = 11 \\)? <i class='fas fa-star text-orange-500 ml-2'></i>", q_trans: "Metode mana yang TERBAIK untuk menyelesaikan: \\( y = 2x - 3 \\) dan \\( 3x + 2y = 11 \\)?", opts: ["Substitution, because \\( y \\) is already isolated", "Graphical, because one is a line and the other is a line", "Elimination, because the coefficients are different", "Trial and error"], ans: [0], exp: "Substitution is best because one equation is already solved for \\( y \\). You just plug \\( 2x - 3 \\) into the second equation.", exp_trans: "Substitusi adalah yang terbaik karena satu persamaan sudah diselesaikan untuk \\( y \\). Kamu tinggal masukkan \\( 2x - 3 \\) ke persamaan kedua." },
+            "p-task6": { type: "fill", q: "Find the value of \\( y \\) if \\( x = 3 \\) and \\( 2x - y = 5 \\). <i class='fas fa-equals text-orange-500 ml-2'></i>", q_trans: "Cari nilai \\( y \\) jika \\( x = 3 \\) dan \\( 2x - y = 5 \\).", ans: "1", exp: "Substitute \\( x = 3 \\implies 2(3) - y = 5 \\implies 6 - y = 5 \\implies y = 1 \\).", exp_trans: "Substitusi \\( x = 3 \\implies 6 - y = 5 \\implies y = 1 \\)." },
+            "p-task7": { type: "single", q: "Two lines are parallel on a graph. What does this mean for their simultaneous equations? <i class='fas fa-grip-lines text-orange-500 ml-2'></i>", q_trans: "Dua garis sejajar pada grafik. Apa artinya untuk persamaan simultan mereka?", opts: ["There is exactly one solution", "There are no real solutions", "There are infinitely many solutions", "The slopes are different", "The y-intercepts are the same"], ans: "There are no real solutions", exp: "Parallel lines never intersect, so there is no point \\( (x, y) \\) that lies on both lines. The system has no solution.", exp_trans: "Garis sejajar tidak pernah berpotongan, jadi tidak ada titik \\( (x, y) \\) yang berada pada kedua garis. Sistem tidak memiliki solusi." },
+            "p-task8": { type: "tf_table", q: "Consider solving a linear-quadratic system graphically. <i class='fas fa-project-diagram text-orange-500 ml-2'></i>", q_trans: "Pertimbangkan menyelesaikan sistem linear-kuadrat secara grafis.", opts: ["The line can intersect the parabola at two points", "The line can be tangent to the parabola", "The line can miss the parabola entirely", "The line and parabola can be parallel"], ans: ["B", "B", "B", "S"], exp: "1. B, 2 intersections. 2. B, 1 intersection (tangent). 3. B, 0 intersections. 4. S, a line and a parabola cannot be parallel.", exp_trans: "1. B. 2. B. 3. B. 4. S, garis dan parabola tidak bisa sejajar." },
+            "p-task9": { type: "single", q: "Given \\( y = x + 2 \\) and \\( y = x^2 - 4 \\), substitute to find the quadratic equation in standard form. <i class='fas fa-random text-orange-500 ml-2'></i>", q_trans: "Diketahui \\( y = x + 2 \\) dan \\( y = x^2 - 4 \\), substitusi untuk menemukan persamaan kuadrat dalam bentuk standar.", opts: ["\\( x^2 - x - 6 = 0 \\)", "\\( x^2 + x - 2 = 0 \\)", "\\( x^2 + x + 6 = 0 \\)", "\\( x^2 - x + 2 = 0 \\)", "\\( x^2 + x - 6 = 0 \\)"], ans: "\\( x^2 - x - 6 = 0 \\)", exp: "Set equal: \\( x + 2 = x^2 - 4 \\implies x^2 - x - 6 = 0 \\).", exp_trans: "Setarakan: \\( x + 2 = x^2 - 4 \\implies x^2 - x - 6 = 0 \\)." },
+            "p-task10": { type: "complex", q: "Which of the following statements are true regarding simultaneous equations? <i class='fas fa-brain text-orange-500 ml-2'></i>", q_trans: "Manakah pernyataan berikut yang benar mengenai persamaan simultan?", opts: ["A system of two linear equations can have 0, 1, or infinitely many solutions", "Substitution is generally preferred when one variable is already isolated", "Elimination is generally preferred when coefficients are identical or multiples", "Two parallel lines have infinitely many solutions"], ans: [0, 1, 2], exp: "1. B. 2. B. 3. B. 4. S, parallel lines have 0 solutions. Coincident lines (same line) have infinitely many.", exp_trans: "1. B. 2. B. 3. B. 4. S, garis sejajar punya 0 solusi. Garis yang berhimpit punya tak terhingga banyaknya." }
+        });
+		
+        // ====== MATH QUESTIONS DATA (PART 2: GUIDED, INDEPENDENT, TASK 1-3) ======
+        Object.assign(questions, {
+            // GUIDED PRACTICE
+            "g-task1": { type: "single", q: "Solve using substitution: \\( y = 2x - 1 \\) and \\( 3x + y = 14 \\). <i class='fas fa-sync text-blue-500 ml-2'></i>", q_trans: "Selesaikan menggunakan substitusi: \\( y = 2x - 1 \\) dan \\( 3x + y = 14 \\).", opts: ["\\( x = 2, y = 3 \\)", "\\( x = 3, y = 5 \\)", "\\( x = 4, y = 7 \\)", "\\( x = 1, y = 1 \\)", "\\( x = 5, y = 9 \\)"], ans: "\\( x = 3, y = 5 \\)", exp: "Substitute \\( y = 2x - 1 \\) into \\( 3x + y = 14 \\implies 3x + (2x - 1) = 14 \\implies 5x - 1 = 14 \\implies 5x = 15 \\implies x = 3 \\). Then \\( y = 2(3) - 1 = 5 \\).", exp_trans: "Substitusi \\( y = 2x - 1 \\) ke \\( 3x + y = 14 \\implies 5x = 15 \\implies x = 3 \\). Lalu \\( y = 2(3) - 1 = 5 \\)." },
+            "g-task2": { type: "fill", q: "Solve using substitution: \\( x = 2y \\) and \\( 3x - y = 10 \\). Find the value of \\( y \\). <i class='fas fa-key text-blue-500 ml-2'></i>", q_trans: "Selesaikan menggunakan substitusi: \\( x = 2y \\) dan \\( 3x - y = 10 \\). Cari nilai \\( y \\).", ans: "2", exp: "Substitute \\( x = 2y \\implies 3(2y) - y = 10 \\implies 6y - y = 10 \\implies 5y = 10 \\implies y = 2 \\).", exp_trans: "Substitusi \\( x = 2y \\implies 6y - y = 10 \\implies 5y = 10 \\implies y = 2 \\)." },
+            "g-task3": { type: "tf_table", q: "Analyze the elimination setup for: \\( 2x + 3y = 12 \\) and \\( 2x - y = 4 \\). <i class='fas fa-broom text-blue-500 ml-2'></i>", q_trans: "Analisis setup eliminasi untuk: \\( 2x + 3y = 12 \\) dan \\( 2x - y = 4 \\).", opts: ["Subtracting the equations will eliminate \\( x \\)", "Adding the equations will eliminate \\( y \\)", "Subtracting gives \\( 4y = 8 \\)", "The solution is \\( x = 3, y = 2 \\)"], ans: ["B", "S", "B", "B"], exp: "1. B, \\( x \\) coefficients are the same. 2. S, adding gives \\( 4x + 2y = 16 \\). 3. B, \\( (2x+3y) - (2x-y) = 12 - 4 \\implies 4y = 8 \\implies y = 2 \\). 4. B, substituting \\( y=2 \\) gives \\( 2x - 2 = 4 \\implies x = 3 \\).", exp_trans: "1. B. 2. S. 3. B. 4. B." },
+            "g-task4": { type: "single", q: "Solve using elimination: \\( 3x + 2y = 16 \\) and \\( 2x - 2y = 4 \\). What is the value of \\( x \\)? <i class='fas fa-times-circle text-blue-500 ml-2'></i>", q_trans: "Selesaikan menggunakan eliminasi: \\( 3x + 2y = 16 \\) dan \\( 2x - 2y = 4 \\). Berapakah nilai \\( x \\)?", opts: ["\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 6 \\)"], ans: "\\( x = 4 \\)", exp: "Add equations to eliminate \\( y \\): \\( 5x = 20 \\implies x = 4 \\).", exp_trans: "Jumlahkan persamaan untuk mengeliminasi \\( y \\): \\( 5x = 20 \\implies x = 4 \\)." },
+            "g-task5": { type: "complex", q: "Which of the following are correct steps to solve: \\( 2x + y = 7 \\) and \\( 3x - 2y = 14 \\)? <i class='fas fa-list-ol text-blue-500 ml-2'></i>", q_trans: "Manakah langkah yang benar untuk menyelesaikan: \\( 2x + y = 7 \\) dan \\( 3x - 2y = 14 \\)?", opts: ["Multiply Eq 1 by 2 to get \\( 4x + 2y = 14 \\)", "Add the new Eq 1 to Eq 2 to get \\( 7x = 28 \\)", "The solution for \\( x \\) is 4", "The solution for \\( y \\) is 1"], ans: [0, 1, 2], exp: "1. B. 2. B, \\( (4x+2y) + (3x-2y) = 14 + 14 \implies 7x = 28 \\). 3. B, x = 4. 4. S, substituting x=4 gives 2(4)+y=7 \implies y = -1, not 1.", exp_trans: "1. B. 2. B. 3. B. 4. S, karena y = -1, bukan 1." },
+            "g-task6": { type: "fill", q: "Find the value of \\( y \\) in the system: \\( y = x^2 \\) and \\( y = x + 2 \\) given \\( x = 2 \\). <i class='fas fa-superscript text-blue-500 ml-2'></i>", q_trans: "Cari nilai \\( y \\) pada sistem: \\( y = x^2 \\) dan \\( y = x + 2 \\) jika diketahui \\( x = 2 \\).", ans: "4", exp: "Substitute \\( x = 2 \\) into either equation. \\( y = 2^2 = 4 \\) or \\( y = 2 + 2 = 4 \\).", exp_trans: "Substitusi \\( x = 2 \\) ke persamaan mana pun. \\( y = 2^2 = 4 \\) atau \\( y = 2 + 2 = 4 \\)." },
+            "g-task7": { type: "single", q: "Solve the linear-quadratic system: \\( y = x + 3 \\) and \\( y = x^2 - 2x + 3 \\). Find the x-coordinates of the intersection points. <i class='fas fa-project-diagram text-blue-500 ml-2'></i>", q_trans: "Selesaikan sistem linear-kuadrat: \\( y = x + 3 \\) dan \\( y = x^2 - 2x + 3 \\). Cari koordinat x titik potongnya.", opts: ["\\( x = 0 \\) and \\( x = 3 \\)", "\\( x = 1 \\) and \\( x = 3 \\)", "\\( x = 0 \\) and \\( x = -3 \\)", "\\( x = -1 \\) and \\( x = 3 \\)", "\\( x = 2 \\) and \\( x = -3 \\)"], ans: "\\( x = 0 \\) and \\( x = 3 \\)", exp: "Set equal: \\( x + 3 = x^2 - 2x + 3 \implies x^2 - 3x = 0 \implies x(x - 3) = 0 \\). So \\( x = 0 \\) or \\( x = 3 \\).", exp_trans: "Setarakan: \\( x + 3 = x^2 - 2x + 3 \implies x^2 - 3x = 0 \implies x(x - 3) = 0 \\). Jadi \\( x = 0 \\) atau \\( x = 3 \\)." },
+            "g-task8": { type: "tf_table", q: "For the system \\( y = 2x - 1 \\) and \\( y = x^2 + x - 2 \\): <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Untuk sistem \\( y = 2x - 1 \\) dan \\( y = x^2 + x - 2 \\):", opts: ["Setting them equal gives \\( x^2 - x - 1 = 0 \\)", "The discriminant is \\( \\Delta = -3 \\)", "The line and parabola do not intersect", "There are exactly two real solutions"], ans: ["B", "S", "S", "B"], exp: "1. B, \\( 2x - 1 = x^2 + x - 2 \implies x^2 - x - 1 = 0 \\). 2. S, discriminant is \\( (-1)^2 - 4(1)(-1) = 5 \\), not -3. 3. S, since \\( \Delta > 0 \\), they intersect twice. 4. B, there are two real solutions.", exp_trans: "1. B. 2. S, diskriminannya adalah 5. 3. S, mereka berpotongan. 4. B, ada dua solusi real." },
+            "g-task9": { type: "single", q: "Solve: \\( y = x + 2 \\) and \\( y = x^2 - 4x + 2 \\). Find the positive \\( x \\)-value. <i class='fas fa-calculator text-blue-500 ml-2'></i>", q_trans: "Selesaikan: \\( y = x + 2 \\) dan \\( y = x^2 - 4x + 2 \\). Cari nilai \\( x \\) positif.", opts: ["\\( x = 1 \\)", "\\( x = 2 \\)", "\\( x = 3 \\)", "\\( x = 4 \\)", "\\( x = 5 \\)"], ans: "\\( x = 5 \\)", exp: "Set equal: \\( x + 2 = x^2 - 4x + 2 \implies x^2 - 5x = 0 \implies x(x - 5) = 0 \\). So \\( x = 0 \\) or \\( x = 5 \\). The positive value is 5.", exp_trans: "Setarakan: \\( x + 2 = x^2 - 4x + 2 \implies x^2 - 5x = 0 \implies x(x-5) = 0 \\). Jadi \\( x = 0 \\) atau \\( x = 5 \\). Nilai positifnya adalah 5." },
+            "g-task10": { type: "complex", q: "A number is 3 less than another number. Their sum is 15. Let the numbers be \\( x \\) and \\( y \\). Which statements are true? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Sebuah bilangan 3 kurangnya dari bilangan lain. Jumlah mereka 15. Misalkan bilangannya \\( x \\) dan \\( y \\). Pernyataan mana yang benar?", opts: ["\\( x + y = 15 \\)", "\\( x - y = 3 \\)", "The numbers are 9 and 6", "The numbers are 10 and 5"], ans: [0, 1, 2], exp: "1. B. 2. B. 3. B, solving \\( x+y=15 \\) and \\( x-y=3 \implies 2x=18 \implies x=9, y=6 \\). 4. S, difference is 5, not 3.", exp_trans: "1. B. 2. B. 3. B, penyelesaian \\( x+y=15 \\) dan \\( x-y=3 \implies x=9, y=6 \\). 4. S." },
+
+            // INDEPENDENT PRACTICE
+            "ind-task1": { type: "single", q: "Clear the fractions in the equation \\( \frac{x}{3} + \frac{y}{4} = 5 \\) by multiplying by the LCM. <i class='fas fa-divide text-green-500 ml-2'></i>", q_trans: "Hilangkan pecahan pada persamaan \\( \frac{x}{3} + \frac{y}{4} = 5 \\) dengan mengalikan KPK.", opts: ["\\( 4x + 3y = 60 \\)", "\\( 3x + 4y = 15 \\)", "\\( 4x + 3y = 5 \\)", "\\( x + y = 60 \\)", "\\( 12x + 12y = 60 \\)"], ans: "\\( 4x + 3y = 60 \\)", exp: "The LCM of 3 and 4 is 12. Multiply the whole equation by 12: \\( 12(\frac{x}{3}) + 12(\frac{y}{4}) = 12(5) \implies 4x + 3y = 60 \\).", exp_trans: "KPK dari 3 dan 4 adalah 12. Kalikan seluruh persamaan dengan 12: \\( 12(\frac{x}{3}) + 12(\frac{y}{4}) = 12(5) \implies 4x + 3y = 60 \\)." },
+            "ind-task2": { type: "fill", q: "Solve the system: \\( 2x + y = 10 \\) and \\( 3x - y = 5 \\). Find the value of \\( x \\). <i class='fas fa-search text-green-500 ml-2'></i>", q_trans: "Selesaikan sistem: \\( 2x + y = 10 \\) dan \\( 3x - y = 5 \\). Cari nilai \\( x \\).", ans: "3", exp: "Add equations to eliminate \\( y \\): \\( 5x = 15 \implies x = 3 \\).", exp_trans: "Jumlahkan persamaan untuk mengeliminasi \\( y \\): \\( 5x = 15 \implies x = 3 \\)." },
+            "ind-task3": { type: "tf_table", q: "Consider the word problem: 'The length of a rectangle is 3 cm more than its width. The perimeter is 26 cm.' <i class='fas fa-ruler-combined text-green-500 ml-2'></i>", q_trans: "Perhatikan soal cerita: 'Panjang sebuah persegi panjang 3 cm lebih dari lebarnya. Kelilingnya 26 cm.'", opts: ["Let \\( l = w + 3 \\)", "The perimeter equation is \\( 2l + 2w = 26 \\)", "Substituting gives \\( 2(w+3) + 2w = 26 \\)", "The width is 10 cm"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B. 4. S, solving \\( 4w + 6 = 26 \implies 4w = 20 \implies w = 5 \\). Length is 8.", exp_trans: "1. B. 2. B. 3. B. 4. S, lebarnya 5 cm, panjangnya 8 cm." },
+            "ind-task4": { type: "single", q: "A man is 3 times as old as his son. In 10 years, he will be twice as old. Let the son's current age be \\( s \\) and the father's be \\( f \\). Which system models this? <i class='fas fa-user-clock text-green-500 ml-2'></i>", q_trans: "Seorang pria berusia 3 kali lipat putranya. Dalam 10 tahun, ia akan berusia 2 kali lipat. Misalkan usia anak \\( s \\) dan ayah \\( f \\). Sistem manakah yang memodelkan ini?", opts: ["\\( f = 3s \\) and \\( f + 10 = 2(s + 10) \\)", "\\( f = 3s \\) and \\( f + 10 = 2s \\)", "\\( f = 3s + 10 \\) and \\( f = 2s + 10 \\)", "\\( f = 3(s + 10) \\) and \\( f + 10 = 2s \\)", "\\( f = 3s \\) and \\( f = 2(s + 10) \\)"], ans: "\\( f = 3s \\) and \\( f + 10 = 2(s + 10) \\)", exp: "Currently: \\( f = 3s \\). In 10 years: father's age is \\( f + 10 \\), son's age is \\( s + 10 \\). So \\( f + 10 = 2(s + 10) \\).", exp_trans: "Saat ini: \\( f = 3s \\). Dalam 10 tahun: usia ayah \\( f + 10 \\), usia anak \\( s + 10 \\). Jadi \\( f + 10 = 2(s + 10) \\)." },
+            "ind-task5": { type: "complex", q: "Solve the system: \\( y = x^2 - 4 \\) and \\( y = 2x - 1 \\). Which statements are true? <i class='fas fa-project-diagram text-green-500 ml-2'></i>", q_trans: "Selesaikan sistem: \\( y = x^2 - 4 \\) dan \\( y = 2x - 1 \\). Pernyataan mana yang benar?", opts: ["The resulting quadratic is \\( x^2 - 2x - 3 = 0 \\)", "The discriminant is 16", "The solutions are \\( x = 3 \\) and \\( x = -1 \\)", "The intersection points are \\( (3, 5) \\) and \\( (-1, -3) \\)"], ans: [0, 1, 2, 3], exp: "1. B, \\( 2x - 1 = x^2 - 4 \implies x^2 - 2x - 3 = 0 \\). 2. B, \\( (-2)^2 - 4(1)(-3) = 4 + 12 = 16 \\). 3. B, \\( (x-3)(x+1) = 0 \\). 4. B, for \\( x=3, y=2(3)-1=5 \\); for \\( x=-1, y=2(-1)-1=-3 \\).", exp_trans: "1. B. 2. B. 3. B. 4. B." },
+            "ind-task6": { type: "fill", q: "The sum of two numbers is 12, and their difference is 4. What is the larger number? <i class='fas fa-greater-than text-green-500 ml-2'></i>", q_trans: "Jumlah dua bilangan adalah 12, dan selisihnya 4. Berapakah bilangan yang lebih besar?", ans: "8", exp: "Let \\( x + y = 12 \\) and \\( x - y = 4 \\). Add them: \\( 2x = 16 \implies x = 8 \\). The larger number is 8.", exp_trans: "Misalkan \\( x + y = 12 \\) dan \\( x - y = 4 \\). Jumlahkan: \\( 2x = 16 \implies x = 8 \\). Bilangan yang lebih besar adalah 8." },
+            "ind-task7": { type: "single", q: "Verify if \\( (4, -1) \\) is a solution to \\( 3x - 2y = 14 \\) and \\( x + y = 3 \\). <i class='fas fa-check text-green-500 ml-2'></i>", q_trans: "Verifikasi apakah \\( (4, -1) \\) adalah solusi dari \\( 3x - 2y = 14 \\) dan \\( x + y = 3 \\).", opts: ["Yes, it satisfies both equations", "No, it satisfies neither", "It satisfies the first but not the second", "It satisfies the second but not the first", "Cannot be determined"], ans: "Yes, it satisfies both equations", exp: "Check Eq 1: \\( 3(4) - 2(-1) = 12 + 2 = 14 \\) (True). Check Eq 2: \\( 4 + (-1) = 3 \\) (True). Since it satisfies both, it is the solution.", exp_trans: "Cek Eq 1: \\( 3(4) - 2(-1) = 14 \\) (Benar). Cek Eq 2: \\( 4 + (-1) = 3 \\) (Benar). Karena memenuhi keduanya, itu adalah solusinya." },
+            "ind-task8": { type: "tf_table", q: "Consider the system: \\( 2x + 5y = 20 \\) and \\( 3x - 5y = 10 \\). <i class='fas fa-clipboard-list text-green-500 ml-2'></i>", q_trans: "Perhatikan sistem: \\( 2x + 5y = 20 \\) dan \\( 3x - 5y = 10 \\).", opts: ["Adding the equations eliminates \\( y \\)", "The resulting equation is \\( 5x = 30 \\)", "The value of \\( x \\) is 6", "The value of \\( y \\) is 4"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, \\( x = 6 \\). 4. S, substitute \\( x=6 \\implies 2(6) + 5y = 20 \implies 12 + 5y = 20 \implies 5y = 8 \implies y = 1.6 \\), not 4.", exp_trans: "1. B. 2. B. 3. B. 4. S, nilai \\( y \\) adalah 1.6." },
+            "ind-task9": { type: "single", q: "Find the smaller \\( x \\)-value for the system: \\( y = 4 - x \\) and \\( y = x^2 - 4x + 4 \\). <i class='fas fa-superscript text-green-500 ml-2'></i>", q_trans: "Cari nilai \\( x \\) yang lebih kecil untuk sistem: \\( y = 4 - x \\) dan \\( y = x^2 - 4x + 4 \\).", opts: ["\\( x = 0, y = 4 \\)", "\\( x = 1, y = 3 \\)", "\\( x = 2, y = 2 \\)", "\\( x = 3, y = 1 \\)", "\\( x = 4, y = 0 \\)"], ans: "\\( x = 0, y = 4 \\)", exp: "Set equal: \\( 4 - x = x^2 - 4x + 4 \implies x^2 - 3x = 0 \implies x(x - 3) = 0 \\). The solutions are x=0 and x=3. The smaller x-value is 0, which gives y=4.", exp_trans: "Setarakan: \\( 4 - x = x^2 - 4x + 4 \implies x^2 - 3x = 0 \\). Solusinya adalah x=0 dan x=3. Nilai x yang lebih kecil adalah 0, yang memberikan y=4." },
+            "ind-task10": { type: "complex", q: "Which of the following are valid steps to solve: \\( \frac{x}{2} - \frac{y}{3} = 1 \\) and \\( \frac{x}{4} + y = 4 \\)? <i class='fas fa-check-circle text-green-500 ml-2'></i>", q_trans: "Manakah langkah valid untuk menyelesaikan: \\( \frac{x}{2} - \frac{y}{3} = 1 \\) dan \\( \frac{x}{4} + y = 4 \\)?", opts: ["Multiply Eq 1 by 6 to get \\( 3x - 2y = 6 \\)", "Multiply Eq 2 by 4 to get \\( x + 4y = 16 \\)", "From Eq 2, \\( x = 16 - 4y \\)", "Substitute \\( x \\) into Eq 1 to find \\( y \\)"], ans: [0, 1, 2, 3], exp: "1. B. 2. B. 3. B. 4. B, substitution is a valid step. All are correct steps.", exp_trans: "1. B. 2. B. 3. B. 4. B. Semua langkah benar." },
+
+            // TASK 1: Basic to Intermediate Word Problems
+            "t1-task1": { type: "single", q: "Two numbers add up to 15. Their difference is 3. What is the larger number? <i class='fas fa-calculator text-orange-500 ml-2'></i>", q_trans: "Dua bilangan dijumlahkan menghasilkan 15. Selisihnya 3. Berapakah bilangan yang lebih besar?", opts: ["\\( 6 \\)", "\\( 9 \\)", "\\( 12 \\)", "\\( 15 \\)", "\\( 18 \\)"], ans: "\\( 9 \\)", exp: "Let \\( x + y = 15 \\) and \\( x - y = 3 \\). Adding them: \\( 2x = 18 \implies x = 9 \\).", exp_trans: "Misalkan \\( x + y = 15 \\) dan \\( x - y = 3 \\). Jumlahkan: \\( 2x = 18 \implies x = 9 \\)." },
+            "t1-task2": { type: "fill", q: "A bakery sells muffins for $3 each and cupcakes for $4 each. If a customer buys 10 items for $34, how many muffins did they buy? <i class='fas fa-cookie text-orange-500 ml-2'></i>", q_trans: "Sebuah toko menjual muffin $3 dan cupcake $4. Jika pelanggan membeli 10 item seharga $34, berapa muffin yang dibeli?", ans: "6", exp: "Let \\( m + c = 10 \\) and \\( 3m + 4c = 34 \\). From Eq 1, \\( c = 10 - m \\). Substitute: \\( 3m + 4(10 - m) = 34 \implies 3m + 40 - 4m = 34 \implies -m = -6 \implies m = 6 \\).", exp_trans: "Misalkan \\( m + c = 10 \\) dan \\( 3m + 4c = 34 \\). Substitusi: \\( 3m + 4(10 - m) = 34 \implies m = 6 \\)." },
+            "t1-task3": { type: "tf_table", q: "For the system \\( 2x + y = 10 \\) and \\( y = 3x \\): <i class='fas fa-list-ol text-orange-500 ml-2'></i>", q_trans: "Untuk sistem \\( 2x + y = 10 \\) dan \\( y = 3x \\):", opts: ["Substituting \\( y \\) gives \\( 5x = 10 \\)", "The value of \\( x \\) is 2", "The value of \\( y \\) is 6", "The point \\( (2, 6) \\) is the intersection"], ans: ["B", "B", "B", "B"], exp: "1. B, \\( 2x + 3x = 10 \\implies 5x = 10 \\). 2. B, \\( x = 2 \\). 3. B, \\( y = 3(2) = 6 \\). 4. B. All true.", exp_trans: "1. B. 2. B. 3. B. 4. B. Semua benar." },
+            "t1-task4": { type: "single", q: "The perimeter of a rectangle is 20 cm. The length is 2 cm more than the width. What is the width? <i class='fas fa-ruler-horizontal text-orange-500 ml-2'></i>", q_trans: "Keliling persegi panjang 20 cm. Panjangnya 2 cm lebih dari lebarnya. Berapakah lebarnya?", opts: ["\\( 2 \\text{ cm} \\)", "\\( 3 \\text{ cm} \\)", "\\( 4 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)", "\\( 6 \\text{ cm} \\)"], ans: "\\( 4 \\text{ cm} \\)", exp: "Let \\( l = w + 2 \\). Perimeter: \\( 2(w + 2) + 2w = 20 \implies 2w + 4 + 2w = 20 \implies 4w = 16 \implies w = 4 \\).", exp_trans: "Misalkan \\( l = w + 2 \\). Keliling: \\( 2(w + 2) + 2w = 20 \implies 4w = 16 \implies w = 4 \\)." },
+            "t1-task5": { type: "complex", q: "Solve the system: \\( 3x - 2y = 4 \\) and \\( x + 2y = 8 \\). <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Selesaikan sistem: \\( 3x - 2y = 4 \\) dan \\( x + 2y = 8 \\).", opts: ["Adding the equations eliminates \\( y \\)", "The value of \\( x \\) is 3", "The value of \\( y \\) is 2.5", "The solution is \\( (3, 2.5) \\)"], ans: [0, 1, 2, 3], exp: "1. B. 2. B, \\( 4x = 12 \implies x = 3 \\). 3. B, \\( 3 + 2y = 8 \implies 2y = 5 \implies y = 2.5 \\). 4. B.", exp_trans: "1. B. 2. B. 3. B. 4. B." },
+            "t1-task6": { type: "fill", q: "Find the x-coordinate of the intersection of \\( y = x - 2 \\) and \\( y = -2x + 7 \\). <i class='fas fa-map-marker-alt text-orange-500 ml-2'></i>", q_trans: "Cari koordinat x dari perpotongan \\( y = x - 2 \\) dan \\( y = -2x + 7 \\).", ans: "3", exp: "Set equal: \\( x - 2 = -2x + 7 \implies 3x = 9 \implies x = 3 \\).", exp_trans: "Setarakan: \\( x - 2 = -2x + 7 \implies 3x = 9 \implies x = 3 \\)." },
+            "t1-task7": { type: "single", q: "A car rental charges $20 per day plus $0.10 per km. Another charges $15 per day plus $0.20 per km. For what distance are the costs the same? <i class='fas fa-car text-orange-500 ml-2'></i>", q_trans: "Sewa mobil A mengambil $20 per hari + $0.10 per km. B mengambil $15 per hari + $0.20 per km. Untuk jarak berapakah biayanya sama?", opts: ["\\( 10 \\text{ km} \\)", "\\( 25 \\text{ km} \\)", "\\( 50 \\text{ km} \\)", "\\( 100 \\text{ km} \\)", "\\( 200 \\text{ km} \\)"], ans: "\\( 50 \\text{ km} \\)", exp: "Let \\( 20 + 0.10k = 15 + 0.20k \implies 5 = 0.10k \implies k = 50 \\).", exp_trans: "Misalkan \\( 20 + 0.10k = 15 + 0.20k \implies 5 = 0.10k \implies k = 50 \\)." },
+            "t1-task8": { type: "tf_table", q: "Consider the linear-quadratic system: \\( y = 2x \\) and \\( y = x^2 - 3x + 2 \\). <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Perhatikan sistem linear-kuadrat: \\( y = 2x \\) dan \\( y = x^2 - 3x + 2 \\).", opts: ["Setting equal gives \\( x^2 - 5x + 2 = 0 \\)", "The discriminant is 17", "There are two real solutions", "The line intersects the parabola"], ans: ["B", "B", "B", "B"], exp: "1. B, \\( 2x = x^2 - 3x + 2 \implies x^2 - 5x + 2 = 0 \\). 2. B, \\( 25 - 8 = 17 \\). 3. B, \\( \\Delta > 0 \\). 4. B. All true.", exp_trans: "1. B. 2. B. 3. B. 4. B." },
+            "t1-task9": { type: "single", q: "Solve for \\( y \\): \\( x + y = 5 \\) and \\( 2x - y = 4 \\). <i class='fas fa-equals text-orange-500 ml-2'></i>", q_trans: "Cari \\( y \\): \\( x + y = 5 \\) dan \\( 2x - y = 4 \\).", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 2 \\)", exp: "Add equations: \\( 3x = 9 \implies x = 3 \\). Substitute into Eq 1: \\( 3 + y = 5 \implies y = 2 \\).", exp_trans: "Jumlahkan: \\( 3x = 9 \implies x = 3 \\). Substitusi: \\( 3 + y = 5 \implies y = 2 \\)." },
+            "t1-task10": { type: "complex", q: "Which of the following systems has no solution? <i class='fas fa-times-circle text-orange-500 ml-2'></i>", q_trans: "Manakah sistem berikut yang tidak memiliki solusi?", opts: ["\\( y = 2x + 1 \\) and \\( y = 2x + 5 \\)", "\\( x + y = 4 \\) and \\( 2x + 2y = 8 \\)", "\\( y = x \\) and \\( y = -x \\)", "\\( 3x - y = 2 \\) and \\( 6x - 2y = 4 \\)"], ans: [0], exp: "Option 1 represents two parallel lines (same slope, different y-intercept), so they never intersect and have no solution. Options 2 and 4 are the same line (infinite solutions). Option 3 intersects at origin.", exp_trans: "Opsi 1 mewakili dua garis sejajar (gradien sama, perpotongan-y berbeda), jadi tidak pernah berpotongan dan tidak ada solusi. Opsi 2 dan 4 adalah garis yang sama (solusi tak hingga). Opsi 3 berpotongan di pusat." },
+
+            // TASK 2: Intermediate Word Problems
+            "t2-task1": { type: "single", q: "The sum of two numbers is 20. Three times the smaller equals the larger. What are the numbers? <i class='fas fa-sort-numeric-down text-orange-500 ml-2'></i>", q_trans: "Jumlah dua bilangan 20. Tiga kali bilangan kecil sama dengan bilangan besar. Berapakah bilangannya?", opts: ["\\( 5 \\) and \\( 15 \\)", "\\( 4 \\) and \\( 16 \\)", "\\( 6 \\) and \\( 14 \\)", "\\( 8 \\) and \\( 12 \\)", "\\( 10 \\) and \\( 10 \\)"], ans: "\\( 5 \\) and \\( 15 \\)", exp: "Let \\( x + y = 20 \\) and \\( 3x = y \\). Substitute: \\( x + 3x = 20 \implies 4x = 20 \implies x = 5 \\). Then \\( y = 15 \\).", exp_trans: "Misalkan \\( x + y = 20 \\) dan \\( 3x = y \\). Substitusi: \\( 4x = 20 \implies x = 5 \\). Lalu \\( y = 15 \\)." },
+            "t2-task2": { type: "fill", q: "In a triangle, angle A is \\( 10^\\circ \\) more than angle B. Angle C is \\( 50^\\circ \\). Find angle B. <i class='fas fa-shapes text-orange-500 ml-2'></i>", q_trans: "Pada segitiga, sudut A \\( 10^\\circ \\) lebih dari sudut B. Sudut C \\( 50^\\circ \\). Cari sudut B.", ans: "60", exp: "Sum of angles = 180. \\( A + B + C = 180 \implies (B + 10) + B + 50 = 180 \implies 2B + 60 = 180 \implies 2B = 120 \implies B = 60 \\).", exp_trans: "Jumlah sudut = 180. \\( (B + 10) + B + 50 = 180 \implies 2B = 120 \implies B = 60 \\)." },
+            "t2-task3": { type: "tf_table", q: "For the system \\( \frac{x}{2} + \frac{y}{3} = 2 \\) and \\( 2x - y = 1 \\): <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Untuk sistem \\( \frac{x}{2} + \frac{y}{3} = 2 \\) dan \\( 2x - y = 1 \\):", opts: ["Multiplying Eq 1 by 6 gives \\( 3x + 2y = 12 \\)", "From Eq 2, \\( y = 2x - 1 \\)", "Substituting gives \\( 3x + 2(2x - 1) = 12 \\)", "The solution is \\( x = 2, y = 3 \\)"], ans: ["B", "B", "B", "B"], exp: "1. B. 2. B. 3. B, \\( 3x + 4x - 2 = 12 \implies 7x = 14 \implies x = 2 \\). 4. B, \\( y = 2(2)-1 = 3 \\). All true.", exp_trans: "1. B. 2. B. 3. B. 4. B." },
+            "t2-task4": { type: "single", q: "A chemist has 10% and 30% acid solutions. How many ml of 30% solution must be added to 100ml of 10% to make a 25% solution? <i class='fas fa-flask text-orange-500 ml-2'></i>", q_trans: "Seorang ahli kimia punya larutan asam 10% dan 30%. Berapa ml larutan 30% harus ditambahkan ke 100ml larutan 10% untuk membuat larutan 25%?", opts: ["\\( 100 \\text{ ml} \\)", "\\( 200 \\text{ ml} \\)", "\\( 300 \\text{ ml} \\)", "\\( 400 \\text{ ml} \\)", "\\( 500 \\text{ ml} \\)"], ans: "\\( 300 \\text{ ml} \\)", exp: "Let \\( x \\) be the amount of 30%. Equation: \\( 0.10(100) + 0.30x = 0.25(100 + x) \implies 10 + 0.3x = 25 + 0.25x \implies 0.05x = 15 \implies x = 300 \\).", exp_trans: "Misalkan \\( x \\) jumlah asam 30%. Persamaan: \\( 10 + 0.3x = 25 + 0.25x \implies 0.05x = 15 \implies x = 300 \\)." },
+            "t2-task5": { type: "complex", q: "Which of the following are valid steps to solve: \\( y = x^2 \\) and \\( y = 3x + 4 \\)? <i class='fas fa-project-diagram text-orange-500 ml-2'></i>", q_trans: "Manakah langkah valid untuk menyelesaikan: \\( y = x^2 \\) dan \\( y = 3x + 4 \\)?", opts: ["Set them equal: \\( x^2 = 3x + 4 \\)", "Rearrange: \\( x^2 - 3x - 4 = 0 \\)", "Factor: \\( (x - 4)(x + 1) = 0 \\)", "Solutions: \\( x = 4, x = -1 \\)"], ans: [0, 1, 2, 3], exp: "1. B. 2. B. 3. B, \\( -4 \times 1 = -4 \\), \\( -4 + 1 = -3 \\). 4. B, \\( x = 4 \\) or \\( x = -1 \\).", exp_trans: "1. B. 2. B. 3. B. 4. B." },
+            "t2-task6": { type: "fill", q: "Find the smaller x-coordinate of the intersection of \\( y = x - 3 \\) and \\( y = x^2 - 4x + 3 \\). <i class='fas fa-superscript text-orange-500 ml-2'></i>", q_trans: "Cari koordinat x yang lebih kecil dari perpotongan \\( y = x - 3 \\) dan \\( y = x^2 - 4x + 3 \\).", ans: "2", exp: "Set equal: \\( x - 3 = x^2 - 4x + 3 \implies x^2 - 5x + 6 = 0 \implies (x - 2)(x - 3) = 0 \\). The x-coordinates are 2 and 3. The smaller one is 2.", exp_trans: "Setarakan: \\( x - 3 = x^2 - 4x + 3 \implies x^2 - 5x + 6 = 0 \implies (x-2)(x-3)=0 \\). Koordinat x adalah 2 dan 3. Yang lebih kecil adalah 2." },
+            "t2-task7": { type: "single", q: "A boat travels 20 km downstream in 2 hours. Upstream, it takes 4 hours to travel the same distance. What is the speed of the current? <i class='fas fa-ship text-orange-500 ml-2'></i>", q_trans: "Perahu menempuh 20 km hilir dalam 2 jam. Hulu, menempuh jarak sama 4 jam. Berapakah kecepatan arus?", opts: ["\\( 2.5 \\text{ km/h} \\)", "\\( 3.5 \\text{ km/h} \\)", "\\( 5 \\text{ km/h} \\)", "\\( 7.5 \\text{ km/h} \\)", "\\( 10 \\text{ km/h} \\)"], ans: "\\( 2.5 \\text{ km/h} \\)", exp: "Let boat speed = \\( b \\), current = \\( c \\). Downstream: \\( b + c = 20 / 2 = 10 \\). Upstream: \\( b - c = 20 / 4 = 5 \\). Subtracting: \\( 2c = 5 \implies c = 2.5 \\).", exp_trans: "Misalkan kec. perahu \\( b \\), arus \\( c \\). Hilir: \\( b+c=10 \\). Hulu: \\( b-c=5 \\). Kurangkan: \\( 2c=5 \implies c=2.5 \\)." },
+            "t2-task8": { type: "tf_table", q: "Analyze the system: \\( 3x - y = 5 \\) and \\( 6x - 2y = 10 \\). <i class='fas fa-clipboard-list text-orange-500 ml-2'></i>", q_trans: "Analisis sistem: \\( 3x - y = 5 \\) dan \\( 6x - 2y = 10 \\).", opts: ["The second equation is a multiple of the first", "The lines are parallel", "The system has infinitely many solutions", "The system has no solution"], ans: ["B", "S", "B", "S"], exp: "1. B, multiply by 2. 2. S, they are the same line, not parallel. 3. B, same line means infinite solutions. 4. S, it has solutions.", exp_trans: "1. B. 2. S, mereka garis yang sama. 3. B, solusi tak hingga. 4. S." },
+            "t2-task9": { type: "single", q: "Solve for \\( x \\): \\( y = 2x + 1 \\) and \\( y = -x + 4 \\). <i class='fas fa-equals text-orange-500 ml-2'></i>", q_trans: "Cari \\( x \\): \\( y = 2x + 1 \\) dan \\( y = -x + 4 \\).", opts: ["\\( 0 \\)", "\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)"], ans: "\\( 1 \\)", exp: "Set equal: \\( 2x + 1 = -x + 4 \implies 3x = 3 \implies x = 1 \\).", exp_trans: "Setarakan: \\( 2x + 1 = -x + 4 \implies 3x = 3 \implies x = 1 \\)." },
+            "t2-task10": { type: "complex", q: "Which of the following systems has exactly one solution? <i class='fas fa-check text-orange-500 ml-2'></i>", q_trans: "Manakah sistem berikut yang memiliki tepat satu solusi?", opts: ["\\( y = x \\) and \\( y = x + 1 \\)", "\\( 2x + y = 4 \\) and \\( x - y = 1 \\)", "\\( y = x^2 \\) and \\( y = 0 \\)", "\\( 3x - 3y = 6 \\) and \\( x - y = 2 \\)"], ans: [1, 2], exp: "1. S, parallel lines (0 solutions). 2. B, intersecting lines (1 solution). 3. B, line touches parabola at origin (1 solution). 4. S, same line (infinite solutions).", exp_trans: "1. S, garis sejajar. 2. B, garis berpotongan. 3. B, garis menyinggung parabola. 4. S, garis yang sama." },
+
+            // TASK 3: Advanced Problem Solving
+            "t3-task1": { type: "single", q: "Find the larger positive value of \\( x \\) for the system: \\( y = x - 1 \\) and \\( y = x^2 - 3x + 2 \\). <i class='fas fa-search-location text-orange-500 ml-2'></i>", q_trans: "Cari nilai \\( x \\) positif yang lebih besar untuk sistem: \\( y = x - 1 \\) dan \\( y = x^2 - 3x + 2 \\).", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 3 \\)", exp: "Set equal: \\( x - 1 = x^2 - 3x + 2 \implies x^2 - 4x + 3 = 0 \implies (x-1)(x-3)=0 \\). So \\( x = 1 \\) or \\( x = 3 \\). The larger positive value is 3.", exp_trans: "Setarakan: \\( x - 1 = x^2 - 3x + 2 \implies x^2 - 4x + 3 = 0 \implies (x-1)(x-3)=0 \\). Jadi \\( x = 1 \\) atau \\( x = 3 \\). Nilai positif yang lebih besar adalah 3." },
+            "t3-task2": { type: "fill", q: "The sum of two numbers is 10. The sum of their squares is 52. Find the product of the numbers. <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Jumlah dua bilangan 10. Jumlah kuadratnya 52. Cari hasil kali bilangan tersebut.", ans: "24", exp: "Let \\( x + y = 10 \implies (x+y)^2 = 100 \implies x^2 + 2xy + y^2 = 100 \\). We know \\( x^2 + y^2 = 52 \\). Substitute: \\( 52 + 2xy = 100 \implies 2xy = 48 \implies xy = 24 \\).", exp_trans: "Misalkan \\( x + y = 10 \implies (x+y)^2 = 100 \implies x^2 + 2xy + y^2 = 100 \\). Kita tahu \\( x^2 + y^2 = 52 \\). Substitusi: \\( 52 + 2xy = 100 \implies 2xy = 48 \implies xy = 24 \\)." },
+            "t3-task3": { type: "tf_table", q: "Consider the system: \\( 2x + 3y = 1 \\) and \\( 4x - y = 11 \\). <i class='fas fa-brain text-orange-500 ml-2'></i>", q_trans: "Perhatikan sistem: \\( 2x + 3y = 1 \\) dan \\( 4x - y = 11 \\).", opts: ["Multiplying Eq 1 by 2 gives \\( 4x + 6y = 2 \\)", "Subtracting Eq 2 from the new Eq 1 eliminates \\( x \\)", "The value of \\( y \\) is -1", "The value of \\( x \\) is 2"], ans: ["B", "B", "S", "S"], exp: "1. B. 2. B, \\( (4x+6y) - (4x-y) = 2 - 11 \implies 7y = -9 \implies y = -9/7 \\). 3. S, \\( y = -9/7 \\), not -1. 4. S, substituting y back gives \\( x = 17/7 \\), not 2.", exp_trans: "1. B. 2. B. 3. S, \\( y = -9/7 \\). 4. S, \\( x = 17/7 \\)." },
+            "t3-task4": { type: "single", q: "A fraction becomes 2/3 if 1 is added to both numerator and denominator. If 1 is subtracted from both, it becomes 1/2. What is the denominator? <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Sebuah pecahan menjadi 2/3 jika 1 ditambah ke pembilang dan penyebut. Jika 1 dikurangi, menjadi 1/2. Berapakah penyebutnya?", opts: ["\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( 7 \\)"], ans: "\\( 5 \\)", exp: "Let \\( \frac{x+1}{y+1} = \frac{2}{3} \implies 3x - 2y = -1 \\). And \\( \frac{x-1}{y-1} = \frac{1}{2} \implies 2x - y = 1 \\). Solve: From Eq 2, \\( y = 2x - 1 \\). Substitute into Eq 1: \\( 3x - 2(2x - 1) = -1 \implies 3x - 4x + 2 = -1 \implies -x = -3 \implies x = 3 \\). Then \\( y = 2(3) - 1 = 5 \\).", exp_trans: "Selesaikan sistem \\( 3x - 2y = -1 \\) dan \\( 2x - y = 1 \\). Diperoleh \\( x = 3 \\) dan \\( y = 5 \\)." },
+            "t3-task5": { type: "complex", q: "Find the intersection points of \\( y = x + 1 \\) and \\( y = 2x^2 - 4x + 1 \\). <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Cari titik potong \\( y = x + 1 \\) dan \\( y = 2x^2 - 4x + 1 \\).", opts: ["Setting equal gives \\( 2x^2 - 5x = 0 \\)", "The x-coordinates are 0 and 5/2", "The points are \\( (0, 1) \\) and \\( (5/2, 7/2) \\)", "The line is tangent to the parabola"], ans: [0, 1, 2], exp: "1. B, \\( x+1 = 2x^2-4x+1 \implies 2x^2-5x = 0 \\). 2. B, \\( x(2x-5)=0 \implies x=0, x=5/2 \\). 3. B, substitute back: if \\( x=0, y=1 \\); if \\( x=5/2, y=7/2 \\). 4. S, it intersects twice, not tangent.", exp_trans: "1. B. 2. B. 3. B. 4. S, berpotongan dua kali." },
+            "t3-task6": { type: "fill", q: "Solve for \\( x \\): \\( 3x + 2y = 11 \\) and \\( 2x - y = 5 \\). <i class='fas fa-equals text-orange-500 ml-2'></i>", q_trans: "Cari \\( x \\): \\( 3x + 2y = 11 \\) dan \\( 2x - y = 5 \\).", ans: "3", exp: "From Eq 2, \\( y = 2x - 5 \\). Substitute into Eq 1: \\( 3x + 2(2x - 5) = 11 \implies 3x + 4x - 10 = 11 \implies 7x = 21 \implies x = 3 \\).", exp_trans: "Substitusi: \\( 3x + 2(2x - 5) = 11 \implies 7x = 21 \implies x = 3 \\)." },
+            "t3-task7": { type: "single", q: "A rectangle has an area of \\( 24 \text{ cm}^2 \\). Its length is 2 cm more than its width. What is the perimeter? <i class='fas fa-ruler-combined text-orange-500 ml-2'></i>", q_trans: "Persegi panjang berluas \\( 24 \text{ cm}^2 \\). Panjangnya 2 cm lebih dari lebarnya. Berapakah kelilingnya?", opts: ["\\( 14 \\text{ cm} \\)", "\\( 16 \\text{ cm} \\)", "\\( 20 \\text{ cm} \\)", "\\( 24 \\text{ cm} \\)", "\\( 28 \\text{ cm} \\)"], ans: "\\( 20 \\text{ cm} \\)", exp: "Let \\( l = w + 2 \\). Area: \\( w(w + 2) = 24 \implies w^2 + 2w - 24 = 0 \implies (w + 6)(w - 4) = 0 \implies w = 4 \\). Then \\( l = 6 \\). Perimeter: \\( 2(6) + 2(4) = 12 + 8 = 20 \\).", exp_trans: "Misalkan \\( l = w + 2 \\). Luas: \\( w^2 + 2w - 24 = 0 \implies w = 4 \\). Lalu \\( l = 6 \\). Keliling: \\( 20 \text{ cm} \\)." },
+            "t3-task8": { type: "tf_table", q: "Analyze the word problem: 'A father is 4 times as old as his son. In 20 years, he will be twice as old.' <i class='fas fa-user-clock text-orange-500 ml-2'></i>", q_trans: "Analisis soal: 'Ayah berusia 4 kali lipat anaknya. Dalam 20 tahun, ia akan berusia 2 kali lipat.'", opts: ["Equation 1: \\( f = 4s \\)", "Equation 2: \\( f + 20 = 2(s + 20) \\)", "Solving gives \\( s = 10 \\)", "The father is currently 40 years old"], ans: ["B", "B", "B", "B"], exp: "1. B. 2. B. 3. B, substitute: \\( 4s + 20 = 2s + 40 \implies 2s = 20 \implies s = 10 \\). 4. B, \\( f = 4(10) = 40 \\). All true.", exp_trans: "1. B. 2. B. 3. B, \\( s = 10 \\). 4. B, \\( f = 40 \\)." },
+            "t3-task9": { type: "single", q: "Find the smaller x-coordinate where \\( y = x + 2 \\) intersects \\( y = x^2 - 4x + 2 \\). <i class='fas fa-superscript text-orange-500 ml-2'></i>", q_trans: "Cari koordinat x yang lebih kecil di mana \\( y = x + 2 \\) memotong \\( y = x^2 - 4x + 2 \\).", opts: ["\\( 0 \\)", "\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 5 \\)"], ans: "\\( 0 \\)", exp: "Set equal: \\( x + 2 = x^2 - 4x + 2 \implies x^2 - 5x = 0 \implies x(x - 5) = 0 \\). The x-coordinates are 0 and 5. The smaller one is 0.", exp_trans: "Setarakan: \\( x + 2 = x^2 - 4x + 2 \implies x^2 - 5x = 0 \implies x = 0, x = 5 \\). Yang lebih kecil adalah 0." },
+            "t3-task10": { type: "complex", q: "Which of the following systems of equations has infinitely many solutions? <i class='fas fa-infinity text-orange-500 ml-2'></i>", q_trans: "Manakah sistem persamaan berikut yang memiliki solusi tak hingga?", opts: ["\\( x + y = 5 \\) and \\( 2x + 2y = 10 \\)", "\\( y = 2x + 1 \\) and \\( 2x - y = -1 \\)", "\\( 3x - y = 4 \\) and \\( 6x - 2y = 8 \\)", "\\( y = x \\) and \\( y = x + 1 \\)"], ans: [0, 1, 2], exp: "Options 1, 2, and 3 are all the same line written in different forms, meaning they overlap completely and have infinite solutions. Option 4 is parallel (no solution).", exp_trans: "Opsi 1, 2, dan 3 adalah garis yang sama dalam bentuk berbeda, berarti tumpang tindih dan punya solusi tak hingga. Opsi 4 sejajar (tidak ada solusi)." }
+        });
+		
+        // ====== MATH QUESTIONS DATA (PART 3: TASK 4 - TASK 5) ======
+        Object.assign(questions, {
+            // TASK 4: Real-World Complex Applications
+            "t4-task1": { type: "single", q: "A car leaves town A at 60 km/h. One hour later, another car leaves town A at 80 km/h. How long does it take the second car to catch the first? <i class='fas fa-car-side text-orange-500 ml-2'></i>", q_trans: "Sebuah mobil meninggalkan kota A dengan 60 km/jam. Satu jam kemudian, mobil lain meninggalkan kota A dengan 80 km/jam. Berapa lama mobil kedua mengejar mobil pertama?", opts: ["\\( 2 \\text{ hours} \\)", "\\( 3 \\text{ hours} \\)", "\\( 4 \\text{ hours} \\)", "\\( 5 \\text{ hours} \\)", "\\( 6 \\text{ hours} \\)"], ans: "\\( 3 \\text{ hours} \\)", exp: "Let \\( t \\) be the time for the second car. The first car has been traveling for \\( t+1 \\) hours. Set distances equal: \\( 60(t+1) = 80t \implies 60t + 60 = 80t \implies 20t = 60 \implies t = 3 \\) hours.", exp_trans: "Misalkan \\( t \\) waktu mobil kedua. Mobil pertama berjalan selama \\( t+1 \\) jam. Setarakan jarak: \\( 60(t+1) = 80t \implies 20t = 60 \implies t = 3 \\) jam." },
+            "t4-task2": { type: "fill", q: "A wallet contains $5 and $10 bills, totaling 30 bills with a combined value of $200. How many $10 bills are there? <i class='fas fa-wallet text-orange-500 ml-2'></i>", q_trans: "Dompet berisi uang $5 dan $10, total 30 lembar dengan nilai gabungan $200. Berapa banyak uang $10?", ans: "10", exp: "Let \\( f + t = 30 \\) and \\( 5f + 10t = 200 \\). From Eq 1, \\( f = 30 - t \\). Substitute: \\( 5(30 - t) + 10t = 200 \implies 150 - 5t + 10t = 200 \implies 5t = 50 \implies t = 10 \\).", exp_trans: "Misalkan \\( f + t = 30 \\) dan \\( 5f + 10t = 200 \\). Substitusi: \\( 5(30 - t) + 10t = 200 \implies 5t = 50 \implies t = 10 \\)." },
+            "t4-task3": { type: "tf_table", q: "A rectangle has a perimeter of 34 cm and an area of 60 sq cm. Let length be \\( l \\) and width be \\( w \\). <i class='fas fa-square text-orange-500 ml-2'></i>", q_trans: "Persegi panjang berkeliling 34 cm dan luas 60 sq cm. Misalkan panjang \\( l \\) dan lebar \\( w \\).", opts: ["The equations are \\( 2l + 2w = 34 \\) and \\( l \\times w = 60 \\)", "Simplifying gives \\( l + w = 17 \\)", "The dimensions are 5 cm and 12 cm", "The dimensions are 6 cm and 10 cm"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, solving \\( l+w=17 \\) and \\( lw=60 \\implies l=12, w=5 \\). 4. S, 6*10=60 but 2(6)+2(10)=32, not 34.", exp_trans: "1. B. 2. B. 3. B, penyelesaiannya 12 dan 5. 4. S, kelilingnya 32 bukan 34." },
+            "t4-task4": { type: "single", q: "A chemist needs 10 liters of a 30% acid solution. He has 40% and 20% solutions. How many liters of the 40% solution does he need? <i class='fas fa-flask text-orange-500 ml-2'></i>", q_trans: "Ahli kimia butuh 10 larutan asam 30%. Ia punya larutan 40% dan 20%. Berapa liter larutan 40% yang dibutuhkan?", opts: ["\\( 2 \\text{ L} \\)", "\\( 3 \\text{ L} \\)", "\\( 4 \\text{ L} \\)", "\\( 5 \\text{ L} \\)", "\\( 6 \\text{ L} \\)"], ans: "\\( 5 \\text{ L} \\)", exp: "Let \\( x \\) be 40% and \\( y \\) be 20%. \\( x + y = 10 \\). Acid equation: \\( 0.4x + 0.2y = 0.3(10) = 3 \\). Multiply by 10: \\( 4x + 2y = 30 \\). We know \\( y = 10 - x \\implies 4x + 2(10-x) = 30 \implies 2x = 10 \implies x = 5 \\).", exp_trans: "Misalkan \\( x \\) 40% dan \\( y \\) 20%. \\( 4x + 2(10-x) = 30 \implies 2x = 10 \implies x = 5 \\)." },
+            "t4-task5": { type: "complex", q: "The sum of the digits of a two-digit number is 9. If the digits are reversed, the new number is 9 greater than the original. Which statements are true? <i class='fas fa-sort-numeric-down-alt text-orange-500 ml-2'></i>", q_trans: "Jumlah digit angka dua digit adalah 9. Jika digit dibalik, angka baru 9 lebih besar. Pernyataan mana yang benar?", opts: ["Let \\( x \\) be the tens digit and \\( y \\) be the units digit", "Equation 1 is \\( x + y = 9 \\)", "Equation 2 is \\( 10y + x = 10x + y + 9 \\)", "The original number is 45"], ans: [0, 1, 2, 3], exp: "1. B. 2. B. 3. B, reversed number minus original = 9. 4. B, solving gives \\( y - x = 1 \\implies y=5, x=4 \\implies 45 \\).", exp_trans: "1. B. 2. B. 3. B. 4. B, penyelesaiannya adalah 45." },
+            "t4-task6": { type: "fill", q: "A company's cost function is \\( C = 500 + 20x \\) and revenue is \\( R = 45x \\). Find the break-even point \\( x \\) where cost equals revenue. <i class='fas fa-balance-scale-right text-orange-500 ml-2'></i>", q_trans: "Fungsi biaya perusahaan \\( C = 500 + 20x \\) dan pendapatan \\( R = 45x \\). Cari titik impas \\( x \\) di mana biaya sama dengan pendapatan.", ans: "20", exp: "Set equal: \\( 500 + 20x = 45x \implies 25x = 500 \implies x = 20 \\).", exp_trans: "Setarakan: \\( 500 + 20x = 45x \implies 25x = 500 \implies x = 20 \\)." },
+            "t4-task7": { type: "single", q: "Solve the linear-quadratic system: \\( y = x + 1 \\) and \\( y = x^2 - 3x + 4 \\). Find the larger positive \\( x \\)-coordinate. <i class='fas fa-superscript text-orange-500 ml-2'></i>", q_trans: "Selesaikan sistem linear-kuadrat: \\( y = x + 1 \\) dan \\( y = x^2 - 3x + 4 \\). Cari koordinat \\( x \\) positif yang lebih besar.", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 3 \\)", exp: "Set equal: \\( x + 1 = x^2 - 3x + 4 \implies x^2 - 4x + 3 = 0 \implies (x-1)(x-3) = 0 \\). The solutions are 1 and 3. The larger one is 3.", exp_trans: "Setarakan: \\( x^2 - 4x + 3 = 0 \\). Solusinya adalah 1 dan 3. Yang lebih besar adalah 3." },
+            "t4-task8": { type: "tf_table", q: "Analyze the system: \\( 3x - 2y = 7 \\) and \\( 6x - 4y = 14 \\). <i class='fas fa-clipboard-list text-orange-500 ml-2'></i>", q_trans: "Analisis sistem: \\( 3x - 2y = 7 \\) dan \\( 6x - 4y = 14 \\).", opts: ["The equations are dependent", "The lines are coincident (the same line)", "There are infinitely many solutions", "The system has no solution"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, because every point on the line is a solution. 4. S, it has infinite solutions, not zero.", exp_trans: "1. B. 2. B. 3. B. 4. S, memiliki solusi tak hingga." },
+            "t4-task9": { type: "single", q: "Given \\( x + 2y = 5 \\) and \\( 2x - y = 1 \\), what is the value of \\( 3x + y \\)? <i class='fas fa-plus text-orange-500 ml-2'></i>", q_trans: "Diketahui \\( x + 2y = 5 \\) dan \\( 2x - y = 1 \\), berapakah nilai \\( 3x + y \\)?", opts: ["\\( 4 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( 7 \\)", "\\( 8 \\)"], ans: "\\( 6 \\)", exp: "Add the two equations directly: \\( (x + 2y) + (2x - y) = 5 + 1 \implies 3x + y = 6 \\). We don't even need to find x and y individually!", exp_trans: "Jumlahkan kedua persamaan secara langsung: \\( (x + 2y) + (2x - y) = 5 + 1 \implies 3x + y = 6 \\)." },
+            "t4-task10": { type: "complex", q: "Which of the following linear-quadratic systems has exactly one solution (is tangent)? <i class='fas fa-grip-lines text-orange-500 ml-2'></i>", q_trans: "Manakah sistem linear-kuadrat berikut yang memiliki tepat satu solusi (menyinggung)?", opts: ["\\( y = x^2 + 1 \\) and \\( y = -2 \\)", "\\( y = x^2 - 4x + 4 \\) and \\( y = 0 \\)", "\\( y = x^2 - 2x + 1 \\) and \\( y = 1 \\)", "\\( y = x^2 - 4 \\) and \\( y = 2 \\)"], ans: [1], exp: "1. S, \\( x^2+1 = -2 \implies x^2 = -3 \\) has no real solution. 2. B, \\( x^2-4x+4=0 \implies (x-2)^2=0 \\) has one repeated root (tangent). 3. S, \\( x^2-2x+1=1 \implies x(x-2)=0 \\) has two solutions. 4. S, \\( x^2 = 6 \\) has two solutions. Only option 2 is tangent.", exp_trans: "1. S, tidak ada solusi real. 2. B, memiliki satu akar berulang (menyinggung). 3. S, memiliki dua solusi. 4. S, memiliki dua solusi. Hanya opsi 2 yang menyinggung." },
+
+            // TASK 5: Mastery & Challenge
+            "t5-task1": { type: "single", q: "A man can row 30 km downstream in 2 hours. Upstream, it takes him 5 hours to return. What is his rowing speed in still water? <i class='fas fa-water text-orange-500 ml-2'></i>", q_trans: "Seorang pria mendayung 30 km hilir dalam 2 jam. Hulu, butuh 5 jam untuk kembali. Berapakah kecepatan dayungnya di air tenang?", opts: ["\\( 8 \\text{ km/h} \\)", "\\( 9 \\text{ km/h} \\)", "\\( 10.5 \\text{ km/h} \\)", "\\( 12 \\text{ km/h} \\)", "\\( 15 \\text{ km/h} \\)"], ans: "\\( 10.5 \\text{ km/h} \\)", exp: "Let \\( b \\) = boat speed, \\( c \\) = current. Downstream: \\( b + c = 30 / 2 = 15 \\). Upstream: \\( b - c = 30 / 5 = 6 \\). Adding: \\( 2b = 21 \implies b = 10.5 \\) km/h.", exp_trans: "Misalkan \\( b \\) kec. perahu, \\( c \\) arus. Hilir: \\( b+c=15 \\). Hulu: \\( b-c=6 \\). Jumlahkan: \\( 2b=21 \implies b=10.5 \\) km/jam." },
+            "t5-task2": { type: "fill", q: "If \\( 3x + 2y = 13 \\) and \\( 2x + 3y = 12 \\), what is the value of \\( x + y \\)? <i class='fas fa-plus-circle text-orange-500 ml-2'></i>", q_trans: "Jika \\( 3x + 2y = 13 \\) dan \\( 2x + 3y = 12 \\), berapakah nilai \\( x + y \\)?", ans: "5", exp: "Add the two equations: \\( 5x + 5y = 25 \\). Divide by 5: \\( x + y = 5 \\).", exp_trans: "Jumlahkan kedua persamaan: \\( 5x + 5y = 25 \\). Bagi 5: \\( x + y = 5 \\)." },
+            "t5-task3": { type: "tf_table", q: "Consider the system involving reciprocals: \\( \frac{1}{x} + \frac{1}{y} = 5 \\) and \\( \frac{1}{x} - \frac{1}{y} = 1 \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Perhatikan sistem yang melibatkan resiprokal: \\( \frac{1}{x} + \frac{1}{y} = 5 \\) dan \\( \frac{1}{x} - \frac{1}{y} = 1 \\).", opts: ["Let \\( u = \frac{1}{x} \\) and \\( v = \frac{1}{y} \\)", "Adding the equations gives \\( 2u = 6 \implies u = 3 \\)", "Substituting back gives \\( v = 2 \\)", "The solution for the original variables is \\( x = 1/3, y = 1/2 \\)"], ans: ["B", "B", "B", "B"], exp: "1. B. 2. B. 3. B, \\( 3 - v = 1 \implies v = 2 \\). 4. B, since \\( u=1/x \implies x=1/3 \\), and \\( v=1/y \implies y=1/2 \\). All true.", exp_trans: "1. B. 2. B. 3. B. 4. B, karena \\( x=1/3 \\) dan \\( y=1/2 \\). Semua benar." },
+            "t5-task4": { type: "single", q: "For what value of \\( c \\) will the line \\( y = 2x - 1 \\) be tangent to the parabola \\( y = x^2 - 4x + c \\)? <i class='fas fa-grip-lines text-orange-500 ml-2'></i>", q_trans: "Untuk nilai \\( c \\) berapa garis \\( y = 2x - 1 \\) akan menyinggung parabola \\( y = x^2 - 4x + c \\)?", opts: ["\\( c = 6 \\)", "\\( c = 7 \\)", "\\( c = 8 \\)", "\\( c = 9 \\)", "\\( c = 10 \\)"], ans: "\\( c = 8 \\)", exp: "Set equal: \\( 2x - 1 = x^2 - 4x + c \implies x^2 - 6x + (c+1) = 0 \\). For tangency, discriminant is 0: \\( (-6)^2 - 4(1)(c+1) = 0 \implies 36 - 4c - 4 = 0 \implies 32 = 4c \implies c = 8 \\).", exp_trans: "Setarakan: \\( x^2 - 6x + (c+1) = 0 \\). Diskriminan = 0: \\( 36 - 4(c+1) = 0 \implies 36 = 4c + 4 \implies c = 8 \\)." },
+            "t5-task5": { type: "complex", q: "Which of the following systems can be solved algebraically using substitution to yield integer solutions? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah sistem berikut yang dapat diselesaikan secara aljabar menggunakan substitusi untuk menghasilkan solusi bilangan bulat?", opts: ["\\( y = 2x \\) and \\( x^2 - 3x + 2 = 0 \\)", "\\( x + y = 4 \\) and \\( xy = 4 \\)", "\\( 3x - y = 5 \\) and \\( x + 2y = 3 \\)", "\\( y = x^2 - 2 \\) and \\( y = x \\)"], ans: [0, 1, 3], exp: "1. B, roots are \\( x=1, x=2 \\) which are integers. 2. B, solving \\( x(4-x)=4 \\) gives \\( x=2, y=2 \\) which are integers. 3. S, solving gives \\( x=13/7 \\) which is not an integer. 4. B, \\( x^2 - x - 2 = 0 \\) gives \\( x=2 \\) or \\( x=-1 \\), which are integers.", exp_trans: "1. B. 2. B. 3. S, bukan bilangan bulat. 4. B, solusinya bilangan bulat." },
+            "t5-task6": { type: "fill", q: "Find the value of \\( k \\) if the system \\( y = kx - 2 \\) and \\( y = 3x + 1 \\) intersects at \\( x = 2 \\). <i class='fas fa-search text-orange-500 ml-2'></i>", q_trans: "Cari nilai \\( k \\) jika sistem \\( y = kx - 2 \\) dan \\( y = 3x + 1 \\) berpotongan di \\( x = 2 \\).", ans: "4.5", exp: "At \\( x = 2 \\), \\( y = 3(2) + 1 = 7 \\). So the point is \\( (2, 7) \\). Substitute into first equation: \\( 7 = k(2) - 2 \implies 2k = 9 \implies k = 4.5 \\).", exp_trans: "Saat \\( x = 2 \\), \\( y = 7 \\). Substitusi ke persamaan pertama: \\( 7 = 2k - 2 \implies 2k = 9 \implies k = 4.5 \\)." },
+            "t5-task7": { type: "single", q: "A fruit seller sells 2 oranges and 3 apples for $2.40. He also sells 3 oranges and 2 apples for $2.30. What is the cost of 1 orange and 1 apple together? <i class='fas fa-apple-alt text-orange-500 ml-2'></i>", q_trans: "Penjual buah menjual 2 jeruk dan 3 apel seharga $2.40. Ia juga menjual 3 jeruk dan 2 apel seharga $2.30. Berapakah harga 1 jeruk dan 1 apel bersama-sama?", opts: ["$0.80", "$0.94", "$1.00", "$1.20", "$1.50"], ans: "$0.94", exp: "Equations: \\( 2o + 3a = 240 \\) and \\( 3o + 2a = 230 \\). Add them: \\( 5o + 5a = 470 \\implies o + a = 94 \\) cents = $0.94. No need to find them individually!", exp_trans: "Jumlahkan: \\( 5o + 5a = 470 \implies o + a = 94 \\) sen = $0.94. Tidak perlu mencarinya satu per satu!" },
+            "t5-task8": { type: "tf_table", q: "Verify if the points \\( (0, -3) \\) and \\( (3, 0) \\) are intersections of \\( y = x^2 - 2x - 3 \\) and \\( y = x - 3 \\). <i class='fas fa-check text-orange-500 ml-2'></i>", q_trans: "Verifikasi apakah titik \\( (0, -3) \\) dan \\( (3, 0) \\) adalah perpotongan dari \\( y = x^2 - 2x - 3 \\) dan \\( y = x - 3 \\).", opts: ["For \\( (0, -3) \\): \\( -3 = 0^2 - 2(0) - 3 \\) is True", "For \\( (0, -3) \\): \\( -3 = 0 - 3 \\) is True", "For \\( (3, 0) \\): \\( 0 = 3^2 - 2(3) - 3 \\) is True", "The lines intersect at two distinct points"], ans: ["B", "B", "B", "B"], exp: "1. B, \\( -3 = -3 \\). 2. B, \\( -3 = -3 \\). 3. B, \\( 9 - 6 - 3 = 0 \\). 4. B. All true.", exp_trans: "1. B. 2. B. 3. B. 4. B. Semua benar." },
+            "t5-task9": { type: "single", q: "If \\( 3x - 2y = 10 \\) and \\( 5x + 3y = 4 \\), what is the value of \\( x \\)? <i class='fas fa-equals text-orange-500 ml-2'></i>", q_trans: "Jika \\( 3x - 2y = 10 \\) dan \\( 5x + 3y = 4 \\), berapakah nilai \\( x \\)?", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 2 \\)", exp: "Multiply Eq 1 by 3: \\( 9x - 6y = 30 \\). Multiply Eq 2 by 2: \\( 10x + 6y = 8 \\). Add them: \\( 19x = 38 \implies x = 2 \\).", exp_trans: "Kalikan Eq 1 dengan 3 dan Eq 2 dengan 2, lalu jumlahkan: \\( 19x = 38 \implies x = 2 \\)." },
+            "t5-task10": { type: "complex", q: "Which of the following statements are true regarding the graphical interpretation of simultaneous equations? <i class='fas fa-chart-line text-orange-500 ml-2'></i>", q_trans: "Manakah pernyataan berikut yang benar mengenai interpretasi grafis persamaan simultan?", opts: ["If two lines intersect at one point, there is one unique solution", "If two lines are parallel, there is no solution", "If two lines are coincident, there are infinitely many solutions", "A line and a parabola can intersect at a maximum of 4 points"], ans: [0, 1, 2], exp: "1. B. 2. B. 3. B. 4. S, a line and a parabola can intersect at a maximum of 2 points.", exp_trans: "1. B. 2. B. 3. B. 4. S, garis dan parabola maksimal berpotongan di 2 titik." }
+        });
+        
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-indigo-100', 'text-indigo-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-indigo-100', 'text-indigo-800', 'font-bold');
+                }
+            }
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-indigo-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Exercise'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full shrink-0">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Pilih semua pernyataan yang benar. <span class="translation">*Select all correct statements.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox shrink-0" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah untuk setiap pernyataan. <span class="translation">*Determine True or False for each statement.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                // Menghapus spasi, mengubah koma jadi titik, dan membuat semua huruf jadi kecil agar tidak case-sensitive
+                let userVal = inputField.value.trim().replace(/\s/g, '').replace(',', '.').toLowerCase();
+                let correctAns = data.ans.toString().toLowerCase();
+                inputField.disabled = true;
+                isCorrect = (userVal === correctAns);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = userVal;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                let sAnsStr = '';
+                let cAnsStr = '';
+                let isCorrect = false;
+                
+                if (data.type === 'complex') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.length > 0 ? cArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    isCorrect = (sArr.length > 0 && sArr.slice().sort().join(',') === cArr.slice().sort().join(','));
+                } else if (data.type === 'tf_table') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.join(' | ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.join(' | ');
+                    isCorrect = (sArr.length > 0 && sArr.join(',') === cArr.join(','));
+                } else {
+                    sAnsStr = studentAns || 'Tidak Dijawab';
+                    cAnsStr = correctAns;
+                    isCorrect = (sAnsStr === cAnsStr);
+                }
+                
+                let note = '❌';
+                if(isCorrect) { score++; note = '✔️'; }
+                
+                let qText = data.q.replace(/<[^>]+>/g, '');
+                if (data.type === 'tf_table') {
+                    qText += " | Statements: " + data.opts.map((opt, idx) => `${idx+1}. ${opt}`).join(" ; ");
+                }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${qText}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            // Pastikan library KaTeX sudah tersedia sebelum merender
+            if (typeof renderMathInElement === 'undefined') return;
+            
+            const target = document.querySelector('.content-section.active') || document.body;
+            try {
+                renderMathInElement(target, {
+                    delimiters: [
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false // Mencegah halaman rusak jika ada 1 simbol math yang error
+                });
+            } catch(e) {
+                console.error("KaTeX rendering error:", e);
+            }
+        }
+
+        window.onload = () => {
+            renderTasks();
+            // Beri jeda 100ms agar library dari CDN benar-benar siap sebelum merender
+            setTimeout(() => {
+                showSection('warmup');
+                renderMath();
+            }, 100);
+        };
+    </script>
+</body>
+</html>
