@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Algebraic Fractions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        .prompt-box { max-width: 650px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; text-align: left; }
+        .prompt-box p { width: 100%; }
+        .prompt-box img { width: 100%; height: auto; max-width: 300px; display: block; margin-top: 0.5rem; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; padding: 0; border: 0; background: transparent; }
+        .collapse-content.open { max-height: 2000px; padding: 1.5rem; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 0.5rem; margin-top: 1rem; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            #printArea table { table-layout: fixed; width: 100%; font-size: 9px; }
+            #printArea td, #printArea th { word-wrap: break-word; padding: 2px !important; }
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <marker id="arr1" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Algebraic Fractions</p>
+            <p class="translation text-indigo-200">Topik: Pecahan Aljabar</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">Class Rules <br><span class="translation text-gray-500">Aturan Kelas</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-indigo-500 mt-1"></i>
+                    <div>Take turns speaking. <span class="translation">Berbicara secara bergantian.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-indigo-500 mt-1"></i>
+                    <div>Ask permission if you want to leave the class. <span class="translation">Meminta izin jika ingin meninggalkan kelas.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-indigo-500 mt-1"></i>
+                    <div>Turn on camera and microphone if needed. <span class="translation">Menyalakan kamera dan microphone jika diperlukan.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-indigo-200 mt-1">Select topic to navigate <span class="translation text-indigo-300 block">Pilih topik untuk navigasi</span></p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li><a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="warmup"><div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="intro"><div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="review"><div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="problem"><div class="font-semibold text-sm text-gray-800">Problem Introduction</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="guided"><div class="font-semibold text-sm text-gray-800">Guided Practice</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="independent"><div class="font-semibold text-sm text-gray-800">Independent Practice</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="consolidation"><div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div></a></li>
+                    <hr class="my-3 border-gray-200">
+                    <li><a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                </ul>
+            </nav>
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">What is a Fraction? <i class="fas fa-cookie-bite text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Apa itu Pecahan?</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="90" cy="70" r="60" fill="#f3f4f6" stroke="#333" stroke-width="2"/>
+                                    <path d="M90 10 A60 60 0 0 1 150 70 L90 70 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <path d="M150 70 A60 60 0 0 1 90 130 L90 70 Z" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                                    <path d="M90 130 A60 60 0 0 1 30 70 L90 70 Z" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                                    <text x="90" y="50" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">1/4</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>A fraction represents a part of a whole. It is written as \( \frac{a}{b} \), where \( a \) is the numerator (top) and \( b \) is the denominator (bottom). <span class="translation">Pecahan mewakili bagian dari keseluruhan. Ditulis sebagai \( \frac{a}{b} \), di mana \( a \) adalah pembilang dan \( b \) adalah penyebut.</span></p>
+                                <p class="mt-2">The denominator tells us how many equal parts the whole is divided into, and the numerator tells us how many of those parts we have. <span class="translation">Penyebut memberi tahu berapa banyak bagian yang sama dari keseluruhan, dan pembilang memberi tahu berapa banyak bagian yang kita miliki.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The "Slice" Rule</p>
+                            <p class="mt-1">Think of the denominator as the number of slices, and the numerator as the slices you eat. <span class="translation">Anggap penyebut sebagai jumlah potongan, dan pembilang sebagai potongan yang kamu makan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Fraction} = \frac{\text{Numerator}}{\text{Denominator}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Equivalent Fractions <i class="fas fa-equals text-green-400 ml-2"></i></h2>
+                        <p class="translation">Pecahan Senilai</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="100" viewBox="0 0 180 100">
+                                    <text x="40" y="50" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1/2</text>
+                                    <text x="90" y="50" font-size="16" text-anchor="middle" fill="#10b981">=</text>
+                                    <text x="140" y="50" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">2/4</text>
+                                    <path d="M20 60 L 160 60" stroke="#10b981" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Two fractions are equivalent if they represent the same value. You can create an equivalent fraction by multiplying or dividing both the numerator and denominator by the same non-zero number. <span class="translation">Dua pecahan senilai jika mewakili nilai yang sama. Kamu bisa membuat pecahan senilai dengan mengalikan atau membagi pembilang dan penyebut dengan bilangan yang sama (bukan nol).</span></p>
+                                <p class="mt-2">For example, \( \frac{1}{2} = \frac{1 \times 2}{2 \times 2} = \frac{2}{4} \). <span class="translation">Contohnya, \( \frac{1}{2} = \frac{2}{4} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Whatever you do to the top, do to the bottom!</p>
+                            <p class="mt-1">To keep a fraction balanced, multiply or divide both parts by the same thing. <span class="translation">Untuk menjaga keseimbangan pecahan, kalikan atau bagikan kedua bagiannya dengan hal yang sama.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a}{b} = \frac{a \times k}{b \times k} \) (where \( k \neq 0 \))</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Simplifying Fractions <i class="fas fa-broom text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Menyederhanakan Pecahan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="120" viewBox="0 0 180 120">
+                                    <text x="40" y="60" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">4/8</text>
+                                    <path d="M 60 60 L 120 60" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="140" y="60" font-size="20" text-anchor="middle" fill="#10b981" font-weight="bold">1/2</text>
+                                    <text x="90" y="90" font-size="12" text-anchor="middle" fill="#8b5cf6">Divide by 4</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Simplifying (or reducing) a fraction means making the numerator and denominator as small as possible while keeping the same value. We do this by dividing both by their Greatest Common Divisor (GCD). <span class="translation">Menyederhanakan pecahan berarti membuat pembilang dan penyebut sekecil mungkin tapi nilainya tetap. Lakukan dengan membagi keduanya dengan Faktor Persekutuan Terbesar (FPB).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The Zorro Slash</p>
+                            <p class="mt-1">Cancel out common factors by drawing a slash through them! <span class="translation">Coret faktor yang sama dengan menggambar garis silang di atasnya!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a \cdot c}{b \cdot c} = \frac{a}{b} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Real-World Application: Pizza Sharing <i class="fas fa-pizza-slice text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Aplikasi Dunia Nyata: Berbagi Pizza</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="90" cy="70" r="60" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                    <path d="M90 10 A60 60 0 0 1 150 70 L90 70 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+                                    <text x="120" y="50" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">1/4</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Imagine you have \( \frac{1}{4} \) of a pizza. Your friend has \( \frac{2}{8} \) of a similar pizza. You both actually have the same amount! Algebraic fractions work the same way, but with variables like \( x \). <span class="translation">Bayangkan kamu punya \( \frac{1}{4} \) pizza. Temanmu punya \( \frac{2}{8} \) pizza yang sama. Kalian sebenarnya punya jumlah yang sama! Pecahan aljabar bekerja dengan cara yang sama, tapi dengan variabel seperti \( x \).</span></p>
+                                <p class="mt-2">In real life, we use fractions to calculate ratios, proportions, and rates. <span class="translation">Dalam kehidupan nyata, kita menggunakan pecahan untuk menghitung rasio, proporsi, dan tingkat.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Visualize the Pizza</p>
+                            <p class="mt-1">Whenever you see an algebraic fraction, imagine the denominator as the total slices and the numerator as the slices you're taking. <span class="translation">Saat melihat pecahan aljabar, bayangkan penyebut sebagai total potongan dan pembilang sebagai potongan yang diambil.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Part} = \frac{\text{Numerator (Slices)}}{\text{Denominator (Total)}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Scaling Recipes with Fractions <i class="fas fa-blender text-green-400 ml-2"></i></h2>
+                        <p class="translation">Menskalakan Resep dengan Pecahan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="40" y="20" width="100" height="100" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="60" font-size="14" text-anchor="middle" fill="#333">Recipe</text>
+                                    <text x="90" y="80" font-size="12" text-anchor="middle" fill="#10b981">x / 2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>If a recipe needs \( \frac{x}{3} \) cups of flour, and you want to make half the recipe, you need \( \frac{1}{2} \times \frac{x}{3} \) cups. This is multiplying algebraic fractions! <span class="translation">Jika resep butuh \( \frac{x}{3} \) cangkir tepung, dan kamu mau membuat setengah resep, kamu butuh \( \frac{1}{2} \times \frac{x}{3} \) cangkir. Ini adalah perkalian pecahan aljabar!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Multiply Across</p>
+                            <p class="mt-1">When multiplying fractions, simply multiply the tops and multiply the bottoms. <span class="translation">Saat mengalikan pecahan, kalikan bagian atas dan kalikan bagian bawah.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a}{b} \times \frac{c}{d} = \frac{a \times c}{b \times d} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Splitting Costs with Variables <i class="fas fa-hand-holding-usd text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Membagi Biaya dengan Variabel</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="50" font-size="14" text-anchor="middle" fill="#333">$x</text>
+                                    <path d="M 40 60 L 40 100 L 130 100" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">x / n</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>If a total cost of a gift is \( \$x \) and it is split among \( n \) friends, each pays \( \frac{x}{n} \) dollars. If 2 friends drop out, each now pays \( \frac{x}{n-2} \). <span class="translation">Jika total biaya hadiah adalah $x dan dibagi di antara n teman, masing-masing membayar \( \frac{x}{n} \) dolar. Jika 2 teman mundur, masing-masing membayar \( \frac{x}{n-2} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Grouping</p>
+                            <p class="mt-1">Treat expressions in parentheses (like \( n-2 \)) as a single unit! <span class="translation">Anggap ekspresi dalam tanda kurung (seperti \( n-2 \)) sebagai satu kesatuan!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Share} = \frac{\text{Total Cost}}{\text{Number of People}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Recalling Factoring <i class="fas fa-puzzle-piece text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Mengingat Pemfaktoran</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="30" width="140" height="30" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="50" font-size="12" text-anchor="middle" fill="#333">x^2 - 5x + 6</text>
+                                    <path d="M 90 65 L 90 85" stroke="#ef4444" stroke-width="2"/>
+                                    <rect x="30" y="90" width="120" height="30" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="110" font-size="12" text-anchor="middle" fill="#333">(x-2)(x-3)</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Factoring is breaking down an expression into simpler multipliers. For example, \( x^2 - 5x + 6 \) factors into \( (x-2)(x-3) \). <span class="translation">Pemfaktoran adalah mengubah ekspresi menjadi pengali yang lebih sederhana. Contohnya, \( x^2 - 5x + 6 \) difaktorkan menjadi \( (x-2)(x-3) \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The AC Method</p>
+                            <p class="mt-1">Find two numbers that multiply to \( a \times c \) and add to \( b \). <span class="translation">Cari dua bilangan yang jika dikalikan menghasilkan \( a \times c \) dan jika dijumlahkan menghasilkan \( b \).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( ax^2 + bx + c = (px + m)(qx + n) \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Cancelling Common Factors <i class="fas fa-cut text-green-400 ml-2"></i></h2>
+                        <p class="translation">Mencoret Faktor yang Sama</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="70" font-size="16" text-anchor="middle" fill="#333">(x * 3) / (2 * x)</text>
+                                    <path d="M 20 80 L 160 40" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="120" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">3/2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Just like numerical fractions, if the numerator and denominator share a common factor, we can cancel them out. \( \frac{x \times 3}{2 \times x} = \frac{3}{2} \). <span class="translation">Sama seperti pecahan angka, jika pembilang dan penyebut punya faktor yang sama, kita bisa coret. \( \frac{x \times 3}{2 \times x} = \frac{3}{2} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Factor First, Cancel Second</p>
+                            <p class="mt-1">You can only cancel factors (things being multiplied), NOT terms (things being added/subtracted). <span class="translation">Kamu hanya bisa coret faktor (yang dikalikan), BUKAN suku (yang ditambah/dikurangi).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a \cdot b}{a \cdot c} = \frac{b}{c} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Exponent Rules Refresher <i class="fas fa-superscript text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Pengingat Aturan Eksponen</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="50" font-size="14" text-anchor="middle" fill="#333">x^2 * x^3</text>
+                                    <path d="M 40 60 L 40 100 L 130 100" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">x^5</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>When multiplying like bases, add exponents: \( x^a \times x^b = x^{a+b} \). When dividing, subtract: \( \frac{x^a}{x^b} = x^{a-b} \). <span class="translation">Saat mengalikan basis yang sama, tambahkan eksponen: \( x^a \times x^b = x^{a+b} \). Saat membagi, kurangkan: \( \frac{x^a}{x^b} = x^{a-b} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Keep the Base, Play with the Power</p>
+                            <p class="mt-1">Never multiply the base and the exponent together! <span class="translation">Jangan kalikan basis dan eksponen!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{x^a}{x^b} = x^{a-b} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Simplifying Algebraic Fractions <i class='fas fa-broom text-indigo-400 ml-2'></i></h2>
+                        <p class="translation">Menyederhanakan Pecahan Aljabar</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="50" font-size="14" text-anchor="middle" fill="#333">(x^2-4)/(x-2)</text>
+                                    <path d="M 40 60 L 40 100 L 130 100" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">x+2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>To simplify an algebraic fraction, factor the numerator and denominator completely, then cancel common factors. <span class="translation">Untuk menyederhanakan pecahan aljabar, faktorkan pembilang dan penyebut sepenuhnya, lalu coret faktor yang sama.</span></p>
+                                <p class="mt-2">Example: \( \frac{x^2-4}{x-2} = \frac{(x+2)(x-2)}{(x-2)} = x+2 \). <span class="translation">Contoh: \( \frac{x^2-4}{x-2} = \frac{(x+2)(x-2)}{(x-2)} = x+2 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Difference of Squares</p>
+                            <p class="mt-1">Recognize patterns like \( a^2 - b^2 = (a-b)(a+b) \) quickly. <span class="translation">Kenali pola seperti \( a^2 - b^2 = (a-b)(a+b) \) dengan cepat.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Factor -> Cancel -> Simplify.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Multiplying Algebraic Fractions <i class='fas fa-times text-green-400 ml-2'></i></h2>
+                        <p class="translation">Mengalikan Pecahan Aljabar</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="100" viewBox="0 0 180 100">
+                                    <text x="40" y="50" font-size="14" text-anchor="middle" fill="#333">(x/2) * (4/x^2)</text>
+                                    <path d="M 40 60 L 40 80 L 130 80" stroke="#10b981" stroke-width="2" fill="none"/>
+                                    <text x="100" y="95" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">2/x</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Multiplying algebraic fractions is just like multiplying numerical fractions: multiply the numerators together and the denominators together. <span class="translation">Mengalikan pecahan aljabar sama seperti mengalikan pecahan angka: kalikan pembilang dengan pembilang dan penyebut dengan penyebut.</span></p>
+                                <p class="mt-2">Example: \( \frac{x}{2} \times \frac{4}{x^2} = \frac{4x}{2x^2} = \frac{2}{x} \). <span class="translation">Contoh: \( \frac{x}{2} \times \frac{4}{x^2} = \frac{4x}{2x^2} = \frac{2}{x} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Cancel Before Multiplying</p>
+                            <p class="mt-1">It's easier to cancel common factors before you multiply to keep the numbers small. <span class="translation">Lebih mudah coret faktor yang sama sebelum dikalikan agar angka tetap kecil.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a}{b} \times \frac{c}{d} = \frac{ac}{bd} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Dividing Algebraic Fractions <i class='fas fa-divide text-purple-400 ml-2'></i></h2>
+                        <p class="translation">Membagi Pecahan Aljabar</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="40" font-size="12" text-anchor="middle" fill="#333">(x/y) / (2/x)</text>
+                                    <path d="M 40 50 L 40 80 L 130 80" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="100" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">x^2/2y</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Dividing is just multiplying by the reciprocal. Keep the first fraction, change the division to multiplication, and flip the second fraction. <span class="translation">Membagi sama dengan mengalikan dengan kebalikannya. Simpan pecahan pertama, ubah pembagian jadi perkalian, dan balikkan pecahan kedua.</span></p>
+                                <p class="mt-2">Example: \( \frac{x}{y} \div \frac{2}{x} = \frac{x}{y} \times \frac{x}{2} = \frac{x^2}{2y} \). <span class="translation">Contoh: \( \frac{x}{y} \div \frac{2}{x} = \frac{x}{y} \times \frac{x}{2} = \frac{x^2}{2y} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Keep, Change, Flip (KCF)</p>
+                            <p class="mt-1">Keep the first fraction, Change \( \div \) to \( \times \), Flip the second fraction. <span class="translation">Simpan pecahan pertama, Ubah \( \div \) menjadi \( \times \), Balikkan pecahan kedua.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \times \frac{d}{c} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Factoring Quadratics in Fractions <i class='fas fa-chalkboard-teacher text-indigo-400 ml-2'></i></h2>
+                        <p class="translation">Memfaktorkan Kuadrat dalam Pecahan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="50" font-size="12" text-anchor="middle" fill="#333">(x^2-5x+6)/(x-3)</text>
+                                    <path d="M 40 60 L 40 100 L 130 100" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="12" text-anchor="middle" fill="#10b981" font-weight="bold">x-2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sometimes, the numerator is a quadratic expression. You must factor it first before you can cancel anything. <span class="translation">Terkadang, pembilang adalah ekspresi kuadrat. Kamu harus memfaktorkannya sebelum bisa mencoret apapun.</span></p>
+                                <p class="mt-2">Example: \( \frac{x^2-5x+6}{x-3} = \frac{(x-2)(x-3)}{(x-3)} = x-2 \). <span class="translation">Contoh: \( \frac{x^2-5x+6}{x-3} = \frac{(x-2)(x-3)}{(x-3)} = x-2 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Always Factor Fully</p>
+                            <p class="mt-1">Don't stop factoring halfway. Check if the numerator or denominator can be broken down further. <span class="translation">Jangan berhenti memfaktorkan di tengah jalan. Cek apakah pembilang/penyebut masih bisa diurai.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Factor Num & Den -> Cancel -> Result.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Multiplying with Quadratics <i class='fas fa-times-circle text-green-400 ml-2'></i></h2>
+                        <p class="translation">Perkalian dengan Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="40" font-size="10" text-anchor="middle" fill="#333">((x-2)/x) * (x/(x-2))</text>
+                                    <path d="M 40 50 L 40 100 L 130 100" stroke="#10b981" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">1</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>When multiplying fractions with quadratics, factor everything first, then cancel out common binomial factors. <span class="translation">Saat mengalikan pecahan dengan kuadrat, faktorkan semuanya, lalu coret faktor binomial yang sama.</span></p>
+                                <p class="mt-2">Example: \( \frac{(x-2)}{x} \times \frac{x}{(x-2)} = 1 \). <span class="translation">Contoh: \( \frac{x-2}{x} \times \frac{x}{x-2} = 1 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Binomials are Single Units</p>
+                            <p class="mt-1">Treat \( (x-2) \) as a single variable like \( y \). You can cancel \( y \) easily. <span class="translation">Anggap \( (x-2) \) sebagai variabel tunggal seperti \( y \). Kamu bisa mencoret \( y \) dengan mudah.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{(x+a)}{b} \times \frac{b}{(x+a)} = 1 \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Dividing with Quadratics <i class='fas fa-divide text-purple-400 ml-2'></i></h2>
+                        <p class="translation">Pembagian dengan Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="40" font-size="10" text-anchor="middle" fill="#333">(x^2-9) / (x+3)</text>
+                                    <path d="M 40 50 L 40 100 L 130 100" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">x-3</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Dividing fractions with quadratics requires factoring, flipping, and then multiplying. <span class="translation">Membagi pecahan dengan kuadrat memerlukan pemfaktoran, pembalikan, lalu perkalian.</span></p>
+                                <p class="mt-2">Example: \( \frac{x^2-9}{x+3} \div \frac{x-3}{1} = \frac{(x-3)(x+3)}{x+3} \times \frac{1}{x-3} = 1 \). <span class="translation">Contoh: \( \frac{x^2-9}{x+3} \div \frac{x-3}{1} = \frac{(x-3)(x+3)}{x+3} \times \frac{1}{x-3} = 1 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Watch the Flip!</p>
+                            <p class="mt-1">If the second fraction is a polynomial without a visible denominator, its denominator is 1. Flip it over! <span class="translation">Jika pecahan kedua tidak ada penyebut, penyebutnya adalah 1. Balikkan!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( A \div \frac{B}{C} = A \times \frac{C}{B} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Complex Simplification <i class='fas fa-stream text-indigo-400 ml-2'></i></h2>
+                        <p class="translation">Penyederhanaan Kompleks</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="20" width="140" height="20" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="35" font-size="10" text-anchor="middle" fill="#333">1. Factor Everything</text>
+                                    <path d="M 90 45 L 90 55" stroke="#333" stroke-width="2"/>
+                                    <rect x="20" y="60" width="140" height="20" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="75" font-size="10" text-anchor="middle" fill="#333">2. Multiply or Divide</text>
+                                    <path d="M 90 85 L 90 95" stroke="#333" stroke-width="2"/>
+                                    <rect x="20" y="100" width="140" height="20" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="115" font-size="10" text-anchor="middle" fill="#333">3. Cancel & Simplify</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Combine everything you've learned: factor polynomials, apply exponent rules, multiply or divide, and cancel common factors. <span class="translation">Gabungkan semua yang dipelajari: faktorkan polinomial, terapkan aturan eksponen, kalikan/bagi, dan coret faktor yang sama.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Step-by-Step</p>
+                            <p class="mt-1">Don't rush. Write down each step to avoid sign errors or missing factors. <span class="translation">Jangan terburu-buru. Tuliskan setiap langkah untuk menghindari kesalahan tanda atau faktor yang hilang.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Factor -> Apply Operation -> Cancel -> Final Answer.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Real-World Algebraic Fractions <i class='fas fa-globe text-green-400 ml-2'></i></h2>
+                        <p class="translation">Pecahan Aljabar Dunia Nyata</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="90" y="50" font-size="14" text-anchor="middle" fill="#333">Distance / Time</text>
+                                    <path d="M 90 60 L 90 80" stroke="#10b981" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="90" y="100" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">d / t</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Algebraic fractions are common in physics and engineering. For example, speed is \( \frac{d}{t} \). If distance is \( x^2 \) and time is \( x \), speed is \( \frac{x^2}{x} = x \). <span class="translation">Pecahan aljabar sering ada di fisika. Misal, kecepatan = \( \frac{d}{t} \). Jika jarak = \( x^2 \) dan waktu = \( x \), kecepatan = \( \frac{x^2}{x} = x \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Context Matters</p>
+                            <p class="mt-1">In word problems, define your variables clearly before forming the fraction. <span class="translation">Dalam soal cerita, tentukan variabel dengan jelas sebelum membentuk pecahan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Read -> Define Variables -> Form Fraction -> Simplify.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Restrictions and Limits <i class='fas fa-ban text-purple-400 ml-2'></i></h2>
+                        <p class="translation">Pembatasan dan Batasan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="50" font-size="14" text-anchor="middle" fill="#333">1 / x</text>
+                                    <text x="90" y="50" font-size="14" text-anchor="middle" fill="#ef4444" font-weight="bold">x != 0</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>The denominator of an algebraic fraction can never be zero. If \( x=0 \) makes the denominator zero, then \( x \neq 0 \) is a restriction. <span class="translation">Penyebut pecahan aljabar tidak boleh nol. Jika \( x=0 \) membuat penyebut nol, maka \( x \neq 0 \) adalah pembatasannya.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Set Denominator to Zero</p>
+                            <p class="mt-1">To find restrictions, set the denominator equal to 0 and solve for \( x \). <span class="translation">Untuk mencari pembatasan, samakan penyebut dengan 0 dan selesaikan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Denominator \( \neq 0 \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+			
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+            
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Consolidation & Reflection</h2>
+                    <p class="translation">Konsolidasi & Refleksi</p>
+                    <p>Excellent work! You've completed the Algebraic Fractions material. Keep practicing to master simplifying, multiplying, and dividing these expressions. <span class="translation">Kerja bagus! Anda telah menyelesaikan materi Pecahan Aljabar. Teruslah berlatih untuk menguasai penyederhanaan, perkalian, dan pembagian ekspresi ini.</span></p>
+                    <p class="mt-2">To test your understanding further, please complete Tasks 1 to 5. <span class="translation">Untuk menguji pemahaman Anda lebih lanjut, silakan kerjakan Task 1 hingga Task 5.</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Go to learn.algonova.id <span class="translation text-sm italic">Pergi ke learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Algebraic Fractions</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+    
+    <script>
+	
+        // ====== ALGEBRAIC FRACTIONS QUESTIONS DATABASE ======
+        const questions = {};
+        Object.assign(questions, {
+            // SECTION 1: SPIRAL REVIEW WARM-UP
+            "w-task1": { type: "single", q: "A pizza is cut into 8 slices. You eat 3 slices. What fraction of the pizza is left? <i class='fas fa-pizza-slice text-blue-500 ml-2'></i>", q_trans: "Sebuah pizza dipotong menjadi 8 bagian. Kamu memakan 3 bagian. Berapa pecahan pizza yang tersisa?", opts: ["\\( \\frac{3}{8} \\)", "\\( \\frac{5}{8} \\)", "\\( \\frac{8}{5} \\)", "\\( \\frac{3}{5} \\)", "\\( \\frac{8}{3} \\)"], ans: "\\( \\frac{5}{8} \\)", exp: "Total slices = 8. Eaten = 3. Left = 8 - 3 = 5. Fraction left = \\( \\frac{5}{8} \\).", exp_trans: "Total potongan = 8. Dimakan = 3. Sisa = 8 - 3 = 5. Pecahan tersisa = \\( \\frac{5}{8} \\)." },
+            "w-task2": { type: "single", q: "Which fraction is equivalent to \\( \\frac{2}{3} \\)? <i class='fas fa-equals text-blue-500 ml-2'></i>", q_trans: "Pecahan manakah yang senilai dengan \\( \\frac{2}{3} \\)?", opts: ["\\( \\frac{4}{6} \\)", "\\( \\frac{3}{2} \\)", "\\( \\frac{6}{4} \\)", "\\( \\frac{2}{6} \\)", "\\( \\frac{1}{3} \\)"], ans: "\\( \\frac{4}{6} \\)", exp: "Multiply numerator and denominator by 2: 2*2=4, 3*2=6. So \\( \\frac{4}{6} \\) is equivalent to \\( \\frac{2}{3} \\).", exp_trans: "Kalikan pembilang dan penyebut dengan 2: 2*2=4, 3*2=6. Jadi \\( \\frac{4}{6} \\) senilai dengan \\( \\frac{2}{3} \\)." },
+            "w-task3": { type: "fill", q: "Simplify the fraction \\( \\frac{15}{25} \\) to its lowest terms. <i class='fas fa-broom text-blue-500 ml-2'></i>", q_trans: "Sederhanakan pecahan \\( \\frac{15}{25} \\) ke bentuk terkecilnya.", ans: "3/5", exp: "Divide both by 5 (GCD). 15/5=3, 25/5=5. Result is \\( \\frac{3}{5} \\).", exp_trans: "Bagi keduanya dengan 5 (FPB). 15/5=3, 25/5=5. Hasilnya \\( \\frac{3}{5} \\)." },
+            "w-task4": { type: "tf_table", q: "Evaluate the rules of equivalent fractions. <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Evaluasi aturan pecahan senilai.", opts: ["You can add 2 to top and bottom to get an equivalent fraction", "You can multiply top and bottom by the same number", "You can divide top and bottom by a common factor", "Equivalent fractions have the same value"], ans: ["S", "B", "B", "B"], exp: "1. S, must multiply/divide, not add. 2. B, multiply works. 3. B, divide works. 4. B, they are equal.", exp_trans: "1. S, harus kali/bagi, bukan tambah. 2. B. 3. B. 4. B, nilainya sama." },
+            "w-task5": { type: "single", q: "What is \\( \\frac{x}{4} + \\frac{x}{4} \\) in simplest form? <i class='fas fa-plus text-blue-500 ml-2'></i>", q_trans: "Berapakah \\( \\frac{x}{4} + \\frac{x}{4} \\) dalam bentuk paling sederhana?", opts: ["\\( \\frac{2x}{8} \\)", "\\( \\frac{2x}{4} \\)", "\\( \\frac{x^2}{16} \\)", "\\( \\frac{x}{8} \\)", "\\( \\frac{x}{2} \\)"], ans: "\\( \\frac{x}{2} \\)", exp: "If denominators are the same, add numerators: \\( x + x = 2x \\). Denominator stays 4. So \\( \\frac{2x}{4} \\). Always simplify the final answer: \\( \\frac{2x}{4} = \\frac{x}{2} \\).", exp_trans: "Jika penyebut sama, jumlahkan pembilang: \\( x + x = 2x \\). Penyebut tetap 4. Selalu sederhanakan jawaban akhir: \\( \\frac{2x}{4} = \\frac{x}{2} \\)." },
+            "w-task6": { type: "complex", q: "Which of the following fractions are in their simplest form? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Pecahan manakah yang sudah dalam bentuk paling sederhana?", opts: ["\\( \\frac{3}{5} \\)", "\\( \\frac{4}{6} \\)", "\\( \\frac{7}{11} \\)", "\\( \\frac{9}{12} \\)"], ans: [0, 2], exp: "3 and 5 share no factors. 7 and 11 share no factors. \\( \\frac{4}{6}=\\frac{2}{3} \\), \\( \\frac{9}{12}=\\frac{3}{4} \\).", exp_trans: "3 dan 5 tak punya faktor sama. 7 dan 11 tak punya faktor sama. \\( \\frac{4}{6}=\\frac{2}{3} \\), \\( \\frac{9}{12}=\\frac{3}{4} \\)." },
+            "w-task7": { type: "single", q: "If you have \\( \\frac{3x}{5} \\) of a cake and you give away \\( \\frac{x}{5} \\), how much is left? <i class='fas fa-cake text-blue-500 ml-2'></i>", q_trans: "Jika kamu punya \\( \\frac{3x}{5} \\) kue dan memberikan \\( \\frac{x}{5} \\), berapa banyak yang tersisa?", opts: ["\\( \\frac{2x}{5} \\)", "\\( \\frac{4x}{5} \\)", "\\( \\frac{2x}{10} \\)", "\\( \\frac{3x}{25} \\)", "\\( \\frac{2}{5} \\)"], ans: "\\( \\frac{2x}{5} \\)", exp: "Same denominator, subtract numerators: \\( 3x - x = 2x \\). So \\( \\frac{2x}{5} \\).", exp_trans: "Penyebut sama, kurangi pembilang: \\( 3x - x = 2x \\). Jadi \\( \\frac{2x}{5} \\)." },
+            "w-task8": { type: "fill", q: "What is the reciprocal of \\( \\frac{x}{3} \\)? <i class='fas fa-arrows-up-down text-blue-500 ml-2'></i>", q_trans: "Berapakah kebalikan dari \\( \\frac{x}{3} \\)?", ans: "3/x", exp: "The reciprocal is flipping the fraction upside down. So \\( \\frac{x}{3} \\) becomes \\( \\frac{3}{x} \\).", exp_trans: "Kebalikan adalah membalik pecahan. \\( \\frac{x}{3} \\) menjadi \\( \\frac{3}{x} \\)." },
+            "w-task9": { type: "single", q: "Which of these is a variable fraction? <i class='fas fa-flask text-blue-500 ml-2'></i>", q_trans: "Manakah dari berikut ini yang merupakan pecahan variabel?", opts: ["\\( \\frac{1}{2} \\)", "\\( \\frac{5}{8} \\)", "\\( \\frac{x+2}{3} \\)", "\\( \\frac{10}{100} \\)", "\\( \\frac{3}{4} \\)"], ans: "\\( \\frac{x+2}{3} \\)", exp: "A variable fraction contains a letter (variable) in the numerator or denominator.", exp_trans: "Pecahan variabel mengandung huruf (variabel) di pembilang atau penyebut." },
+            "w-task10": { type: "tf_table", q: "Evaluate the rules of simplifying numerical fractions. <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Evaluasi aturan menyederhanakan pecahan angka.", opts: ["You can only divide top and bottom by the same number", "You can subtract the same number from top and bottom", "Simplifying changes the value of the fraction", "Simplifying keeps the value the same"], ans: ["B", "S", "S", "B"], exp: "1. B, divide by common factor. 2. S, subtraction changes value. 3. S, value stays same. 4. B.", exp_trans: "1. B. 2. S. 3. S, nilai tetap. 4. B." },
+
+            // SECTION 2: INTRO & REAL-WORLD
+            "i-task1": { type: "single", q: "A recipe needs \\( \\frac{x}{2} \\) cups of sugar. You want to make 1/3 of the recipe. How much sugar? <i class='fas fa-candy-cane text-green-500 ml-2'></i>", q_trans: "Resep butuh \\( \\frac{x}{2} \\) cangkir gula. Kamu mau membuat \\( \\frac{1}{3} \\) resep. Berapa gulanya?", opts: ["\\( \\frac{x}{6} \\)", "\\( \\frac{3x}{2} \\)", "\\( \\frac{2x}{3} \\)", "\\( \\frac{x}{3} \\)", "\\( \\frac{6x}{1} \\)"], ans: "\\( \\frac{x}{6} \\)", exp: "Multiply: \\( \\frac{x}{2} \\times \\frac{1}{3} = \\frac{x}{6} \\).", exp_trans: "Kali: \\( \\frac{x}{2} \\times \\frac{1}{3} = \\frac{x}{6} \\)." },
+            "i-task2": { type: "fill", q: "If a total cost \\$x is split among 4 friends, each pays x/4. If another joins, it's x/5. If 2 friends join the original 4, each pays x/a. What is a? <i class='fas fa-user-friends text-green-500 ml-2'></i>", q_trans: "Jika biaya $x dibagi 4 teman, masing-masing \\( \\frac{x}{4} \\). Jika 2 teman lagi ikut, masing-masing \\( \\frac{x}{a} \\). Berapakah a?", ans: "6", exp: "4 original friends + 2 new friends = 6 friends. So a = 6.", exp_trans: "4 teman asli + 2 teman baru = 6 teman. Jadi a = 6." },
+            "i-task3": { type: "complex", q: "Which expressions represent sharing \\( x \\) dollars among a group of people where the group size varies? <i class='fas fa-hand-holding-usd text-green-500 ml-2'></i>", q_trans: "Manakah ekspresi yang mewakili pembagian \\( x \\) dolar ke sekelompok orang dengan jumlah yang berubah-ubah?", opts: ["\\( \\frac{x}{n} \\)", "\\( \\frac{10}{x} \\)", "\\( \\frac{x}{y+2} \\)", "\\( \\frac{100}{x} \\)"], ans: [0, 2], exp: "x in numerator is the total. Variable in denominator is the number of people. So \\( \\frac{x}{n} \\) and \\( \\frac{x}{y+2} \\).", exp_trans: "x di pembilang adalah total. Variabel di penyebut adalah jumlah orang." },
+            "i-task4": { type: "tf_table", q: "Evaluate the real-world interpretations of fractions. <i class='fas fa-list-ul text-green-500 ml-2'></i>", q_trans: "Evaluasi interpretasi pecahan dunia nyata.", opts: ["\\( \\frac{d}{t} \\) means speed", "\\( \\frac{Total}{People} \\) means share per person", "\\( \\frac{x}{2} \\) means half of x", "\\( \\frac{2}{x} \\) means twice of x"], ans: ["B", "B", "B", "S"], exp: "1. B, distance/time=speed. 2. B, cost share. 3. B, half. 4. S, \\( \\frac{2}{x} \\) is not twice of x, it is 2 divided by x.", exp_trans: "1. B. 2. B. 3. B. 4. S, \\( \\frac{2}{x} \\) bukan dua kali x." },
+            "i-task5": { type: "single", q: "You drive at speed \\( \\frac{d}{t} \\). If distance doubles, what is the new speed fraction? <i class='fas fa-car text-green-500 ml-2'></i>", q_trans: "Kamu mengemudi dengan kecepatan \\( \\frac{d}{t} \\). Jika jarak berlipat ganda, berapakah pecahan kecepatan baru?", opts: ["\\( \\frac{d}{t} \\)", "\\( \\frac{2d}{t} \\)", "\\( \\frac{d}{2t} \\)", "\\( \\frac{2d}{2t} \\)", "\\( \\frac{t}{2d} \\)"], ans: "\\( \\frac{2d}{t} \\)", exp: "New distance = \\( 2d \\). Speed = \\( \\frac{2d}{t} \\).", exp_trans: "Jarak baru = \\( 2d \\). Kecepatan = \\( \\frac{2d}{t} \\)." },
+            "i-task6": { type: "fill", q: "A pizza has \\( x \\) slices. You eat 1/3 of them. How many slices left? <i class='fas fa-pizza-slice text-green-500 ml-2'></i>", q_trans: "Pizza punya \\( x \\) potongan. Kamu makan \\( \\frac{1}{3} \\) dari itu. Berapa potong tersisa?", ans: "2x/3", exp: "You ate \\( \\frac{x}{3} \\). Left = \\( x - \\frac{x}{3} = \\frac{2x}{3} \\).", exp_trans: "Kamu makan \\( \\frac{x}{3} \\). Sisa = \\( x - \\frac{x}{3} = \\frac{2x}{3} \\)." },
+            "i-task7": { type: "single", q: "If you scale a recipe by \\( \\frac{3}{x} \\), and original needs \\( \\frac{x}{2} \\) cups, how much now? <i class='fas fa-blender text-green-500 ml-2'></i>", q_trans: "Jika resep diskalakan \\( \\frac{3}{x} \\), dan asalnya butuh \\( \\frac{x}{2} \\) cangkir, berapa sekarang?", opts: ["\\( \\frac{3}{2} \\)", "\\( \\frac{x^2}{6} \\)", "\\( \\frac{3x}{2x} \\)", "\\( \\frac{6}{x} \\)", "\\( \\frac{x}{6} \\)"], ans: "\\( \\frac{3}{2} \\)", exp: "Multiply: \\( \\frac{3}{x} \\times \\frac{x}{2} = \\frac{3x}{2x} \\). Cancel x, get \\( \\frac{3}{2} \\).", exp_trans: "Kali: \\( \\frac{3}{x} \\times \\frac{x}{2} = \\frac{3}{2} \\) setelah coret x." },
+            "i-task8": { type: "complex", q: "Which expressions correctly calculate half of a variable amount \\( x \\)? <i class='fas fa-check-double text-green-500 ml-2'></i>", q_trans: "Manakah ekspresi yang menghitung setengah dari jumlah variabel \\( x \\)?", opts: ["\\( \\frac{x}{2} \\)", "\\( \\frac{1}{2}x \\)", "\\( 0.5x \\)", "\\( \\frac{2}{x} \\)"], ans: [0, 1, 2], exp: "All 3 forms represent half of x. \\( \\frac{2}{x} \\) is x divided by 2 inverted.", exp_trans: "Ketiganya mewakili setengah x. \\( \\frac{2}{x} \\) salah." },
+            "i-task9": { type: "tf_table", q: "Evaluate the algebraic fraction concepts. <i class='fas fa-clipboard-check text-green-500 ml-2'></i>", q_trans: "Evaluasi konsep pecahan aljabar.", opts: ["Algebraic fractions have variables", "Algebraic fractions can be simplified", "Algebraic fractions cannot be multiplied", "Algebraic fractions can be used in real life"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, they can be multiplied. 4. B.", exp_trans: "1. B. 2. B. 3. S, bisa dikalikan. 4. B." },
+            "i-task10": { type: "single", q: "A box weighs \\( \\frac{x}{3} \\) kg. What is the total weight of 6 boxes in simplest form? <i class='fas fa-box text-green-500 ml-2'></i>", q_trans: "Sebuah box beratnya \\( \\frac{x}{3} \\) kg. Berapa total berat 6 box dalam bentuk paling sederhana?", opts: ["\\( \\frac{6x}{3} \\)", "\\( \\frac{x}{18} \\)", "\\( \\frac{3x}{6} \\)", "\\( \\frac{x}{6} \\)", "\\( 2x \\)"], ans: "\\( 2x \\)", exp: "Multiply 6 by \\( \\frac{x}{3} \\): \\( 6 \\times \\frac{x}{3} = \\frac{6x}{3} \\). Simplify by dividing top and bottom by 3, which gives \\( 2x \\).", exp_trans: "Kali 6 dengan \\( \\frac{x}{3} \\): \\( 6 \\times \\frac{x}{3} = \\frac{6x}{3} \\). Sederhanakan dengan membagi atas dan bawah dengan 3, menghasilkan \\( 2x \\)." },
+
+            // SECTION 3: REVIEW OF PRIOR KNOWLEDGE
+            "r-task1": { type: "single", q: "Factor the expression \\( x^2 - 16 \\). <i class='fas fa-puzzle-piece text-indigo-500 ml-2'></i>", q_trans: "Faktorkan \\( x^2 - 16 \\).", opts: ["\\( (x-4)(x-4) \\)", "\\( (x+4)(x-4) \\)", "\\( (x-2)(x+8) \\)", "\\( (x-4)^2 \\)", "\\( (x+4)^2 \\)"], ans: "\\( (x+4)(x-4) \\)", exp: "This is difference of squares: \\( a^2 - b^2 = (a+b)(a-b) \\). So \\( (x+4)(x-4) \\).", exp_trans: "Ini selisih kuadrat: \\( (x+4)(x-4) \\)." },
+            "r-task2": { type: "fill", q: "Factor \\( x^2 - 5x + 6 \\). Type the format as (x-a)(x-b). <i class='fas fa-key text-indigo-500 ml-2'></i>", q_trans: "Faktorkan \\( x^2 - 5x + 6 \\). Ketik dengan format (x-a)(x-b).", ans: "(x-2)(x-3)", exp: "Find two numbers that add to -5 and multiply to 6. They are -2 and -3.", exp_trans: "Cari dua angka yang dijumlahkan -5 dan dikali 6. Yaitu -2 dan -3." },
+            "r-task3": { type: "single", q: "Expand \\( x(x - 5) \\). <i class='fas fa-expand text-indigo-500 ml-2'></i>", q_trans: "Kalikan \\( x(x - 5) \\).", opts: ["\\( x^2 - 5 \\)", "\\( x^2 - 5x \\)", "\\( 2x - 5 \\)", "\\( x^2 + 5x \\)", "\\( x - 5x \\)"], ans: "\\( x^2 - 5x \\)", exp: "Distribute x: \\( x \\times x = x^2 \\). \\( x \\times (-5) = -5x \\). Result \\( x^2 - 5x \\).", exp_trans: "Distribusikan x: \\( x^2 - 5x \\)." },
+            "r-task4": { type: "tf_table", q: "Evaluate factoring rules. <i class='fas fa-list-ul text-indigo-500 ml-2'></i>", q_trans: "Evaluasi aturan pemfaktoran.", opts: ["\\( x^2 - 9 = (x-3)(x+3) \\)", "\\( x^2 + 4x + 4 = (x+2)^2 \\)", "\\( x^2 - 5x + 6 = (x-5)(x+6) \\)", "\\( x(x-2) = x^2 - 2x \\)"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, factors are -2 and -3. 4. B.", exp_trans: "1. B. 2. B. 3. S, faktornya -2 dan -3. 4. B." },
+            "r-task5": { type: "single", q: "Simplify \\( \\frac{x^5}{x^2} \\). <i class='fas fa-superscript text-indigo-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^5}{x^2} \\).", opts: ["\\( x^3 \\)", "\\( x^7 \\)", "\\( x^{10} \\)", "\\( x^{2.5} \\)", "\\( x^{-3} \\)"], ans: "\\( x^3 \\)", exp: "When dividing like bases, subtract exponents: 5 - 2 = 3. So \\( x^3 \\).", exp_trans: "Saat membagi basis sama, kurangkan eksponen: 5 - 2 = 3." },
+            "r-task6": { type: "complex", q: "Which expressions simplify to \\( x^3 \\)? <i class='fas fa-check-double text-indigo-500 ml-2'></i>", q_trans: "Manakah ekspresi yang disederhanakan menjadi \\( x^3 \\)?", opts: ["\\( \\frac{x^4}{x} \\)", "\\( x^2 \\times x \\)", "\\( x^5 \\div x^2 \\)", "\\( x^3 \\times x \\)"], ans: [0, 1, 2], exp: "1. 4-1=3. 2. 2+1=3. 3. 5-2=3. 4. 3+1=4.", exp_trans: "1, 2, 3 menghasilkan \\( x^3 \\)." },
+            "r-task7": { type: "fill", q: "Factor out the common term in \\( 3x^2 + 6x \\). Type as ax(bx+c). <i class='fas fa-key text-indigo-500 ml-2'></i>", q_trans: "Keluarkan faktor sama dari \\( 3x^2 + 6x \\). Ketik sebagai ax(bx+c).", ans: "3x(x+2)", exp: "Common factor is \\( 3x \\). \\( \\frac{3x^2}{3x} = x \\). \\( \\frac{6x}{3x} = 2 \\). So \\( 3x(x+2) \\).", exp_trans: "Faktor sama \\( 3x \\). Hasilnya \\( 3x(x+2) \\)." },
+            "r-task8": { type: "single", q: "Which expression is fully factored? <i class='fas fa-puzzle-piece text-indigo-500 ml-2'></i>", q_trans: "Manakah ekspresi yang sudah difaktorkan penuh?", opts: ["\\( 2(x^2 + 4) \\)", "\\( 2x(x + 2) \\)", "\\( 2x^2 + 4x \\)", "\\( 2(x+2)(x-2) \\)"], ans: "\\( 2(x+2)(x-2) \\)", exp: "Fully factored means no brackets can be expanded or factored further. \\( 2(x+2)(x-2) \\) is fully broken down.", exp_trans: "Sudah difaktorkan penuh berarti tak bisa diurai lagi." },
+            "r-task9": { type: "tf_table", q: "Evaluate exponent rules. <i class='fas fa-clipboard-check text-indigo-500 ml-2'></i>", q_trans: "Evaluasi aturan eksponen.", opts: ["\\( x^a \\times x^b = x^{a+b} \\)", "\\( \\frac{x^a}{x^b} = x^{a-b} \\)", "\\( (x^a)^b = x^{a-b} \\)", "\\( x^0 = 1 \\)"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, it's \\( a \\times b \\). 4. B.", exp_trans: "1. B. 2. B. 3. S, a dikali b. 4. B." },
+            "r-task10": { type: "single", q: "Factor \\( 2x^2 - 8 \\). <i class='fas fa-key text-indigo-500 ml-2'></i>", q_trans: "Faktorkan \\( 2x^2 - 8 \\).", opts: ["\\( 2(x^2 - 4) \\)", "\\( 2(x-2)(x+2) \\)", "\\( (2x-4)(2x+4) \\)", "\\( (x-2)(x-4) \\)", "\\( 2(x-2)^2 \\)"], ans: "\\( 2(x-2)(x+2) \\)", exp: "Factor 2 out first: \\( 2(x^2-4) \\). Then difference of squares: \\( 2(x-2)(x+2) \\).", exp_trans: "Keluarkan 2: \\( 2(x^2-4) \\). Lalu selisih kuadrat: \\( 2(x-2)(x+2) \\)." },
+
+            // SECTION 4: PROBLEM INTRODUCTION
+            "p-task1": { type: "single", q: "Simplify \\( \\frac{5x}{10} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{5x}{10} \\).", opts: ["\\( \\frac{x}{2} \\)", "\\( \\frac{x}{5} \\)", "\\( 2x \\)", "\\( 5x \\)", "\\( \\frac{2x}{5} \\)"], ans: "\\( \\frac{x}{2} \\)", exp: "Divide top and bottom by 5: 5x/5=x, 10/5=2. Result \\( \\frac{x}{2} \\).", exp_trans: "Bagi atas dan bawah dengan 5: \\( \\frac{x}{2} \\)." },
+            "p-task2": { type: "fill", q: "Simplify \\( \\frac{x^2}{x} \\). <i class='fas fa-superscript text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2}{x} \\).", ans: "x", exp: "\\( \\frac{x^2}{x} = x^{2-1} = x^1 = x \\).", exp_trans: "\\( \\frac{x^2}{x} = x \\)." },
+            "p-task3": { type: "single", q: "Simplify \\( \\frac{(x+2)(x-2)}{(x-2)} \\). <i class='fas fa-cut text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{(x+2)(x-2)}{(x-2)} \\).", opts: ["\\( x+2 \\)", "\\( x-2 \\)", "\\( x^2 - 4 \\)", "\\( x^2 + 4 \\)", "\\( 1 \\)"], ans: "\\( x+2 \\)", exp: "Cancel the common factor \\( (x-2) \\) from top and bottom. Leaves \\( (x+2) \\).", exp_trans: "Coret \\( (x-2) \\) dari atas dan bawah. Sisa \\( (x+2) \\)." },
+            "p-task4": { type: "complex", q: "Which simplifications are correct? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah penyederhanaan yang benar?", opts: ["\\( \\frac{3x}{6} = \\frac{x}{2} \\)", "\\( \\frac{x+2}{2} = x \\)", "\\( \\frac{x^3}{x} = x^2 \\)", "\\( \\frac{4x}{2x} = 2 \\)"], ans: [0, 2, 3], exp: "1. B. 2. S, you can't cancel 2 if it's added. 3. B. 4. B.", exp_trans: "1. B. 2. S, tidak bisa coret 2 jika ditambah. 3. B. 4. B." },
+            "p-task5": { type: "single", q: "Multiply \\( \\frac{x}{3} \\times \\frac{3}{x} \\). <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x}{3} \\times \\frac{3}{x} \\).", opts: ["\\( x^2 \\)", "\\( 9 \\)", "\\( 1 \\)", "\\( \\frac{x^2}{9} \\)", "\\( 0 \\)"], ans: "\\( 1 \\)", exp: "Multiply: \\( \\frac{x \\times 3}{3 \\times x} = \\frac{3x}{3x} = 1 \\).", exp_trans: "Kali: \\( \\frac{3x}{3x} = 1 \\)." },
+            "p-task6": { type: "fill", q: "Multiply \\( \\frac{2x}{5} \\times \\frac{10}{x} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{2x}{5} \\times \\frac{10}{x} \\).", ans: "4", exp: "\\( \\frac{2x \\times 10}{5 \\times x} = \\frac{20x}{5x} = 4 \\).", exp_trans: "\\( \\frac{20x}{5x} = 4 \\)." },
+            "p-task7": { type: "single", q: "Divide \\( \\frac{x}{4} \\div \\frac{2}{x} \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x}{4} \\div \\frac{2}{x} \\).", opts: ["\\( \\frac{2}{4} \\)", "\\( \\frac{x^2}{8} \\)", "\\( \\frac{8}{x^2} \\)", "\\( \\frac{2x}{x} \\)", "\\( \\frac{x}{8} \\)"], ans: "\\( \\frac{x^2}{8} \\)", exp: "Keep \\( \\frac{x}{4} \\), flip \\( \\frac{2}{x} \\) to \\( \\frac{x}{2} \\), multiply: \\( \\frac{x}{4} \\times \\frac{x}{2} = \\frac{x^2}{8} \\).", exp_trans: "Simpan \\( \\frac{x}{4} \\), balik \\( \\frac{2}{x} \\) jadi \\( \\frac{x}{2} \\), kali: \\( \\frac{x^2}{8} \\)." },
+            "p-task8": { type: "tf_table", q: "Evaluate the Keep-Change-Flip (KCF) division rule. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi aturan bagi Keep-Change-Flip (KCF).", opts: ["Keep the first fraction", "Change division to multiplication", "Flip the first fraction", "Flip the second fraction"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, flip the SECOND. 4. B.", exp_trans: "1. B. 2. B. 3. S, balik yang KEDUA. 4. B." },
+            "p-task9": { type: "single", q: "Simplify \\( \\frac{x^2 - 4}{x - 2} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 4}{x - 2} \\).", opts: ["\\( x-2 \\)", "\\( x+2 \\)", "\\( x \\)", "\\( x^2 \\)", "\\( 2 \\)"], ans: "\\( x+2 \\)", exp: "Factor num: \\( x^2-4 = (x+2)(x-2) \\). Cancel \\( (x-2) \\). Leaves \\( (x+2) \\).", exp_trans: "Faktorkan atas: \\( (x+2)(x-2) \\). Coret \\( (x-2) \\). Sisa \\( (x+2) \\)." },
+            "p-task10": { type: "fill", q: "Divide \\( \\frac{x}{5} \\div \\frac{x}{10} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x}{5} \\div \\frac{x}{10} \\).", ans: "2", exp: "Keep \\( \\frac{x}{5} \\), flip \\( \\frac{x}{10} \\) to \\( \\frac{10}{x} \\). \\( \\frac{x}{5} \\times \\frac{10}{x} = \\frac{10x}{5x} = 2 \\).", exp_trans: "\\( \\frac{x}{5} \\times \\frac{10}{x} = 2 \\)." },
+
+            // SECTION 5: GUIDED PRACTICE
+            "g-task1": { type: "single", q: "Simplify \\( \\frac{x^2 - 5x + 6}{x - 2} \\). <i class='fas fa-chalkboard-teacher text-blue-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 5x + 6}{x - 2} \\).", opts: ["\\( x-3 \\)", "\\( x+3 \\)", "\\( x-2 \\)", "\\( x+2 \\)", "\\( x \\)"], ans: "\\( x-3 \\)", exp: "Factor num: \\( (x-2)(x-3) \\). Cancel \\( (x-2) \\). Result \\( x-3 \\).", exp_trans: "Faktor atas: \\( (x-2)(x-3) \\). Coret \\( (x-2) \\). Sisa \\( x-3 \\)." },
+            "g-task2": { type: "fill", q: "Simplify \\( \\frac{x^2 - 9}{x + 3} \\). Format: x-a or x+a. <i class='fas fa-key text-blue-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 9}{x + 3} \\).", ans: "x-3", exp: "Factor num: \\( (x-3)(x+3) \\). Cancel \\( (x+3) \\). Leaves \\( x-3 \\).", exp_trans: "Faktor atas: \\( (x+3)(x-3) \\). Coret \\( (x+3) \\)." },
+            "g-task3": { type: "single", q: "Multiply \\( \\frac{x^2 - 4}{x + 3} \\times \\frac{x + 3}{x + 2} \\). <i class='fas fa-times-circle text-blue-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x^2 - 4}{x + 3} \\times \\frac{x + 3}{x + 2} \\).", opts: ["\\( x-2 \\)", "\\( x+2 \\)", "\\( x^2 - 4 \\)", "\\( \\frac{x-2}{x+2} \\)", "\\( 1 \\)"], ans: "\\( x-2 \\)", exp: "Factor \\( x^2-4 \\) to \\( (x+2)(x-2) \\). Cancel \\( (x+3) \\) and \\( (x+2) \\). Leaves \\( x-2 \\).", exp_trans: "Faktor \\( x^2-4 \\) jadi \\( (x+2)(x-2) \\). Coret \\( (x+3) \\) dan \\( (x+2) \\)." },
+            "g-task4": { type: "complex", q: "Which multiplications result in 1? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Perkalian manakah yang hasilnya 1?", opts: ["\\( \\frac{x}{2} \\times \\frac{2}{x} \\)", "\\( \\frac{x-1}{x+1} \\times \\frac{x+1}{x-1} \\)", "\\( \\frac{x^2}{3} \\times 3 \\)", "\\( \\frac{1}{x} \\times \\frac{x}{2} \\)"], ans: [0, 1], exp: "1. B, reciprocal. 2. B, reciprocal. 3. S, result is \\( x^2 \\). 4. S, result is \\( \\frac{1}{2} \\).", exp_trans: "1. B. 2. B. 3. S. 4. S." },
+            "g-task5": { type: "single", q: "Divide \\( \\frac{x^2 - 9}{x - 2} \\div \\frac{x + 3}{x - 2} \\). <i class='fas fa-divide text-blue-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2 - 9}{x - 2} \\div \\frac{x + 3}{x - 2} \\).", opts: ["\\( x-3 \\)", "\\( x+3 \\)", "\\( x-2 \\)", "\\( \\frac{1}{x-3} \\)", "\\( 1 \\)"], ans: "\\( x-3 \\)", exp: "KCF: \\( \\frac{x^2-9}{x-2} \\times \\frac{x-2}{x+3} \\). Factor \\( x^2-9=(x-3)(x+3) \\). Cancel \\( (x-2) \\) and \\( (x+3) \\).", exp_trans: "KCF: faktor \\( x^2-9 \\), coret \\( (x-2) \\) dan \\( (x+3) \\)." },
+            "g-task6": { type: "fill", q: "Multiply \\( \\frac{3x}{x-2} \\times \\frac{x-2}{x} \\). <i class='fas fa-key text-blue-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{3x}{x-2} \\times \\frac{x-2}{x} \\).", ans: "3", exp: "Cancel \\( (x-2) \\) and \\( x \\). Leaves 3.", exp_trans: "Coret \\( (x-2) \\) dan x. Sisa 3." },
+            "g-task7": { type: "single", q: "Simplify \\( \\frac{2x^2 - 8}{x + 2} \\). <i class='fas fa-broom text-blue-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{2x^2 - 8}{x + 2} \\).", opts: ["\\( 2x-4 \\)", "\\( 2x+4 \\)", "\\( x-2 \\)", "\\( 2x^2 - 8 \\)", "\\( 2 \\)"], ans: "\\( 2x-4 \\)", exp: "Factor num: \\( 2(x^2-4)=2(x-2)(x+2) \\). Cancel \\( (x+2) \\). Leaves \\( 2(x-2) = 2x-4 \\).", exp_trans: "Faktor atas: \\( 2(x+2)(x-2) \\). Coret \\( (x+2) \\)." },
+            "g-task8": { type: "tf_table", q: "Evaluate factoring in fractions. <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Evaluasi pemfaktoran dalam pecahan.", opts: ["You can cancel added terms", "You can cancel multiplied factors", "Factoring helps simplify fractions", "Always factor before multiplying"], ans: ["S", "B", "B", "B"], exp: "1. S, only multiply. 2. B. 3. B. 4. B.", exp_trans: "1. S. 2. B. 3. B. 4. B." },
+            "g-task9": { type: "single", q: "Divide \\( \\frac{x^2 - 4}{x} \\div (x-2) \\). <i class='fas fa-divide text-blue-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2 - 4}{x} \\div (x-2) \\).", opts: ["\\( \\frac{x+2}{x} \\)", "\\( \\frac{x-2}{x} \\)", "\\( \\frac{x}{x+2} \\)", "\\( x+2 \\)", "\\( x-2 \\)"], ans: "\\( \\frac{x+2}{x} \\)", exp: "\\( (x-2) \\) is \\( \\frac{x-2}{1} \\). KCF: \\( \\frac{x^2-4}{x} \\times \\frac{1}{x-2} \\). Factor \\( x^2-4=(x+2)(x-2) \\). Cancel \\( (x-2) \\).", exp_trans: "KCF: faktorkan, coret \\( (x-2) \\)." },
+            "g-task10": { type: "fill", q: "Simplify \\( \\frac{x^2 + 5x + 6}{x + 2} \\). Format: x+a. <i class='fas fa-key text-blue-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 + 5x + 6}{x + 2} \\).", ans: "x+3", exp: "Factor num: \\( (x+2)(x+3) \\). Cancel \\( (x+2) \\).", exp_trans: "Faktor atas: \\( (x+2)(x+3) \\). Coret \\( (x+2) \\)." },
+
+            // SECTION 6: INDEPENDENT PRACTICE
+            "ind-task1": { type: "single", q: "Speed is distance/time. Distance is \\( 2x^2 \\), time is \\( x \\). What is speed? <i class='fas fa-car-crash text-indigo-500 ml-2'></i>", q_trans: "Kecepatan = jarak/waktu. Jarak \\( 2x^2 \\), waktu \\( x \\). Berapa kecepatan?", opts: ["\\( 2x \\)", "\\( x \\)", "\\( 2x^3 \\)", "\\( 2 \\)", "\\( x^2 \\)"], ans: "\\( 2x \\)", exp: "\\( \\frac{2x^2}{x} = 2x^{2-1} = 2x \\).", exp_trans: "\\( \\frac{2x^2}{x} = 2x \\)." },
+            "ind-task2": { type: "fill", q: "A rectangular area is \\( x^2 - 1 \\). Width is \\( x - 1 \\). What is length? Format: x+a. <i class='fas fa-ruler text-indigo-500 ml-2'></i>", q_trans: "Luas \\( x^2 - 1 \\). Lebar \\( x - 1 \\). Berapa panjangnya?", ans: "x+1", exp: "Area = L * W. L = Area / W = \\( \\frac{x^2-1}{x-1} \\). Factor: \\( \\frac{(x+1)(x-1)}{x-1} = x+1 \\).", exp_trans: "Luas / Lebar = \\( x+1 \\)." },
+            "ind-task3": { type: "single", q: "Simplify \\( \\frac{2x^2 - 8}{2x - 4} \\). <i class='fas fa-broom text-indigo-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{2x^2 - 8}{2x - 4} \\).", opts: ["\\( x-2 \\)", "\\( x+2 \\)", "\\( 2x \\)", "\\( \\frac{x+2}{2} \\)", "\\( \\frac{1}{2} \\)"], ans: "\\( x+2 \\)", exp: "Factor fully: \\( \\frac{2(x-2)(x+2)}{2(x-2)} \\). Cancel 2 and \\( (x-2) \\). Leaves \\( x+2 \\).", exp_trans: "Faktor penuh: coret 2 dan \\( (x-2) \\)." },
+            "ind-task4": { type: "complex", q: "Which expressions have a restriction \\( x \\neq 2 \\)? <i class='fas fa-check-double text-indigo-500 ml-2'></i>", q_trans: "Manakah ekspresi yang punya batasan \\( x \\neq 2 \\)?", opts: ["\\( \\frac{1}{x-2} \\)", "\\( \\frac{x+2}{x} \\)", "\\( \\frac{x}{x-2} \\)", "\\( \\frac{1}{x+2} \\)"], ans: [0, 2], exp: "Denominator cannot be 0. If \\( x-2=0 \\), \\( x=2 \\). So restrictions apply to \\( \\frac{1}{x-2} \\) and \\( \\frac{x}{x-2} \\).", exp_trans: "Penyebut tidak boleh 0. \\( x-2=0 \\) berarti \\( x=2 \\)." },
+            "ind-task5": { type: "single", q: "Multiply \\( \\frac{x^2 + 2x}{x - 1} \\times \\frac{x - 1}{x} \\). <i class='fas fa-times text-indigo-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x^2 + 2x}{x - 1} \\times \\frac{x - 1}{x} \\).", opts: ["\\( x+2 \\)", "\\( x-2 \\)", "\\( \\frac{x+2}{x} \\)", "\\( 1 \\)", "\\( x^2 + 2x \\)"], ans: "\\( x+2 \\)", exp: "Factor num: \\( x(x+2) \\). Cancel \\( (x-1) \\) and \\( x \\). Leaves \\( x+2 \\).", exp_trans: "Faktor atas: \\( x(x+2) \\). Coret \\( (x-1) \\) dan x." },
+            "ind-task6": { type: "fill", q: "Divide \\( \\frac{x^2 - 25}{x} \\div \\frac{x - 5}{x} \\). <i class='fas fa-key text-indigo-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2 - 25}{x} \\div \\frac{x - 5}{x} \\).", ans: "x+5", exp: "KCF: \\( \\frac{x^2-25}{x} \\times \\frac{x}{x-5} \\). Factor: \\( (x+5)(x-5) \\). Cancel \\( x \\) and \\( (x-5) \\). Leaves \\( x+5 \\).", exp_trans: "KCF: faktorkan, coret x dan \\( (x-5) \\)." },
+            "ind-task7": { type: "single", q: "Simplify \\( \\frac{3x^2 - 12}{x^2 + 5x + 6} \\). <i class='fas fa-broom text-indigo-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{3x^2 - 12}{x^2 + 5x + 6} \\).", opts: ["\\( \\frac{3(x-2)}{x+3} \\)", "\\( \\frac{3(x+2)}{x+3} \\)", "\\( \\frac{3(x-2)}{x-3} \\)", "\\( \\frac{x+2}{x+3} \\)", "\\( \\frac{3(x+2)}{x-3} \\)"], ans: "\\( \\frac{3(x-2)}{x+3} \\)", exp: "Num: \\( 3(x-2)(x+2) \\). Den: \\( (x+2)(x+3) \\). Cancel \\( (x+2) \\). Leaves \\( \\frac{3(x-2)}{x+3} \\).", exp_trans: "Atas: \\( 3(x+2)(x-2) \\). Bawah: \\( (x+2)(x+3) \\). Coret \\( (x+2) \\)." },
+            "ind-task8": { type: "tf_table", q: "Evaluate restrictions. <i class='fas fa-clipboard-check text-indigo-500 ml-2'></i>", q_trans: "Evaluasi batasan pecahan.", opts: ["Denominator can be 0", "Denominator cannot be 0", "Numerator cannot be 0", "To find restriction, set denom to 0"], ans: ["S", "B", "S", "B"], exp: "1. S. 2. B. 3. S, numerator can be 0. 4. B.", exp_trans: "1. S. 2. B. 3. S. 4. B." },
+            "ind-task9": { type: "single", q: "Simplify \\( \\frac{x^2 - 2x}{x^2 - 4} \\div \\frac{x}{x+2} \\). <i class='fas fa-divide text-indigo-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 2x}{x^2 - 4} \\div \\frac{x}{x+2} \\).", opts: ["\\( 1 \\)", "\\( \\frac{x+2}{x} \\)", "\\( \\frac{x-2}{x+2} \\)", "\\( x \\)", "\\( x-2 \\)"], ans: "\\( 1 \\)", exp: "KCF: \\( \\frac{x(x-2)}{(x-2)(x+2)} \\times \\frac{x+2}{x} \\). Cancel \\( x \\), \\( (x-2) \\), \\( (x+2) \\). Result 1.", exp_trans: "KCF: coret semua, hasil 1." },
+            "ind-task10": { type: "fill", q: "A recipe uses \\( \\frac{x}{2} \\) flour. You make \\( \\frac{4}{x} \\) of it. How much flour? <i class='fas fa-key text-indigo-500 ml-2'></i>", q_trans: "Resep pakai \\( \\frac{x}{2} \\) tepung. Kamu buat \\( \\frac{4}{x} \\) dari itu. Berapa tepungnya?", ans: "2", exp: "\\( \\frac{x}{2} \\times \\frac{4}{x} = \\frac{4x}{2x} = 2 \\).", exp_trans: "\\( \\frac{x}{2} \\times \\frac{4}{x} = 2 \\)." }
+        });
+
+        Object.assign(questions, {
+            // TASK 1: Simplifying Algebraic Fractions
+            "t1-task1": { type: "single", q: "Simplify \\( \\frac{8x}{12} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{8x}{12} \\).", opts: ["\\( \\frac{2x}{3} \\)", "\\( \\frac{3x}{2} \\)", "\\( \\frac{8x}{3} \\)", "\\( \\frac{2}{3} \\)", "\\( \\frac{4x}{6} \\)"], ans: "\\( \\frac{2x}{3} \\)", exp: "Divide top and bottom by 4. 8/4=2, 12/4=3. Result \\( \\frac{2x}{3} \\).", exp_trans: "Bagi atas dan bawah dengan 4. Hasil \\( \\frac{2x}{3} \\)." },
+            "t1-task2": { type: "fill", q: "Simplify \\( \\frac{x^3}{x^2} \\). <i class='fas fa-superscript text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^3}{x^2} \\).", ans: "x", exp: "Subtract exponents: 3-2=1. So \\( x \\).", exp_trans: "Kurangi eksponen: 3-2=1." },
+            "t1-task3": { type: "tf_table", q: "Evaluate simplifying rules. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi aturan menyederhanakan.", opts: ["You can cancel factors", "You can cancel terms", "\\( \\frac{ax}{bx} = \\frac{a}{b} \\)", "You can only cancel if multiplied"], ans: ["B", "S", "B", "B"], exp: "1. B. 2. S, terms are added. 3. B. 4. B.", exp_trans: "1. B. 2. S. 3. B. 4. B." },
+            "t1-task4": { type: "complex", q: "Which equal \\( \\frac{x}{2} \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah yang sama dengan \\( \\frac{x}{2} \\)?", opts: ["\\( \\frac{3x}{6} \\)", "\\( \\frac{2x}{4} \\)", "\\( \\frac{x+2}{2+2} \\)", "\\( \\frac{x^2}{2x} \\)"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, can't cancel 2. 4. B, cancel x.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t1-task5": { type: "single", q: "Simplify \\( \\frac{x^2 - 4}{x + 2} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 4}{x + 2} \\).", opts: ["\\( x-2 \\)", "\\( x+2 \\)", "\\( x \\)", "\\( 2 \\)", "\\( x^2 - 2 \\)"], ans: "\\( x-2 \\)", exp: "Factor num: \\( (x+2)(x-2) \\). Cancel \\( (x+2) \\).", exp_trans: "Faktor atas: \\( (x+2)(x-2) \\). Coret \\( (x+2) \\)." },
+            "t1-task6": { type: "fill", q: "Simplify \\( \\frac{2x^2 - 6x}{x} \\). Format: ax-b. <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{2x^2 - 6x}{x} \\).", ans: "2x-6", exp: "Factor x: \\( \\frac{x(2x-6)}{x} \\). Cancel x. Result \\( 2x-6 \\).", exp_trans: "Faktor x, coret x. Sisa \\( 2x-6 \\)." },
+            "t1-task7": { type: "single", q: "Simplify \\( \\frac{x^2 + 3x + 2}{x + 1} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 + 3x + 2}{x + 1} \\).", opts: ["\\( x+2 \\)", "\\( x+1 \\)", "\\( x-2 \\)", "\\( x+3 \\)", "\\( 1 \\)"], ans: "\\( x+2 \\)", exp: "Factor num: \\( (x+1)(x+2) \\). Cancel \\( (x+1) \\).", exp_trans: "Faktor atas: \\( (x+1)(x+2) \\). Coret \\( (x+1) \\)." },
+            "t1-task8": { type: "tf_table", q: "Evaluate restrictions. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi batasan.", opts: ["Denominator cannot be 0", "Set denom to 0 to find restriction", "\\( \\frac{1}{x-2} \\) restricts x=2", "Numerator cannot be 0"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B. 4. S, num can be 0.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t1-task9": { type: "complex", q: "Which have restriction x != 0? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah yang batasannya x != 0?", opts: ["\\( \\frac{1}{x} \\)", "\\( \\frac{x}{5} \\)", "\\( \\frac{x+2}{x} \\)", "\\( \\frac{5}{x+2} \\)"], ans: [0, 2], exp: "Denom must have x. \\( \\frac{1}{x} \\) and \\( \\frac{x+2}{x} \\) have x in denom.", exp_trans: "Penyebut harus ada x." },
+            "t1-task10": { type: "single", q: "Simplify \\( \\frac{3x^2 - 12}{3} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{3x^2 - 12}{3} \\).", opts: ["\\( x^2 - 4 \\)", "\\( 3x^2 - 4 \\)", "\\( x^2 - 12 \\)", "\\( x - 4 \\)", "\\( 3x^2 - 12 \\)"], ans: "\\( x^2 - 4 \\)", exp: "Divide both terms by 3: 3x^2/3=x^2, 12/3=4. Result \\( x^2-4 \\).", exp_trans: "Bagi kedua suku dengan 3." },
+
+            // TASK 2: Multiplying Algebraic Fractions
+            "t2-task1": { type: "single", q: "Multiply \\( \\frac{x}{3} \\times \\frac{6}{x^2} \\). <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x}{3} \\times \\frac{6}{x^2} \\).", opts: ["\\( \\frac{2}{x} \\)", "\\( \\frac{2x}{x} \\)", "\\( 2x \\)", "\\( \\frac{6x}{3x^2} \\)", "\\( \\frac{x}{2} \\)"], ans: "\\( \\frac{2}{x} \\)", exp: "Multiply: \\( \\frac{6x}{3x^2} \\). Divide by 3x: \\( \\frac{2}{x} \\).", exp_trans: "Kali: \\( \\frac{6x}{3x^2} \\). Sederhanakan: \\( \\frac{2}{x} \\)." },
+            "t2-task2": { type: "fill", q: "Multiply \\( \\frac{2}{x} \\times \\frac{x}{4} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{2}{x} \\times \\frac{x}{4} \\).", ans: "1/2", exp: "\\( \\frac{2x}{4x} = \\frac{1}{2} \\).", exp_trans: "\\( \\frac{2x}{4x} = \\frac{1}{2} \\)." },
+            "t2-task3": { type: "tf_table", q: "Evaluate multiplication rules. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi aturan perkalian.", opts: ["Multiply tops and bottoms", "Find common denominator first", "Cancel before multiplying to simplify", "\\( \\frac{a}{b} \\times \\frac{c}{d} = \\frac{ac}{bd} \\)"], ans: ["B", "S", "B", "B"], exp: "1. B. 2. S, only for add/sub. 3. B. 4. B.", exp_trans: "1. B. 2. S. 3. B. 4. B." },
+            "t2-task4": { type: "complex", q: "Which equal 1? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah yang sama dengan 1?", opts: ["\\( \\frac{x}{5} \\times \\frac{5}{x} \\)", "\\( \\frac{2}{x} \\times x \\)", "\\( \\frac{x-1}{x+1} \\times \\frac{x+1}{x-1} \\)", "\\( \\frac{x}{2} \\times \\frac{1}{x} \\)"], ans: [0, 2], exp: "1. B, reciprocal. 2. S, equals 2. 3. B, reciprocal. 4. S, equals \\( \\frac{1}{2} \\).", exp_trans: "1. B. 2. S. 3. B. 4. S." },
+            "t2-task5": { type: "single", q: "Multiply \\( \\frac{x^2 - 1}{x} \\times \\frac{1}{x-1} \\). <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x^2 - 1}{x} \\times \\frac{1}{x-1} \\).", opts: ["\\( \\frac{x+1}{x} \\)", "\\( x-1 \\)", "\\( \\frac{x-1}{x} \\)", "\\( 1 \\)", "\\( x+1 \\)"], ans: "\\( \\frac{x+1}{x} \\)", exp: "Factor \\( x^2-1=(x+1)(x-1) \\). Cancel \\( (x-1) \\). Leaves \\( \\frac{x+1}{x} \\).", exp_trans: "Faktor atas: \\( (x+1)(x-1) \\). Coret \\( (x-1) \\)." },
+            "t2-task6": { type: "fill", q: "Multiply \\( \\frac{x^2}{2} \\times \\frac{4}{x} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x^2}{2} \\times \\frac{4}{x} \\).", ans: "2x", exp: "\\( \\frac{4x^2}{2x} = 2x \\).", exp_trans: "\\( \\frac{4x^2}{2x} = 2x \\)." },
+            "t2-task7": { type: "single", q: "Multiply \\( \\frac{x+2}{3} \\times \\frac{6}{x+2} \\). <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x+2}{3} \\times \\frac{6}{x+2} \\).", opts: ["\\( 2 \\)", "\\( 3 \\)", "\\( 6 \\)", "\\( \\frac{6(x+2)}{3} \\)", "\\( 18 \\)"], ans: "\\( 2 \\)", exp: "Cancel \\( (x+2) \\). 6/3 = 2.", exp_trans: "Coret \\( (x+2) \\). 6/3 = 2." },
+            "t2-task8": { type: "tf_table", q: "Evaluate fraction multiplication. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi perkalian pecahan.", opts: ["Cancel common factors across fractions", "You can cancel vertically", "You can cancel diagonally", "Factor first if quadratic"], ans: ["B", "B", "B", "B"], exp: "All true.", exp_trans: "Semua benar." },
+            "t2-task9": { type: "complex", q: "Which result in \\( x \\)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah yang hasilnya \\( x \\)?", opts: ["\\( \\frac{x}{2} \\times 2 \\)", "\\( \\frac{x^2}{2} \\times \\frac{2}{x} \\)", "\\( \\frac{1}{x} \\times x^2 \\)", "\\( \\frac{x}{x} \\times x \\)"], ans: [0, 1, 2, 3], exp: "1. B, x. 2. B, x. 3. B, \\( \\frac{x^2}{x} = x \\). 4. B, \\( 1 \\times x = x \\). All options equal x.", exp_trans: "1. B. 2. B. 3. B. 4. B. Semuanya menghasilkan \\( x \\)." },
+            "t2-task10": { type: "single", q: "Multiply \\( \\frac{x^2 - 5x + 6}{x-3} \\times \\frac{1}{x-2} \\). <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x^2 - 5x + 6}{x-3} \\times \\frac{1}{x-2} \\).", opts: ["\\( 1 \\)", "\\( \\frac{1}{x-3} \\)", "\\( x-2 \\)", "\\( x-3 \\)", "\\( \\frac{1}{x-2} \\)"], ans: "\\( 1 \\)", exp: "Factor num: \\( (x-2)(x-3) \\). Cancel \\( (x-3) \\) and \\( (x-2) \\). Leaves 1.", exp_trans: "Faktor atas: \\( (x-2)(x-3) \\). Coret semuanya, sisa 1." },
+
+            // TASK 3: Dividing Algebraic Fractions
+            "t3-task1": { type: "single", q: "Divide \\( \\frac{x}{4} \\div \\frac{x}{2} \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x}{4} \\div \\frac{x}{2} \\).", opts: ["\\( 2 \\)", "\\( \\frac{1}{2} \\)", "\\( \\frac{x}{8} \\)", "\\( \\frac{8}{x} \\)", "\\( x^2/8 \\)"], ans: "\\( \\frac{1}{2} \\)", exp: "KCF: \\( \\frac{x}{4} \\times \\frac{2}{x} = \\frac{2x}{4x} = \\frac{1}{2} \\).", exp_trans: "KCF: \\( \\frac{x}{4} \\times \\frac{2}{x} = \\frac{1}{2} \\)." },
+            "t3-task2": { type: "fill", q: "Divide \\( \\frac{x^2}{3} \\div \\frac{x}{6} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2}{3} \\div \\frac{x}{6} \\).", ans: "2x", exp: "KCF: \\( \\frac{x^2}{3} \\times \\frac{6}{x} = \\frac{6x^2}{3x} = 2x \\).", exp_trans: "KCF: \\( \\frac{x^2}{3} \\times \\frac{6}{x} = 2x \\)." },
+            "t3-task3": { type: "tf_table", q: "Evaluate KCF rule. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi aturan KCF.", opts: ["Keep first fraction", "Change divide to multiply", "Flip first fraction", "Flip second fraction"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, flip SECOND. 4. B.", exp_trans: "1. B. 2. B. 3. S, balik KEDUA. 4. B." },
+            "t3-task4": { type: "complex", q: "Which equal \\( \\frac{1}{x} \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah yang sama dengan \\( \\frac{1}{x} \\)?", opts: ["\\( \\frac{1}{x^2} \\div \\frac{1}{x} \\)", "\\( \\frac{2}{x} \\div 2 \\)", "\\( \\frac{x}{5} \\div \\frac{x^2}{5} \\)", "\\( \\frac{1}{2} \\div \\frac{x}{2} \\)"], ans: [0, 1, 2, 3], exp: "1. B, \\( \\frac{1}{x^2} \\times \\frac{x}{1} = \\frac{1}{x} \\). 2. B, \\( \\frac{2}{x} \\times \\frac{1}{2} = \\frac{1}{x} \\). 3. B, \\( \\frac{x}{5} \\times \\frac{5}{x^2} = \\frac{1}{x} \\). 4. B, \\( \\frac{1}{2} \\times \\frac{2}{x} = \\frac{1}{x} \\). All options equal \\( \\frac{1}{x} \\).", exp_trans: "1. B. 2. B. 3. B. 4. B. Semua opsi menghasilkan \\( \\frac{1}{x} \\)." },
+            "t3-task5": { type: "single", q: "Divide \\( \\frac{x^2 - 9}{x+2} \\div \\frac{x-3}{x+2} \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2 - 9}{x+2} \\div \\frac{x-3}{x+2} \\).", opts: ["\\( x-3 \\)", "\\( x+3 \\)", "\\( 1 \\)", "\\( \\frac{1}{x-3} \\)", "\\( x+2 \\)"], ans: "\\( x+3 \\)", exp: "KCF: \\( \\frac{x^2-9}{x+2} \\times \\frac{x+2}{x-3} \\). Factor \\( x^2-9=(x+3)(x-3) \\). Cancel \\( (x+2) \\) and \\( (x-3) \\).", exp_trans: "KCF: faktorkan, coret \\( (x+2) \\) dan \\( (x-3) \\)." },
+            "t3-task6": { type: "fill", q: "Divide \\( \\frac{2x}{3} \\div \\frac{4x}{9} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{2x}{3} \\div \\frac{4x}{9} \\).", ans: "3/2", exp: "KCF: \\( \\frac{2x}{3} \\times \\frac{9}{4x} = \\frac{18x}{12x} = \\frac{3}{2} \\).", exp_trans: "KCF: \\( \\frac{2x}{3} \\times \\frac{9}{4x} = \\frac{3}{2} \\)." },
+            "t3-task7": { type: "single", q: "Divide \\( \\frac{x^2 - 4}{x} \\div (x-2) \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2 - 4}{x} \\div (x-2) \\).", opts: ["\\( \\frac{x+2}{x} \\)", "\\( x-2 \\)", "\\( \\frac{x-2}{x} \\)", "\\( \\frac{x}{x+2} \\)", "\\( 1 \\)"], ans: "\\( \\frac{x+2}{x} \\)", exp: "KCF: \\( \\frac{x^2-4}{x} \\times \\frac{1}{x-2} \\). Factor: \\( \\frac{(x+2)(x-2)}{x} \\). Cancel \\( (x-2) \\).", exp_trans: "KCF: faktorkan, coret \\( (x-2) \\)." },
+            "t3-task8": { type: "tf_table", q: "Evaluate division. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi pembagian.", opts: ["Division is multiplying by reciprocal", "Always factor before KCF", "You can divide straight across", "\\( A \\div B = A \\times \\frac{1}{B} \\)"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, KCF first. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t3-task9": { type: "complex", q: "Which result in \\( x \\)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah yang hasilnya \\( x \\)?", opts: ["\\( \\frac{x^2}{2} \\div \\frac{x}{2} \\)", "\\( \\frac{x^3}{1} \\div x^2 \\)", "\\( \\frac{x}{2} \\div \\frac{1}{2} \\)", "\\( \\frac{1}{x} \\div x \\)"], ans: [0, 1, 2], exp: "1. B, \\( \\frac{x^2}{2} \\times \\frac{2}{x} = x \\). 2. B. 3. B, \\( \\frac{x}{2} \\times 2 = x \\). 4. S, \\( \\frac{1}{x^2} \\).", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t3-task10": { type: "single", q: "Divide \\( \\frac{x^2 + 5x + 6}{x-1} \\div \\frac{x+2}{x-1} \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2 + 5x + 6}{x-1} \\div \\frac{x+2}{x-1} \\).", opts: ["\\( x+3 \\)", "\\( x+2 \\)", "\\( x-1 \\)", "\\( \\frac{x+3}{x+2} \\)", "\\( 1 \\)"], ans: "\\( x+3 \\)", exp: "KCF: \\( \\frac{(x+2)(x+3)}{x-1} \\times \\frac{x-1}{x+2} \\). Cancel all common. Leaves \\( x+3 \\).", exp_trans: "KCF: coret semua yang sama. Sisa \\( x+3 \\)." },
+
+            // TASK 4: Real-World & Complex
+            "t4-task1": { type: "single", q: "Speed = d/t. d = x^2, t = x/2. What is speed? <i class='fas fa-car text-orange-500 ml-2'></i>", q_trans: "Kecepatan = d/t. d = \\( x^2 \\), t = \\( x/2 \\). Berapa kecepatan?", opts: ["\\( 2x \\)", "\\( \\frac{x}{2} \\)", "\\( \\frac{x^3}{2} \\)", "\\( \\frac{x^2}{2} \\)", "\\( x \\)"], ans: "\\( 2x \\)", exp: "\\( x^2 \\div \\frac{x}{2} = x^2 \\times \\frac{2}{x} = \\frac{2x^2}{x} = 2x \\).", exp_trans: "\\( x^2 \\div \\frac{x}{2} = 2x \\)." },
+            "t4-task2": { type: "fill", q: "Area = L * W. A = x^2-1, W = x-1. L = ? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Luas = L*W. A = \\( x^2-1 \\), W = \\( x-1 \\). L = ?", ans: "x+1", exp: "\\( L = \\frac{A}{W} = \\frac{x^2-1}{x-1} = (x+1) \\).", exp_trans: "L = \\( x+1 \\)." },
+            "t4-task3": { type: "tf_table", q: "Evaluate word problems. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi soal cerita.", opts: ["Total / Group = Share", "Rate * Time = Distance", "Area / Width = Length", "Rate = Time / Distance"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B. 4. S, Rate = Dist/Time.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t4-task4": { type: "complex", q: "Which simplify to \\( x-2 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah yang disederhanakan menjadi \\( x-2 \\)?", opts: ["\\( \\frac{x^2 - 4}{x+2} \\)", "\\( \\frac{x^2 - 4x + 4}{x-2} \\)", "\\( \\frac{x^2 + 4}{x+2} \\)", "\\( \\frac{2x - 4}{2} \\)"], ans: [0, 1, 3], exp: "1. B, \\( \\frac{(x+2)(x-2)}{x+2} \\). 2. B, \\( \\frac{(x-2)^2}{x-2} \\). 3. S. 4. B, \\( \\frac{2(x-2)}{2} \\).", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t4-task5": { type: "single", q: "A box weighs \\( \\frac{x^2}{x} \\) kg. What is the weight? <i class='fas fa-box text-orange-500 ml-2'></i>", q_trans: "Box beratnya \\( \\frac{x^2}{x} \\) kg. Berapa beratnya?", opts: ["\\( x \\) kg", "\\( x^3 \\) kg", "\\( 1 \\) kg", "\\( x^2 \\) kg", "\\( \\frac{1}{x} \\) kg"], ans: "\\( x \\) kg", exp: "\\( \\frac{x^2}{x} = x \\).", exp_trans: "\\( \\frac{x^2}{x} = x \\)." },
+            "t4-task6": { type: "fill", q: "Recipe needs \\( \\frac{x}{2} \\). You multiply by \\( \\frac{4}{x} \\). Result? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Resep butuh \\( \\frac{x}{2} \\). Kamu kalikan \\( \\frac{4}{x} \\). Hasilnya?", ans: "2", exp: "\\( \\frac{x}{2} \\times \\frac{4}{x} = \\frac{4x}{2x} = 2 \\).", exp_trans: "\\( \\frac{x}{2} \\times \\frac{4}{x} = 2 \\)." },
+            "t4-task7": { type: "single", q: "Distance = x^2+2x. Time = x. Speed = ? <i class='fas fa-route text-orange-500 ml-2'></i>", q_trans: "Jarak = \\( x^2+2x \\). Waktu = \\( x \\). Kecepatan = ?", opts: ["\\( x+2 \\)", "\\( x-2 \\)", "\\( x^2+2 \\)", "\\( 2x \\)", "\\( \\frac{x^2+2}{x} \\)"], ans: "\\( x+2 \\)", exp: "\\( \\frac{x^2+2x}{x} = \\frac{x(x+2)}{x} = x+2 \\).", exp_trans: "\\( \\frac{x^2+2x}{x} = x+2 \\)." },
+            "t4-task8": { type: "tf_table", q: "Evaluate complex simplifications. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi penyederhanaan kompleks.", opts: ["Factor before cancel", "Cancel before factor", "KCF for division", "Denominator can be 0"], ans: ["B", "S", "B", "S"], exp: "1. B. 2. S, factor first. 3. B. 4. S.", exp_trans: "1. B. 2. S, faktorkan dulu. 3. B. 4. S." },
+            "t4-task9": { type: "complex", q: "Which have restriction x != 2? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah yang batasannya \\( x \\neq 2 \\)?", opts: ["\\( \\frac{1}{x-2} \\)", "\\( \\frac{x}{2} \\)", "\\( \\frac{x+2}{x-2} \\)", "\\( \\frac{x-2}{x} \\)"], ans: [0, 2], exp: "Denom has \\( x-2 \\). 1 and 2 have it.", exp_trans: "Penyebut punya \\( x-2 \\)." },
+            "t4-task10": { type: "single", q: "Simplify \\( \\frac{x^2 - 5x + 6}{x^2 - 9} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 5x + 6}{x^2 - 9} \\).", opts: ["\\( \\frac{x-2}{x+3} \\)", "\\( \\frac{x+2}{x-3} \\)", "\\( \\frac{x-3}{x+3} \\)", "\\( \\frac{x-2}{x-3} \\)", "\\( 1 \\)"], ans: "\\( \\frac{x-2}{x+3} \\)", exp: "Num: \\( (x-2)(x-3) \\). Den: \\( (x+3)(x-3) \\). Cancel \\( (x-3) \\). Leaves \\( \\frac{x-2}{x+3} \\).", exp_trans: "Atas: \\( (x-2)(x-3) \\). Bawah: \\( (x+3)(x-3) \\). Coret \\( (x-3) \\)." },
+
+            // TASK 5: Final Challenge
+            "t5-task1": { type: "single", q: "Simplify \\( \\frac{2x^2 - 18}{x - 3} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{2x^2 - 18}{x - 3} \\).", opts: ["\\( 2x+6 \\)", "\\( 2x-6 \\)", "\\( x-3 \\)", "\\( 2x \\)", "\\( x+3 \\)"], ans: "\\( 2x+6 \\)", exp: "Factor: \\( 2(x^2-9) = 2(x-3)(x+3) \\). Cancel \\( (x-3) \\). Leaves \\( 2(x+3) = 2x+6 \\).", exp_trans: "Faktor: \\( 2(x+3)(x-3) \\). Coret \\( (x-3) \\)." },
+            "t5-task2": { type: "fill", q: "Simplify \\( \\frac{x^2 - 1}{x+1} \\). Format: x-a. <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{x^2 - 1}{x+1} \\).", ans: "x-1", exp: "\\( \\frac{(x+1)(x-1)}{x+1} = x-1 \\).", exp_trans: "\\( x-1 \\)." },
+            "t5-task3": { type: "tf_table", q: "Evaluate everything. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi semuanya.", opts: ["KCF is for division", "Factor first always", "You can cancel added terms", "Denominator cannot be zero"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t5-task4": { type: "complex", q: "Which simplify to \\( x+1 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah yang disederhanakan menjadi \\( x+1 \\)?", opts: ["\\( \\frac{x^2-1}{x-1} \\)", "\\( \\frac{x^2+2x+1}{x+1} \\)", "\\( \\frac{x^2-2x-1}{x-1} \\)", "\\( \\frac{x^2+1}{x} \\)"], ans: [0, 1], exp: "1. B, \\( \\frac{(x+1)(x-1)}{x-1} \\). 2. B, \\( \\frac{(x+1)^2}{x+1} \\). 3. S. 4. S.", exp_trans: "1. B. 2. B. 3. S. 4. S." },
+            "t5-task5": { type: "single", q: "Multiply \\( \\frac{x^2 - 4}{x} \\times \\frac{x}{x+2} \\). <i class='fas fa-times text-orange-500 ml-2'></i>", q_trans: "Kalikan \\( \\frac{x^2 - 4}{x} \\times \\frac{x}{x+2} \\).", opts: ["\\( x-2 \\)", "\\( x+2 \\)", "\\( 1 \\)", "\\( \\frac{x-2}{x+2} \\)", "\\( x^2 - 4 \\)"], ans: "\\( x-2 \\)", exp: "Factor: \\( (x+2)(x-2) \\). Cancel \\( x \\) and \\( (x+2) \\). Leaves \\( x-2 \\).", exp_trans: "Faktor: \\( (x+2)(x-2) \\). Coret x dan \\( (x+2) \\)." },
+            "t5-task6": { type: "fill", q: "Divide \\( \\frac{x^2+3x+2}{x} \\div \\frac{x+1}{x^2} \\). <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Bagi \\( \\frac{x^2+3x+2}{x} \\div \\frac{x+1}{x^2} \\).", ans: "x(x+2)", exp: "KCF: \\( \\frac{(x+1)(x+2)}{x} \\times \\frac{x^2}{x+1} \\). Cancel \\( (x+1) \\) and one \\( x \\). Leaves \\( x(x+2) \\).", exp_trans: "KCF: coret \\( (x+1) \\) dan satu x. Sisa \\( x(x+2) \\)." },
+            "t5-task7": { type: "single", q: "Simplify \\( \\frac{2x^2 - 8}{x^2 - 4} \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", q_trans: "Sederhanakan \\( \\frac{2x^2 - 8}{x^2 - 4} \\).", opts: ["\\( 2 \\)", "\\( \\frac{2}{x+2} \\)", "\\( \\frac{x-2}{x+2} \\)", "\\( 1 \\)", "\\( 2x-4 \\)"], ans: "\\( 2 \\)", exp: "Num: \\( 2(x-2)(x+2) \\). Den: \\( (x-2)(x+2) \\). Cancel all. Leaves 2.", exp_trans: "Atas: \\( 2(x-2)(x+2) \\). Bawah: \\( (x-2)(x+2) \\). Coret semua, sisa 2." },
+            "t5-task8": { type: "tf_table", q: "Evaluate true statements. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi pernyataan benar.", opts: ["\\( \\frac{1}{x} + \\frac{1}{x} = \\frac{2}{x} \\)", "\\( \\frac{1}{x} \\times x = 1 \\)", "\\( x \\div \\frac{1}{x} = 1 \\)", "\\( \\frac{x^2}{x} = x \\)"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, \\( x \\times x = x^2 \\). 4. B.", exp_trans: "1. B. 2. B. 3. S, \\( x^2 \\). 4. B." },
+            "t5-task9": { type: "complex", q: "Which equal \\( \\frac{1}{x-2} \\)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah yang sama dengan \\( \\frac{1}{x-2} \\)?", opts: ["\\( \\frac{x-2}{(x-2)^2} \\)", "\\( \\frac{1}{x^2-4} \\times (x+2) \\)", "\\( \\frac{x+2}{x^2-4} \\)", "\\( \\frac{1}{x} \\div \\frac{1}{2} \\)"], ans: [0, 1, 2], exp: "1. B, cancel \\( (x-2) \\). 2. B, \\( \\frac{x+2}{(x+2)(x-2)} = \\frac{1}{x-2} \\). 3. B, same. 4. S, = \\( \\frac{2}{x} \\).", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t5-task10": { type: "single", q: "Final Challenge: Simplify \\( \\frac{x^2 + 4x + 4}{x^2 - 4} \\div \\frac{x+2}{x-2} \\). <i class='fas fa-flag-checkered text-orange-500 ml-2'></i>", q_trans: "Tantangan Akhir: Sederhanakan \\( \\frac{x^2 + 4x + 4}{x^2 - 4} \\div \\frac{x+2}{x-2} \\).", opts: ["\\( 1 \\)", "\\( \\frac{x+2}{x-2} \\)", "\\( \\frac{x-2}{x+2} \\)", "\\( x+2 \\)", "\\( 0 \\)"], ans: "\\( 1 \\)", exp: "Num1: \\( (x+2)^2 \\). Den1: \\( (x-2)(x+2) \\). KCF: \\( \\times \\frac{x-2}{x+2} \\). Cancel all. Result 1.", exp_trans: "Atas1: \\( (x+2)^2 \\). Bawah1: \\( (x+2)(x-2) \\). KCF: \\( \\times \\frac{x-2}{x+2} \\). Coret semua, sisa 1." }
+        });
+        
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-indigo-100', 'text-indigo-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-indigo-100', 'text-indigo-800', 'font-bold');
+                }
+            }
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+            document.getElementById('contentScrollArea').scrollTo(0, 0);
+        }
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+        
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-indigo-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Latihan'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full shrink-0">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Pilih semua jawaban yang benar. <span class="translation">*Select all correct answers.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox shrink-0" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah. <span class="translation">*Determine True or False.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                let userVal = inputField.value.trim().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                let correctAns = data.ans.toString().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                inputField.disabled = true;
+                isCorrect = (userVal === correctAns);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = inputField.value;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                let sAnsStr = '';
+                let cAnsStr = '';
+                let isCorrect = false;
+                
+                if (data.type === 'complex') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.length > 0 ? cArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    isCorrect = (sArr.length > 0 && sArr.slice().sort().join(',') === cArr.slice().sort().join(','));
+                } else if (data.type === 'tf_table') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.join(' | ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.join(' | ');
+                    isCorrect = (sArr.length > 0 && sArr.join(',') === cArr.join(','));
+                } else {
+                    sAnsStr = studentAns || 'Tidak Dijawab';
+                    cAnsStr = correctAns;
+                    let userValNorm = (studentAns || '').toString().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                    let correctAnsNorm = correctAns.toString().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                    isCorrect = (userValNorm === correctAnsNorm);
+                }
+                
+                let note = '❌';
+                if(isCorrect) { score++; note = '✔️'; }
+                
+                let qText = data.q.replace(/<[^>]+>/g, '');
+                if (data.type === 'tf_table') {
+                    qText += " | Statements: " + data.opts.map((opt, idx) => `${idx+1}. ${opt}`).join(" ; ");
+                }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${qText}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            if (typeof renderMathInElement === 'undefined') return;
+            
+            const target = document.querySelector('.content-section.active') || document.body;
+            try {
+                renderMathInElement(target, {
+                    delimiters: [
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            } catch(e) {
+                console.error("KaTeX rendering error:", e);
+            }
+        }
+        
+        window.onload = () => {
+            renderTasks();
+            setTimeout(() => {
+                showSection('warmup');
+                renderMath();
+            }, 100);
+        };
+	
+    </script>
+</body>
+</html>
