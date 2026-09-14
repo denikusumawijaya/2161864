@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Linear Inequalities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        .prompt-box { max-width: 650px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; text-align: left; }
+        .prompt-box p { width: 100%; }
+        .prompt-box img { width: 100%; height: auto; max-width: 300px; display: block; margin-top: 0.5rem; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; padding: 0; border: 0; background: transparent; }
+        .collapse-content.open { max-height: 2000px; padding: 1.5rem; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 0.5rem; margin-top: 1rem; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            #printArea table { table-layout: fixed; width: 100%; font-size: 9px; }
+            #printArea td, #printArea th { word-wrap: break-word; padding: 2px !important; }
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <marker id="arr1" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Linear Inequalities</p>
+            <p class="translation text-indigo-200">Topik: Pertidaksamaan Linear</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">Class Rules <br><span class="translation text-gray-500">Aturan Kelas</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-indigo-500 mt-1"></i>
+                    <div>Take turns speaking. <span class="translation">Berbicara secara bergantian.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-indigo-500 mt-1"></i>
+                    <div>Ask permission if you want to leave the class. <span class="translation">Meminta izin jika ingin meninggalkan kelas.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-indigo-500 mt-1"></i>
+                    <div>Turn on camera and microphone if needed. <span class="translation">Menyalakan kamera dan microphone jika diperlukan.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-indigo-200 mt-1">Select topic to navigate <span class="translation text-indigo-300 block">Pilih topik untuk navigasi</span></p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li><a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="warmup"><div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="intro"><div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="review"><div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="problem"><div class="font-semibold text-sm text-gray-800">Problem Introduction</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="guided"><div class="font-semibold text-sm text-gray-800">Guided Practice</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="independent"><div class="font-semibold text-sm text-gray-800">Independent Practice</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="consolidation"><div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div></a></li>
+                    <hr class="my-3 border-gray-200">
+                    <li><a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div><div class="text-xs text-gray-500 mt-1">10 Mixed Questions</div></a></li>
+                </ul>
+            </nav>
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">What is an Inequality? <i class="fas fa-balance-scale-right text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Apa itu Pertidaksamaan?</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <line x1="20" y1="70" x2="160" y2="70" stroke="#333" stroke-width="3"/>
+                                    <rect x="40" y="40" width="30" height="30" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <text x="55" y="60" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">5</text>
+                                    <path d="M80 70 L90 60 L80 50 M80 70 L90 80 L80 90" stroke="#ef4444" stroke-width="3" fill="none"/>
+                                    <text x="100" y="65" font-size="14" fill="#333">&gt;</text>
+                                    <rect x="110" y="50" width="40" height="30" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                                    <text x="130" y="70" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">3</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>An inequality is a mathematical statement that compares two expressions using inequality symbols: \( > \) (greater than), \( < \) (less than), \( \geq \) (greater than or equal to), and \( \leq \) (less than or equal to). <span class="translation">Pertidaksamaan adalah pernyataan matematika yang membandingkan dua ekspresi menggunakan simbol pertidaksamaan: lebih besar dari, lebih kecil dari, lebih besar dari atau sama dengan, dan lebih kecil dari atau sama dengan.</span></p>
+                                <p class="mt-2">Unlike an equation which has a specific solution, an inequality often has a range of solutions. <span class="translation">Tidak seperti persamaan yang memiliki solusi spesifik, pertidaksamaan sering kali memiliki rentang solusi.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The "Pac-Man" Rule</p>
+                            <p class="mt-1">The inequality symbol acts like a hungry Pac-Man. It always wants to "eat" the larger number. \( 5 > 3 \) because 5 is bigger. <span class="translation">Simbol pertidaksamaan bertindak seperti Pac-Man yang lapar. Ia selalu ingin "memakan" bilangan yang lebih besar.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( x > a \) means \( x \) can be any number strictly larger than \( a \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">The Number Line <i class="fas fa-chart-line text-green-400 ml-2"></i></h2>
+                        <p class="translation">Garis Bilangan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="80" viewBox="0 0 180 80">
+                                    <line x1="10" y1="40" x2="170" y2="40" stroke="#333" stroke-width="2"/>
+                                    <path d="M170 40 L160 35 L160 45 Z" fill="#333"/>
+                                    <circle cx="90" cy="40" r="5" fill="#fff" stroke="#ef4444" stroke-width="2"/>
+                                    <path d="M95 40 L170 40" stroke="#ef4444" stroke-width="4"/>
+                                    <text x="90" y="60" font-size="12" text-anchor="middle" fill="#333">2</text>
+                                    <text x="140" y="30" font-size="12" text-anchor="middle" fill="#ef4444" font-weight="bold">x &gt; 2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>We represent inequalities on a number line. An open circle \( \circ \) means the number is NOT included (\( < \) or \( > \)). A closed circle \( \bullet \) means the number IS included (\( \leq \) or \( \geq \)). <span class="translation">Kita merepresentasikan pertidaksamaan pada garis bilangan. Lingkaran terbuka berarti bilangan tersebut TIDAK termasuk. Lingkaran tertutup berarti bilangan tersebut Termasuk.</span></p>
+                                <p class="mt-2">The arrow shows the direction of all possible solutions. <span class="translation">Anak panah menunjukkan arah dari semua kemungkinan solusi.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Closed vs Open</p>
+                            <p class="mt-1">Think of a closed gate (closed circle) that keeps the number inside, and an open gate (open circle) that lets the number escape. <span class="translation">Bayangkan gerbang tertutup yang menjaga angka tetap di dalam, dan gerbang terbuka yang membiarkan angka lolos.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Solid dot \( \bullet \) for \( \ge, \le \); Hollow dot \( \circ \) for \( >, < \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">The Golden Rule of Inequalities <i class="fas fa-exchange-alt text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Aturan Emas Pertidaksamaan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="100" viewBox="0 0 180 100">
+                                    <text x="40" y="50" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">4 &lt; 8</text>
+                                    <text x="90" y="50" font-size="16" text-anchor="middle" fill="#8b5cf6">x(-1)</text>
+                                    <path d="M 60 60 L 120 60" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="140" y="50" font-size="20" text-anchor="middle" fill="#ef4444" font-weight="bold">-4 &gt; -8</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>You can add, subtract, multiply, or divide both sides of an inequality just like an equation. HOWEVER, if you multiply or divide by a NEGATIVE number, you MUST FLIP the inequality sign! <span class="translation">Anda bisa menambah, mengurangi, mengalikan, atau membagi kedua sisi pertidaksamaan seperti persamaan. NAMUN, jika Anda mengalikan atau membagi dengan bilangan NEGATIF, Anda HARUS MEMBALIKkan tanda pertidaksamaan!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The Flip</p>
+                            <p class="mt-1">"Negative makes you do a backflip!" Always reverse \( < \) to \( > \) and \( \le \) to \( \ge \) when dealing with negatives. <span class="translation">"Negatif membuat Anda melakukan backflip!" Selalu balikkan tanda ketika berhadapan dengan negatif.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: If \( a < b \) and \( c < 0 \), then \( a \cdot c > b \cdot c \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Real-World Application: Budgeting <i class="fas fa-wallet text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Aplikasi Dunia Nyata: Anggaran</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="90" y="30" font-size="12" text-anchor="middle" fill="#333">Budget: $50</text>
+                                    <rect x="40" y="50" width="100" height="40" rx="5" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <text x="90" y="75" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">Items ($10 each)</text>
+                                    <path d="M90 95 L90 110" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="90" y="125" font-size="10" text-anchor="middle" fill="#ef4444">Max 5 items</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Imagine you have $50 and want to buy some items that cost $10 each. How many can you buy? You can buy exactly 5, but you can also buy fewer. This is an inequality: \( 10x \leq 50 \). <span class="translation">Bayangkan Anda punya $50 dan ingin membeli barang seharga $10 per buah. Berapa banyak yang bisa Anda beli? Anda bisa membeli tepat 5, tapi juga bisa kurang. Ini adalah pertidaksamaan: 10x ≤ 50.</span></p>
+                                <p class="mt-2">Inequalities help us find limits and boundaries in real life. <span class="translation">Pertidaksamaan membantu kita menemukan batas dan rentang dalam kehidupan nyata.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Keywords</p>
+                            <p class="mt-1">"At most", "no more than", "maximum" mean \( \leq \). "At least", "no less than", "minimum" mean \( \geq \). <span class="translation">"Paling banyak" berarti ≤. "Paling sedikit" berarti ≥.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Total Cost \( \leq \) Budget.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Translating Words to Math <i class="fas fa-language text-green-400 ml-2"></i></h2>
+                        <p class="translation">Menerjemahkan Kata ke Matematika</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="30" width="140" height="80" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="55" font-size="14" text-anchor="middle" fill="#333">"At most 20"</text>
+                                    <path d="M 90 65 L 90 85" stroke="#ef4444" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="90" y="100" font-size="16" text-anchor="middle" fill="#10b981" font-weight="bold">x ≤ 20</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>To solve word problems, you must translate English into Math. If a speed limit says "Maximum 60 mph", your speed (\( s \)) must satisfy \( s \leq 60 \). <span class="translation">Untuk menyelesaikan soal cerita, Anda harus menerjemahkan bahasa ke Matematika. Jika batas kecepatan tertulis "Maksimum 60 mph", kecepatan (s) Anda harus memenuhi s ≤ 60.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Watch the Wording</p>
+                            <p class="mt-1">"Fewer than" means \( < \). "Not less than" means \( \geq \). Pay close attention! <span class="translation">"Lebih sedikit dari" berarti <. "Tidak kurang dari" berarti ≥. Perhatikan dengan saksama!</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Maximum/At most = \( \leq \), Minimum/At least = \( \geq \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Solving Basic Inequalities <i class="fas fa-calculator text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Menyelesaikan Pertidaksamaan Dasar</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="50" font-size="14" text-anchor="middle" fill="#333">x + 5 &gt; 12</text>
+                                    <path d="M 40 60 L 40 100 L 130 100" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="120" font-size="14" text-anchor="middle" fill="#10b981" font-weight="bold">x &gt; 7</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Solving a linear inequality is just like solving an equation. Isolate the variable \( x \) by doing the same operation to both sides. For \( x + 5 > 12 \), subtract 5 from both sides to get \( x > 7 \). <span class="translation">Menyelesaikan pertidaksamaan linear sama seperti persamaan. Isolasi variabel x dengan melakukan operasi yang sama di kedua sisi. Untuk x + 5 > 12, kurangkan 5 dari kedua sisi untuk mendapatkan x > 7.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Keep Balance</p>
+                            <p class="mt-1">Whatever you do to the left, do to the right. The sign only flips when multiplying or dividing by a negative. <span class="translation">Apa pun yang Anda lakukan di kiri, lakukan di kanan. Tanda hanya berbalik saat mengalikan atau membagi dengan negatif.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( x + a > b \implies x > b - a \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Recalling Quadratic Equations <i class="fas fa-superscript text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Mengingat Persamaan Kuadrat</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M20 120 Q90 20 160 120" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                                    <circle cx="50" cy="105" r="4" fill="#ef4444"/>
+                                    <circle cx="130" cy="105" r="4" fill="#ef4444"/>
+                                    <line x1="20" y1="120" x2="160" y2="120" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+                                    <text x="50" y="135" font-size="10" text-anchor="middle" fill="#333">x1</text>
+                                    <text x="130" y="135" font-size="10" text-anchor="middle" fill="#333">x2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Before diving into quadratic inequalities, let's recall quadratic equations of the form \( ax^2 + bx + c = 0 \). The solutions (roots) are where the parabola crosses the x-axis. <span class="translation">Sebelum mendalami pertidaksamaan kuadrat, mari kita ingat persamaan kuadrat berbentuk ax^2 + bx + c = 0. Solusinya (akar) adalah di mana parabola memotong sumbu x.</span></p>
+                                <p class="mt-2">We find roots using factoring, completing the square, or the quadratic formula. <span class="translation">Kita mencari akar menggunakan pemfaktoran, melengkapkan kuadrat, atau rumus kuadrat.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The Quadratic Formula</p>
+                            <p class="mt-1">When factoring is hard, use \( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \). <span class="translation">Ketika pemfaktoran sulit, gunakan rumus kuadrat.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Roots are the x-intercepts of \( f(x) \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Parabolas and the x-Axis <i class="fas fa-bezier-curve text-green-400 ml-2"></i></h2>
+                        <p class="translation">Parabola dan Sumbu X</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M20 120 Q90 20 160 120" stroke="#10b981" stroke-width="3" fill="none"/>
+                                    <circle cx="50" cy="105" r="4" fill="#ef4444"/>
+                                    <circle cx="130" cy="105" r="4" fill="#ef4444"/>
+                                    <line x1="20" y1="105" x2="160" y2="105" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+                                    <text x="80" y="80" font-size="10" text-anchor="middle" fill="#10b981">Positive</text>
+                                    <text x="40" y="130" font-size="10" text-anchor="middle" fill="#ef4444">Negative</text>
+                                    <text x="140" y="130" font-size="10" text-anchor="middle" fill="#ef4444">Negative</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>A parabola opening upwards (where \( a > 0 \)) is positive (above x-axis) between the roots and outside the roots. Wait, no! If it opens upwards, it is positive OUTSIDE the roots and negative BETWEEN them. <span class="translation">Parabola terbuka ke atas (di mana a > 0) positif (di atas sumbu x) di luar akar-akarnya dan negatif di antara akar-akarnya.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Smile vs Frown</p>
+                            <p class="mt-1">A positive \( a \) makes a "smile" (U shape). A negative \( a \) makes a "frown" (∩ shape). <span class="translation">Nilai a positif membuat "senyum" (bentuk U). Nilai a negatif membuat "cemberut" (bentuk ∩).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Outside roots = Same sign as \( a \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Transitioning to Inequalities <i class="fas fa-random text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Transisi ke Pertidaksamaan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="40" font-size="12" text-anchor="middle" fill="#333">x^2 - 4 = 0</text>
+                                    <path d="M 40 50 L 40 80 L 130 80" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="90" y="100" font-size="12" text-anchor="middle" fill="#8b5cf6">x = -2, 2</text>
+                                    <path d="M 90 110 L 90 130" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="140" y="120" font-size="12" text-anchor="middle" fill="#10b981">x^2 - 4 < 0 ?</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>When we change \( = \) to \( < \) or \( > \), we aren't looking for specific points anymore. We are looking for intervals of \( x \) where the graph is above or below the x-axis. <span class="translation">Ketika kita mengubah = menjadi < atau >, kita tidak lagi mencari titik spesifik. Kita mencari interval x di mana grafik berada di atas atau di bawah sumbu x.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Above or Below?</p>
+                            <p class="mt-1">\( > 0 \) means look above the x-axis. \( < 0 \) means look below. <span class="translation">> 0 berarti lihat di atas sumbu x. < 0 berarti lihat di bawah.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Find roots -> Determine intervals -> Check sign.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Finding Critical Values <i class='fas fa-map-pin text-indigo-400 ml-2'></i></h2>
+                        <p class="translation">Menemukan Nilai Kritis</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <line x1="10" y1="70" x2="170" y2="70" stroke="#333" stroke-width="2"/>
+                                    <circle cx="60" cy="70" r="5" fill="#ef4444"/>
+                                    <circle cx="120" cy="70" r="5" fill="#ef4444"/>
+                                    <text x="60" y="90" font-size="10" text-anchor="middle" fill="#333">x1</text>
+                                    <text x="120" y="90" font-size="10" text-anchor="middle" fill="#333">x2</text>
+                                    <path d="M10 70 L55 70 M65 70 L115 70 M125 70 L165 70" stroke="#3b82f6" stroke-width="4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>To solve \( (x-2)(x-4) > 0 \), the roots (critical values) are \( x=2 \) and \( x=4 \). These roots divide the number line into three intervals: \( x < 2 \), \( 2 < x < 4 \), and \( x > 4 \). <span class="translation">Untuk menyelesaikan (x-2)(x-4) > 0, akar-akarnya (nilai kritis) adalah x=2 dan x=4. Akar-akar ini membagi garis bilangan menjadi tiga interval.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Set to Zero First</p>
+                            <p class="mt-1">Always rearrange the inequality so one side is 0 before finding roots. <span class="translation">Selalu atur ulang pertidaksamaan sehingga satu sisi bernilai 0 sebelum mencari akar.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Critical values are boundaries of your intervals.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">The Test Point Method <i class='fas fa-vial text-green-400 ml-2'></i></h2>
+                        <p class="translation">Metode Titik Uji</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <line x1="10" y1="70" x2="170" y2="70" stroke="#333" stroke-width="2"/>
+                                    <circle cx="60" cy="70" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+                                    <circle cx="120" cy="70" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+                                    <text x="30" y="60" font-size="10" fill="#3b82f6">Test x=0</text>
+                                    <text x="90" y="60" font-size="10" fill="#3b82f6">Test x=3</text>
+                                    <text x="150" y="60" font-size="10" fill="#3b82f6">Test x=5</text>
+                                    <path d="M30 65 L30 75" stroke="#10b981" stroke-width="2"/>
+                                    <path d="M90 65 L90 75" stroke="#10b981" stroke-width="2"/>
+                                    <path d="M150 65 L150 75" stroke="#10b981" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Pick any number inside each interval and plug it into the inequality. If it makes the statement true, that whole interval is part of the solution. <span class="translation">Pilih sembarang angka di dalam setiap interval dan masukkan ke pertidaksamaan. Jika pernyataan menjadi benar, maka seluruh interval adalah bagian dari solusi.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Easy Numbers</p>
+                            <p class="mt-1">Choose easy numbers like 0, 1, or -1 for your test points to make mental math simple. <span class="translation">Pilih angka mudah seperti 0, 1, atau -1 untuk mempermudah perhitungan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Test point true -> Keep interval.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Writing the Solution Set <i class='fas fa-code-branch text-purple-400 ml-2'></i></h2>
+                        <p class="translation">Menulis Himpunan Penyelesaian</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="100" viewBox="0 0 180 100">
+                                    <line x1="10" y1="50" x2="170" y2="50" stroke="#333" stroke-width="2"/>
+                                    <circle cx="60" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+                                    <circle cx="120" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+                                    <path d="M10 50 L55 50" stroke="#ef4444" stroke-width="4"/>
+                                    <path d="M125 50 L165 50" stroke="#ef4444" stroke-width="4"/>
+                                    <text x="30" y="40" font-size="10" fill="#333">x < 2</text>
+                                    <text x="145" y="40" font-size="10" fill="#333">x > 4</text>
+                                    <text x="90" y="80" font-size="12" text-anchor="middle" fill="#8b5cf6" font-weight="bold">x < 2 U x > 4</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>If the true intervals are on the outer sides, we use the union symbol \( \cup \) to combine them. <span class="translation">Jika interval yang benar ada di sisi luar, kita gunakan simbol union (∪) untuk menggabungkannya.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Strict vs Inclusive</p>
+                            <p class="mt-1">If the original inequality was \( < \) or \( > \), use open circles and open intervals \( (a, b) \). If \( \leq \) or \( \geq \), use closed circles and closed intervals \( [a, b] \). <span class="translation">Jika pertidaksamaan ketat, gunakan kurung biasa. Jika termasuk sama dengan, gunakan kurung siku.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( x < a \cup x > b \) for outside intervals.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Solving Simple Quadratic Inequalities <i class='fas fa-chalkboard-teacher text-indigo-400 ml-2'></i></h2>
+                        <p class="translation">Menyelesaikan Pertidaksamaan Kuadrat Sederhana</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M20 120 Q90 20 160 120" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                                    <circle cx="50" cy="105" r="4" fill="#ef4444"/>
+                                    <circle cx="130" cy="105" r="4" fill="#ef4444"/>
+                                    <path d="M50 105 L130 105" stroke="#10b981" stroke-width="5"/>
+                                    <text x="90" y="90" font-size="10" text-anchor="middle" fill="#10b981">x^2 < 0 ? No!</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Let's solve \( x^2 - 9 < 0 \). Roots are \( \pm 3 \). The parabola opens upwards. The graph is below the x-axis (negative) BETWEEN the roots. So, solution is \( -3 < x < 3 \). <span class="translation">Mari selesaikan x^2 - 9 < 0. Akarnya ±3. Parabola terbuka ke atas. Grafik di bawah sumbu x (negatif) di ANTARA akar-akarnya. Jadi, solusinya -3 < x < 3.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: The "Inside" Rule</p>
+                            <p class="mt-1">For \( ax^2 + bx + c < 0 \) with \( a > 0 \), the solution is always between the roots. <span class="translation">Untuk ax^2 + bx + c < 0 dengan a > 0, solusinya selalu di antara akar-akarnya.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( < 0 \) & \( a > 0 \) -> Between roots.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Factoring to Solve <i class='fas fa-puzzle-piece text-green-400 ml-2'></i></h2>
+                        <p class="translation">Memfaktorkan untuk Menyelesaikan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="30" width="140" height="30" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="50" font-size="12" text-anchor="middle" fill="#333">x^2 - 5x + 6 > 0</text>
+                                    <path d="M 90 65 L 90 85" stroke="#ef4444" stroke-width="2"/>
+                                    <rect x="30" y="90" width="120" height="30" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="110" font-size="12" text-anchor="middle" fill="#333">(x-2)(x-3) > 0</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Factor \( x^2 - 5x + 6 > 0 \) into \( (x-2)(x-3) > 0 \). Roots are 2 and 3. Since \( > 0 \), we look for where it's positive: \( x < 2 \cup x > 3 \). <span class="translation">Faktorkan x^2 - 5x + 6 > 0 menjadi (x-2)(x-3) > 0. Akarnya 2 dan 3. Karena > 0, kita cari di mana nilainya positif: x < 2 ∪ x > 3.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Product Signs</p>
+                            <p class="mt-1">Positive * Positive = Positive. Negative * Negative = Positive. Positive * Negative = Negative. <span class="translation">Positif * Positif = Positif. Negatif * Negatif = Positif. Positif * Negatif = Negatif.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: For \( (x-a)(x-b) > 0 \), solution is \( x < a \) or \( x > b \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Handling Negative Leading Coefficients <i class='fas fa-sync-alt text-purple-400 ml-2'></i></h2>
+                        <p class="translation">Menangani Koefisien Utama Negatif</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M20 20 Q90 120 160 20" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                                    <circle cx="50" cy="35" r="4" fill="#ef4444"/>
+                                    <circle cx="130" cy="35" r="4" fill="#ef4444"/>
+                                    <path d="M50 35 L130 35" stroke="#10b981" stroke-width="5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>If you have \( -x^2 + 4 > 0 \), it's easier to multiply by -1 (don't forget to flip the sign!) to get \( x^2 - 4 < 0 \). Now it's a standard upward parabola. <span class="translation">Jika Anda punya -x^2 + 4 > 0, lebih mudah dikalikan dengan -1 (jangan lupa balikkan tanda!) untuk mendapatkan x^2 - 4 < 0. Sekarang itu parabola ke atas standar.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Always Make 'a' Positive</p>
+                            <p class="mt-1">Multiply by -1 and flip the sign to make the parabola open upwards. It reduces confusion. <span class="translation">Kalikan dengan -1 dan balikkan tanda agar parabola terbuka ke atas. Ini mengurangi kebingungan.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( -ax^2 + bx + c > 0 \implies ax^2 - bx - c < 0 \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Word Problems: Profit and Area <i class='fas fa-briefcase text-indigo-400 ml-2'></i></h2>
+                        <p class="translation">Soal Cerita: Keuntungan dan Luas</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="40" y="40" width="100" height="60" fill="none" stroke="#333" stroke-width="2"/>
+                                    <text x="90" y="75" font-size="14" text-anchor="middle" fill="#333">Area > 50</text>
+                                    <path d="M140 70 L160 70" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="170" y="75" font-size="10" fill="#333">x</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>A farmer has a rectangle field. Length is \( x+5 \) and width is \( x \). He needs Area \( > 50 \). So, \( x(x+5) > 50 \implies x^2 + 5x - 50 > 0 \). <span class="translation">Petani memiliki lapangan persegi panjang. Panjang x+5 dan lebar x. Dia butuh Luas > 50. Jadi, x(x+5) > 50 maka x^2 + 5x - 50 > 0.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Context Matters</p>
+                            <p class="mt-1">In real life, dimensions can't be negative. Always filter mathematical solutions through practical limits (e.g., \( x > 0 \)). <span class="translation">Dalam kehidupan nyata, dimensi tidak bisa negatif. Selalu saring solusi matematis melalui batas praktis (misalnya x > 0).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Math solution \( \cap \) Physical limits = Final answer.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Fractions and Inequalities <i class='fas fa-divide text-green-400 ml-2'></i></h2>
+                        <p class="translation">Pecahan dan Pertidaksamaan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="30" width="140" height="80" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="75" font-size="14" text-anchor="middle" fill="#333">(x-1) / (x+2) > 0</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>For rational inequalities like \( \frac{x-1}{x+2} > 0 \), the fraction is positive when both are positive OR both are negative. Critical values are \( x=1 \) and \( x=-2 \). <span class="translation">Untuk pertidaksamaan rasional seperti (x-1)/(x+2) > 0, pecahan positif ketika keduanya positif ATAU keduanya negatif. Nilai kritisnya adalah x=1 dan x=-2.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Denominator Cannot Be Zero</p>
+                            <p class="mt-1">Always exclude the value that makes the denominator zero! Use an open circle for it. <span class="translation">Selalu kecualikan nilai yang membuat penyebut nol! Gunakan lingkaran terbuka untuk nilai tersebut.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Num and Den have same sign = Positive fraction.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Complete Problem Solving Flow <i class='fas fa-stream text-purple-400 ml-2'></i></h2>
+                        <p class="translation">Alur Penyelesaian Masalah Lengkap</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="20" width="140" height="20" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="35" font-size="10" text-anchor="middle" fill="#333">1. Move all terms to one side (0)</text>
+                                    <path d="M 90 45 L 90 55" stroke="#333" stroke-width="2"/>
+                                    <rect x="20" y="60" width="140" height="20" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="75" font-size="10" text-anchor="middle" fill="#333">2. Factor / Find critical values</text>
+                                    <path d="M 90 85 L 90 95" stroke="#333" stroke-width="2"/>
+                                    <rect x="20" y="100" width="140" height="20" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="115" font-size="10" text-anchor="middle" fill="#333">3. Test intervals & Write solution</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>1. Ensure 0 is on one side. 2. Find roots (critical values). 3. Draw number line, test intervals. 4. Select true intervals and write the union. <span class="translation">Pastikan 0 di satu sisi. Temukan akar. Gambar garis bilangan, uji interval. Pilih interval yang benar dan tulis unionnya.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Never Skip Steps</p>
+                            <p class="mt-1">Trying to solve inequalities in your head without a number line often leads to sign errors. <span class="translation">Mencoba menyelesaikannya di kepala tanpa garis bilangan sering menyebabkan kesalahan tanda.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: Arrange -> Factor -> Test -> Conclude.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+			
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Consolidation & Reflection</h2>
+                    <p class="translation">Konsolidasi & Refleksi</p>
+                    <p>Excellent work! You've completed the Linear Inequalities material. Keep practicing to master solving and graphing these equations. <span class="translation">Kerja bagus! Anda telah menyelesaikan materi Pertidaksamaan Linear. Teruslah berlatih untuk menguasai penyelesaian dan grafik persamaan ini.</span></p>
+                    <p class="mt-2">To test your understanding further, please complete Tasks 1 to 5. <span class="translation">Untuk menguji pemahaman Anda lebih lanjut, silakan kerjakan Task 1 hingga Task 5.</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Go to learn.algonova.id <span class="translation text-sm italic">Pergi ke learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Linear Inequalities</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+    
+    <script>
+        // ====== MATH QUESTIONS DATA (PART 1) ======
+        const questions = {};
+        Object.assign(questions, {
+            // SPIRAL REVIEW WARM-UP
+            "w-task1": { type: "single", q: "Which of the following represents 'x is greater than or equal to 5'? <i class='fas fa-balance-scale-right text-blue-500 ml-2'></i>", q_trans: "Manakah dari berikut ini yang mewakili 'x lebih besar dari atau sama dengan 5'?", opts: ["\\( x > 5 \\)", "\\( x < 5 \\)", "\\( x \\geq 5 \\)", "\\( x \\leq 5 \\)", "\\( x = 5 \\)"], ans: "\\( x \\geq 5 \\)", exp: "The symbol \\( \\geq \\) means 'greater than or equal to'. Therefore, \\( x \\geq 5 \\) is the correct representation.", exp_trans: "Simbol ≥ berarti 'lebih besar dari atau sama dengan'. Oleh karena itu, x ≥ 5 adalah representasi yang benar." },
+            "w-task2": { type: "single", q: "If a speed limit sign says 'Maximum 80 km/h', which inequality represents your speed (s)? <i class='fas fa-car text-blue-500 ml-2'></i>", q_trans: "Jika rambu batas kecepatan bertuliskan 'Maksimum 80 km/h', pertidaksamaan manakah yang mewakili kecepatan Anda (s)?", opts: ["\\( s > 80 \\)", "\\( s < 80 \\)", "\\( s \\geq 80 \\)", "\\( s \\leq 80 \\)", "\\( s = 80 \\)"], ans: "\\( s \\leq 80 \\)", exp: "'Maximum' means you can go up to that speed, including 80 itself. So, \\( s \\leq 80 \\) is correct.", exp_trans: "'Maksimum' berarti Anda bisa melaju hingga kecepatan tersebut, termasuk 80 itu sendiri. Jadi, s ≤ 80 adalah benar." },
+            "w-task3": { type: "single", q: "On a number line, an open circle is used for which symbols? <i class='fas fa-circle text-blue-500 ml-2'></i>", q_trans: "Pada garis bilangan, lingkaran terbuka digunakan untuk simbol mana?", opts: ["\\( > \\) and \\( < \\) only", "\\( \\geq \\) and \\( \\leq \\) only", "\\( > \\) and \\( \\geq \\)", "\\( < \\) and \\( \\leq \\)", "All symbols"], ans: "\\( > \\) and \\( < \\) only", exp: "An open circle \\( \\circ \\) indicates that the endpoint is NOT included in the solution, which corresponds to strict inequalities \\( > \\) and \\( < \\).", exp_trans: "Lingkaran terbuka menunjukkan bahwa titik akhir TIDAK termasuk dalam solusi, yang sesuai dengan pertidaksamaan ketat > dan <." },
+            "w-task4": { type: "single", q: "Which number is a solution to \\( x + 2 < 5 \\)? <i class='fas fa-calculator text-blue-500 ml-2'></i>", q_trans: "Bilangan manakah yang merupakan solusi dari x + 2 < 5?", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 2 \\)", exp: "Substitute the values: If \\( x = 2 \\), then \\( 2 + 2 = 4 \\). Since \\( 4 < 5 \\), 2 is a valid solution. (Note: if \\( x=3 \\), then \\( 3+2=5 \\), which is not strictly less than 5).", exp_trans: "Substitusi nilai: Jika x = 2, maka 2 + 2 = 4. Karena 4 < 5, 2 adalah solusi yang valid. (Catatan: jika x=3, maka 3+2=5, yang tidak kurang dari 5)." },
+            "w-task5": { type: "single", q: "Solve: \\( x - 5 > 0 \\). <i class='fas fa-plus-circle text-blue-500 ml-2'></i>", q_trans: "Selesaikan: x - 5 > 0.", opts: ["\\( x > -5 \\)", "\\( x < 5 \\)", "\\( x > 5 \\)", "\\( x < -5 \\)", "\\( x = 5 \\)"], ans: "\\( x > 5 \\)", exp: "Add 5 to both sides: \\( x - 5 + 5 > 0 + 5 \\implies x > 5 \\).", exp_trans: "Tambahkan 5 ke kedua sisi: x - 5 + 5 > 0 + 5 maka x > 5." },
+            "w-task6": { type: "single", q: "Which symbol represents 'less than or equal to'? <i class='fas fa-less-than text-blue-500 ml-2'></i>", q_trans: "Simbol manakah yang berarti 'kurang dari atau sama dengan'?", opts: ["\\( > \\)", "\\( < \\)", "\\( \\geq \\)", "\\( \\leq \\)", "\\( = \\)"], ans: "\\( \\leq \\)", exp: "The symbol \\( \\leq \\) combines '<' (less than) and '=' (equal to).", exp_trans: "Simbol ≤ menggabungkan '<' (kurang dari) dan '=' (sama dengan)." },
+            "w-task7": { type: "single", q: "If you multiply both sides of \\( 4 < 7 \\) by \\( -2 \\), what is the result? <i class='fas fa-exchange-alt text-blue-500 ml-2'></i>", q_trans: "Jika Anda mengalikan kedua sisi dari 4 < 7 dengan -2, apa hasilnya?", opts: ["\\( -8 < -14 \\)", "\\( -8 > -14 \\)", "\\( -8 \\leq -14 \\)", "\\( 8 > 14 \\)", "\\( -8 = -14 \\)"], ans: "\\( -8 > -14 \\)", exp: "Multiplying by a negative number reverses the inequality. \\( 4 \\times -2 = -8 \\) and \\( 7 \\times -2 = -14 \\). Since \\( -8 \\) is larger than \\( -14 \\) (closer to zero), the sign flips to \\( > \\).", exp_trans: "Mengalikan dengan bilangan negatif membalikkan pertidaksamaan. Karena -8 lebih besar dari -14 (lebih dekat ke nol), tanda berbalik menjadi >." },
+            "w-task8": { type: "single", q: "Which number line correctly represents \\( x \\geq 3 \\)? <i class='fas fa-chart-line text-blue-500 ml-2'></i>", q_trans: "Garis bilangan manakah yang benar mewakili x ≥ 3?", opts: ["Open circle at 3, arrow left", "Closed circle at 3, arrow left", "Open circle at 3, arrow right", "Closed circle at 3, arrow right", "Closed circle at -3, arrow right"], ans: "Closed circle at 3, arrow right", exp: "\\( \\geq \\) means 3 is included (closed circle) and solutions are greater than 3 (arrow points right).", exp_trans: "≥ berarti 3 termasuk (lingkaran tertutup) dan solusinya lebih besar dari 3 (panah menunjuk ke kanan)." },
+            "w-task9": { type: "single", q: "Which inequality matches 'You must be at least 18 years old to vote'? <i class='fas fa-person-booth text-blue-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang cocok dengan 'Anda harus berusia minimal 18 tahun untuk memilih'?", opts: ["\\( x > 18 \\)", "\\( x < 18 \\)", "\\( x \\geq 18 \\)", "\\( x \\leq 18 \\)", "\\( x = 18 \\)"], ans: "\\( x \\geq 18 \\)", exp: "'At least' means 18 or older, which corresponds to \\( \\geq 18 \\).", exp_trans: "'Minimal' berarti 18 atau lebih tua, yang sesuai dengan ≥ 18." },
+            "w-task10": { type: "single", q: "Which of the following is true? <i class='fas fa-check-circle text-blue-500 ml-2'></i>", q_trans: "Manakah dari pernyataan berikut yang benar?", opts: ["\\( -5 > -2 \\)", "\\( 0 > -1 \\)", "\\( -10 < -20 \\)", "\\( 4 < 3 \\)", "\\( 7 \\leq 6 \\)"], ans: "\\( 0 > -1 \\)", exp: "On the number line, 0 is to the right of -1, making it greater. Negative numbers further from zero are smaller.", exp_trans: "Pada garis bilangan, 0 berada di sebelah kanan -1, membuatnya lebih besar. Bilangan negatif yang jauh dari nol lebih kecil." },
+
+            // INTRODUCTION & REAL-WORLD
+            "i-task1": { type: "single", q: "A taxi charges $3 base fare plus $2 per km. If you have $15, what is the maximum distance you can travel? <i class='fas fa-taxi text-green-500 ml-2'></i>", q_trans: "Taksi mengenakan tarif dasar $3 ditambah $2 per km. Jika Anda punya $15, berapa jarak maksimum yang dapat ditempuh?", opts: ["\\( 5 \\text{ km} \\)", "\\( 6 \\text{ km} \\)", "\\( 7 \\text{ km} \\)", "\\( 8 \\text{ km} \\)", "\\( 10 \\text{ km} \\)"], ans: "\\( 6 \\text{ km} \\)", exp: "Let \\( x \\) be distance. Cost \\( = 3 + 2x \\leq 15 \\implies 2x \\leq 12 \\implies x \\leq 6 \\). Max distance is 6 km.", exp_trans: "Misalkan x adalah jarak. Biaya = 3 + 2x ≤ 15 maka 2x ≤ 12 maka x ≤ 6. Jarak maksimum adalah 6 km." },
+            "i-task2": { type: "single", q: "A baker needs to sell more than 50 cakes to make a profit. If he sold 20 today, how many more must he sell? <i class='fas fa-cake-candles text-green-500 ml-2'></i>", q_trans: "Seorang tukang roti harus menjual lebih dari 50 kue untuk untung. Jika dia menjual 20 hari ini, berapa banyak lagi yang harus dia jual?", opts: ["\\( x > 30 \\)", "\\( x \\geq 30 \\)", "\\( x < 30 \\)", "\\( x > 50 \\)", "\\( x = 30 \\)"], ans: "\\( x > 30 \\)", exp: "Total \\( 20 + x > 50 \\implies x > 30 \\). He needs to sell MORE than 30.", exp_trans: "Total 20 + x > 50 maka x > 30. Dia perlu menjual LEBIH dari 30." },
+            "i-task3": { type: "single", q: "To pass the exam, a student needs at least 40 marks. Which inequality represents this? <i class='fas fa-graduation-cap text-green-500 ml-2'></i>", q_trans: "Untuk lulus ujian, siswa membutuhkan minimal 40 nilai. Pertidaksamaan manakah yang mewakili ini?", opts: ["\\( x > 40 \\)", "\\( x < 40 \\)", "\\( x \\geq 40 \\)", "\\( x \\leq 40 \\)", "\\( x \\neq 40 \\)"], ans: "\\( x \\geq 40 \\)", exp: "'At least' means 40 or more, so \\( \\geq 40 \\).", exp_trans: "'Minimal' berarti 40 atau lebih, jadi ≥ 40." },
+            "i-task4": { type: "single", q: "Translate into an inequality: 'A number decreased by 4 is no more than 5.' <i class='fas fa-language text-green-500 ml-2'></i>", q_trans: "Terjemahkan ke pertidaksamaan: 'Sebuah bilangan dikurangi 4 tidak lebih dari 5.'", opts: ["\\( x - 4 > 5 \\)", "\\( x - 4 \\geq 5 \\)", "\\( x - 4 < 5 \\)", "\\( x - 4 \\leq 5 \\)", "\\( x - 4 = 5 \\)"], ans: "\\( x - 4 \\leq 5 \\)", exp: "'No more than' means less than or equal to \\( \\leq \\). So, \\( x - 4 \\leq 5 \\).", exp_trans: "'Tidak lebih dari' berarti kurang dari atau sama dengan ≤. Jadi, x - 4 ≤ 5." },
+            "i-task5": { type: "single", q: "Translate: 'Twice a number is at least 10.' <i class='fas fa-language text-green-500 ml-2'></i>", q_trans: "Terjemahkan: 'Dua kali sebuah bilangan adalah minimal 10.'", opts: ["\\( 2x > 10 \\)", "\\( 2x < 10 \\)", "\\( 2x \\geq 10 \\)", "\\( 2x \\leq 10 \\)", "\\( x^2 \\geq 10 \\)"], ans: "\\( 2x \\geq 10 \\)", exp: "'Twice' means \\( 2x \\), 'at least' means \\( \\geq \\). Result: \\( 2x \\geq 10 \\).", exp_trans: "'Dua kali' berarti 2x, 'minimal' berarti ≥. Hasil: 2x ≥ 10." },
+            "i-task6": { type: "single", q: "A rectangle has length 12 and width \\( w \\). If its area is greater than 60, what is \\( w \\)? <i class='fas fa-vector-square text-green-500 ml-2'></i>", q_trans: "Persegi panjang memiliki panjang 12 dan lebar w. Jika luasnya lebih besar dari 60, berapakah w?", opts: ["\\( w > 5 \\)", "\\( w < 5 \\)", "\\( w \\geq 5 \\)", "\\( w \\leq 5 \\)", "\\( w = 5 \\)"], ans: "\\( w > 5 \\)", exp: "Area = \\( 12w > 60 \\implies w > 5 \\).", exp_trans: "Luas = 12w > 60 maka w > 5." },
+            "i-task7": { type: "single", q: "If \\( x + 3 > 10 \\), what is the smallest integer that satisfies this? <i class='fas fa-sort-numeric-down text-green-500 ml-2'></i>", q_trans: "Jika x + 3 > 10, berapakah bilangan bulat terkecil yang memenuhi ini?", opts: ["\\( 7 \\)", "\\( 8 \\)", "\\( 9 \\)", "\\( 10 \\)", "\\( 11 \\)"], ans: "\\( 8 \\)", exp: "\\( x > 10 - 3 \\implies x > 7 \\). The smallest integer strictly greater than 7 is 8.", exp_trans: "x > 10 - 3 maka x > 7. Bilangan bulat terkecil yang lebih besar dari 7 adalah 8." },
+            "i-task8": { type: "single", q: "Which graph represents \\( x < -2 \\)? <i class='fas fa-chart-line text-green-500 ml-2'></i>", q_trans: "Grafik manakah yang mewakili x < -2?", opts: ["Closed circle at 2, left", "Open circle at -2, right", "Closed circle at -2, right", "Open circle at -2, left", "Open circle at 2, left"], ans: "Open circle at -2, left", exp: "\\( < \\) means open circle, and values are less than -2, so the arrow goes left.", exp_trans: "< berarti lingkaran terbuka, dan nilai-nilai kurang dari -2, jadi panah ke kiri." },
+            "i-task9": { type: "single", q: "Which value does NOT satisfy \\( 2x - 1 \\leq 9 \\)? <i class='fas fa-times-circle text-green-500 ml-2'></i>", q_trans: "Nilai manakah yang TIDAK memenuhi 2x - 1 ≤ 9?", opts: ["\\( 5 \\)", "\\( 4 \\)", "\\( 3 \\)", "\\( 6 \\)", "\\( 2 \\)"], ans: "\\( 6 \\)", exp: "\\( 2x - 1 \\leq 9 \\implies 2x \\leq 10 \\implies x \\leq 5 \\). 6 is greater than 5, so it fails.", exp_trans: "2x - 1 ≤ 9 maka 2x ≤ 10 maka x ≤ 5. 6 lebih besar dari 5, jadi gagal." },
+            "i-task10": { type: "single", q: "Your phone battery lasts 15 hours. If you use it for 2 hours already, how many hours max are left? <i class='fas fa-battery-half text-green-500 ml-2'></i>", q_trans: "Baterai ponsel Anda bertahan 15 jam. Jika Anda sudah menggunakannya 2 jam, berapa jam maksimum yang tersisa?", opts: ["\\( x \\geq 13 \\)", "\\( x > 13 \\)", "\\( x \\leq 13 \\)", "\\( x < 13 \\)", "\\( x = 13 \\)"], ans: "\\( x \\leq 13 \\)", exp: "Total time \\( 2 + x \\leq 15 \\implies x \\leq 13 \\).", exp_trans: "Total waktu 2 + x ≤ 15 maka x ≤ 13." }
+        });
+
+        Object.assign(questions, {
+            // REVIEW OF PRIOR KNOWLEDGE
+            "r-task1": { type: "single", q: "What are the roots of \\( x^2 - 5x + 6 = 0 \\)? <i class='fas fa-seedling text-blue-500 ml-2'></i>", q_trans: "Apa akar-akar dari x^2 - 5x + 6 = 0?", opts: ["\\( 1, 6 \\)", "\\( 2, 3 \\)", "\\( -2, -3 \\)", "\\( 1, -6 \\)", "\\( -2, 3 \\)"], ans: "\\( 2, 3 \\)", exp: "Factor: \\( (x-2)(x-3) = 0 \\). Thus, \\( x=2 \\) and \\( x=3 \\).", exp_trans: "Faktor: (x-2)(x-3) = 0. Jadi, x=2 dan x=3." },
+            "r-task2": { type: "single", q: "Which parabola opens downwards (frown)? <i class='fas fa-face-frown text-blue-500 ml-2'></i>", q_trans: "Parabola mana yang terbuka ke bawah (cemberut)?", opts: ["\\( y = 2x^2 + 1 \\)", "\\( y = x^2 - 4 \\)", "\\( y = -x^2 + 5 \\)", "\\( y = 3x^2 \\)", "\\( y = x^2 \\)"], ans: "\\( y = -x^2 + 5 \\)", exp: "A negative leading coefficient (the \\( a \\) value) means the parabola opens downwards.", exp_trans: "Koefisien utama negatif (nilai a) berarti parabola terbuka ke bawah." },
+            "r-task3": { type: "single", q: "If roots are \\( x=1 \\) and \\( x=4 \\), what is the quadratic equation? <i class='fas fa-link text-blue-500 ml-2'></i>", q_trans: "Jika akar-akarnya x=1 dan x=4, berapakah persamaan kuadratnya?", opts: ["\\( x^2 - 5x + 4 = 0 \\)", "\\( x^2 + 5x + 4 = 0 \\)", "\\( x^2 - 3x - 4 = 0 \\)", "\\( x^2 + 3x - 4 = 0 \\)", "\\( x^2 - 5x - 4 = 0 \\)"], ans: "\\( x^2 - 5x + 4 = 0 \\)", exp: "\\( (x-1)(x-4) = x^2 - 4x - x + 4 = x^2 - 5x + 4 = 0 \\).", exp_trans: "(x-1)(x-4) = x^2 - 4x - x + 4 = x^2 - 5x + 4 = 0." },
+            "r-task4": { type: "single", q: "For \\( y = x^2 - 4 \\), where is the graph positive (above x-axis)? <i class='fas fa-arrow-up text-blue-500 ml-2'></i>", q_trans: "Untuk y = x^2 - 4, di mana grafiknya positif (di atas sumbu x)?", opts: ["\\( -2 < x < 2 \\)", "\\( x < -2 \\cup x > 2 \\)", "\\( x < 2 \\)", "\\( x > 2 \\)", "Everywhere"], ans: "\\( x < -2 \\cup x > 2 \\)", exp: "Roots are \\( \\pm 2 \\). It opens upwards. Positive is OUTSIDE the roots.", exp_trans: "Akar-akarnya ±2. Terbuka ke atas. Positif di LUAR akar-akarnya." },
+            "r-task5": { type: "single", q: "Solve \\( x^2 - 9 = 0 \\). <i class='fas fa-equals text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 9 = 0.", opts: ["\\( x = 3 \\) only", "\\( x = -3 \\) only", "\\( x = \\pm 3 \\)", "\\( x = 9 \\)", "\\( x = \\pm 9 \\)"], ans: "\\( x = \\pm 3 \\)", exp: "Difference of squares: \\( (x-3)(x+3) = 0 \\implies x = 3 \\) or \\( x = -3 \\).", exp_trans: "Selisih kuadrat: (x-3)(x+3) = 0 maka x = 3 atau x = -3." },
+            "r-task6": { type: "fill", q: "For \\( x^2 - 7x + 10 = 0 \\), what is the sum of the roots? <i class='fas fa-plus text-blue-500 ml-2'></i>", q_trans: "Untuk x^2 - 7x + 10 = 0, berapakah jumlah akar-akarnya?", ans: "7", exp: "Sum of roots \\( = -b/a = -(-7)/1 = 7 \\). (Roots are 2 and 5).", exp_trans: "Jumlah akar = -b/a = -(-7)/1 = 7. (Akar-akarnya 2 dan 5)." },
+            "r-task7": { type: "single", q: "Which inequality means 'the graph is below the x-axis'? <i class='fas fa-arrow-down text-blue-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang berarti 'grafik di bawah sumbu x'?", opts: ["\\( > 0 \\)", "\\( < 0 \\)", "\\( = 0 \\)", "\\( \\geq 0 \\)", "\\( \\neq 0 \\)"], ans: "\\( < 0 \\)", exp: "Negative values correspond to points below the x-axis.", exp_trans: "Nilai negatif sesuai dengan titik-titik di bawah sumbu x." },
+            "r-task8": { type: "single", q: "What is the discriminant of \\( x^2 - 4x + 4 = 0 \\)? <i class='fas fa-calculator text-blue-500 ml-2'></i>", q_trans: "Berapakah diskriminan dari x^2 - 4x + 4 = 0?", opts: ["\\( 0 \\)", "\\( 4 \\)", "\\( 8 \\)", "\\( 16 \\)", "\\( -4 \\)"], ans: "\\( 0 \\)", exp: "\\( b^2 - 4ac = (-4)^2 - 4(1)(4) = 16 - 16 = 0 \\). One real root (touches axis once).", exp_trans: "b^2 - 4ac = (-4)^2 - 4(1)(4) = 16 - 16 = 0. Satu akar real (menyentuh sumbu sekali)." },
+            "r-task9": { type: "single", q: "Roots are \\( -1 \\) and \\( 3 \\). Which interval is between the roots? <i class='fas fa-arrows-left-right text-blue-500 ml-2'></i>", q_trans: "Akar-akarnya -1 dan 3. Interval manakah yang ada di antara akar-akarnya?", opts: ["\\( x < -1 \\)", "\\( x > 3 \\)", "\\( -1 < x < 3 \\)", "\\( x < 3 \\)", "\\( x > -1 \\)"], ans: "\\( -1 < x < 3 \\)", exp: "Between -1 and 3 means values greater than -1 but less than 3.", exp_trans: "Di antara -1 dan 3 berarti nilai lebih besar dari -1 tapi kurang dari 3." },
+            "r-task10": { type: "single", q: "If \\( a > 0 \\) and the graph is below the x-axis between the roots, what is true? <i class='fas fa-check text-blue-500 ml-2'></i>", q_trans: "Jika a > 0 dan grafik ada di bawah sumbu x di antara akar-akarnya, pernyataan apa yang benar?", opts: ["\\( f(x) < 0 \\) between roots", "\\( f(x) > 0 \\) between roots", "\\( f(x) = 0 \\) between roots", "Graph is a straight line", "No roots exist"], ans: "\\( f(x) < 0 \\) between roots", exp: "Below x-axis means y-values are negative, so \\( f(x) < 0 \\).", exp_trans: "Di bawah sumbu x berarti nilai y negatif, jadi f(x) < 0." },
+
+            // PROBLEM INTRODUCTION
+            "p-task1": { type: "single", q: "What are the critical values for \\( (x-1)(x+4) > 0 \\)? <i class='fas fa-map-pin text-orange-500 ml-2'></i>", q_trans: "Apa nilai kritis untuk (x-1)(x+4) > 0?", opts: ["\\( 1, -4 \\)", "\\( -1, 4 \\)", "\\( 1, 4 \\)", "\\( -1, -4 \\)", "\\( 1, 0 \\)"], ans: "\\( 1, -4 \\)", exp: "Set each factor to zero: \\( x-1=0 \\implies x=1 \\), \\( x+4=0 \\implies x=-4 \\).", exp_trans: "Atur setiap faktor ke nol: x-1=0 maka x=1, x+4=0 maka x=-4." },
+            "p-task2": { type: "fill", q: "For \\( x^2 - 16 > 0 \\), roots are \\( \\pm 4 \\). Which test point should you pick for the interval \\( x > 4 \\)? <i class='fas fa-vial text-orange-500 ml-2'></i>", q_trans: "Untuk x^2 - 16 > 0, akarnya ±4. Titik uji mana yang harus dipilih untuk interval x > 4?", ans: "5", exp: "Any number greater than 4 works, like 5, 10, or 100. 5 is the easiest integer.", exp_trans: "Sembarang angka lebih besar dari 4 bisa, seperti 5, 10, atau 100. 5 adalah bilangan bulat termudah." },
+            "p-task3": { type: "single", q: "For \\( (x-2)(x-3) < 0 \\), which interval is the solution? <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Untuk (x-2)(x-3) < 0, interval manakah yang menjadi solusinya?", opts: ["\\( x < 2 \\)", "\\( x > 3 \\)", "\\( 2 < x < 3 \\)", "\\( x < 2 \\cup x > 3 \\)", "All real numbers"], ans: "\\( 2 < x < 3 \\)", exp: "Opens upwards (positive). We want \\( < 0 \\) (negative), which is BETWEEN the roots 2 and 3.", exp_trans: "Terbuka ke atas (positif). Kita mau < 0 (negatif), yaitu DI ANTARA akar 2 dan 3." },
+            "p-task4": { type: "single", q: "Solve \\( x^2 - 5x + 6 \\geq 0 \\). <i class='fas fa-square text-orange-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 5x + 6 ≥ 0.", opts: ["\\( 2 \\leq x \\leq 3 \\)", "\\( x \\leq 2 \\cup x \\geq 3 \\)", "\\( x < 2 \\cup x > 3 \\)", "\\( 2 < x < 3 \\)", "No solution"], ans: "\\( x \\leq 2 \\cup x \\geq 3 \\)", exp: "Roots 2, 3. Positive outside. \\( \\geq \\) includes the roots.", exp_trans: "Akar 2, 3. Positif di luar. ≥ termasuk akar-akarnya." },
+            "p-task5": { type: "single", q: "Which test point makes \\( (x+1)(x-1) > 0 \\) true? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Titik uji manakah yang membuat (x+1)(x-1) > 0 benar?", opts: ["\\( x = 0 \\)", "\\( x = 0.5 \\)", "\\( x = 2 \\)", "\\( x = -0.5 \\)", "\\( x = 1 \\)"], ans: "\\( x = 2 \\)", exp: "Interval \\( x > 1 \\) works. Test \\( x=2 \\): \\( (2+1)(2-1) = 3(1) = 3 > 0 \\). True!", exp_trans: "Interval x > 1 berhasil. Uji x=2: (2+1)(2-1) = 3(1) = 3 > 0. Benar!" },
+            "p-task6": { type: "fill", q: "For \\( x^2 < 25 \\), the solution is \\( -5 < x < a \\). What is \\( a \\)? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Untuk x^2 < 25, solusinya -5 < x < a. Berapakah a?", ans: "5", exp: "\\( x^2 < 25 \\implies -5 < x < 5 \\). So \\( a = 5 \\).", exp_trans: "x^2 < 25 maka -5 < x < 5. Jadi a = 5." },
+            "p-task7": { type: "single", q: "Solve \\( (x-4)(x+2) \\leq 0 \\). <i class='fas fa-flag-checkered text-orange-500 ml-2'></i>", q_trans: "Selesaikan (x-4)(x+2) ≤ 0.", opts: ["\\( x < -2 \\cup x > 4 \\)", "\\( -2 \\leq x \\leq 4 \\)", "\\( -2 < x < 4 \\)", "\\( x \\leq -2 \\cup x \\geq 4 \\)", "\\( x = -2 \\)"], ans: "\\( -2 \\leq x \\leq 4 \\)", exp: "Opens upwards. \\( \\leq 0 \\) means between roots. Closed brackets for \\( \\leq \\).", exp_trans: "Terbuka ke atas. ≤ 0 berarti di antara akar. Kurung siku tertutup untuk ≤." },
+            "p-task8": { type: "single", q: "Which interval is NOT part of the solution to \\( x^2 - 1 > 0 \\)? <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Interval manakah yang BUKAN bagian dari solusi x^2 - 1 > 0?", opts: ["\\( x < -1 \\)", "\\( x > 1 \\)", "\\( -1 < x < 1 \\)", "\\( x = 2 \\)", "\\( x = -2 \\)"], ans: "\\( -1 < x < 1 \\)", exp: "Solution is outside roots \\( \\pm 1 \\). The inside interval is NOT part of it.", exp_trans: "Solusinya di luar akar ±1. Interval di dalamnya BUKAN bagiannya." },
+            "p-task9": { type: "single", q: "What is the first step to solve \\( x^2 + 2x < 8 \\)? <i class='fas fa-route text-orange-500 ml-2'></i>", q_trans: "Apa langkah pertama untuk menyelesaikan x^2 + 2x < 8?", opts: ["Divide by x", "Subtract 8 from both sides", "Multiply by -1", "Factor it immediately", "Take square root"], ans: "Subtract 8 from both sides", exp: "Must set to 0: \\( x^2 + 2x - 8 < 0 \\). Then factor.", exp_trans: "Harus diatur ke 0: x^2 + 2x - 8 < 0. Lalu difaktorkan." },
+            "p-task10": { type: "single", q: "Which inequality has solution \\( x < -3 \\cup x > 2 \\)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang solusinya x < -3 ∪ x > 2?", opts: ["\\( (x+3)(x-2) < 0 \\)", "\\( (x+3)(x-2) > 0 \\)", "\\( (x-3)(x+2) > 0 \\)", "\\( (x-3)(x+2) < 0 \\)", "\\( x^2 - 5x - 6 < 0 \\)"], ans: "\\( (x+3)(x-2) > 0 \\)", exp: "Roots -3, 2. Outside roots means \\( > 0 \\). Equation is \\( (x+3)(x-2) > 0 \\).", exp_trans: "Akar -3, 2. Di luar akar berarti > 0. Persamaannya (x+3)(x-2) > 0." },
+
+            // GUIDED PRACTICE
+            "g-task1": { type: "single", q: "Solve \\( x^2 - 4 < 0 \\). <i class='fas fa-chalkboard-teacher text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 4 < 0.", opts: ["\\( x < -2 \\cup x > 2 \\)", "\\( -2 < x < 2 \\)", "\\( x < 2 \\)", "\\( x > -2 \\)", "No solution"], ans: "\\( -2 < x < 2 \\)", exp: "Roots \\( \\pm 2 \\). Opens up. \\( < 0 \\) is between roots.", exp_trans: "Akar ±2. Terbuka ke atas. < 0 ada di antara akar." },
+            "g-task2": { type: "fill", q: "Solve \\( x^2 - 9 > 0 \\). The solution is \\( x < -a \\cup x > a \\). What is \\( a \\)? <i class='fas fa-square text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 9 > 0. Solusinya x < -a ∪ x > a. Berapakah a?", ans: "3", exp: "Roots are \\( \\pm 3 \\). Outside roots. So \\( a = 3 \\).", exp_trans: "Akar-akarnya ±3. Di luar akar. Jadi a = 3." },
+            "g-task3": { type: "single", q: "Solve \\( x^2 - 5x + 6 > 0 \\). <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 5x + 6 > 0.", opts: ["\\( 2 < x < 3 \\)", "\\( x < 2 \\cup x > 3 \\)", "\\( x < 3 \\)", "\\( x > 2 \\)", "All real numbers"], ans: "\\( x < 2 \\cup x > 3 \\)", exp: "Factor: \\( (x-2)(x-3) > 0 \\). Roots 2, 3. Positive is outside.", exp_trans: "Faktor: (x-2)(x-3) > 0. Akar 2, 3. Positif di luar." },
+            "g-task4": { type: "single", q: "Solve \\( x^2 - x - 12 \\leq 0 \\). <i class='fas fa-plug text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - x - 12 ≤ 0.", opts: ["\\( -3 \\leq x \\leq 4 \\)", "\\( x \\leq -3 \\cup x \\geq 4 \\)", "\\( -4 \\leq x \\leq 3 \\)", "\\( x < -3 \\cup x > 4 \\)", "No solution"], ans: "\\( -3 \\leq x \\leq 4 \\)", exp: "Factor: \\( (x+3)(x-4) \\leq 0 \\). Roots -3, 4. \\( \\leq 0 \\) is between roots.", exp_trans: "Faktor: (x+3)(x-4) ≤ 0. Akar -3, 4. ≤ 0 ada di antara akar." },
+            "g-task5": { type: "single", q: "Solve \\( -x^2 + 1 > 0 \\). <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Selesaikan -x^2 + 1 > 0.", opts: ["\\( x < -1 \\cup x > 1 \\)", "\\( -1 < x < 1 \\)", "\\( x < 1 \\)", "\\( x > -1 \\)", "No solution"], ans: "\\( -1 < x < 1 \\)", exp: "Multiply by -1: \\( x^2 - 1 < 0 \\). Roots \\( \\pm 1 \\). Between roots.", exp_trans: "Kalikan -1: x^2 - 1 < 0. Akar ±1. Di antara akar." },
+            "g-task6": { type: "fill", q: "Solve \\( -x^2 + 4 \\geq 0 \\). The solution is \\( -a \\leq x \\leq a \\). What is \\( a \\)? <i class='fas fa-wallet text-blue-500 ml-2'></i>", q_trans: "Selesaikan -x^2 + 4 ≥ 0. Solusinya -a ≤ x ≤ a. Berapakah a?", ans: "2", exp: "Multiply by -1: \\( x^2 - 4 \\leq 0 \\implies -2 \\leq x \\leq 2 \\). So \\( a = 2 \\).", exp_trans: "Kalikan -1: x^2 - 4 ≤ 0 maka -2 ≤ x ≤ 2. Jadi a = 2." },
+            "g-task7": { type: "single", q: "Solve \\( x^2 - 6x + 9 > 0 \\). <i class='fas fa-money-bill text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 6x + 9 > 0.", opts: ["\\( x = 3 \\)", "\\( x \\neq 3 \\)", "\\( x < 3 \\)", "\\( x > 3 \\)", "All real numbers"], ans: "\\( x \\neq 3 \\)", exp: "\\( (x-3)^2 > 0 \\). A square is always positive except at root \\( x=3 \\). So solution is all \\( x \\) except 3.", exp_trans: "(x-3)^2 > 0. Kuadrat selalu positif kecuali di akar x=3. Jadi solusinya semua x kecuali 3." },
+            "g-task8": { type: "single", q: "Which interval is true for \\( (x-1)(x+5) < 0 \\)? <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Interval manakah yang benar untuk (x-1)(x+5) < 0?", opts: ["\\( x < -5 \\)", "\\( x > 1 \\)", "\\( -5 < x < 1 \\)", "\\( -1 < x < 5 \\)", "\\( x < 1 \\)"], ans: "\\( -5 < x < 1 \\)", exp: "Roots -5, 1. Opens up. \\( < 0 \\) is between roots.", exp_trans: "Akar -5, 1. Terbuka ke atas. < 0 ada di antara akar." },
+            "g-task9": { type: "single", q: "Solve \\( 2x^2 - 8x < 0 \\). <i class='fas fa-route text-blue-500 ml-2'></i>", q_trans: "Selesaikan 2x^2 - 8x < 0.", opts: ["\\( x < 0 \\cup x > 4 \\)", "\\( 0 < x < 4 \\)", "\\( x < 4 \\)", "\\( x > 0 \\)", "No solution"], ans: "\\( 0 < x < 4 \\)", exp: "Factor: \\( 2x(x-4) < 0 \\). Roots 0, 4. Between roots is true.", exp_trans: "Faktor: 2x(x-4) < 0. Akar 0, 4. Di antara akar benar." },
+            "g-task10": { type: "single", q: "Solve \\( x^2 - 10x + 25 \\leq 0 \\). <i class='fas fa-check-circle text-blue-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 10x + 25 ≤ 0.", opts: ["\\( x = 5 \\)", "\\( x \\neq 5 \\)", "\\( x < 5 \\)", "\\( x > 5 \\)", "All real numbers"], ans: "\\( x = 5 \\)", exp: "\\( (x-5)^2 \\leq 0 \\). A square can never be negative, so it must be exactly 0. \\( x = 5 \\).", exp_trans: "(x-5)^2 ≤ 0. Kuadrat tidak pernah negatif, jadi harus tepat 0. x = 5." },
+
+            // INDEPENDENT PRACTICE
+            "ind-task1": { type: "single", q: "A rectangle has length \\( x+3 \\) and width \\( x \\). Area must be greater than 10. Which inequality holds? <i class='fas fa-route text-indigo-500 ml-2'></i>", q_trans: "Persegi panjang memiliki panjang x+3 dan lebar x. Luas harus lebih besar dari 10. Pertidaksamaan manakah yang berlaku?", opts: ["\\( x^2 + 3x > 10 \\)", "\\( x^2 + 3x < 10 \\)", "\\( x^2 + 3x \\geq 10 \\)", "\\( x^2 + 3x \\leq 10 \\)", "\\( x^2 - 3x > 10 \\)"], ans: "\\( x^2 + 3x > 10 \\)", exp: "Area = \\( x(x+3) = x^2 + 3x \\). Must be \\( > 10 \\).", exp_trans: "Luas = x(x+3) = x^2 + 3x. Harus > 10." },
+            "ind-task2": { type: "fill", q: "A rectangle has length \\( x+3 \\) and width \\( x \\). Area must be less than 10. From \\( x^2 + 3x - 10 < 0 \\), roots are -5 and 2. Since width \\( x > 0 \\), what is the valid range for \\( x \\)? (Format: a < x < b) <i class='fas fa-equals text-indigo-500 ml-2'></i>", q_trans: "Persegi panjang memiliki panjang x+3 dan lebar x. Luas harus kurang dari 10. Dari x^2 + 3x - 10 < 0, akarnya -5 dan 2. Karena lebar x > 0, berapakah rentang yang valid untuk x? (Format: a < x < b)", ans: "0 < x < 2", exp: "For Area < 10, the inequality is \\( x^2 + 3x - 10 < 0 \\). Roots are -5 and 2. The solution between roots is \\( -5 < x < 2 \\). Intersecting with the physical limit \\( x > 0 \\), we get \\( 0 < x < 2 \\).", exp_trans: "Untuk Luas < 10, pertidaksamaannya adalah x^2 + 3x - 10 < 0. Akar-akarnya -5 dan 2. Solusi di antara akar adalah -5 < x < 2. Diiriskan dengan batas fisik x > 0, kita dapat 0 < x < 2." },
+            "ind-task3": { type: "single", q: "Solve \\( \\frac{x-2}{x+1} > 0 \\). <i class='fas fa-list-ul text-indigo-500 ml-2'></i>", q_trans: "Selesaikan (x-2)/(x+1) > 0.", opts: ["\\( -1 < x < 2 \\)", "\\( x < -1 \\cup x > 2 \\)", "\\( -2 < x < 1 \\)", "\\( x < 1 \\cup x > 2 \\)", "No solution"], ans: "\\( x < -1 \\cup x > 2 \\)", exp: "Critical vals -1, 2. Same sign means positive. Left of -1 (both neg) and right of 2 (both pos).", exp_trans: "Nilai kritis -1, 2. Tanda sama berarti positif. Kiri -1 (keduanya neg) dan kanan 2 (keduanya pos)." },
+            "ind-task4": { type: "single", q: "Solve \\( \\frac{x+3}{x-1} \\leq 0 \\). <i class='fas fa-calculator text-indigo-500 ml-2'></i>", q_trans: "Selesaikan (x+3)/(x-1) ≤ 0.", opts: ["\\( -3 \\leq x \\leq 1 \\)", "\\( -3 \\leq x < 1 \\)", "\\( x \\leq -3 \\cup x > 1 \\)", "\\( -1 \\leq x < 3 \\)", "No solution"], ans: "\\( -3 \\leq x < 1 \\)", exp: "Crit vals -3, 1. Opposite signs mean negative. Between -3 and 1. Include -3 (makes num 0), exclude 1 (denom 0).", exp_trans: "Nilai kritis -3, 1. Tanda berlawanan berarti negatif. Antara -3 dan 1. Sertakan -3 (membuat num 0), kecualikan 1 (penyebut 0)." },
+            "ind-task5": { type: "single", q: "Profit \\( P = -x^2 + 10x - 16 \\). For profit \\( > 0 \\), what is valid range of \\( x \\)? <i class='fas fa-check-double text-indigo-500 ml-2'></i>", q_trans: "Keuntungan P = -x^2 + 10x - 16. Agar untung > 0, berapakah rentang valid x?", opts: ["\\( x < 2 \\cup x > 8 \\)", "\\( 2 < x < 8 \\)", "\\( x < 8 \\)", "\\( x > 2 \\)", "No profit possible"], ans: "\\( 2 < x < 8 \\)", exp: "\\( -x^2 + 10x - 16 > 0 \\implies x^2 - 10x + 16 < 0 \\). Roots 2, 8. Between roots is negative for the new equation, which is positive for the original. So \\( 2 < x < 8 \\).", exp_trans: "-x^2 + 10x - 16 > 0 maka x^2 - 10x + 16 < 0. Akar 2, 8. Di antara akar negatif untuk persamaan baru, yang positif untuk aslinya. Jadi 2 < x < 8." },
+            "ind-task6": { type: "fill", q: "Solve \\( \\frac{1}{x} < 0 \\). If \\( x < a \\), what is \\( a \\)? <i class='fas fa-ticket text-indigo-500 ml-2'></i>", q_trans: "Selesaikan 1/x < 0. Jika x < a, berapakah a?", ans: "0", exp: "1 is always positive. For the fraction to be negative, \\( x \\) must be negative. So \\( x < 0 \\). \\( a = 0 \\).", exp_trans: "1 selalu positif. Agar pecahan negatif, x harus negatif. Jadi x < 0. a = 0." },
+            "ind-task7": { type: "single", q: "From \\( x^2 - 4x - 5 \\geq 0 \\), roots are -1, 5. What is the solution set? <i class='fas fa-user-tie text-indigo-500 ml-2'></i>", q_trans: "Dari x^2 - 4x - 5 ≥ 0, akarnya -1, 5. Berapakah himpunan penyelesaiannya?", opts: ["\\( -1 \\leq x \\leq 5 \\)", "\\( x \\leq -1 \\cup x \\geq 5 \\)", "\\( -1 < x < 5 \\)", "\\( x < -1 \\cup x > 5 \\)", "All real numbers"], ans: "\\( x \\leq -1 \\cup x \\geq 5 \\)", exp: "Opens up. \\( \\geq 0 \\) is outside roots. Include roots.", exp_trans: "Terbuka ke atas. ≥ 0 ada di luar akar. Sertakan akar." },
+            "ind-task8": { type: "single", q: "Solve \\( x^2 - 2x + 1 < 0 \\). <i class='fas fa-clipboard-check text-indigo-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 2x + 1 < 0.", opts: ["\\( x = 1 \\)", "\\( x \\neq 1 \\)", "\\( x < 1 \\)", "\\( x > 1 \\)", "No solution (Empty Set)"], ans: "No solution (Empty Set)", exp: "\\( (x-1)^2 < 0 \\). A square can never be strictly less than 0. No solution.", exp_trans: "(x-1)^2 < 0. Kuadrat tidak pernah kurang dari 0. Tidak ada solusi." },
+            "ind-task9": { type: "single", q: "Solve \\( x^2 - 7x + 10 \\leq 0 \\). <i class='fas fa-pen text-indigo-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 7x + 10 ≤ 0.", opts: ["\\( 2 \\leq x \\leq 5 \\)", "\\( x \\leq 2 \\cup x \\geq 5 \\)", "\\( 2 < x < 5 \\)", "\\( x < 2 \\cup x > 5 \\)", "No solution"], ans: "\\( 2 \\leq x \\leq 5 \\)", exp: "Factor: \\( (x-2)(x-5) \\leq 0 \\). Roots 2, 5. Between roots, closed brackets.", exp_trans: "Faktor: (x-2)(x-5) ≤ 0. Akar 2, 5. Di antara akar, kurung siku tertutup." },
+            "ind-task10": { type: "single", q: "Which of the following is true about \\( x^2 + 1 > 0 \\)? <i class='fas fa-check-circle text-indigo-500 ml-2'></i>", q_trans: "Manakah dari pernyataan berikut yang benar tentang x^2 + 1 > 0?", opts: ["Solution is \\( x > -1 \\)", "Solution is \\( x < -1 \\)", "Solution is all real numbers", "No solution", "Solution is \\( x = 0 \\)"], ans: "Solution is all real numbers", exp: "\\( x^2 \\) is always \\( \\geq 0 \\), so \\( x^2 + 1 \\) is always \\( \\geq 1 \\), which is always \\( > 0 \\).", exp_trans: "x^2 selalu ≥ 0, jadi x^2 + 1 selalu ≥ 1, yang selalu > 0." }
+        });
+		
+        Object.assign(questions, {
+            // TASK 1: Real-World Linear Inequalities
+            "t1-task1": { type: "single", q: "A taxi charges $3 base fare plus $2 per km. If you have $15, what is the maximum distance you can travel? <i class='fas fa-taxi text-orange-500 ml-2'></i>", q_trans: "Taksi mengenakan tarif dasar $3 ditambah $2 per km. Jika Anda punya $15, berapa jarak maksimum yang dapat ditempuh?", opts: ["\\( 5 \\text{ km} \\)", "\\( 6 \\text{ km} \\)", "\\( 7 \\text{ km} \\)", "\\( 8 \\text{ km} \\)", "\\( 10 \\text{ km} \\)"], ans: "\\( 6 \\text{ km} \\)", exp: "Let \\( x \\) be distance. Cost \\( = 3 + 2x \\leq 15 \\implies 2x \\leq 12 \\implies x \\leq 6 \\). Max distance is 6 km.", exp_trans: "Misalkan x adalah jarak. Biaya = 3 + 2x ≤ 15 maka 2x ≤ 12 maka x ≤ 6. Jarak maksimum adalah 6 km." },
+            "t1-task2": { type: "fill", q: "A baker needs to sell more than 50 cakes to make a profit. If he sold 20 today, how many more (\\( x \\)) must he sell? <i class='fas fa-cake-candles text-orange-500 ml-2'></i>", q_trans: "Seorang tukang roti harus menjual lebih dari 50 kue untuk untung. Jika dia menjual 20 hari ini, berapa banyak lagi (x) yang harus dia jual?", ans: "31", exp: "Total \\( 20 + x > 50 \\implies x > 30 \\). Since he needs to sell MORE, the minimum integer is 31. (If the question implies any number, >30 is the range, but strictly speaking, integer context means 31).", exp_trans: "Total 20 + x > 50 maka x > 30. Karena dia perlu menjual LEBIH, bilangan bulat minimum adalah 31." },
+            "t1-task3": { type: "tf_table", q: "Evaluate the rules of inequalities for the statement: 'A number \\( x \\) is at least 5'. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi aturan pertidaksamaan untuk pernyataan: 'Sebuah bilangan x minimal 5'.", opts: ["It means \\( x \\geq 5 \\)", "It means \\( x > 5 \\)", "5 is included in the solution", "It means \\( x \\leq 5 \\)"], ans: ["B", "S", "B", "S"], exp: "1. B, 'at least' means greater than or equal to. 2. S, it's not strictly greater. 3. B, 5 is included. 4. S, wrong symbol.", exp_trans: "1. B, 'minimal' berarti lebih besar dari atau sama dengan. 2. S. 3. B, 5 termasuk. 4. S." },
+            "t1-task4": { type: "complex", q: "Which of the following values satisfy \\( 2x - 3 < 7 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah dari nilai berikut yang memenuhi 2x - 3 < 7?", opts: ["\\( x = 4 \\)", "\\( x = 5 \\)", "\\( x = 3 \\)", "\\( x = 6 \\)"], ans: [0, 2], exp: "\\( 2x - 3 < 7 \\implies 2x < 10 \\implies x < 5 \\). Only 4 and 3 are strictly less than 5.", exp_trans: "2x - 3 < 7 maka 2x < 10 maka x < 5. Hanya 4 dan 3 yang kurang dari 5." },
+            "t1-task5": { type: "single", q: "To pass the exam, a student needs at least 40 marks. Which inequality represents this? <i class='fas fa-graduation-cap text-orange-500 ml-2'></i>", q_trans: "Untuk lulus ujian, siswa membutuhkan minimal 40 nilai. Pertidaksamaan manakah yang mewakili ini?", opts: ["\\( x > 40 \\)", "\\( x < 40 \\)", "\\( x \\geq 40 \\)", "\\( x \\leq 40 \\)", "\\( x \\neq 40 \\)"], ans: "\\( x \\geq 40 \\)", exp: "'At least' means 40 or more, so \\( \\geq 40 \\).", exp_trans: "'Minimal' berarti 40 atau lebih, jadi ≥ 40." },
+            "t1-task6": { type: "fill", q: "A rectangle has length 12 and width \\( w \\). If its area is greater than 60, what is the minimum integer value of \\( w \\)? <i class='fas fa-vector-square text-orange-500 ml-2'></i>", q_trans: "Persegi panjang memiliki panjang 12 dan lebar w. Jika luasnya lebih besar dari 60, berapakah nilai bilangan bulat minimum dari w?", ans: "6", exp: "Area = \\( 12w > 60 \\implies w > 5 \\). The smallest integer greater than 5 is 6.", exp_trans: "Luas = 12w > 60 maka w > 5. Bilangan bulat terkecil lebih besar dari 5 adalah 6." },
+            "t1-task7": { type: "single", q: "Translate into an inequality: 'A number decreased by 4 is no more than 5.' <i class='fas fa-language text-orange-500 ml-2'></i>", q_trans: "Terjemahkan ke pertidaksamaan: 'Sebuah bilangan dikurangi 4 tidak lebih dari 5.'", opts: ["\\( x - 4 > 5 \\)", "\\( x - 4 \\geq 5 \\)", "\\( x - 4 < 5 \\)", "\\( x - 4 \\leq 5 \\)", "\\( x - 4 = 5 \\)"], ans: "\\( x - 4 \\leq 5 \\)", exp: "'No more than' means less than or equal to \\( \\leq \\). So, \\( x - 4 \\leq 5 \\).", exp_trans: "'Tidak lebih dari' berarti kurang dari atau sama dengan ≤. Jadi, x - 4 ≤ 5." },
+            "t1-task8": { type: "tf_table", q: "Evaluate the steps to solve \\( 3x + 2 \\leq 14 \\). <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi langkah-langkah menyelesaikan 3x + 2 ≤ 14.", opts: ["Subtract 2: \\( 3x \\leq 12 \\)", "Divide by 3: \\( x \\leq 4 \\)", "The sign flips because we subtracted", "4 is included in the solution"], ans: ["B", "B", "S", "B"], exp: "1. B, subtract 2. 2. B, divide by 3. 3. S, sign only flips for mult/div by negative. 4. B, \\( \\leq \\) includes 4.", exp_trans: "1. B. 2. B. 3. S, tanda hanya berbalik untuk kali/bagi negatif. 4. B, ≤ termasuk 4." },
+            "t1-task9": { type: "complex", q: "Which inequalities have 'Maximum' as a keyword? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang memiliki kata kunci 'Maksimum'?", opts: ["\\( x \\leq 10 \\)", "\\( x > 10 \\)", "\\( x \\geq 10 \\)", "\\( x < 10 \\)"], ans: [0, 3], exp: "Maximum means an upper limit, so \\( x \\leq 10 \\) or \\( x < 10 \\) represent maximums.", exp_trans: "Maksimum berarti batas atas, jadi x ≤ 10 atau x < 10 mewakili maksimum." },
+            "t1-task10": { type: "single", q: "If you multiply both sides of \\( -2x > 8 \\) by \\( -1 \\), what is the result? <i class='fas fa-exchange-alt text-orange-500 ml-2'></i>", q_trans: "Jika Anda mengalikan kedua sisi dari -2x > 8 dengan -1, apa hasilnya?", opts: ["\\( 2x > 8 \\)", "\\( 2x < 8 \\)", "\\( 2x > -8 \\)", "\\( 2x < -8 \\)", "\\( -2x < 8 \\)"], ans: "\\( 2x < -8 \\)", exp: "Multiply by -1 and FLIP the sign: \\( 2x < -8 \\).", exp_trans: "Kalikan dengan -1 dan BALIKKAN tanda: 2x < -8." },
+
+            // TASK 2: Solving & Graphing
+            "t2-task1": { type: "single", q: "Solve \\( 4x - 7 < 9 \\). <i class='fas fa-calculator text-orange-500 ml-2'></i>", q_trans: "Selesaikan 4x - 7 < 9.", opts: ["\\( x < 3 \\)", "\\( x < 4 \\)", "\\( x > 4 \\)", "\\( x \\leq 4 \\)", "\\( x > 3 \\)"], ans: "\\( x < 4 \\)", exp: "\\( 4x - 7 < 9 \\implies 4x < 16 \\implies x < 4 \\).", exp_trans: "4x - 7 < 9 maka 4x < 16 maka x < 4." },
+            "t2-task2": { type: "fill", q: "Solve \\( -3x \\geq 12 \\). What is the maximum integer value for \\( x \\)? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan -3x ≥ 12. Berapakah nilai bilangan bulat maksimum untuk x?", ans: "-4", exp: "Divide by -3 and flip: \\( x \\leq -4 \\). The maximum integer less than or equal to -4 is -4 itself.", exp_trans: "Bagi -3 dan balikkan: x ≤ -4. Bilangan bulat maksimum kurang dari atau sama dengan -4 adalah -4 itu sendiri." },
+            "t2-task3": { type: "tf_table", q: "Evaluate the properties of solving \\( 5 - x < 2 \\). <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi sifat penyelesaian 5 - x < 2.", opts: ["Subtract 5: \\( -x < -3 \\)", "Divide by -1 and flip: \\( x > 3 \\)", "The sign does not flip because we only subtracted 5", "Solution includes 3"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B, dividing by negative flips sign. 3. B, subtraction doesn't flip. 4. S, \\( x > 3 \\) does not include 3.", exp_trans: "1. B. 2. B, bagi negatif membalikkan tanda. 3. B, pengurangan tidak membalikkan. 4. S, x > 3 tidak termasuk 3." },
+            "t2-task4": { type: "complex", q: "Which of the following are solutions to \\( 2x + 1 \\leq 7 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Manakah dari berikut ini yang merupakan solusi dari 2x + 1 ≤ 7?", opts: ["\\( x = 3 \\)", "\\( x = 2 \\)", "\\( x = 4 \\)", "\\( x = 0 \\)"], ans: [0, 1, 3], exp: "\\( 2x \\leq 6 \\implies x \\leq 3 \\). 3, 2, and 0 are all \\( \\leq 3 \\).", exp_trans: "2x ≤ 6 maka x ≤ 3. 3, 2, dan 0 semuanya ≤ 3." },
+            "t2-task5": { type: "single", q: "Which number line represents \\( x \\geq -2 \\)? <i class='fas fa-chart-line text-orange-500 ml-2'></i>", q_trans: "Garis bilangan manakah yang mewakili x ≥ -2?", opts: ["Open circle at -2, left", "Closed circle at -2, right", "Open circle at -2, right", "Closed circle at 2, left", "Closed circle at -2, left"], ans: "Closed circle at -2, right", exp: "\\( \\geq \\) means closed circle, and greater than means arrow points right.", exp_trans: "≥ berarti lingkaran tertutup, dan lebih besar dari berarti panah menunjuk ke kanan." },
+            "t2-task6": { type: "fill", q: "A concert ticket costs $25. You have $120. What is the maximum number of tickets you can buy? <i class='fas fa-ticket text-orange-500 ml-2'></i>", q_trans: "Tiket konser berharga $25. Anda punya $120. Berapa jumlah maksimum tiket yang bisa dibeli?", ans: "4", exp: "\\( 25x \\leq 120 \\implies x \\leq 4.8 \\). Since you can't buy 0.8 of a ticket, max is 4.", exp_trans: "25x ≤ 120 maka x ≤ 4.8. Karena Anda tidak bisa membeli 0.8 tiket, maksimum adalah 4." },
+            "t2-task7": { type: "single", q: "Solve \\( \\frac{x}{3} - 4 > -2 \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Selesaikan x/3 - 4 > -2.", opts: ["\\( x > 2 \\)", "\\( x > 6 \\)", "\\( x < 6 \\)", "\\( x > -6 \\)", "\\( x > 18 \\)"], ans: "\\( x > 6 \\)", exp: "Add 4: \\( \\frac{x}{3} > 2 \\). Multiply by 3: \\( x > 6 \\).", exp_trans: "Tambahkan 4: x/3 > 2. Kalikan 3: x > 6." },
+            "t2-task8": { type: "tf_table", q: "Check the solution for \\( -2(x - 3) \\geq 8 \\). <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Periksa solusi untuk -2(x - 3) ≥ 8.", opts: ["Distribute: \\( -2x + 6 \\geq 8 \\)", "Subtract 6: \\( -2x \\geq 2 \\)", "Divide by -2 and flip: \\( x \\leq -1 \\)", "Divide by -2 without flip: \\( x \\geq -1 \\)"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, dividing by negative flips sign. 4. S, must flip.", exp_trans: "1. B. 2. B. 3. B, bagi negatif membalikkan. 4. S, harus dibalik." },
+            "t2-task9": { type: "complex", q: "Which inequalities represent 'twice a number subtracted from 10 is at least 4'? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang mewakili 'dua kali sebuah bilangan dikurangi dari 10 adalah minimal 4'?", opts: ["\\( 10 - 2x \\geq 4 \\)", "\\( 10 - 2x > 4 \\)", "\\( 2x - 10 \\geq 4 \\)", "\\( 10 - 2x \\leq 4 \\)"], ans: [0], exp: "'10 - 2x' is twice a number subtracted from 10. 'At least' means \\( \\geq \\). So \\( 10 - 2x \\geq 4 \\).", exp_trans: "'10 - 2x' adalah dua kali bilangan dikurangi dari 10. 'Minimal' berarti ≥. Jadi 10 - 2x ≥ 4." },
+            "t2-task10": { type: "single", q: "Your phone battery lasts 15 hours. If you use it for 2 hours already, how many hours max are left? <i class='fas fa-battery-half text-orange-500 ml-2'></i>", q_trans: "Baterai ponsel Anda bertahan 15 jam. Jika Anda sudah menggunakannya 2 jam, berapa jam maksimum yang tersisa?", opts: ["\\( x \\geq 13 \\)", "\\( x > 13 \\)", "\\( x \\leq 13 \\)", "\\( x < 13 \\)", "\\( x = 13 \\)"], ans: "\\( x \\leq 13 \\)", exp: "Total time \\( 2 + x \\leq 15 \\implies x \\leq 13 \\).", exp_trans: "Total waktu 2 + x ≤ 15 maka x ≤ 13." },
+
+            // TASK 3: Compound Inequalities
+            "t3-task1": { type: "single", q: "Solve the compound inequality: \\( -2 < x + 3 \\leq 5 \\). <i class='fas fa-code-branch text-orange-500 ml-2'></i>", q_trans: "Selesaikan pertidaksamaan majemuk: -2 < x + 3 ≤ 5.", opts: ["\\( 1 < x \\leq 8 \\)", "\\( -5 < x \\leq 2 \\)", "\\( -5 < x \\leq 8 \\)", "\\( 1 < x \\leq 2 \\)", "\\( -2 < x \\leq 5 \\)"], ans: "\\( -5 < x \\leq 2 \\)", exp: "Subtract 3 from all parts: \\( -2 - 3 < x \\leq 5 - 3 \\implies -5 < x \\leq 2 \\).", exp_trans: "Kurangi 3 dari semua bagian: -2 - 3 < x ≤ 5 - 3 maka -5 < x ≤ 2." },
+            "t3-task2": { type: "fill", q: "Solve \\( 4 \\leq 2x - 2 < 10 \\). What is the smallest integer that satisfies this? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan 4 ≤ 2x - 2 < 10. Berapakah bilangan bulat terkecil yang memenuhi ini?", ans: "3", exp: "Add 2: \\( 6 \\leq 2x < 12 \\). Divide by 2: \\( 3 \\leq x < 6 \\). Smallest integer is 3.", exp_trans: "Tambahkan 2: 6 ≤ 2x < 12. Bagi 2: 3 ≤ x < 6. Bilangan bulat terkecil adalah 3." },
+            "t3-task3": { type: "tf_table", q: "Evaluate the compound inequality \\( x < 3 \\) OR \\( x > 7 \\). <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi pertidaksamaan majemuk x < 3 ATAU x > 7.", opts: ["5 is a solution", "2 is a solution", "8 is a solution", "3 is a solution"], ans: ["S", "B", "B", "S"], exp: "1. S, 5 is between 3 and 7. 2. B, 2 is < 3. 3. B, 8 is > 7. 4. S, 3 is not strictly less than 3.", exp_trans: "1. S, 5 di antara 3 dan 7. 2. B, 2 < 3. 3. B, 8 > 7. 4. S, 3 tidak kurang dari 3." },
+            "t3-task4": { type: "complex", q: "Which values satisfy \\( x \\leq -1 \\) AND \\( x > -5 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Nilai manakah yang memenuhi x ≤ -1 DAN x > -5?", opts: ["\\( x = -2 \\)", "\\( x = 0 \\)", "\\( x = -4 \\)", "\\( x = -1 \\)"], ans: [0, 2, 3], exp: "The intersection is \\( -5 < x \\leq -1 \\). -2, -4, and -1 fall in this range.", exp_trans: "Irisannya adalah -5 < x ≤ -1. -2, -4, dan -1 berada dalam rentang ini." },
+            "t3-task5": { type: "single", q: "A ride requires height to be between 120cm and 150cm inclusive. Which inequality represents this? <i class='fas fa-ruler-vertical text-orange-500 ml-2'></i>", q_trans: "Wahana membutuhkan tinggi badan antara 120cm dan 150cm inklusif. Pertidaksamaan manakah yang mewakili ini?", opts: ["\\( 120 < h < 150 \\)", "\\( 120 \\leq h \\leq 150 \\)", "\\( 120 < h \\leq 150 \\)", "\\( 120 \\leq h < 150 \\)", "\\( h \\leq 120 \\cup h \\geq 150 \\)"], ans: "\\( 120 \\leq h \\leq 150 \\)", exp: "'Between inclusive' means \\( \\leq \\) on both ends.", exp_trans: "'Antara inklusif' berarti ≤ di kedua ujung." },
+            "t3-task6": { type: "fill", q: "Solve \\( -3 \\leq \\frac{x}{2} < 1 \\). What is the upper bound for \\( x \\)? (Do not include the number itself) <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan -3 ≤ x/2 < 1. Berapakah batas atas untuk x? (Jangan sertakan angka itu sendiri)", ans: "2", exp: "Multiply by 2: \\( -6 \\leq x < 2 \\). Upper bound is 2.", exp_trans: "Kalikan 2: -6 ≤ x < 2. Batas atas adalah 2." },
+            "t3-task7": { type: "single", q: "Temperature \\( T \\) must be above 10 or below -5. Which represents this? <i class='fas fa-temperature-high text-orange-500 ml-2'></i>", q_trans: "Suhu T harus di atas 10 atau di bawah -5. Manakah yang mewakili ini?", opts: ["\\( -5 < T < 10 \\)", "\\( -5 \\leq T \\leq 10 \\)", "\\( T < -5 \\cup T > 10 \\)", "\\( T \\leq -5 \\cup T \\geq 10 \\)", "\\( T < 10 \\cup T > -5 \\)"], ans: "\\( T < -5 \\cup T > 10 \\)", exp: "Above 10 is \\( > 10 \\). Below -5 is \\( < -5 \\). OR means union \\( \\cup \\).", exp_trans: "Di atas 10 berarti > 10. Di bawah -5 berarti < -5. ATAU berarti union ∪." },
+            "t3-task8": { type: "tf_table", q: "Evaluate the solution to \\( 2 < 3x - 1 \\leq 8 \\). <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi solusi untuk 2 < 3x - 1 ≤ 8.", opts: ["Add 1 to all parts: \\( 3 < 3x \\leq 9 \\)", "Divide by 3: \\( 1 < x \\leq 3 \\)", "2 is included in the solution", "1 is included in the solution"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, 2 is between 1 and 3, so it is included. 4. S, 1 is not included because the inequality is strictly \\( > 1 \\).", exp_trans: "1. B. 2. B. 3. B, 2 ada di antara 1 dan 3, jadi termasuk. 4. S, 1 tidak termasuk karena pertidaksamaannya ketat \\( > 1 \\)." },
+            "t3-task9": { type: "complex", q: "Which inequalities are equivalent to \\( x \\leq 5 \\) AND \\( x \\geq -2 \\)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang ekuivalen dengan x ≤ 5 DAN x ≥ -2?", opts: ["\\( -2 \\leq x \\leq 5 \\)", "\\( x \\in [-2, 5] \\)", "\\( -2 < x < 5 \\)", "\\( -2 \\leq x < 5 \\)"], ans: [0, 1], exp: "AND means intersection. \\( x \\geq -2 \\) and \\( x \\leq 5 \\) can be written as \\( -2 \\leq x \\leq 5 \\), which is the interval \\( [-2, 5] \\).", exp_trans: "DAN berarti irisan. x ≥ -2 dan x ≤ 5 dapat ditulis -2 ≤ x ≤ 5, yang merupakan interval [-2, 5]." },
+            "t3-task10": { type: "single", q: "Solve \\( -4 < 2x \\leq 6 \\). <i class='fas fa-calculator text-orange-500 ml-2'></i>", q_trans: "Selesaikan -4 < 2x ≤ 6.", opts: ["\\( -2 < x \\leq 3 \\)", "\\( -2 \\leq x < 3 \\)", "\\( -8 < x \\leq 12 \\)", "\\( -2 < x < 3 \\)", "\\( -4 < x \\leq 3 \\)"], ans: "\\( -2 < x \\leq 3 \\)", exp: "Divide all parts by 2: \\( -4/2 < 2x/2 \\leq 6/2 \\implies -2 < x \\leq 3 \\).", exp_trans: "Bagi semua bagian dengan 2: -4/2 < 2x/2 ≤ 6/2 maka -2 < x ≤ 3." },
+
+            // TASK 4: Quadratic Inequalities
+            "t4-task1": { type: "single", q: "Solve \\( x^2 - 16 > 0 \\). <i class='fas fa-superscript text-orange-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 16 > 0.", opts: ["\\( -4 < x < 4 \\)", "\\( x < -4 \\cup x > 4 \\)", "\\( x < 4 \\)", "\\( x > 4 \\)", "All real numbers"], ans: "\\( x < -4 \\cup x > 4 \\)", exp: "Roots are \\( \\pm 4 \\). Opens upwards (positive). \\( > 0 \\) means outside the roots.", exp_trans: "Akar-akarnya ±4. Terbuka ke atas (positif). > 0 berarti di luar akar." },
+            "t4-task2": { type: "fill", q: "Solve \\( x^2 - 9 \\leq 0 \\). If the solution is \\( -a \\leq x \\leq a \\), what is \\( a \\)? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 9 ≤ 0. Jika solusinya -a ≤ x ≤ a, berapakah a?", ans: "3", exp: "Roots are \\( \\pm 3 \\). Opens up. \\( \\leq 0 \\) is between roots. So \\( -3 \\leq x \\leq 3 \\). \\( a = 3 \\).", exp_trans: "Akar-akarnya ±3. Terbuka ke atas. ≤ 0 ada di antara akar. Jadi -3 ≤ x ≤ 3. a = 3." },
+            "t4-task3": { type: "tf_table", q: "Evaluate the properties of \\( y = -x^2 + 4 \\). <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi sifat-sifat dari y = -x^2 + 4.", opts: ["It opens downwards", "Roots are \\( x = \\pm 2 \\)", "The maximum point is at \\( y = 4 \\)", "The graph is always positive"], ans: ["B", "B", "B", "S"], exp: "1. B, negative leading coefficient. 2. B, \\( x^2 = 4 \\implies x = \\pm 2 \\). 3. B, vertex is at (0,4). 4. S, it goes down to negative infinity.", exp_trans: "1. B, koefisien utama negatif. 2. B. 3. B, puncak di (0,4). 4. S, grafik turun ke negatif tak hingga." },
+            "t4-task4": { type: "complex", q: "Which values satisfy \\( (x-1)(x-3) > 0 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Nilai manakah yang memenuhi (x-1)(x-3) > 0?", opts: ["\\( x = 0 \\)", "\\( x = 2 \\)", "\\( x = 4 \\)", "\\( x = 1 \\)"], ans: [0, 2], exp: "Roots 1, 3. Opens up. \\( > 0 \\) is outside. 0 is < 1. 4 is > 3. So 0 and 4 work.", exp_trans: "Akar 1, 3. Terbuka ke atas. > 0 ada di luar. 0 < 1. 4 > 3. Jadi 0 dan 4 berhasil." },
+            "t4-task5": { type: "single", q: "A ball is thrown and its height is \\( h = -t^2 + 4t \\). When is \\( h > 0 \\)? <i class='fas fa-baseball-ball text-orange-500 ml-2'></i>", q_trans: "Bola dilempar dan ketinggiannya h = -t^2 + 4t. Kapan h > 0?", opts: ["\\( t < 0 \\cup t > 4 \\)", "\\( 0 < t < 4 \\)", "\\( t < 4 \\)", "\\( t > 0 \\)", "Never"], ans: "\\( 0 < t < 4 \\)", exp: "Roots 0, 4. Opens down. \\( > 0 \\) is between roots.", exp_trans: "Akar 0, 4. Terbuka ke bawah. > 0 ada di antara akar." },
+            "t4-task6": { type: "fill", q: "Solve \\( x^2 - 5x + 6 < 0 \\). If the roots are 2 and 3, what is the upper bound of the solution? (Do not include the number) <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 5x + 6 < 0. Jika akarnya 2 dan 3, berapakah batas atas solusinya? (Jangan sertakan angkanya)", ans: "3", exp: "Opens up. \\( < 0 \\) is between roots. Solution is \\( 2 < x < 3 \\). Upper bound is 3.", exp_trans: "Terbuka ke atas. < 0 ada di antara akar. Solusinya 2 < x < 3. Batas atas adalah 3." },
+            "t4-task7": { type: "single", q: "Profit \\( P = -x^2 + 10x - 16 \\). For profit \\( > 0 \\), what is valid range of \\( x \\)? <i class='fas fa-money-bill-trend-up text-orange-500 ml-2'></i>", q_trans: "Keuntungan P = -x^2 + 10x - 16. Agar untung > 0, berapakah rentang valid x?", opts: ["\\( x < 2 \\cup x > 8 \\)", "\\( 2 < x < 8 \\)", "\\( x < 8 \\)", "\\( x > 2 \\)", "No profit possible"], ans: "\\( 2 < x < 8 \\)", exp: "\\( -x^2 + 10x - 16 > 0 \\implies x^2 - 10x + 16 < 0 \\). Roots 2, 8. Between roots is negative for the new equation, which is positive for the original.", exp_trans: "-x^2 + 10x - 16 > 0 maka x^2 - 10x + 16 < 0. Akar 2, 8. Di antara akar negatif untuk persamaan baru, yang berarti positif untuk aslinya." },
+            "t4-task8": { type: "tf_table", q: "Evaluate \\( x^2 - 4x + 4 \\leq 0 \\). <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi x^2 - 4x + 4 ≤ 0.", opts: ["It factors to \\( (x-2)^2 \\leq 0 \\)", "A square can never be strictly less than 0", "The only solution is \\( x = 2 \\)", "The solution is all real numbers"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B, squares are \\( \\geq 0 \\). 3. B, the only time it is \\( \\leq 0 \\) is when it equals 0, so \\( x = 2 \\). 4. S.", exp_trans: "1. B. 2. B, kuadrat selalu ≥ 0. 3. B, satu-satunya saat ≤ 0 adalah saat sama dengan 0, jadi x = 2. 4. S." },
+            "t4-task9": { type: "complex", q: "Which inequalities have the solution 'All real numbers'? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Pertidaksamaan manakah yang solusinya 'Semua bilangan real'?", opts: ["\\( x^2 + 1 > 0 \\)", "\\( -x^2 - 1 < 0 \\)", "\\( x^2 - 1 > 0 \\)", "\\( (x-2)^2 \\geq 0 \\)"], ans: [0, 1, 3], exp: "1. B, \\( x^2 \\geq 0 \\implies x^2 + 1 \\geq 1 > 0 \\). 2. B, \\( -x^2 - 1 \\leq -1 < 0 \\). 3. S, has roots. 4. B, squares are always \\( \\geq 0 \\).", exp_trans: "1. B. 2. B. 3. S, punya akar. 4. B, kuadrat selalu ≥ 0." },
+            "t4-task10": { type: "single", q: "Solve \\( x^2 - 7x + 10 \\geq 0 \\). <i class='fas fa-flag-checkered text-orange-500 ml-2'></i>", q_trans: "Selesaikan x^2 - 7x + 10 ≥ 0.", opts: ["\\( 2 \\leq x \\leq 5 \\)", "\\( x \\leq 2 \\cup x \\geq 5 \\)", "\\( 2 < x < 5 \\)", "\\( x < 2 \\cup x > 5 \\)", "No solution"], ans: "\\( x \\leq 2 \\cup x \\geq 5 \\)", exp: "Factor: \\( (x-2)(x-5) \\geq 0 \\). Roots 2, 5. Opens up. \\( \\geq 0 \\) is outside, including roots.", exp_trans: "Faktor: (x-2)(x-5) ≥ 0. Akar 2, 5. Terbuka ke atas. ≥ 0 ada di luar, termasuk akar." },
+
+            // TASK 5: Rational & Advanced
+            "t5-task1": { type: "single", q: "Solve \\( \\frac{x-2}{x+1} > 0 \\). <i class='fas fa-divide text-orange-500 ml-2'></i>", q_trans: "Selesaikan (x-2)/(x+1) > 0.", opts: ["\\( -1 < x < 2 \\)", "\\( x < -1 \\cup x > 2 \\)", "\\( -2 < x < 1 \\)", "\\( x < 1 \\cup x > 2 \\)", "No solution"], ans: "\\( x < -1 \\cup x > 2 \\)", exp: "Critical vals -1, 2. Same sign means positive. Left of -1 (both neg) and right of 2 (both pos).", exp_trans: "Nilai kritis -1, 2. Tanda sama berarti positif. Kiri -1 dan kanan 2." },
+            "t5-task2": { type: "fill", q: "Solve \\( \\frac{x+3}{x-1} \\leq 0 \\). If the solution is \\( -3 \\leq x < a \\), what is \\( a \\)? <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Selesaikan (x+3)/(x-1) ≤ 0. Jika solusinya -3 ≤ x < a, berapakah a?", ans: "1", exp: "Crit vals -3, 1. Opposite signs mean negative. Between -3 and 1. Include -3 (num 0), exclude 1 (denom 0). So \\( a = 1 \\).", exp_trans: "Nilai kritis -3, 1. Tanda berlawanan berarti negatif. Antara -3 dan 1. Sertakan -3, kecualikan 1. Jadi a = 1." },
+            "t5-task3": { type: "tf_table", q: "Evaluate the rational inequality \\( \\frac{1}{x} < 0 \\). <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluasi pertidaksamaan rasional 1/x < 0.", opts: ["Numerator is always positive", "Solution is \\( x < 0 \\)", "0 is included in the solution", "Solution is \\( x > 0 \\)"], ans: ["B", "B", "S", "S"], exp: "1. B. 2. B, for fraction to be negative, den must be negative, so \\( x < 0 \\). 3. S, 0 makes it undefined. 4. S.", exp_trans: "1. B. 2. B, penyebut harus negatif, jadi x < 0. 3. S, 0 tidak terdefinisi. 4. S." },
+            "t5-task4": { type: "complex", q: "Which values satisfy \\( \\frac{2x}{x-2} \\geq 0 \\)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Nilai manakah yang memenuhi 2x/(x-2) ≥ 0?", opts: ["\\( x = 0 \\)", "\\( x = 1 \\)", "\\( x = 2 \\)", "\\( x = 3 \\)"], ans: [0, 3], exp: "Crit vals 0, 2. Same sign or 0. \\( x \\leq 0 \\cup x > 2 \\). 0 works (equals 0). 1 is between (fails). 2 is excluded. 3 is > 2 (works).", exp_trans: "Nilai kritis 0, 2. Tanda sama atau 0. x ≤ 0 ∪ x > 2. 0 berhasil. 1 gagal. 2 dikecualikan. 3 berhasil." },
+            "t5-task5": { type: "single", q: "A worker produces \\( x \\) items per hour. He needs to produce more than 20 in 3 hours. Which inequality is correct? <i class='fas fa-tools text-orange-500 ml-2'></i>", q_trans: "Pekerja menghasilkan x barang per jam. Dia perlu menghasilkan lebih dari 20 dalam 3 jam. Pertidaksamaan manakah yang benar?", opts: ["\\( 3x > 20 \\)", "\\( x + 3 > 20 \\)", "\\( 3x < 20 \\)", "\\( x/3 > 20 \\)", "\\( 3x \\geq 20 \\)"], ans: "\\( 3x > 20 \\)", exp: "Total items = rate * time = \\( x \\cdot 3 \\). Must be > 20.", exp_trans: "Total barang = kecepatan * waktu = x * 3. Harus > 20." },
+            "t5-task6": { type: "fill", q: "If \\( \\frac{x}{x-1} > 1 \\), moving terms gives \\( \\frac{x}{x-1} - 1 > 0 \\implies \\frac{1}{x-1} > 0 \\). What is the lower bound for \\( x \\)? (Do not include the number) <i class='fas fa-key text-orange-500 ml-2'></i>", q_trans: "Jika x/(x-1) > 1, memindahkan suku memberi x/(x-1) - 1 > 0 maka 1/(x-1) > 0. Berapakah batas bawah untuk x? (Jangan sertakan angkanya)", ans: "1", exp: "\\( \\frac{1}{x-1} > 0 \\). Num is positive, so den must be positive. \\( x - 1 > 0 \\implies x > 1 \\). Lower bound is 1.", exp_trans: "1/(x-1) > 0. Pembilang positif, jadi penyebut harus positif. x - 1 > 0 maka x > 1. Batas bawah adalah 1." },
+            "t5-task7": { type: "single", q: "Solve \\( \\frac{2}{x+2} \\geq 0 \\). <i class='fas fa-route text-orange-500 ml-2'></i>", q_trans: "Selesaikan 2/(x+2) ≥ 0.", opts: ["\\( x > -2 \\)", "\\( x \\geq -2 \\)", "\\( x < -2 \\)", "\\( x \\leq -2 \\)", "All real numbers except -2"], ans: "\\( x > -2 \\)", exp: "Num is always positive. Den must be positive. \\( x + 2 > 0 \\implies x > -2 \\). (-2 excluded because denom can't be 0).", exp_trans: "Pembilang selalu positif. Penyebut harus positif. x + 2 > 0 maka x > -2. (-2 dikecualikan)." },
+            "t5-task8": { type: "tf_table", q: "Evaluate \\( x^2 - 2x - 3 < 0 \\). Roots are -1, 3. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluasi x^2 - 2x - 3 < 0. Akarnya -1, 3.", opts: ["The parabola opens upwards", "The solution is between the roots", "The solution is \\( -1 < x < 3 \\)", "The point (0,0) is in the solution set"], ans: ["B", "B", "B", "B"], exp: "1. B (a=1>0). 2. B, < 0 means between roots. 3. B. 4. B, 0 is between -1 and 3.", exp_trans: "1. B. 2. B, < 0 berarti di antara akar. 3. B. 4. B, 0 ada di antara -1 dan 3." },
+            "t5-task9": { type: "complex", q: "Which of the following inequalities have NO SOLUTION (Empty Set)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Manakah dari pertidaksamaan berikut yang TIDAK MEMILIKI SOLUSI (Himpunan Kosong)?", opts: ["\\( x^2 + 1 < 0 \\)", "\\( -x^2 - 5 > 0 \\)", "\\( (x-2)^2 < 0 \\)", "\\( x^2 - 4 > 0 \\)"], ans: [0, 1, 2], exp: "1. B, squares are positive. 2. B, \\( -x^2 - 5 \\) is always negative. 3. B, squares can't be negative. 4. S, has real solutions.", exp_trans: "1. B. 2. B. 3. B. 4. S, punya solusi real." },
+            "t5-task10": { type: "single", q: "Final Challenge: Solve \\( \\frac{x-3}{x^2 - 4} \\geq 0 \\). <i class='fas fa-flag-checkered text-orange-500 ml-2'></i>", q_trans: "Tantangan Akhir: Selesaikan (x-3)/(x^2 - 4) ≥ 0.", opts: ["\\( -2 < x \\leq 3 \\)", "\\( -2 < x < 2 \\cup x \\geq 3 \\)", "\\( x < -2 \\cup 2 < x \\leq 3 \\)", "\\( -2 < x < 2 \\)", "\\( x \\geq 3 \\)"], ans: "\\( -2 < x < 2 \\cup x \\geq 3 \\)", exp: "Roots: Numerator is 0 at \\( x=3 \\). Denominator is 0 at \\( x=\\pm 2 \\). Intervals: \\( x<-2 \\) (Neg/Pos = Neg), \\( -2<x<2 \\) (Neg/Neg = Pos), \\( 2<x<3 \\) (Neg/Pos = Neg), \\( x \\geq 3 \\) (Pos/Pos = Pos). We want \\( \\geq 0 \\), so we take the positive intervals and the root \\( x=3 \\). Solution is \\( -2 < x < 2 \\cup x \\geq 3 \\).", exp_trans: "Akar: Pembilang 0 di \\( x=3 \\). Penyebut 0 di \\( x=\\pm 2 \\). Interval: \\( x<-2 \\) (Neg/Pos = Neg), \\( -2<x<2 \\) (Neg/Neg = Pos), \\( 2<x<3 \\) (Neg/Pos = Neg), \\( x \\geq 3 \\) (Pos/Pos = Pos). Kita ingin \\( \\geq 0 \\), jadi kita ambil interval positif dan akar \\( x=3 \\). Solusinya \\( -2 < x < 2 \\cup x \\geq 3 \\)." },
+        });
+        
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-indigo-100', 'text-indigo-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-indigo-100', 'text-indigo-800', 'font-bold');
+                }
+            }
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+            document.getElementById('contentScrollArea').scrollTo(0, 0);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+        
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-indigo-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Latihan'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full shrink-0">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Pilih semua jawaban yang benar. <span class="translation">*Select all correct answers.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox shrink-0" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah. <span class="translation">*Determine True or False.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                let userVal = inputField.value.trim().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                let correctAns = data.ans.toString().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                inputField.disabled = true;
+                isCorrect = (userVal === correctAns);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = inputField.value;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                let sAnsStr = '';
+                let cAnsStr = '';
+                let isCorrect = false;
+                
+                if (data.type === 'complex') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.length > 0 ? cArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    isCorrect = (sArr.length > 0 && sArr.slice().sort().join(',') === cArr.slice().sort().join(','));
+                } else if (data.type === 'tf_table') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.join(' | ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.join(' | ');
+                    isCorrect = (sArr.length > 0 && sArr.join(',') === cArr.join(','));
+                } else {
+                    sAnsStr = studentAns || 'Tidak Dijawab';
+                    cAnsStr = correctAns;
+                    let userValNorm = (studentAns || '').toString().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                    let correctAnsNorm = correctAns.toString().toLowerCase().replace(/\s/g, '').replace('rp', '').replace('rb', '').replace(',', '.');
+                    isCorrect = (userValNorm === correctAnsNorm);
+                }
+                
+                let note = '❌';
+                if(isCorrect) { score++; note = '✔️'; }
+                
+                let qText = data.q.replace(/<[^>]+>/g, '');
+                if (data.type === 'tf_table') {
+                    qText += " | Statements: " + data.opts.map((opt, idx) => `${idx+1}. ${opt}`).join(" ; ");
+                }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${qText}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            if (typeof renderMathInElement === 'undefined') return;
+            
+            const target = document.querySelector('.content-section.active') || document.body;
+            try {
+                renderMathInElement(target, {
+                    delimiters: [
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            } catch(e) {
+                console.error("KaTeX rendering error:", e);
+            }
+        }
+        
+        window.onload = () => {
+            renderTasks();
+            setTimeout(() => {
+                showSection('warmup');
+                renderMath();
+            }, 100);
+        };
+    </script>
+</body>
+</html>
