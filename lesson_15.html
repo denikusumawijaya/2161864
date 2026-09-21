@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni - Simultaneous Equations</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#f59e0b;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.tr{font-style:italic;font-size:.82em;color:var(--muted);display:block;margin-top:2px}
+header{background:var(--primary);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
+header .brand{font-weight:700;font-size:1.05em}
+header .topic{font-size:.88em;text-align:center;flex:1}
+header .topic .tr{color:rgba(255,255,255,.85)}
+header button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85em;white-space:nowrap}
+header button:hover{background:rgba(255,255,255,.25)}
+.main-container{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 52px)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);padding:14px;overflow-y:auto;position:sticky;top:52px;height:calc(100vh - 52px)}
+.sidebar h3{font-size:.72em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
+.nav-link{display:block;padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:3px;font-size:.84em;border:1px solid transparent;transition:all .15s}
+.nav-link:hover{background:#eff6ff}
+.nav-link.active{background:var(--primary);color:#fff;pointer-events:none;cursor:default}
+.nav-link .nl-title{display:block;font-weight:600}
+.nav-link .time{font-size:.76em;color:var(--muted);display:block;margin-top:2px}
+.nav-link.active .time,.nav-link.active .tr{color:rgba(255,255,255,.85)}
+.nav-link.disabled{opacity:.45;cursor:not-allowed;font-size:.8em;padding:6px 10px}
+.content-area{padding:22px 28px;overflow-y:auto;max-width:1100px;margin:0 auto;width:100%}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:8px}
+.page-header h2{color:var(--primary-dark);font-size:1.1em}
+.page-header .badge{background:var(--secondary);color:#fff;padding:4px 10px;border-radius:20px;font-size:.76em;font-weight:600}
+.card{background:var(--card);border-radius:10px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:16px;border:1px solid var(--border)}
+.card.explain{border-left:4px solid var(--primary)}
+.card.task{border-left:4px solid var(--secondary)}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.1em}
+.math-block{background:#f1f5f9;padding:12px 14px;border-radius:8px;margin:12px 0;overflow-x:auto}
+.example-box{background:#fef3c7;border-left:4px solid var(--secondary);padding:12px 16px;margin:12px 0;border-radius:6px}
+.example-box h4{color:#92400e;margin-bottom:6px;font-size:.95em}
+.tip-box{background:#dbeafe;border-left:4px solid var(--primary);padding:10px 14px;margin:10px 0;border-radius:6px}
+.tip-box h4{color:#1e40af;margin-bottom:4px;font-size:.9em}
+.illustration{text-align:center;margin:14px 0;padding:14px;background:#f1f5f9;border-radius:8px}
+.q-text{font-size:1em;margin-bottom:12px;line-height:1.7}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;transition:all .15s}
+.option:hover{border-color:var(--primary);background:#eff6ff}
+.option.selected{border-color:var(--primary);background:#dbeafe}
+.option.correct{border-color:var(--success);background:#d1fae5}
+.option.incorrect{border-color:var(--danger);background:#fee2e2}
+.option .marker{min-width:18px;width:18px;height:18px;border:2px solid var(--muted);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.7em;color:#fff}
+.option.selected .marker{background:var(--primary);border-color:var(--primary)}
+.option.correct .marker{background:var(--success);border-color:var(--success)}
+.option.incorrect .marker{background:var(--danger);border-color:var(--danger)}
+.option.checkbox .marker{border-radius:3px}
+.option .opt-text{flex:1}
+.fill-input{padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-size:1em;width:100%;margin:8px 0;font-family:inherit}
+.fill-input:focus{border-color:var(--primary);outline:none}
+.btn-submit{background:var(--primary);color:#fff;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-size:.88em;font-weight:600;margin-top:12px}
+.btn-submit:hover{background:var(--primary-dark)}
+.feedback{margin-top:12px;padding:14px;border-radius:8px;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#d1fae5;border:1px solid var(--success)}
+.feedback.incorrect{background:#fee2e2;border:1px solid var(--danger)}
+.feedback h4{margin-bottom:6px}
+.feedback ol,.feedback ul{margin:6px 0;padding-left:22px}
+.feedback li{margin:4px 0}
+
+.card ol, .card ul { padding-left: 26px; margin: 10px 0; }
+.card li { margin: 5px 0; }
+.example-box ol, .example-box ul { padding-left: 22px; margin: 8px 0; }
+.tip-box ol, .tip-box ul { padding-left: 22px; margin: 8px 0; }
+.math-block ol, .math-block ul { padding-left: 22px; margin: 8px 0; }
+
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.pagination button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.84em}
+.pagination button:disabled{background:#cbd5e1;cursor:not-allowed}
+.pagination .indicator{font-size:.82em;color:var(--muted);text-align:center;flex:1;padding:0 10px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#fff;padding:22px;border-radius:12px;max-width:460px;width:90%}
+.modal-content h3{color:var(--primary-dark);margin-bottom:12px}
+.modal-content ul{list-style:none;padding-left:0}
+.modal-content li{padding:10px 0;border-bottom:1px solid var(--border)}
+.modal-content li:last-child{border-bottom:none}
+.modal-close{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px}
+.sort-list{display:flex;flex-direction:column;gap:6px}
+.sort-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.sort-item:hover{border-color:var(--primary)}
+.sort-item.selected{border-color:var(--primary);background:#dbeafe}
+.sort-item .pos{background:var(--primary);color:#fff;min-width:24px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em;flex-shrink:0}
+.sort-item .sort-text{flex:1}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair-col h4{font-size:.85em;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.pair-col{display:flex;flex-direction:column;gap:6px}
+.pair-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;font-size:.92em}
+.pair-item.selected{border-color:var(--primary);background:#dbeafe}
+.pair-item.paired{opacity:.5;cursor:default;border-color:var(--success);background:#d1fae5}
+.pairs-list{margin-top:10px}
+.pair-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f1f5f9;border-radius:6px;margin-bottom:4px;font-size:.85em}
+.pair-row .remove{cursor:pointer;color:var(--danger);font-weight:700;margin-left:6px}
+
+.page-numbers {
+  display: flex;
+  gap: 3px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  flex: 1;
+  overflow-x: auto;
+  padding: 0 3px;
+}
+.page-num {
+  min-width: 28px;
+  height: 26px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: .7em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  white-space: nowrap;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.page-num.page-num-e { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+.page-num.page-num-t { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+.page-num.page-num-e:hover { background: #dbeafe; border-color: var(--primary); }
+.page-num.page-num-t:hover { background: #fef3c7; border-color: var(--secondary); }
+.page-num.page-num-e.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+.page-num.page-num-t.active { background: var(--secondary); color: #fff; border-color: var(--secondary); font-weight: 600; }
+.page-num:disabled { opacity: 1; cursor: default; }
+.page-num.page-num-e:disabled:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.page-num.page-num-t:disabled:hover { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+
+@media(max-width:1100px){
+  .main-container{grid-template-columns:180px 1fr}
+  .content-area{padding:18px 20px}
+}
+@media(max-width:760px){
+  .main-container{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .content-area{padding:16px}
+  header{font-size:.9em}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Math Tutoring by Deni</div>
+  <div class="topic">Topic: Simultaneous Equations <span class="tr">Topik: Persamaan Simultan</span></div>
+  <button id="classRulesBtn">Class Rules <span class="tr">Aturan Kelas</span></button>
+</header>
+<div class="main-container">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content-area">
+    <div id="pageContent"></div>
+    <div class="pagination">
+      <button id="prevBtn">← Previous <span class="tr">Sebelumnya</span></button>
+      <div class="page-numbers" id="pageNums"></div>
+      <button id="nextBtn">Next <span class="tr">Berikutnya</span> →</button>
+    </div>
+  </main>
+</div>
+<div id="classRulesModal" class="modal">
+  <div class="modal-content">
+    <h3>Class Rules <span class="tr">Aturan Kelas</span></h3>
+    <ul>
+      <li>Speak in turn <span class="tr">Berbicara secara bergantian</span></li>
+      <li>Ask permission before leaving the class <span class="tr">Meminta izin jika ingin meninggalkan kelas</span></li>
+      <li>Turn on microphone and camera when needed <span class="tr">Menyalakan microphone dan camera jika diperlukan</span></li>
+    </ul>
+    <button class="modal-close">Close <span class="tr">Tutup</span></button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.renderMathInElement){setTimeout(arguments.callee,50);return;}
+  // ================= CONTENT DATA =================
+  const sectionsData = {
+    a: {
+      title: 'Spiral Review Warm-up',
+      titleEn: 'Spiral Review Warm-up',
+      time: '00:00 - 00:10',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Algebra Basics', pageTitleEn:'Dasar-dasar Aljabar',
+          body:`
+            <p><strong>Algebra</strong> uses letters (like $x$ or $y$) to represent unknown numbers. 
+              <span class="tr"><strong>Aljabar</strong> menggunakan huruf (seperti $x$ atau $y$) untuk mewakili angka yang tidak diketahui.</span></p>
+            <div class="math-block"><strong>Key Concepts:</strong> <span class="tr">Konsep Kunci:</span>
+              <ul style="margin-top:6px">
+                <li><strong>Variable:</strong> A letter representing an unknown number (e.g., $x$). <span class="tr">Variabel: Huruf yang mewakili angka tidak diketahui.</span></li>
+                <li><strong>Coefficient:</strong> The number multiplied by the variable (e.g., in $3x$, $3$ is the coefficient). <span class="tr">Koefisien: Angka yang dikalikan dengan variabel.</span></li>
+                <li><strong>Constant:</strong> A fixed number (e.g., $5$ in $x + 5$). <span class="tr">Konstanta: Angka tetap.</span></li>
+                <li><strong>Like Terms:</strong> Terms with the same variable (e.g., $2x$ and $5x$). <span class="tr">Suku Sejenis: Suku dengan variabel yang sama.</span></li>
+              </ul>
+            </div>
+            <div class="illustration">
+              <svg width="280" height="120" viewBox="0 0 280 120">
+                <rect x="10" y="20" width="60" height="50" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="4"/>
+                <text x="40" y="50" text-anchor="middle" font-size="14" fill="#1e40af">2x</text>
+                <text x="85" y="50" font-size="16">+</text>
+                <rect x="105" y="20" width="60" height="50" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="4"/>
+                <text x="135" y="50" text-anchor="middle" font-size="14" fill="#92400e">5</text>
+                <text x="180" y="50" font-size="16">=</text>
+                <rect x="200" y="20" width="70" height="50" fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="4"/>
+                <text x="235" y="50" text-anchor="middle" font-size="14" fill="#065f46">2x + 5</text>
+                <text x="140" y="100" text-anchor="middle" font-size="12" fill="#64748b">Expression: 2x + 5</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Algebraic Expression <span class="tr">Bentuk Aljabar</span></div>
+            </div>
+            <div class="example-box"><h4>Example: Combining Like Terms <span class="tr">Contoh: Menggabungkan Suku Sejenis</span></h4>
+              Simplify $3x + 2y + 4x - y$. <span class="tr">Sederhanakan $3x + 2y + 4x - y$.</span>
+              <ol>
+                <li>Group the $x$ terms: $3x + 4x = 7x$ <span class="tr">Kelompokkan suku $x$.</span></li>
+                <li>Group the $y$ terms: $2y - y = y$ <span class="tr">Kelompokkan suku $y$.</span></li>
+                <li>Combine them: $7x + y$ <span class="tr">Gabungkan.</span></li>
+              </ol>
+            </div>`
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Combine Like Terms', pageTitleEn:'Gabungkan Suku Sejenis', taskType:'fill',
+          question:'Simplify the expression: $5x + 7 - 2x + 3$. The coefficient of $x$ is...', questionEn:'Sederhanakan: $5x + 7 - 2x + 3$. Koefisien $x$ adalah...',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>Step-by-step simplification: <span class="tr">Penyederhanaan langkah demi langkah:</span></p>
+            <ol><li>Group $x$ terms: $5x - 2x = 3x$</li>
+            <li>Group constants: $7 + 3 = 10$</li>
+            <li>Result: $3x + 10$</li></ol>
+            <p>The coefficient of $x$ is <strong>$3$</strong>.</p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Expand Brackets', pageTitleEn:'Kurung Kurawal', taskType:'radio',
+          question:'Expand the expression: $4(x + 3)$.', questionEn:'Kembangkan: $4(x + 3)$.',
+          options:[
+            {text:'$4x + 3$', correct:false},
+            {text:'$4x + 12$', correct:true},
+            {text:'$x + 12$', correct:false},
+            {text:'$4x + 7$', correct:false}
+          ],
+          explanation:`<p>To expand $4(x + 3)$, multiply $4$ by each term inside the bracket: <span class="tr">Untuk mengembangkan, kalikan $4$ dengan setiap suku di dalam kurung:</span></p>
+            <ol><li>$4 \\times x = 4x$</li><li>$4 \\times 3 = 12$</li><li>Combine: $4x + 12$</li></ol>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: Find Equivalent', pageTitleEn:'Cari yang Ekuivalen', taskType:'checkbox',
+          question:'Select all expressions equivalent to $2(x + 5) + 3$.', questionEn:'Pilih semua yang ekuivalen dengan $2(x + 5) + 3$.',
+          options:[
+            {text:'$2x + 13$', correct:true},
+            {text:'$2x + 8$', correct:false},
+            {text:'$x + 5 + x + 8$', correct:true},
+            {text:'$2(x + 6) + 1$', correct:true}
+          ],
+          explanation:`<p>Expand $2(x + 5) + 3$: <span class="tr">Kembangkan $2(x + 5) + 3$:</span></p>
+            <ol><li>$2x + 10 + 3$</li><li>$2x + 13$</li></ol>
+            <p>Check options: <span class="tr">Periksa opsi:</span></p>
+            <ul><li>$2x + 13$ ✓</li><li>$2x + 8$ ✗ (wrong constant)</li>
+            <li>$x + 5 + x + 8 = 2x + 13$ ✓</li>
+            <li>$2(x + 6) + 1 = 2x + 12 + 1 = 2x + 13$ ✓</li></ul>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Solving Linear Equations', pageTitleEn:'Menyelesaikan Persamaan Linear',
+          body:`
+            <p>An <strong>equation</strong> has an equals sign ($=$). Solving it means finding the value of the variable that makes both sides equal. <span class="tr"><strong>Persamaan</strong> memiliki tanda sama dengan. Menyelesaikannya berarti mencari nilai variabel yang membuat kedua sisi sama.</span></p>
+            <div class="math-block"><strong>Golden Rule:</strong> Whatever you do to one side, you must do to the other. <span class="tr">Aturan Emas: Apa pun yang Anda lakukan di satu sisi, harus dilakukan di sisi lain.</span></div>
+            <div class="illustration">
+              <svg width="240" height="100" viewBox="0 0 240 100">
+                <line x1="120" y1="10" x2="120" y2="90" stroke="#333" stroke-width="2"/>
+                <text x="60" y="50" text-anchor="middle" font-size="16" fill="#2563eb">2x + 3</text>
+                <text x="180" y="50" text-anchor="middle" font-size="16" fill="#10b981">11</text>
+                <path d="M 40 60 Q 120 80 200 60" stroke="#ef4444" fill="none" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="120" y="95" text-anchor="middle" font-size="11" fill="#ef4444">Balance must be maintained</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Balanced Equation <span class="tr">Persamaan Seimbang</span></div>
+            </div>
+            <div class="example-box"><h4>Example: Solve $2x + 3 = 11$ <span class="tr">Contoh: Selesaikan $2x + 3 = 11$</span></h4>
+              <ol>
+                <li>Subtract $3$ from both sides: $2x + 3 - 3 = 11 - 3$ <span class="tr">Kurangi 3 dari kedua sisi.</span></li>
+                <li>Simplify: $2x = 8$ <span class="tr">Sederhanakan.</span></li>
+                <li>Divide by $2$: $\\dfrac{2x}{2} = \\dfrac{8}{2}$ <span class="tr">Bagi dengan 2.</span></li>
+                <li>Result: $x = 4$</li>
+              </ol>
+              <strong>Check:</strong> $2(4) + 3 = 8 + 3 = 11$ ✓
+            </div>`
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Solve for x', pageTitleEn:'Selesaikan untuk x', taskType:'fill',
+          question:'Solve for $x$: $3x - 5 = 16$. $x = \\dots$', questionEn:'Selesaikan untuk $x$: $3x - 5 = 16$. $x = \\dots$',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>Step-by-step: <span class="tr">Langkah demi langkah:</span></p>
+            <ol><li>$3x - 5 = 16$</li>
+            <li>Add $5$: $3x = 16 + 5 = 21$</li>
+            <li>Divide by $3$: $x = \\dfrac{21}{3} = 7$</li></ol>
+            <p>Answer: <strong>$x = 7$</strong>.</p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: The solution to $\\dfrac{x}{2} + 4 = 7$ is $x = 6$.', questionEn:'Benar atau Salah: Solusi dari $\\dfrac{x}{2} + 4 = 7$ adalah $x = 6$.',
+          correctAnswer:'true',
+          explanation:`<p>Let's solve it: <span class="tr">Mari kita selesaikan:</span></p>
+            <ol><li>$\\dfrac{x}{2} + 4 = 7$</li>
+            <li>Subtract $4$: $\\dfrac{x}{2} = 3$</li>
+            <li>Multiply by $2$: $x = 3 \\times 2 = 6$</li></ol>
+            <p>Check: $\\dfrac{6}{2} + 4 = 3 + 4 = 7$ ✓. The statement is <strong>True</strong>.</p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve: $5x - 4 = 2x + 11$.', questionEn:'Urutkan langkah menyelesaikan: $5x - 4 = 2x + 11$.',
+          items:[
+            'Subtract $2x$ from both sides: $3x - 4 = 11$',
+            'Add $4$ to both sides: $3x = 15$',
+            'Divide by $3$: $x = 5$',
+            'Check: $5(5) - 4 = 2(5) + 11 \\Rightarrow 21 = 21$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>To solve, gather $x$ terms on one side and constants on the other: <span class="tr">Untuk menyelesaikan, kumpulkan suku $x$ di satu sisi dan konstanta di sisi lain:</span></p>
+            <ol><li>Subtract $2x$: $3x - 4 = 11$</li>
+            <li>Add $4$: $3x = 15$</li>
+            <li>Divide by $3$: $x = 5$</li>
+            <li>Check: $21 = 21$ ✓</li></ol>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Substitution', pageTitleEn:'Substitusi',
+          body:`
+            <p><strong>Substitution</strong> means replacing a variable with a number or another expression. <span class="tr"><strong>Substitusi</strong> berarti mengganti variabel dengan angka atau ekspresi lain.</span></p>
+            <div class="example-box"><h4>Example 1: Number Substitution <span class="tr">Contoh 1: Substitusi Angka</span></h4>
+              If $y = 3x - 2$ and $x = 4$, find $y$. <span class="tr">Jika $y = 3x - 2$ dan $x = 4$, cari $y$.</span>
+              <ol>
+                <li>Replace $x$ with $4$: $y = 3(4) - 2$ <span class="tr">Ganti $x$ dengan $4$.</span></li>
+                <li>Multiply: $y = 12 - 2$</li>
+                <li>Subtract: $y = 10$</li>
+              </ol>
+            </div>
+            <div class="example-box"><h4>Example 2: Expression Substitution <span class="tr">Contoh 2: Substitusi Ekspresi</span></h4>
+              If $y = 2x + 1$ and $x = a + 3$, find $y$ in terms of $a$. <span class="tr">Jika $y = 2x + 1$ dan $x = a + 3$, cari $y$ dalam $a$.</span>
+              <ol>
+                <li>Replace $x$ with $(a + 3)$: $y = 2(a + 3) + 1$</li>
+                <li>Expand: $y = 2a + 6 + 1$</li>
+                <li>Simplify: $y = 2a + 7$</li>
+              </ol>
+            </div>`
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Substitute Value', pageTitleEn:'Substitusi Nilai', taskType:'fill',
+          question:'If $P = 2l + 2w$, and $l = 5$, $w = 3$, find $P$. $P = \\dots$', questionEn:'Jika $P = 2l + 2w$, dan $l = 5$, $w = 3$, cari $P$. $P = \\dots$',
+          correctAnswer:'16', acceptableAnswers:['16'],
+          explanation:`<p>Substitute $l=5$ and $w=3$: <span class="tr">Substitusi $l=5$ dan $w=3$:</span></p>
+            <ol><li>$P = 2(5) + 2(3)$</li>
+            <li>$P = 10 + 6$</li>
+            <li>$P = 16$</li></ol>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Match Expressions', pageTitleEn:'Cocokkan Ekspresi', taskType:'pairing',
+          question:'Match the substitution with its correct result.', questionEn:'Cocokkan substitusi dengan hasilnya.',
+          pairs:[
+            {left:'$y = 4x - 1$, $x=2$', right:'$7$'},
+            {left:'$y = x^2 + 1$, $x=3$', right:'$10$'},
+            {left:'$y = \\dfrac{x}{2} + 5$, $x=6$', right:'$8$'},
+            {left:'$y = 2(x-3)$, $x=5$', right:'$4$'}
+          ],
+          explanation:`<p>Calculate each: <span class="tr">Hitung masing-masing:</span></p>
+            <ul><li>$4(2) - 1 = 8 - 1 = 7$</li>
+            <li>$3^2 + 1 = 9 + 1 = 10$</li>
+            <li>$\\dfrac{6}{2} + 5 = 3 + 5 = 8$</li>
+            <li>$2(5 - 3) = 2(2) = 4$</li></ul>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: First Step', pageTitleEn:'Langkah Pertama', taskType:'radio',
+          question:'What is the best first step to solve $4x + 7 = -2x + 19$?', questionEn:'Apa langkah pertama terbaik untuk menyelesaikan $4x + 7 = -2x + 19$?',
+          options:[
+            {text:'Subtract $7$ from both sides', correct:false},
+            {text:'Add $2x$ to both sides', correct:true},
+            {text:'Divide everything by $4$', correct:false},
+            {text:'Multiply by $-2$', correct:false}
+          ],
+          explanation:`<p>To solve for $x$, we must get all $x$ terms on one side. Adding $2x$ to both sides eliminates $x$ on the right side: <span class="tr">Untuk menyelesaikan $x$, kita harus mendapatkan semua suku $x$ di satu sisi. Menambahkan $2x$ menghapus $x$ di sisi kanan:</span></p>
+            <p>$4x + 2x + 7 = 19 \\Rightarrow 6x + 7 = 19$.</p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Substitute Expression', pageTitleEn:'Substitusi Ekspresi', taskType:'sorting',
+          question:'Order the steps to express $y$ in terms of $a$: $y = 3x - 4$ and $x = 2a + 1$.', questionEn:'Urutkan langkah menyatakan $y$ dalam $a$: $y = 3x - 4$ dan $x = 2a + 1$.',
+          items:[
+            'Substitute $x$: $y = 3(2a + 1) - 4$',
+            'Expand the bracket: $y = 6a + 3 - 4$',
+            'Simplify constants: $y = 6a - 1$'
+          ],
+          correctOrder:[0,1,2],
+          explanation:`<p>Step-by-step: <span class="tr">Langkah demi langkah:</span></p>
+            <ol><li>Substitute $x$: $y = 3(2a + 1) - 4$</li>
+            <li>Expand: $y = 6a + 3 - 4$</li>
+            <li>Simplify: $y = 6a - 1$</li></ol>`
+        }
+      ]
+    },
+    b: {
+      title: 'Introduction & Real-World Connection',
+      titleEn: 'Introduction & Real-World Connection',
+      time: '00:10 - 00:15',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Real-World Problem', pageTitleEn:'Masalah Dunia Nyata',
+          body:`
+            <div class="illustration">
+              <svg width="280" height="100" viewBox="0 0 280 100">
+                <circle cx="40" cy="42" r="18" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="white" font-size="13" font-weight="bold">A</text>
+                <text x="40" y="78" text-anchor="middle" font-size="11" fill="#666">2 tickets</text>
+                <text x="80" y="50" font-size="16">+</text>
+                <circle cx="120" cy="42" r="18" fill="#f59e0b"/><text x="120" y="47" text-anchor="middle" fill="white" font-size="13" font-weight="bold">P</text>
+                <text x="120" y="78" text-anchor="middle" font-size="11" fill="#666">3 popcorns</text>
+                <text x="165" y="50" font-size="14">=</text>
+                <text x="190" y="50" font-size="14" font-weight="bold" fill="#10b981">$38</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Cinema Expenses <span class="tr">Pengeluaran Bioskop</span></div>
+            </div>
+            <p>Imagine you go to the cinema. You buy <strong>2 tickets and 3 popcorns</strong> for <strong>$38</strong>. Another day, you buy <strong>1 ticket and 2 popcorns</strong> for <strong>$22</strong>. How much does 1 ticket and 1 popcorn cost? <span class="tr">Bayangkan Anda pergi ke bioskop. Anda membeli 2 tiket dan 3 popcorn seharga $38. Hari lain, Anda membeli 1 tiket dan 2 popcorn seharga $22. Berapa harga 1 tiket dan 1 popcorn?</span></p>
+            <p>Let: <span class="tr">Misalkan:</span></p>
+            <ul>
+              <li>$x$ = price of 1 ticket <span class="tr">harga 1 tiket</span></li>
+              <li>$y$ = price of 1 popcorn <span class="tr">harga 1 popcorn</span></li>
+            </ul>
+            <div class="math-block">
+              Equation 1: $2x + 3y = 38$ <span class="tr">Persamaan 1</span><br>
+              Equation 2: $x + 2y = 22$ <span class="tr">Persamaan 2</span>
+            </div>
+            <div class="tip-box"><h4>Important <span class="tr">Penting</span></h4>
+              Two equations with two variables that must be true at the same time are called <strong>Simultaneous Equations</strong>. <span class="tr">Dua persamaan dengan dua variabel yang harus benar bersamaan disebut Persamaan Simultan.</span></div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Identify Variables', pageTitleEn:'Identifikasi Variabel', taskType:'radio',
+          question:'In the cinema problem, what do $x$ and $y$ represent?', questionEn:'Pada masalah bioskop, apa yang dimaksud $x$ dan $y$?',
+          options:[
+            {text:'Number of tickets and popcorns bought', correct:false},
+            {text:'Price of 1 ticket and price of 1 popcorn', correct:true},
+            {text:'Total money spent', correct:false},
+            {text:'Time spent in the cinema', correct:false}
+          ],
+          explanation:`<p>Because $x$ and $y$ are multiplied by the quantity (e.g., $2x$ means 2 tickets times price), they represent the <strong>unit price</strong>. <span class="tr">Karena $x$ dan $y$ dikalikan dengan jumlah, mereka mewakili harga satuan.</span></p>
+            <p>$x$ = price of 1 ticket, $y$ = price of 1 popcorn.</p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Form the Equation', pageTitleEn:'Susun Persamaan', taskType:'fill',
+          question:'Write the first equation: 2 tickets and 3 popcorns cost $38. $2x + \\dots y = 38$', questionEn:'Tulis persamaan pertama: 2 tiket dan 3 popcorn seharga $38. $2x + \\dots y = 38$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>2 tickets = $2x$, 3 popcorns = $3y$, total $38$. <span class="tr">2 tiket = $2x$, 3 popcorn = $3y$, total $38$.</span></p>
+            <p>So: $2x + 3y = 38$. The coefficient of $y$ is <strong>3</strong>.</p>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: In simultaneous equations, we look for a pair $(x, y)$ that satisfies both equations at the same time.', questionEn:'Benar atau Salah: Pada persamaan simultan, kita mencari pasangan $(x, y)$ yang memenuhi kedua persamaan bersamaan.',
+          correctAnswer:'true',
+          explanation:`<p>Definition of simultaneous equations: a system seeking a pair $(x, y)$ satisfying <em>both</em> equations. <span class="tr">Definisi persamaan simultan: sistem yang mencari pasangan $(x, y)$ yang memenuhi kedua persamaan.</span></p>
+            <p>The statement is <strong>True</strong>.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Meaning of a Solution', pageTitleEn:'Arti dari Solusi',
+          body:`
+            <p>A <strong>solution</strong> to simultaneous equations is a pair $(x, y)$ that makes <em>both</em> equations true. <span class="tr"><strong>Solusi</strong> persamaan simultan adalah pasangan $(x, y)$ yang membuat kedua persamaan benar.</span></p>
+            <div class="illustration">
+              <svg width="260" height="200" viewBox="0 0 260 200">
+                <line x1="20" y1="150" x2="240" y2="150" stroke="#333" stroke-width="2"/>
+                <line x1="130" y1="20" x2="130" y2="180" stroke="#333" stroke-width="2"/>
+                <line x1="60" y1="50" x2="220" y2="170" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="195" y="165" font-size="10" fill="#2563eb">Eq 1</text>
+                <line x1="40" y1="160" x2="220" y2="70" stroke="#ef4444" stroke-width="2.5"/>
+                <text x="180" y="80" font-size="10" fill="#ef4444">Eq 2</text>
+                <circle cx="160" cy="115" r="5" fill="#10b981"/>
+                <text x="168" y="110" font-size="11" font-weight="bold" fill="#10b981">(x,y)</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Graphical solution: intersection point <span class="tr">Solusi grafik: titik potong</span></div>
+            </div>
+            <div class="example-box"><h4>Example: Checking a Solution <span class="tr">Contoh: Memeriksa Solusi</span></h4>
+              System: $2x + 3y = 38$ and $x + 2y = 22$.<br>
+              Check if $(8, 7)$ is a solution. <span class="tr">Periksa apakah $(8, 7)$ adalah solusi.</span><br><br>
+              <strong>Equation 1:</strong> $2(8) + 3(7) = 16 + 21 = 37 \\neq 38$ ✗<br>
+              <strong>Equation 2:</strong> $8 + 2(7) = 8 + 14 = 22$ ✓<br>
+              Since it fails Eq 1, $(8, 7)$ is <strong>NOT</strong> a solution.
+            </div>`
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Match Points to Equation 1', pageTitleEn:'Cocokkan Titik ke Persamaan 1', taskType:'pairing',
+          question:'Equation: $x + 2y = 10$. Match the point $(x, y)$ with whether it satisfies the equation.', questionEn:'Persamaan: $x + 2y = 10$. Cocokkan titik $(x, y)$ apakah memenuhi persamaan.',
+          pairs:[
+            {left:'$(4, 3)$', right:'YES (4+6=10)'},
+            {left:'$(2, 4)$', right:'YES (2+8=10)'},
+            {left:'$(5, 2)$', right:'NO (5+4=9)'},
+            {left:'$(0, 5)$', right:'YES (0+10=10)'}
+          ],
+          explanation:`<p>Substitute the $x$ and $y$ values into $x + 2y = 10$: <span class="tr">Substitusi nilai $x$ dan $y$ ke $x + 2y = 10$:</span></p>
+            <ul><li>$4 + 2(3) = 10$ ✓</li><li>$2 + 2(4) = 10$ ✓</li>
+            <li>$5 + 2(2) = 9 \\neq 10$ ✗</li><li>$0 + 2(5) = 10$ ✓</li></ul>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Check Solution', pageTitleEn:'Periksa Solusi', taskType:'checkbox',
+          question:'System: $2x + 3y = 38$ and $x + 2y = 22$. Select all points that satisfy BOTH equations.', questionEn:'Sistem: $2x + 3y = 38$ dan $x + 2y = 22$. Pilih semua titik yang memenuhi KEDUA persamaan.',
+          options:[
+            {text:'$(10, 6)$', correct:true},
+            {text:'$(8, 7)$', correct:false},
+            {text:'$(4, 10)$', correct:false},
+            {text:'$(2, 10)$', correct:false}
+          ],
+          explanation:`<p>Test $(10, 6)$: <span class="tr">Uji $(10, 6)$:</span></p>
+            <ul><li>Eq 1: $2(10) + 3(6) = 20 + 18 = 38$ ✓</li>
+            <li>Eq 2: $10 + 2(6) = 10 + 12 = 22$ ✓</li></ul>
+            <p>Test $(8, 7)$: Eq 1: $2(8) + 3(7) = 16 + 21 = 37 \\neq 38$ ✗</p>
+            <p>Only $(10, 6)$ works for both!</p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Order Verification Steps', pageTitleEn:'Urutkan Langkah Verifikasi', taskType:'sorting',
+          question:'Order the steps to verify if $(3, 1)$ is a solution to $y = 2x - 5$ and $x + y = 4$.', questionEn:'Urutkan langkah memeriksa apakah $(3, 1)$ solusi dari $y = 2x - 5$ dan $x + y = 4$.',
+          items:[
+            'Substitute $x=3, y=1$ into Equation 1',
+            'Check: $1 = 2(3) - 5 \\Rightarrow 1 = 1$ (True)',
+            'Substitute $x=3, y=1$ into Equation 2',
+            'Check: $3 + 1 = 4 \\Rightarrow 4 = 4$ (True)',
+            'Conclude $(3, 1)$ is a valid solution'
+          ],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Verification process: <span class="tr">Proses verifikasi:</span></p>
+            <ol><li>Substitute into Eq 1.</li><li>Verify Eq 1 is true.</li>
+            <li>Substitute into Eq 2.</li><li>Verify Eq 2 is true.</li>
+            <li>If both true, it's a solution.</li></ol>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Types of Simultaneous Equations', pageTitleEn:'Tipe Persamaan Simultan',
+          body:`
+            <p>In Cambridge AS & A Level, we deal with two main types: <span class="tr">Di Cambridge AS & A Level, kita berurusan dengan dua tipe utama:</span></p>
+            <div class="math-block">
+              <strong>1. Linear & Linear:</strong> Both equations have degree 1. <span class="tr">Linear & Linear: Kedua persamaan berderajat 1.</span><br>
+              e.g., $2x + 3y = 38$ and $x + 2y = 22$<br><br>
+              <strong>2. Linear & Non-Linear:</strong> One is degree 1, the other has degree 2 (quadratic). <span class="tr">Linear & Non-Linear: Satu derajat 1, lainnya derajat 2 (kuadrat).</span><br>
+              e.g., $y = x - 1$ (Linear) and $y = x^2 - 3x + 2$ (Quadratic)
+            </div>
+            <div class="illustration">
+              <svg width="280" height="120" viewBox="0 0 280 120">
+                <line x1="20" y1="100" x2="260" y2="20" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="220" y="30" font-size="11" fill="#2563eb">Linear</text>
+                <path d="M 20 100 Q 140 160 260 20" stroke="#ef4444" stroke-width="2.5" fill="none"/>
+                <text x="230" y="60" font-size="11" fill="#ef4444">Quadratic</text>
+                <circle cx="75" cy="85" r="4" fill="#10b981"/>
+                <circle cx="205" cy="35" r="4" fill="#10b981"/>
+                <text x="140" y="115" text-anchor="middle" font-size="10" fill="#64748b">Two intersections = 2 solutions</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Linear vs Non-Linear <span class="tr">Linear vs Non-Linear</span></div>
+            </div>
+            <div class="tip-box"><h4>Key Difference <span class="tr">Perbedaan Utama</span></h4>
+              Linear & Linear systems usually have <strong>exactly 1 solution</strong> (one intersection point). <br>
+              Linear & Non-Linear systems can have <strong>0, 1, or 2 solutions</strong>. <span class="tr">Sistem Linear & Non-Linear bisa punya 0, 1, atau 2 solusi.</span></div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Identify Types', pageTitleEn:'Identifikasi Tipe', taskType:'radio',
+          question:'Which of the following is a Linear & Non-Linear system?', questionEn:'Mana yang merupakan sistem Linear & Non-Linear?',
+          options:[
+            {text:'$y = 2x + 1$ and $y = x - 4$', correct:false},
+            {text:'$y = x^2$ and $y = 2x + 3$', correct:true},
+            {text:'$x + y = 5$ and $2x - y = 1$', correct:false},
+            {text:'$y = 4x - 2$ and $y = 5x$', correct:false}
+          ],
+          explanation:`<p>A non-linear system must contain an equation with a variable raised to a power higher than 1 (like $x^2$). <span class="tr">Sistem non-linear harus mengandung persamaan dengan variabel berpangkat lebih dari 1 (seperti $x^2$).</span></p>
+            <p>$y = x^2$ is quadratic (degree 2), and $y = 2x + 3$ is linear (degree 1). This is the correct pair.</p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Number of Solutions', pageTitleEn:'Jumlah Solusi', taskType:'fill',
+          question:'A system of one linear equation and one quadratic equation can have at most how many solutions? (Enter a number)', questionEn:'Sistem satu persamaan linear dan satu kuadrat paling banyak punya berapa solusi? (Masukkan angka)',
+          correctAnswer:'2', acceptableAnswers:['2','two'],
+          explanation:`<p>A straight line can intersect a parabola (U-shape curve) at a maximum of <strong>2 points</strong>. <span class="tr">Garis lurus dapat memotong parabola maksimal di 2 titik.</span></p>
+            <p>Therefore, there can be at most 2 solutions.</p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: Two straight lines that are not parallel will always intersect at exactly one point.', questionEn:'Benar atau Salah: Dua garis lurus yang tidak sejajar akan selalu berpotongan di tepat satu titik.',
+          correctAnswer:'true',
+          explanation:`<p>Geometrically, if two straight lines are not parallel, their slopes are different, meaning they must cross each other exactly once. <span class="tr">Secara geometris, jika dua garis lurus tidak sejajar, gradiennya berbeda, artinya mereka harus berpotongan tepat sekali.</span></p>
+            <p>The statement is <strong>True</strong>.</p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Match Characteristics', pageTitleEn:'Cocokkan Karakteristik', taskType:'pairing',
+          question:'Match the system type with its typical number of solutions.', questionEn:'Cocokkan tipe sistem dengan jumlah solusinya.',
+          pairs:[
+            {left:'Linear & Linear (intersecting)', right:'1 solution'},
+            {left:'Linear & Quadratic (intersecting)', right:'2 solutions'},
+            {left:'Linear & Quadratic (not touching)', right:'0 solutions'},
+            {left:'Linear & Linear (parallel)', right:'0 solutions'}
+          ],
+          explanation:`<p>Graphical interpretation: <span class="tr">Interpretasi grafik:</span></p>
+            <ul><li>Two lines intersect $\Rightarrow$ 1 point $\Rightarrow$ 1 solution.</li>
+            <li>Line crosses parabola twice $\Rightarrow$ 2 points $\Rightarrow$ 2 solutions.</li>
+            <li>Line misses parabola $\Rightarrow$ 0 points $\Rightarrow$ 0 solutions.</li>
+            <li>Parallel lines never meet $\Rightarrow$ 0 points $\Rightarrow$ 0 solutions.</li></ul>`
+        }
+      ]
+    },
+    c: {
+      title: 'Review of Prior Knowledge',
+      titleEn: 'Review of Prior Knowledge',
+      time: '00:15 - 00:20',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Graphical Method', pageTitleEn:'Metode Grafik',
+          body:`
+            <p>The <strong>Graphical Method</strong> solves simultaneous equations by plotting both lines on a coordinate plane. The <strong>intersection point</strong> $(x, y)$ is the solution. <span class="tr"><strong>Metode Grafik</strong> menyelesaikan persamaan simultan dengan menggambar kedua garis. <strong>Titik potong</strong> $(x, y)$ adalah solusinya.</span></p>
+            <div class="illustration">
+              <svg width="260" height="200" viewBox="0 0 260 200">
+                <line x1="20" y1="100" x2="240" y2="100" stroke="#333" stroke-width="2"/>
+                <line x1="130" y1="20" x2="130" y2="180" stroke="#333" stroke-width="2"/>
+                <text x="244" y="105" font-size="11">x</text>
+                <text x="135" y="22" font-size="11">y</text>
+                <!-- Line 1: x + y = 5 (0,5 to 5,0) -> (130,0) to (230,100) -->
+                <line x1="130" y1="0" x2="230" y2="100" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="180" y="50" font-size="10" fill="#2563eb">x + y = 5</text>
+                <!-- Line 2: y = 2x - 1 (0,-1) to (3,5) -> (130,120) to (190,0) -->
+                <line x1="130" y1="120" x2="190" y2="0" stroke="#ef4444" stroke-width="2.5"/>
+                <text x="145" y="115" font-size="10" fill="#ef4444">y = 2x - 1</text>
+                <!-- Intersection (2,3) -> (170, 40) -->
+                <circle cx="170" cy="40" r="5" fill="#10b981"/>
+                <text x="178" y="35" font-size="11" font-weight="bold" fill="#10b981">(2, 3)</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Intersection of two lines <span class="tr">Perpotongan dua garis</span></div>
+            </div>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              If lines intersect at $(2, 3)$, then $x = 2$ and $y = 3$ is the solution to the simultaneous equations. <span class="tr">Jika garis berpotongan di $(2, 3)$, maka $x = 2$ dan $y = 3$ adalah solusinya.</span>
+            </div>`
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Read the Graph', pageTitleEn:'Baca Grafik', taskType:'radio',
+          question:'Two lines intersect at the point $(-1, 4)$. What is the solution to the simultaneous equations?', questionEn:'Dua garis berpotongan di titik $(-1, 4)$. Apa solusi dari persamaan simultan tersebut?',
+          options:[
+            {text:'$x = 4, y = -1$', correct:false},
+            {text:'$x = -1, y = 4$', correct:true},
+            {text:'$x = 1, y = -4$', correct:false},
+            {text:'$x = -1, y = -4$', correct:false}
+          ],
+          explanation:`<p>An ordered pair $(x, y)$ means the first number is the $x$-value and the second is the $y$-value. <span class="tr">Pasangan berurutan $(x, y)$ berarti angka pertama adalah nilai $x$ dan kedua adalah nilai $y$.</span></p>
+            <p>So, $x = -1$ and $y = 4$.</p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Match Equations to Graph', pageTitleEn:'Cocokkan Persamaan ke Grafik', taskType:'pairing',
+          question:'Match the line equation with its intersection with the y-axis (y-intercept).', questionEn:'Cocokkan persamaan garis dengan perpotongannya dengan sumbu y (y-intercept).',
+          pairs:[
+            {left:'$y = 3x + 2$', right:'$(0, 2)$'},
+            {left:'$y = -x - 4$', right:'$(0, -4)$'},
+            {left:'$y = \\dfrac{1}{2}x + 5$', right:'$(0, 5)$'},
+            {left:'$y = 5x$', right:'$(0, 0)$'}
+          ],
+          explanation:`<p>To find the y-intercept, set $x = 0$. <span class="tr">Untuk mencari y-intercept, set $x = 0$.</span></p>
+            <ul><li>$y = 3(0) + 2 = 2$</li><li>$y = -(0) - 4 = -4$</li>
+            <li>$y = \\dfrac{1}{2}(0) + 5 = 5$</li><li>$y = 5(0) = 0$</li></ul>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: If two lines on a graph are parallel, there is exactly one solution.', questionEn:'Benar atau Salah: Jika dua garis pada grafik sejajar, ada tepat satu solusi.',
+          correctAnswer:'false',
+          explanation:`<p>Parallel lines never intersect. Therefore, there is <strong>no solution</strong> (0 solutions). <span class="tr">Garis sejajar tidak pernah berpotongan. Oleh karena itu, tidak ada solusi.</span></p>
+            <p>The statement is <strong>False</strong>.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Substitution Method', pageTitleEn:'Metode Substitusi',
+          body:`
+            <p>The <strong>Substitution Method</strong> involves expressing one variable in terms of the other, and substituting it into the other equation. <span class="tr"><strong>Metode Substitusi</strong> melibatkan menyatakan satu variabel dalam variabel lain, dan menggantikannya ke persamaan lain.</span></p>
+            <div class="example-box"><h4>Example: Solve $y = 2x$ and $x + y = 9$ <span class="tr">Contoh: Selesaikan $y = 2x$ dan $x + y = 9$</span></h4>
+              <ol>
+                <li>Since $y = 2x$, substitute $2x$ into the second equation in place of $y$: <span class="tr">Karena $y = 2x$, substitusikan $2x$ ke persamaan kedua menggantikan $y$:</span><br>
+                $x + (2x) = 9$</li>
+                <li>Simplify: $3x = 9$ <span class="tr">Sederhanakan.</span></li>
+                <li>Solve for $x$: $x = \\dfrac{9}{3} = 3$ <span class="tr">Selesaikan untuk $x$.</span></li>
+                <li>Substitute $x = 3$ back into $y = 2x$ to find $y$: <span class="tr">Substitusikan $x = 3$ kembali ke $y = 2x$ untuk mencari $y$:</span><br>
+                $y = 2(3) = 6$</li>
+              </ol>
+              <strong>Solution: $x = 3, y = 6$</strong>
+            </div>`
+        },
+        // T4
+        { type:'task', pageTitle:'T4: First Step Substitution', pageTitleEn:'Langkah Pertama Substitusi', taskType:'radio',
+          question:'System: $y = 3x - 1$ and $2x + y = 8$. What is the best first step?', questionEn:'Sistem: $y = 3x - 1$ dan $2x + y = 8$. Apa langkah pertama terbaik?',
+          options:[
+            {text:'Substitute $8$ for $y$ in the first equation', correct:false},
+            {text:'Substitute $3x - 1$ for $y$ in the second equation', correct:true},
+            {text:'Add the two equations together', correct:false},
+            {text:'Divide the second equation by $2$', correct:false}
+          ],
+          explanation:`<p>Since the first equation already has $y$ isolated ($y = 3x - 1$), you can replace the $y$ in the second equation with $(3x - 1)$. <span class="tr">Karena persamaan pertama sudah memiliki $y$ yang terisolasi, Anda bisa mengganti $y$ di persamaan kedua dengan $(3x - 1)$.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Solve by Substitution', pageTitleEn:'Selesaikan dengan Substitusi', taskType:'fill',
+          question:'System: $y = 3x - 1$ and $2x + y = 9$. Find the value of $x$. $x = \\dots$', questionEn:'Sistem: $y = 3x - 1$ dan $2x + y = 9$. Cari nilai $x$. $x = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Substitute $y = 3x - 1$ into $2x + y = 9$: <span class="tr">Substitusi $y = 3x - 1$ ke $2x + y = 9$:</span></p>
+            <ol><li>$2x + (3x - 1) = 9$</li>
+            <li>$5x - 1 = 9$</li>
+            <li>$5x = 10$</li>
+            <li>$x = 2$</li></ol>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve: $x = 2y + 1$ and $3x - y = 18$.', questionEn:'Urutkan langkah menyelesaikan: $x = 2y + 1$ dan $3x - y = 18$.',
+          items:[
+            'Substitute $2y + 1$ for $x$ in the second equation: $3(2y + 1) - y = 18$',
+            'Expand and simplify: $6y + 3 - y = 18 \\Rightarrow 5y + 3 = 18$',
+            'Solve for $y$: $5y = 15 \\Rightarrow y = 3$',
+            'Substitute $y = 3$ back into $x = 2y + 1$: $x = 2(3) + 1 = 7$',
+            'State final solution: $x = 7, y = 3$'
+          ],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Substitute the isolated variable, expand, solve for one variable, then back-substitute to find the other. <span class="tr">Substitusi variabel yang terisolasi, kembangkan, selesaikan untuk satu variabel, lalu substitusi kembali.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Elimination Method', pageTitleEn:'Metode Eliminasi',
+          body:`
+            <p>The <strong>Elimination Method</strong> involves adding or subtracting the equations to eliminate one of the variables. <span class="tr"><strong>Metode Eliminasi</strong> melibatkan penjumlahan atau pengurangan persamaan untuk menghilangkan salah satu variabel.</span></p>
+            <div class="example-box"><h4>Example: Solve $2x + y = 7$ and $3x - y = 8$ <span class="tr">Contoh: Selesaikan $2x + y = 7$ dan $3x - y = 8$</span></h4>
+              <ol>
+                <li>Notice the coefficients of $y$ are $+1$ and $-1$. We can add the equations to eliminate $y$: <span class="tr">Perhatikan koefisien $y$ adalah $+1$ dan $-1$. Kita bisa menjumlahkan kedua persamaan:</span></li>
+                <li>$(2x + y) + (3x - y) = 7 + 8$</li>
+                <li>$5x = 15$</li>
+                <li>$x = 3$</li>
+                <li>Substitute $x = 3$ into $2x + y = 7$: $2(3) + y = 7 \Rightarrow 6 + y = 7 \Rightarrow y = 1$.</li>
+              </ol>
+              <strong>Solution: $x = 3, y = 1$</strong>
+            </div>
+            <div class="tip-box"><h4>Scaling <span class="tr">Mengalikan</span></h4>
+              If coefficients aren't the same, multiply one or both equations. e.g., to match $2x$ and $3x$, multiply the first by $3$ and the second by $2$ to get $6x$ in both. <span class="tr">Jika koefisien tidak sama, kalikan satu atau kedua persamaan.</span></div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Eliminate a Variable', pageTitleEn:'Eliminasi Variabel', taskType:'radio',
+          question:'System: $3x + 2y = 12$ and $3x - y = 3$. What is the easiest way to eliminate?', questionEn:'Sistem: $3x + 2y = 12$ dan $3x - y = 3$. Apa cara termudah untuk eliminasi?',
+          options:[
+            {text:'Add the equations to eliminate $x$', correct:false},
+            {text:'Subtract the second equation from the first to eliminate $x$', correct:true},
+            {text:'Multiply the first by $2$ and add to eliminate $y$', correct:false},
+            {text:'Multiply the second by $2$ and subtract to eliminate $x$', correct:false}
+          ],
+          explanation:`<p>Both equations have $3x$. Subtracting them will cancel out the $x$ term: <span class="tr">Kedua persamaan memiliki $3x$. Mengurangkannya akan menghapus suku $x$:</span></p>
+            <p>$(3x + 2y) - (3x - y) = 12 - 3 \Rightarrow 3y = 9 \Rightarrow y = 3$.</p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: When using elimination, if the signs of the variable you want to eliminate are the same, you subtract the equations.', questionEn:'Benar atau Salah: Saat eliminasi, jika tanda variabel yang ingin dieliminasi sama, Anda mengurangkan persamaannya.',
+          correctAnswer:'true',
+          explanation:`<p>Same signs $\rightarrow$ Subtract. Opposite signs (e.g., $+y$ and $-y$) $\rightarrow$ Add. <span class="tr">Tanda sama $\rightarrow$ Kurangkan. Tanda berlawanan $\rightarrow$ Jumlahkan.</span></p>
+            <p>The statement is <strong>True</strong>.</p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Scaling Factor', pageTitleEn:'Faktor Skala', taskType:'fill',
+          question:'To eliminate $x$ from $2x + 3y = 8$ and $3x + y = 2$, you multiply the first equation by $3$. What must you multiply the second equation by?', questionEn:'Untuk mengeliminasi $x$ dari $2x + 3y = 8$ dan $3x + y = 2$, Anda mengalikan persamaan pertama dengan $3$. Dengan apa persamaan kedua harus dikalikan?',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>The Least Common Multiple (LCM) of $2$ and $3$ is $6$. <span class="tr">KPK dari $2$ dan $3$ adalah $6$.</span></p>
+            <p>If you multiply the first equation by $3$, you get $6x$. To match $6x$ in the second equation, you must multiply it by $2$. <span class="tr">Jika persamaan pertama dikalikan 3, Anda dapat $6x$. Untuk mencocokkan $6x$, persamaan kedua harus dikalikan 2.</span></p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Final Solution', pageTitleEn:'Solusi Akhir', taskType:'sorting',
+          question:'System: $x + 2y = 7$ and $3x - 2y = 5$. Order the steps to find the final solution.', questionEn:'Sistem: $x + 2y = 7$ dan $3x - 2y = 5$. Urutkan langkah mencari solusi akhir.',
+          items:[
+            'Add equations: $(x + 2y) + (3x - 2y) = 7 + 5$',
+            'Simplify: $4x = 12$',
+            'Solve for $x$: $x = 3$',
+            'Substitute $x=3$ into $x + 2y = 7$: $3 + 2y = 7$',
+            'Solve for $y$: $2y = 4 \\Rightarrow y = 2$'
+          ],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Since $+2y$ and $-2y$ have opposite signs, we add the equations to eliminate $y$. <span class="tr">Karena $+2y$ dan $-2y$ berlawanan tanda, kita jumlahkan untuk mengeliminasi $y$.</span></p>
+            <ol><li>Add: $4x = 12$</li><li>$x = 3$</li><li>Substitute $x=3$</li><li>$3 + 2y = 7 \Rightarrow y = 2$</li></ol>`
+        }
+      ]
+    },
+    d: {
+      title: 'Problem Introduction',
+      titleEn: 'Problem Introduction',
+      time: '00:20 - 00:30',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Formulating from Word Problems', pageTitleEn:'Merumuskan dari Soal Cerita',
+          body:`
+            <p>Cambridge P1 often requires translating real-world text into mathematical equations. <span class="tr">Cambridge P1 sering meminta menerjemahkan teks dunia nyata menjadi persamaan matematika.</span></p>
+            <div class="illustration">
+              <svg width="280" height="80" viewBox="0 0 280 80">
+                <rect x="10" y="20" width="80" height="40" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="4"/>
+                <text x="50" y="45" text-anchor="middle" font-size="12" fill="#1e40af">Text</text>
+                <text x="105" y="45" font-size="14">➔</text>
+                <rect x="125" y="20" width="80" height="40" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="4"/>
+                <text x="165" y="45" text-anchor="middle" font-size="12" fill="#92400e">Equations</text>
+                <text x="220" y="45" font-size="14">➔</text>
+                <rect x="240" y="20" width="40" height="40" fill="#d1fae5" stroke="#10b981" stroke-width="2" rx="4"/>
+                <text x="260" y="45" text-anchor="middle" font-size="12" fill="#065f46">Solve</text>
+              </svg>
+            </div>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              "The sum of two numbers is 15. Their difference is 3." <span class="tr">"Jumlah dua angka adalah 15. Selisihnya adalah 3."</span><br><br>
+              Let the numbers be $x$ and $y$.<br>
+              Equation 1 (Sum): $x + y = 15$<br>
+              Equation 2 (Difference): $x - y = 3$             </div>`
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Identify Equations', pageTitleEn:'Identifikasi Persamaan', taskType:'pairing',
+          question:'Match the English phrase with its mathematical equation.', questionEn:'Cocokkan frasa bahasa Inggris dengan persamaan matematikanya.',
+          pairs:[
+            {left:'The sum of $x$ and $y$ is 20', right:'$x + y = 20$'},
+            {left:'The difference between $x$ and $y$ is 5', right:'$x - y = 5$'},
+            {left:'$x$ is twice as large as $y$', right:'$x = 2y$'},
+            {left:'Three times $x$ plus $y$ equals 10', right:'$3x + y = 10$'}
+          ],
+          explanation:`<p>Key vocabulary: Sum (+), Difference (-), Product ($\times$), Twice ($2\times$). <span class="tr">Kosakata kunci: Jumlah (+), Selisih (-), Kali ($\times$), Dua kali ($2\times$).</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Formulate System', pageTitleEn:'Rumuskan Sistem', taskType:'radio',
+          question:'"A rectangle has perimeter 20 cm. The length ($l$) is 4 cm longer than the width ($w$)." Which system is correct?', questionEn:'"Persegi panjang memiliki keliling 20 cm. Panjang ($l$) 4 cm lebih panjang dari lebar ($w$)." Sistem mana yang benar?',
+          options:[
+            {text:'$2l + 2w = 20$ and $l = w + 4$', correct:true},
+            {text:'$l + w = 20$ and $l = w - 4$', correct:false},
+            {text:'$2l + 2w = 20$ and $w = l + 4$', correct:false},
+            {text:'$l \\times w = 20$ and $l = w + 4$', correct:false}
+          ],
+          explanation:`<p>Perimeter of rectangle is $2l + 2w$. "Length is 4 longer than width" means $l = w + 4$. <span class="tr">Keliling persegi panjang adalah $2l + 2w$. "Panjang 4 lebih panjang" berarti $l = w + 4$.</span></p>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: "The product of two numbers is 12" translates to $x + y = 12$.', questionEn:'Benar atau Salah: "Hasil kali dua angka adalah 12" diterjemahkan menjadi $x + y = 12$.',
+          correctAnswer:'false',
+          explanation:`<p>"Product" means multiplication, so it should be $x \\times y = 12$ or $xy = 12$. <span class="tr">"Produk/Hasil kali" berarti perkalian, jadi seharusnya $xy = 12$.</span></p>
+            <p>The statement is <strong>False</strong>.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Linear & Non-Linear Setup', pageTitleEn:'Pengaturan Linear & Non-Linear',
+          body:`
+            <p>In Cambridge AS & A Level, you will encounter systems where one equation is a curve (like a circle or parabola). <span class="tr">Di Cambridge AS & A Level, Anda akan menemui sistem di mana satu persamaan adalah kurva (seperti lingkaran atau parabola).</span></p>
+            <div class="example-box"><h4>Example: Line and Parabola <span class="tr">Contoh: Garis dan Parabola</span></h4>
+              $y = 2x - 1$ (Linear)<br>
+              $y = x^2 - 3x + 2$ (Quadratic)<br><br>
+              To solve graphically, you plot both on the same axes. The intersections are the solutions. <span class="tr">Untuk menyelesaikan secara grafis, gambar keduanya pada sumbu yang sama. Perpotongannya adalah solusinya.</span>
+            </div>
+            <div class="tip-box"><h4>Algebraic Approach <span class="tr">Pendekatan Aljabar</span></h4>
+              Since both equal $y$, we can set them equal to each other: <span class="tr">Karena keduanya sama dengan $y$, kita bisa menyamakannya:</span><br>
+              $2x - 1 = x^2 - 3x + 2$             </div>`
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Match Shapes to Equations', pageTitleEn:'Cocokkan Bentuk ke Persamaan', taskType:'pairing',
+          question:'Match the equation with the shape of its graph.', questionEn:'Cocokkan persamaan dengan bentuk grafiknya.',
+          pairs:[
+            {left:'$y = mx + c$', right:'Straight Line'},
+            {left:'$y = ax^2 + bx + c$', right:'Parabola'},
+            {left:'$x^2 + y^2 = r^2$', right:'Circle'},
+            {left:'$y = \\dfrac{1}{x}$', right:'Hyperbola'}
+          ],
+          explanation:`<p>Recognizing the equation type helps you know what to expect graphically. <span class="tr">Mengenali tipe persamaan membantu Anda tahu apa yang diharapkan secara grafis.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Choose Setup', pageTitleEn:'Pilih Pengaturan', taskType:'radio',
+          question:'System: $y = x^2$ and $y = 3x + 4$. What is the correct first algebraic step?', questionEn:'Sistem: $y = x^2$ dan $y = 3x + 4$. Apa langkah aljabar pertama yang benar?',
+          options:[
+            {text:'Substitute $3x+4$ into $y=x^2$ to get $3x+4 = x^2$', correct:true},
+            {text:'Add the equations: $2y = x^2 + 3x + 4$', correct:false},
+            {text:'Divide the second equation by $x$', correct:false},
+            {text:'Subtract $y$ from both sides', correct:false}
+          ],
+          explanation:`<p>Since both are equal to $y$, set them equal to each other. This creates a single quadratic equation in terms of $x$. <span class="tr">Karena keduanya sama dengan $y$, samakan keduanya. Ini membuat persamaan kuadrat tunggal dalam $x$.</span></p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Order Setup Steps', pageTitleEn:'Urutkan Langkah Persiapan', taskType:'sorting',
+          question:'Order the steps to form a quadratic equation from: $y = 2x - 3$ and $x^2 + y^2 = 5$.', questionEn:'Urutkan langkah membentuk persamaan kuadrat dari: $y = 2x - 3$ dan $x^2 + y^2 = 5$.',
+          items:[
+            'Substitute $2x-3$ for $y$ in the circle equation',
+            'Write: $x^2 + (2x-3)^2 = 5$',
+            'Expand the bracket: $x^2 + 4x^2 - 12x + 9 = 5$',
+            'Simplify to standard form: $5x^2 - 12x + 4 = 0$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Substitute the linear equation into the non-linear one, expand carefully, and rearrange. <span class="tr">Substitusi persamaan linear ke non-linear, kembangkan dengan hati-hati, dan atur ulang.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Solving the Quadratic Result', pageTitleEn:'Menyelesaikan Hasil Kuadrat',
+          body:`
+            <p>Once you have a quadratic equation (e.g., $ax^2 + bx + c = 0$), you can solve it using <strong>Factorisation</strong>, the <strong>Quadratic Formula</strong>, or <strong>Completing the Square</strong>. <span class="tr">Setelah Anda memiliki persamaan kuadrat, Anda bisa menyelesaikannya dengan Faktorisasi, Rumus Kuadrat, atau Melengkapkan Kuadrat.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              From $y = 2x - 1$ and $y = x^2 - 3x + 2$, we got $x^2 - 5x + 3 = 0$. <br>
+              If we change the equation slightly to $x^2 - 5x + 6 = 0$, we can factorise it easily:<br>
+              Factorise: $(x - 2)(x - 3) = 0$<br>
+              So $x = 2$ or $x = 3$.<br>
+              Substitute back to find $y$ values.
+            </div>`
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Factorise', pageTitleEn:'Faktorkan', taskType:'fill',
+          question:'Solve $x^2 - 5x + 6 = 0$. What is the smaller value of $x$?', questionEn:'Selesaikan $x^2 - 5x + 6 = 0$. Berapa nilai $x$ yang lebih kecil?',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Find two numbers that multiply to $6$ and add to $-5$. They are $-2$ and $-3$. <span class="tr">Cari dua angka yang dikalikan menjadi $6$ dan dijumlahkan menjadi $-5$. Yaitu $-2$ dan $-3$.</span></p>
+            <p>$(x - 2)(x - 3) = 0 \Rightarrow x = 2$ or $x = 3$. The smaller is $2$.</p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Select Valid Methods', pageTitleEn:'Pilih Metode Valid', taskType:'checkbox',
+          question:'Which of the following are valid methods to solve $x^2 - 4x - 5 = 0$?', questionEn:'Mana dari berikut ini yang merupakan metode valid untuk menyelesaikan $x^2 - 4x - 5 = 0$?',
+          options:[
+            {text:'Factorisation', correct:true},
+            {text:'Quadratic Formula', correct:true},
+            {text:'Completing the Square', correct:true},
+            {text:'Elimination', correct:false}
+          ],
+          explanation:`<p>Elimination is for simultaneous linear equations. The other three are standard methods for quadratics. <span class="tr">Eliminasi untuk persamaan linear simultan. Tiga lainnya adalah metode standar untuk kuadrat.</span></p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Number of Roots', pageTitleEn:'Jumlah Akar', taskType:'radio',
+          question:'A line intersects a parabola at exactly one point. How many real roots does the resulting quadratic equation have?', questionEn:'Garis memotong parabola tepat di satu titik. Berapa banyak akar real yang dimiliki persamaan kuadratnya?',
+          options:[
+            {text:'0', correct:false},
+            {text:'1', correct:true},
+            {text:'2', correct:false},
+            {text:'Infinite', correct:false}
+          ],
+          explanation:`<p>One intersection point means the quadratic has exactly one real root (a repeated root, $b^2 - 4ac = 0$). <span class="tr">Satu titik potong berarti kuadrat memiliki tepat satu akar real.</span></p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Order Solving Steps', pageTitleEn:'Urutkan Langkah Penyelesaian', taskType:'sorting',
+          question:'Order the steps to solve a line and parabola system.', questionEn:'Urutkan langkah menyelesaikan sistem garis dan parabola.',
+          items:[
+            'Set equations equal to form a quadratic',
+            'Rearrange to standard form $ax^2 + bx + c = 0$',
+            'Solve the quadratic for $x$',
+            'Substitute $x$-values back into the linear equation',
+            'State the $(x, y)$ coordinate pairs'
+          ],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Standard procedure for non-linear simultaneous equations. <span class="tr">Prosedur standar untuk persamaan simultan non-linear.</span></p>`
+        }
+      ]
+    },
+    e: {
+      title: 'Guided Practice',
+      titleEn: 'Guided Practice',
+      time: '00:30 - 00:45',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Linear & Non-Linear Walkthrough', pageTitleEn:'Panduan Linear & Non-Linear',
+          body:`
+            <p>Let's solve a complete Cambridge-style problem together. <span class="tr">Mari kita selesaikan soal bergaya Cambridge bersama-sama.</span></p>
+            <div class="math-block">
+              $y = x - 1$ (Linear)<br>
+              $y = x^2 - 4x + 3$ (Quadratic)
+            </div>
+            <div class="example-box"><h4>Step 1: Set Equal <span class="tr">Langkah 1: Samakan</span></h4>
+              $x - 1 = x^2 - 4x + 3$             </div>
+            <div class="example-box"><h4>Step 2: Rearrange <span class="tr">Langkah 2: Atur Ulang</span></h4>
+              $0 = x^2 - 4x - x + 3 + 1$<br>
+              $0 = x^2 - 5x + 4$             </div>
+            <div class="example-box"><h4>Step 3: Factorise & Solve <span class="tr">Langkah 3: Faktorkan & Selesaikan</span></h4>
+              $0 = (x - 1)(x - 4)$<br>
+              $x = 1$ or $x = 4$             </div>
+            <div class="example-box"><h4>Step 4: Find y <span class="tr">Langkah 4: Cari y</span></h4>
+              For $x = 1$: $y = (1) - 1 = 0$. Point: $(1, 0)$<br>
+              For $x = 4$: $y = (4) - 1 = 3$. Point: $(4, 3)$             </div>
+            <div class="tip-box"><h4>Check <span class="tr">Periksa</span></h4>
+              Always use the linear equation to find $y$ to avoid extraneous roots. <span class="tr">Selalu gunakan persamaan linear untuk mencari $y$.</span>
+            </div>`
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Set Equal', pageTitleEn:'Samakan', taskType:'fill',
+          question:'System: $y = 2x + 1$ and $y = x^2 - 2$. Set them equal. $x^2 - \\dots = 2x + 1$', questionEn:'Sistem: $y = 2x + 1$ dan $y = x^2 - 2$. Samakan keduanya. $x^2 - \\dots = 2x + 1$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Since $y = x^2 - 2$ and $y = 2x + 1$, we set $x^2 - 2 = 2x + 1$. The blank is $2$. <span class="tr">Karena $y = x^2 - 2$ dan $y = 2x + 1$, kita samakan $x^2 - 2 = 2x + 1$. Titik kosong adalah $2$.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Rearrange', pageTitleEn:'Atur Ulang', taskType:'sorting',
+          question:'Order the steps to rearrange $x^2 - 2 = 2x + 1$ into standard form $ax^2 + bx + c = 0$.', questionEn:'Urutkan langkah mengatur ulang $x^2 - 2 = 2x + 1$ ke bentuk standar $ax^2 + bx + c = 0$.',
+          items:[
+            'Start: $x^2 - 2 = 2x + 1$',
+            'Subtract $2x$ from both sides: $x^2 - 2x - 2 = 1$',
+            'Subtract $1$ from both sides: $x^2 - 2x - 3 = 0$'
+          ],
+          correctOrder:[0,1,2],
+          explanation:`<p>Move all terms to one side to set the equation to zero. <span class="tr">Pindahkan semua suku ke satu sisi untuk membuat persamaan sama dengan nol.</span></p>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: Factorise', pageTitleEn:'Faktorkan', taskType:'radio',
+          question:'Factorise $x^2 - 2x - 3 = 0$.', questionEn:'Faktorkan $x^2 - 2x - 3 = 0$.',
+          options:[
+            {text:'$(x - 1)(x - 3)$', correct:false},
+            {text:'$(x + 1)(x - 3)$', correct:true},
+            {text:'$(x - 1)(x + 3)$', correct:false},
+            {text:'$(x + 1)(x + 3)$', correct:false}
+          ],
+          explanation:`<p>Need two numbers that multiply to $-3$ and add to $-2$. That is $-3$ and $+1$. <span class="tr">Butuh dua angka yang dikalikan jadi $-3$ dan dijumlahkan jadi $-2$. Yaitu $-3$ dan $+1$.</span></p>
+            <p>So $(x + 1)(x - 3) = 0$.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Finding y-values', pageTitleEn:'Mencari nilai y',
+          body:`
+            <p>Once you have the $x$-values from factorising, plug them back into the simplest equation (usually the linear one) to find $y$. <span class="tr">Setelah Anda mendapatkan nilai $x$ dari faktorisasi, masukkan kembali ke persamaan ter sederhana (biasanya linear) untuk mencari $y$.</span></p>
+            <div class="example-box"><h4>Continuing from T3 <span class="tr">Melanjutkan dari T3</span></h4>
+              We had $(x + 1)(x - 3) = 0 \Rightarrow x = -1$ or $x = 3$.<br><br>
+              Original linear equation: $y = 2x + 1$.<br><br>
+              <strong>For $x = -1$:</strong> $y = 2(-1) + 1 = -2 + 1 = -1$. Point: $(-1, -1)$<br>
+              <strong>For $x = 3$:</strong> $y = 2(3) + 1 = 6 + 1 = 7$. Point: $(3, 7)$             </div>`
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Calculate y', pageTitleEn:'Hitung y', taskType:'fill',
+          question:'Using $y = 2x + 1$ and $x = 3$. What is $y$?', questionEn:'Menggunakan $y = 2x + 1$ dan $x = 3$. Berapa $y$?',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>Substitute $x = 3$ into $y = 2x + 1$: <span class="tr">Substitusi $x = 3$ ke $y = 2x + 1$:</span></p>
+            <p>$y = 2(3) + 1 = 6 + 1 = 7$.</p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Match Points', pageTitleEn:'Cocokkan Titik', taskType:'pairing',
+          question:'Match the $x$ value with its corresponding $y$ value using $y = 2x + 1$.', questionEn:'Cocokkan nilai $x$ dengan nilai $y$ yang sesuai menggunakan $y = 2x + 1$.',
+          pairs:[
+            {left:'$x = -1$', right:'$y = -1$'},
+            {left:'$x = 0$', right:'$y = 1$'},
+            {left:'$x = 3$', right:'$y = 7$'},
+            {left:'$x = -2$', right:'$y = -3$'}
+          ],
+          explanation:`<p>Substitute each $x$ into the equation: <span class="tr">Substitusi setiap $x$ ke persamaan:</span></p>
+            <ul><li>$2(-1)+1 = -1$</li><li>$2(0)+1 = 1$</li>
+            <li>$2(3)+1 = 7$</li><li>$2(-2)+1 = -3$</li></ul>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: You should substitute your $x$-values into the quadratic equation to find $y$ because it is more accurate.', questionEn:'Benar atau Salah: Anda harus mensubstitusi nilai $x$ ke persamaan kuadrat untuk mencari $y$ karena lebih akurat.',
+          correctAnswer:'false',
+          explanation:`<p>You should use the linear equation. The quadratic equation has $x^2$, which can create extra (extraneous) roots if calculations are off, and it's harder to compute. <span class="tr">Gunakan persamaan linear. Persamaan kuadrat memiliki $x^2$, yang bisa membuat akar ekstra dan lebih sulit dihitung.</span></p>
+            <p>The statement is <strong>False</strong>.</p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Elimination with Scaling', pageTitleEn:'Eliminasi dengan Skala',
+          body:`
+            <p>For Linear & Linear systems, sometimes coefficients don't match nicely. You must multiply equations to create matching coefficients. <span class="tr">Untuk sistem Linear & Linear, kadang koefisien tidak cocok. Anda harus mengalikan persamaan untuk membuat koefisien yang cocok.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              $3x + 2y = 7$<br>
+              $2x - y = 1$<br><br>
+              To eliminate $y$, multiply the second equation by $2$: <span class="tr">Untuk mengeliminasi $y$, kalikan persamaan kedua dengan $2$:</span><br>
+              $4x - 2y = 2$<br><br>
+              Now add this to the first equation: <span class="tr">Sekarang jumlahkan ke persamaan pertama:</span><br>
+              $(3x + 2y) + (4x - 2y) = 7 + 2$<br>
+              $7x = 9 \\Rightarrow x = \\dfrac{9}{7}$<br><br>
+              Fractions are normal in algebra!
+            </div>`
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Determine Multipliers', pageTitleEn:'Tentukan Pengali', taskType:'fill',
+          question:'System: $4x + 3y = 10$ and $2x + 5y = 12$. To eliminate $x$ by making coefficients $8$ and $8$, what do you multiply the second equation by?', questionEn:'Sistem: $4x + 3y = 10$ dan $2x + 5y = 12$. Untuk mengeliminasi $x$ dengan membuat koefisien $8$ dan $8$, dengan apa persamaan kedua dikalikan?',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>The goal is to make the coefficients of $x$ equal. <span class="tr">Tujuannya adalah membuat koefisien $x$ sama.</span></p>
+            <p>First equation has $4x$. To make it $8x$, we multiply by 2. <span class="tr">Persamaan pertama punya $4x$. Untuk membuatnya $8x$, kita kalikan dengan 2.</span></p>
+            <p>Second equation has $2x$. To make it $8x$, you must multiply by $4$. <span class="tr">Persamaan kedua punya $2x$. Untuk membuat $2x$ menjadi $8x$, Anda harus mengalikan dengan $4$.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Execute Elimination', pageTitleEn:'Lakukan Eliminasi', taskType:'radio',
+          question:'System: $4x + 3y = 10$ and $4x + 10y = 24$ (after scaling). What is the next step?', questionEn:'Sistem: $4x + 3y = 10$ dan $4x + 10y = 24$ (setelah skala). Apa langkah selanjutnya?',
+          options:[
+            {text:'Add the equations to eliminate $x$', correct:false},
+            {text:'Subtract the first equation from the second to eliminate $x$', correct:true},
+            {text:'Subtract the second from the first to eliminate $y$', correct:false},
+            {text:'Divide by $4$', correct:false}
+          ],
+          explanation:`<p>Since $4x$ and $4x$ have the same sign, we subtract to eliminate. <span class="tr">Karena $4x$ dan $4x$ bertanda sama, kita kurangkan untuk mengeliminasi.</span></p>
+            <p>$(4x + 10y) - (4x + 3y) = 24 - 10 \Rightarrow 7y = 14 \Rightarrow y = 2$.</p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Solve for x', pageTitleEn:'Selesaikan untuk x', taskType:'fill',
+          question:'From the previous task, we found $y = 2$. Substitute this into $4x + 3y = 10$ to find $x$. $x = \\dots$', questionEn:'Dari tugas sebelumnya, kita temukan $y = 2$. Substitusi ini ke $4x + 3y = 10$ untuk mencari $x$. $x = \\dots$',
+          correctAnswer:'1', acceptableAnswers:['1'],
+          explanation:`<p>Substitute $y = 2$: <span class="tr">Substitusi $y = 2$:</span></p>
+            <ol><li>$4x + 3(2) = 10$</li>
+            <li>$4x + 6 = 10$</li>
+            <li>$4x = 4$</li>
+            <li>$x = 1$</li></ol>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Full Process Order', pageTitleEn:'Urutan Proses Penuh', taskType:'sorting',
+          question:'Order the complete elimination process for: $3x + 2y = 8$ and $x - y = 1$.', questionEn:'Urutkan proses eliminasi penuh untuk: $3x + 2y = 8$ dan $x - y = 1$.',
+          items:[
+            'Multiply second equation by 2: $2x - 2y = 2$',
+            'Add to first equation: $(3x+2y) + (2x-2y) = 8+2$',
+            'Simplify: $5x = 10 \\Rightarrow x = 2$',
+            'Substitute $x=2$ into $x - y = 1$: $2 - y = 1$',
+            'Solve for $y$: $y = 1$'
+          ],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Scale to match $y$ coefficients ($2$ and $-2$), add them to eliminate $y$, solve for $x$, then back-substitute. <span class="tr">Skalakan untuk mencocokkan koefisien $y$, jumlahkan untuk mengeliminasi $y$, selesaikan untuk $x$, lalu substitusi kembali.</span></p>`
+        }
+      ]
+    },
+    f: {
+      title: 'Independent Practice',
+      titleEn: 'Independent Practice',
+      time: '00:45 - 00:55',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Harder Substitution', pageTitleEn:'Substitusi Lebih Sulit',
+          body:`
+            <p>Sometimes you have to manipulate both equations or deal with fractions. <span class="tr">Kadang Anda harus memanipulasi kedua persamaan atau berurusan dengan pecahan.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              $2x - 3y = 5$<br>
+              $3x + y = 4$<br><br>
+              From Eq 2: $y = 4 - 3x$.<br>
+              Substitute into Eq 1: $2x - 3(4 - 3x) = 5$<br>
+              $2x - 12 + 9x = 5$<br>
+              $11x = 17 \Rightarrow x = \dfrac{17}{11}$.<br><br>
+              Fractions are normal in Cambridge! Don't be afraid of them. <span class="tr">Pecahan itu normal di Cambridge! Jangan takut.</span>
+            </div>`
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Isolate Variable', pageTitleEn:'Isolasi Variabel', taskType:'radio',
+          question:'System: $5x - 2y = 4$ and $x + 3y = 9$. Which substitution is mathematically valid?', questionEn:'Sistem: $5x - 2y = 4$ dan $x + 3y = 9$. Substitusi mana yang valid secara matematis?',
+          options:[
+            {text:'$y = \\dfrac{5x - 4}{2}$', correct:true},
+            {text:'$y = \\dfrac{5x + 4}{2}$', correct:false},
+            {text:'$x = 9 - y$', correct:false},
+            {text:'$x = 5x - 4$', correct:false}
+          ],
+          explanation:`<p>From $5x - 2y = 4$, we subtract $5x$: $-2y = -5x + 4$. Then divide by $-2$: $y = \dfrac{-5x + 4}{-2} = \dfrac{5x - 4}{2}$. <span class="tr">Dari $5x - 2y = 4$, kurangi $5x$, lalu bagi dengan $-2$.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Solve with Fractions', pageTitleEn:'Selesaikan dengan Pecahan', taskType:'fill',
+          question:'System: $y = x + 1$ and $2y + 3x = 10$. Find $x$. $x = \\dots$', questionEn:'Sistem: $y = x + 1$ dan $2y + 3x = 10$. Cari $x$. $x = \\dots$',
+          correctAnswer:'1.6', acceptableAnswers:['1.6','1,6','8/5','1 3/5'],
+          explanation:`<p>Substitute $y = x + 1$ into the second: <span class="tr">Substitusi $y = x + 1$ ke persamaan kedua:</span></p>
+            <ol><li>$2(x + 1) + 3x = 10$</li>
+            <li>$2x + 2 + 3x = 10$</li>
+            <li>$5x + 2 = 10$</li>
+            <li>$5x = 8 \Rightarrow x = \dfrac{8}{5} = 1.6$</li></ol>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or False: If a simultaneous equation solution results in $x = \dfrac{1}{3}$, it is an invalid answer because it is not an integer.', questionEn:'Benar atau Salah: Jika solusi persamaan simultan menghasilkan $x = \dfrac{1}{3}$, itu jawaban tidak valid karena bukan bilangan bulat.',
+          correctAnswer:'false',
+          explanation:`<p>Fractions and decimals are perfectly valid in Cambridge exams. <span class="tr">Pecahan dan desimal sangat valid di ujian Cambridge.</span></p>
+            <p>The statement is <strong>False</strong>.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Harder Elimination', pageTitleEn:'Eliminasi Lebih Sulit',
+          body:`
+            <p>When dealing with negatives and scaling, keep track of your signs carefully. <span class="tr">Saat berurusan dengan negatif dan skala, perhatikan tanda Anda dengan hati-hati.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              $-2x + 5y = 8$<br>
+              $3x - 10y = -4$<br><br>
+              To eliminate $y$, multiply the first equation by $2$: <span class="tr">Untuk mengeliminasi $y$, kalikan persamaan pertama dengan $2$:</span><br>
+              $-4x + 10y = 16$<br><br>
+              Now add to the second equation (since $+10y$ and $-10y$ are opposite): <span class="tr">Sekarang jumlahkan ke persamaan kedua:</span><br>
+              $(-4x + 10y) + (3x - 10y) = 16 + (-4)$<br>
+              $-x = 12 \Rightarrow x = -12$             </div>`
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Spot the Error', pageTitleEn:'Temukan Kesalahan', taskType:'radio',
+          question:'A student solves $3x - y = 5$ and $2x + y = 5$ by adding them, getting $5x = 10 \\Rightarrow x = 2$. They then substitute $x=2$ into $3x - y = 5$ getting $6 - y = 5 \\Rightarrow y = -1$. What is wrong?', questionEn:'Siswa menyelesaikan $3x - y = 5$ dan $2x + y = 5$ dengan menjumlahkannya, mendapat $5x = 10 \\Rightarrow x = 2$. Lalu substitusi $x=2$ ke $3x - y = 5$ mendapat $6 - y = 5 \\Rightarrow y = -1$. Apa yang salah?',
+          options:[
+            {text:'Adding was wrong, they should have subtracted', correct:false},
+            {text:'Substituting into the wrong equation (should check both)', correct:false},
+            {text:'Math error: $6 - y = 5$ should result in $y = 1$, not $y = -1$', correct:true},
+            {text:'The value of $x$ is wrong, it should be $x=1$', correct:false}
+          ],
+          explanation:`<p>The student made a sign error when solving for $y$. <span class="tr">Siswa membuat kesalahan tanda saat mencari $y$.</span></p>
+            <p>If $6 - y = 5$, subtracting 6 from both sides gives $-y = -1$, so $y = 1$. <span class="tr">Jika $6 - y = 5$, mengurangi 6 dari kedua sisi menghasilkan $-y = -1$, jadi $y = 1$.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Match Method to System', pageTitleEn:'Cocokkan Metode ke Sistem', taskType:'pairing',
+          question:'Match the system with the most efficient method.', questionEn:'Cocokkan sistem dengan metode paling efisien.',
+          pairs:[
+            {left:'$y = 4x - 1$ and $2x + y = 5$', right:'Substitution'},
+            {left:'$3x + 2y = 10$ and $3x - y = 2$', right:'Elimination (Subtract)'},
+            {left:'$x + y = 6$ and $x - y = 2$', right:'Elimination (Add)'},
+            {left:'Need to see intersection visually', right:'Graphical'}
+          ],
+          explanation:`<p>Choose the method that requires the least manipulation. <span class="tr">Pilih metode yang membutuhkan manipulasi paling sedikit.</span></p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Scaling Both', pageTitleEn:'Menskalakan Keduanya', taskType:'sorting',
+          question:'Order steps to eliminate $x$ from $3x + 4y = 10$ and $5x - 2y = 1$.', questionEn:'Urutkan langkah mengeliminasi $x$ dari $3x + 4y = 10$ dan $5x - 2y = 1$.',
+          items:[
+            'Multiply first equation by 5: $15x + 20y = 50$',
+            'Multiply second equation by 3: $15x - 6y = 3$',
+            'Subtract second new equation from first: $(15x+20y) - (15x-6y) = 50-3$',
+            'Simplify: $26y = 47 \\Rightarrow y = \\dfrac{47}{26}$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>LCM of $3$ and $5$ is $15$. Scale both equations to $15x$, then subtract. <span class="tr">KPK dari $3$ dan $5$ adalah $15$. Skalakan keduanya jadi $15x$, lalu kurangkan.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Word Problem Walkthrough', pageTitleEn:'Panduan Soal Cerita',
+          body:`
+            <p>Let's set up a word problem from scratch. <span class="tr">Mari kita susun soal cerita dari awal.</span></p>
+            <div class="example-box"><h4>Problem <span class="tr">Soal</span></h4>
+              "A taxi company charges a flat fee plus a per-km rate. A 5 km ride costs $\\$12$. A 10 km ride costs $\\$17$." Find the flat fee and the per-km rate. <span class="tr">"Perusahaan taksi mengenakan biaya tetap ditambah tarif per km. Tumpangan 5 km biaya $12. Tumpangan 10 km biaya $17."</span>
+            </div>
+            <div class="math-block">
+              Let $F$ = flat fee, $r$ = per-km rate.<br>
+              Eq 1: $F + 5r = 12$<br>
+              Eq 2: $F + 10r = 17$             </div>
+            <div class="tip-box"><h4>Solve by Elimination <span class="tr">Selesaikan dengan Eliminasi</span></h4>
+              Subtract Eq 1 from Eq 2: <br>
+              $(F + 10r) - (F + 5r) = 17 - 12$<br>
+              $5r = 5 \Rightarrow r = 1$.<br>
+              Substitute $r = 1$ into Eq 1: $F + 5(1) = 12 \Rightarrow F = 7$.
+            </div>`
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Identify Variables', pageTitleEn:'Identifikasi Variabel', taskType:'radio',
+          question:'In the taxi problem, what do $F$ and $r$ represent?', questionEn:'Pada masalah taksi, apa yang diwakili $F$ dan $r$?',
+          options:[
+            {text:'$F$ is total cost, $r$ is distance', correct:false},
+            {text:'$F$ is flat fee, $r$ is per-km rate', correct:true},
+            {text:'$F$ is time, $r$ is speed', correct:false},
+            {text:'$F$ is per-km rate, $r$ is flat fee', correct:false}
+          ],
+          explanation:`<p>$F$ is the fixed starting cost (flat fee), and $r$ is the cost added per kilometer. <span class="tr">$F$ adalah biaya awal tetap, dan $r$ adalah biaya yang ditambahkan per kilometer.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Choose Equation', pageTitleEn:'Pilih Persamaan', taskType:'checkbox',
+          question:'Select all equations that correctly represent the taxi problem.', questionEn:'Pilih semua persamaan yang benar mewakili masalah taksi.',
+          options:[
+            {text:'$F + 5r = 12$', correct:true},
+            {text:'$F + 10r = 17$', correct:true},
+            {text:'$5F + r = 12$', correct:false},
+            {text:'$F - r = 12$', correct:false}
+          ],
+          explanation:`<p>Cost = Flat Fee + (Rate $\times$ Distance). <span class="tr">Biaya = Biaya Tetap + (Tarif $\times$ Jarak).</span></p>
+            <p>For 5km: $F + 5r = 12$. For 10km: $F + 10r = 17$.</p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Solve for Rate', pageTitleEn:'Selesaikan untuk Tarif', taskType:'fill',
+          question:'Using $F + 5r = 12$ and $F + 10r = 17$, what is the value of $r$?', questionEn:'Menggunakan $F + 5r = 12$ dan $F + 10r = 17$, berapa nilai $r$?',
+          correctAnswer:'1', acceptableAnswers:['1','1.00'],
+          explanation:`<p>Subtract Eq 1 from Eq 2: <span class="tr">Kurangi Pers 1 dari Pers 2:</span></p>
+            <p>$(F + 10r) - (F + 5r) = 17 - 12$</p>
+            <p>$5r = 5 \Rightarrow r = 1$.</p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Complete Process', pageTitleEn:'Proses Lengkap', taskType:'sorting',
+          question:'Order the steps to solve the taxi problem completely.', questionEn:'Urutkan langkah menyelesaikan masalah taksi sepenuhnya.',
+          items:[
+            'Define variables: $F$ for flat fee, $r$ for rate',
+            'Form equations: $F + 5r = 12$ and $F + 10r = 17$',
+            'Subtract Eq 1 from Eq 2 to eliminate $F$',
+            'Solve for $r$: $5r = 5 \\Rightarrow r = 1$',
+            'Substitute $r=1$ to find $F$: $F = 7$'
+          ],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Standard modeling procedure: define, formulate, solve, back-substitute. <span class="tr">Prosedur pemodelan standar: definisikan, rumuskan, selesaikan, substitusi kembali.</span></p>`
+        }
+      ]
+    },
+    g: {
+      title: 'Consolidation & Reflection',
+      titleEn: 'Consolidation & Reflection',
+      time: '00:55 - 01:00',
+      pages: [
+        // E1: Poin Penting
+        { type:'explanation', pageTitle:'E1: Key Takeaways', pageTitleEn:'Poin Penting',
+          body:`
+            <div class="illustration">
+              <svg width="220" height="80" viewBox="0 0 220 80">
+                <circle cx="40" cy="40" r="28" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="40" y="48" text-anchor="middle" font-size="22" fill="#2563eb">★</text>
+                <text x="85" y="35" font-size="13" fill="#1e40af" font-weight="bold">Simultaneous Eqs</text>
+                <text x="85" y="52" font-size="10" fill="#64748b">Substitution · Elimination · Graph</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Three methods, one solution <span class="tr">Tiga metode, satu solusi</span></div>
+            </div>
+            <p>Today we learned <strong>Simultaneous Equations</strong>. Here are the key points: <span class="tr">Hari ini kita belajar Persamaan Simultan. Berikut poin pentingnya:</span></p>
+            <div class="math-block">
+              <ol>
+                <li><strong>Simultaneous Equations:</strong> Two equations with two variables satisfied together. <span class="tr">Dua persamaan dua variabel dipenuhi bersamaan.</span></li>
+                <li><strong>Substitution:</strong> Isolate one variable $\rightarrow$ substitute $\rightarrow$ solve $\rightarrow$ back-substitute. <span class="tr">Isolasi satu variabel $\rightarrow$ substitusi $\rightarrow$ selesaikan $\rightarrow$ substitusi kembali.</span></li>
+                <li><strong>Elimination:</strong> Equalize coefficients $\rightarrow$ add/subtract $\rightarrow$ solve $\rightarrow$ back-substitute. <span class="tr">Samakan koefisien $\rightarrow$ jumlah/kurangi $\rightarrow$ selesaikan $\rightarrow$ substitusi kembali.</span></li>
+                <li><strong>Linear & Non-Linear:</strong> Set equal $\rightarrow$ form quadratic $\rightarrow$ solve quadratic $\rightarrow$ back-substitute into linear. <span class="tr">Samakan $\rightarrow$ bentuk kuadrat $\rightarrow$ selesaikan kuadrat $\rightarrow$ substitusi ke linear.</span></li>
+                <li><strong>Always check</strong> answers by substituting back into both original equations. <span class="tr">Selalu periksa jawaban dengan substitusi ke kedua persamaan asli.</span></li>
+              </ol>
+            </div>
+            <div class="tip-box">
+              <h4>Tips for choosing method <span class="tr">Tips memilih metode</span></h4>
+              <ul>
+                <li>Coefficient = 1 or already isolated $\rightarrow$ <strong>Substitution</strong> <span class="tr">Koefisien 1 atau sudah terisolasi $\rightarrow$ Substitusi</span></li>
+                <li>Same or easily equalized coefficients $\rightarrow$ <strong>Elimination</strong> <span class="tr">Koefisien sama atau mudah disamakan $\rightarrow$ Eliminasi</span></li>
+                <li>Need visualization $\rightarrow$ <strong>Graph</strong> <span class="tr">Butuh visualisasi $\rightarrow$ Grafik</span></li>
+              </ul>
+            </div>
+          `
+        },
+        // T1: Pertanyaan Refleksi
+        { type:'task', pageTitle:'T1: Reflection Question', pageTitleEn:'Pertanyaan Refleksi', taskType:'truefalse',
+          question:'True or False: I understand at least one method of solving simultaneous equations (substitution, elimination, or graph).', questionEn:'Benar atau Salah: Saya memahami minimal satu metode penyelesaian persamaan simultan.',
+          correctAnswer:'true',
+          explanation:`<p>If you answered <strong>True</strong>, you are ready for independent practice in Task 1–5. <span class="tr">Jika Benar, Anda siap untuk latihan mandiri di Task 1–5.</span></p>
+            <p>If you answered <strong>False</strong>, review sections C–F and ask your tutor. <span class="tr">Jika Salah, pelajari kembali bagian C–F dan tanyakan ke tutor.</span></p>`
+        },
+        // T2: Exit Ticket
+        { type:'task', pageTitle:'T2: Exit Ticket', pageTitleEn:'Exit Ticket', taskType:'fill',
+          question:'Solve: $y = 2x - 3$ and $y = x - 1$. Find $x$. $x = \\dots$', questionEn:'Selesaikan: $y = 2x - 3$ dan $y = x - 1$. Cari $x$. $x = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Set them equal: <span class="tr">Samakan keduanya:</span></p>
+            <ol>
+              <li>$2x - 3 = x - 1$</li>
+              <li>Subtract $x$: $x - 3 = -1$</li>
+              <li>Add $3$: $x = 2$</li>
+            </ol>
+            <p>Check: $y = 2(2)-3 = 1$ and $y = 2-1 = 1$. <strong>Solution: $(2, 1)$</strong></p>`
+        },
+        // E2: Follow-up Practice
+        { type:'explanation', pageTitle:'E2: Follow-up Practice', pageTitleEn:'Follow-up Practice',
+          body:`
+            <p>Additional practice is available in <strong>Task 1–5</strong>. Each section contains 10 questions of various types. <span class="tr">Latihan tambahan tersedia di Task 1–5. Setiap bagian berisi 10 soal dengan berbagai tipe.</span></p>
+            <div class="math-block">
+              <ul>
+                <li><strong>Task 1:</strong> Mixed basics <span class="tr">Campuran dasar</span></li>
+                <li><strong>Task 2:</strong> Substitution focus <span class="tr">Fokus substitusi</span></li>
+                <li><strong>Task 3:</strong> Elimination focus <span class="tr">Fokus eliminasi</span></li>
+                <li><strong>Task 4:</strong> Word problems <span class="tr">Soal cerita</span></li>
+                <li><strong>Task 5:</strong> Advanced mixed (Linear & Non-Linear) <span class="tr">Campuran lanjutan</span></li>
+              </ul>
+            </div>
+            <div class="tip-box">
+              <h4>How to use <span class="tr">Cara menggunakan</span></h4>
+              <ol>
+                <li>Open Task 1–5 from the left sidebar. <span class="tr">Buka Task 1–5 dari sidebar kiri.</span></li>
+                <li>Answer each question, then click <strong>"Check Answer"</strong>. <span class="tr">Jawab tiap soal, lalu klik "Check Answer".</span></li>
+                <li>After finishing all questions in a section, click the <strong>🖨 Print to PDF</strong> button in the top right. <span class="tr">Setelah selesai, klik tombol Print to PDF di kanan atas.</span></li>
+                <li>Print or save as PDF for your tutor to check. <span class="tr">Cetak atau simpan sebagai PDF untuk diperiksa tutor.</span></li>
+              </ol>
+            </div>
+            <div class="example-box">
+              <h4>Tips <span class="tr">Tips</span></h4>
+              <ul>
+                <li>Work sequentially from Task 1 to Task 5. <span class="tr">Kerjakan berurutan dari Task 1 ke 5.</span></li>
+                <li>If confused, return to explanations in Sections C–F. <span class="tr">Jika bingung, kembali ke penjelasan di Bagian C–F.</span></li>
+                <li>Use scratch paper for calculations. <span class="tr">Gunakan kertas coreng-coretan untuk perhitungan.</span></li>
+                <li>Always check your answers. <span class="tr">Selalu periksa jawaban.</span></li>
+              </ul>
+            </div>
+          `
+        }
+      ]
+    },
+    h: {
+      title: 'Task 1',
+      titleEn: 'Task 1',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Identify Solution', pageTitleEn:'Identifikasi Solusi', taskType:'radio',
+          question:'Is $(3, 2)$ a solution to $y = x - 1$ and $y = 2x - 4$?', questionEn:'Apakah $(3, 2)$ solusi dari $y = x - 1$ dan $y = 2x - 4$?',
+          options:[
+            {text:'Yes, it satisfies both', correct:true},
+            {text:'No, it only satisfies the first', correct:false},
+            {text:'No, it only satisfies the second', correct:false},
+            {text:'No, it satisfies neither', correct:false}
+          ],
+          explanation:`<p>Check Eq 1: $2 = 3 - 1 \Rightarrow 2 = 2$ ✓ <span class="tr">Periksa Pers 1.</span></p>
+            <p>Check Eq 2: $2 = 2(3) - 4 \Rightarrow 2 = 6 - 4 \Rightarrow 2 = 2$ ✓ <span class="tr">Periksa Pers 2.</span></p>
+            <p>It satisfies both!</p>`},
+        { type:'task', pageTitle:'T2: Graphical Meaning', pageTitleEn:'Arti Grafis', taskType:'truefalse',
+          question:'True or False: The solution to simultaneous equations is the point where their graphs are perpendicular.', questionEn:'Benar atau Salah: Solusi persamaan simultan adalah titik di mana grafiknya tegak lurus.',
+          correctAnswer:'false',
+          explanation:`<p>The solution is the point where they <strong>intersect</strong>, not necessarily perpendicular. <span class="tr">Solusinya adalah titik di mana mereka berpotongan, tidak harus tegak lurus.</span></p>
+            <p>Statement is <strong>False</strong>.</p>`},
+        { type:'task', pageTitle:'T3: Simple Substitution', pageTitleEn:'Substitusi Sederhana', taskType:'fill',
+          question:'Solve: $y = 3x$ and $x + y = 8$. $x = \\dots$', questionEn:'Selesaikan: $y = 3x$ dan $x + y = 8$. $x = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Substitute $y=3x$: $x + 3x = 8 \Rightarrow 4x = 8 \Rightarrow x = 2$. <span class="tr">Substitusi $y=3x$.</span></p>`},
+        { type:'task', pageTitle:'T4: Elimination Add', pageTitleEn:'Eliminasi Jumlah', taskType:'fill',
+          question:'Solve: $x + y = 10$ and $x - y = 4$. $x = \\dots$', questionEn:'Selesaikan: $x + y = 10$ dan $x - y = 4$. $x = \\dots$',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>Add equations: $(x+y) + (x-y) = 10 + 4 \Rightarrow 2x = 14 \Rightarrow x = 7$. <span class="tr">Jumlahkan persamaan.</span></p>`},
+        { type:'task', pageTitle:'T5: Elimination Subtract', pageTitleEn:'Eliminasi Kurang', taskType:'radio',
+          question:'System: $3x + 4y = 15$ and $3x + y = 6$. What is the result of subtracting Eq 2 from Eq 1?', questionEn:'Sistem: $3x + 4y = 15$ dan $3x + y = 6$. Hasil dari mengurangi Pers 2 dari Pers 1?',
+          options:[
+            {text:'$3y = 9$', correct:true},
+            {text:'$5y = 9$', correct:false},
+            {text:'$6x + 5y = 21$', correct:false},
+            {text:'$3y = 21$', correct:false}
+          ],
+          explanation:`<p>$(3x + 4y) - (3x + y) = 15 - 6 \Rightarrow 3y = 9$. <span class="tr">Kurangi Pers 2 dari Pers 1.</span></p>`},
+        { type:'task', pageTitle:'T6: Match Method', pageTitleEn:'Cocokkan Metode', taskType:'pairing',
+          question:'Match the system with the easiest method.', questionEn:'Cocokkan sistem dengan metode termudah.',
+          pairs:[
+            {left:'$y = 5x - 2$ and $2x + y = 8$', right:'Substitution'},
+            {left:'$2x + 3y = 7$ and $2x - y = 1$', right:'Elimination (Subtract)'},
+            {left:'$4x + y = 10$ and $x - y = 2$', right:'Elimination (Add)'},
+            {left:'Need visual coordinate point', right:'Graphical'}
+          ],
+          explanation:`<p>Choose the most efficient path based on equation structure. <span class="tr">Pilih jalur paling efisien berdasarkan struktur persamaan.</span></p>`},
+        { type:'task', pageTitle:'T7: Find y', pageTitleEn:'Cari y', taskType:'fill',
+          question:'From T4: $x = 7$ in $x + y = 10$. $y = \\dots$', questionEn:'Dari T4: $x = 7$ di $x + y = 10$. $y = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$7 + y = 10 \Rightarrow y = 3$. <span class="tr">Substitusi $x=7$.</span></p>`},
+        { type:'task', pageTitle:'T8: Word Problem Setup', pageTitleEn:'Susun Soal Cerita', taskType:'checkbox',
+          question:'"Sum of $x$ and $y$ is 12. $x$ is 3 more than $y$." Select correct equations.', questionEn:'"Jumlah $x$ dan $y$ adalah 12. $x$ 3 lebih besar dari $y$." Pilih persamaan benar.',
+          options:[
+            {text:'$x + y = 12$', correct:true},
+            {text:'$x = y + 3$', correct:true},
+            {text:'$x - y = 12$', correct:false},
+            {text:'$y = x + 3$', correct:false}
+          ],
+          explanation:`<p>"Sum is 12" $\rightarrow x + y = 12$. "$x$ is 3 more than $y$" $\rightarrow x = y + 3$. <span class="tr">"Jumlah 12" dan "$x$ 3 lebih besar dari $y$".</span></p>`},
+        { type:'task', pageTitle:'T9: Zero Solutions', pageTitleEn:'Nol Solusi', taskType:'radio',
+          question:'Which system has NO solution?', questionEn:'Sistem mana yang TIDAK PUNYA solusi?',
+          options:[
+            {text:'$y = 2x + 1$ and $y = 2x + 5$', correct:true},
+            {text:'$y = 2x + 1$ and $y = 3x + 5$', correct:false},
+            {text:'$y = 2x + 1$ and $2y = 4x + 2$', correct:false},
+            {text:'$y = x$ and $y = -x$', correct:false}
+          ],
+          explanation:`<p>Parallel lines (same slope, different y-intercept) never intersect. $y = 2x + 1$ and $y = 2x + 5$ are parallel. <span class="tr">Garis sejajar tidak pernah berpotongan.</span></p>`},
+        { type:'task', pageTitle:'T10: Infinite Solutions', pageTitleEn:'Solusi Tak Terhingga', taskType:'truefalse',
+          question:'True or False: $2x + 4y = 8$ and $x + 2y = 4$ have exactly one solution.', questionEn:'Benar atau Salah: $2x + 4y = 8$ dan $x + 2y = 4$ memiliki tepat satu solusi.',
+          correctAnswer:'false',
+          explanation:`<p>The second equation is just the first divided by 2. They are the same line (coincident), meaning they have <strong>infinite solutions</strong>. <span class="tr">Persamaan kedua sama dengan pertama dibagi 2. Mereka garis yang sama, punya solusi tak terhingga.</span></p>
+            <p>Statement is <strong>False</strong>.</p>`}
+      ]
+    },
+    i: {
+      title: 'Task 2',
+      titleEn: 'Task 2',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Isolate y', pageTitleEn:'Isolasi y', taskType:'fill',
+          question:'Rearrange $2x + y = 7$ to make $y$ the subject. $y = \\dots$', questionEn:'Atur ulang $2x + y = 7$ agar $y$ menjadi subjek. $y = \\dots$',
+          correctAnswer:'7 - 2x', acceptableAnswers:['7-2x','7 - 2x','7- 2x','7 -2x','-2x + 7','-2x+7'],
+          explanation:`<p>Subtract $2x$ from both sides: $y = 7 - 2x$. <span class="tr">Kurangi $2x$ dari kedua sisi.</span></p>`},
+        { type:'task', pageTitle:'T2: Substitute', pageTitleEn:'Substitusi', taskType:'fill',
+          question:'System: $y = 7 - 2x$ and $3x - y = 2$. Substitute $y$. $3x - (\\dots) = 2$', questionEn:'Sistem: $y = 7 - 2x$ dan $3x - y = 2$. Substitusi $y$. $3x - (\\dots) = 2$',
+          correctAnswer:'7 - 2x', acceptableAnswers:['7-2x','7 - 2x','7- 2x','7 -2x'],
+          explanation:`<p>Replace $y$ with $(7 - 2x)$. <span class="tr">Ganti $y$ dengan $(7 - 2x)$.</span></p>`},
+        { type:'task', pageTitle:'T3: Expand', pageTitleEn:'Kembangkan', taskType:'sorting',
+          question:'Order steps to simplify $3x - (7 - 2x) = 2$.', questionEn:'Urutkan langkah menyederhanakan $3x - (7 - 2x) = 2$.',
+          items:['Distribute the negative: $3x - 7 + 2x = 2$','Combine like terms: $5x - 7 = 2$','Add 7: $5x = 9$','Divide by 5: $x = 1.8$'],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Be careful with the negative sign when expanding! <span class="tr">Hati-hati dengan tanda negatif saat mengembangkan!</span></p>`},
+        { type:'task', pageTitle:'T4: Solve Linear', pageTitleEn:'Selesaikan Linear', taskType:'radio',
+          question:'System: $y = 4x - 1$ and $2x + y = 11$. Find $x$.', questionEn:'Sistem: $y = 4x - 1$ dan $2x + y = 11$. Cari $x$.',
+          options:[
+            {text:'$x = 2$', correct:true},
+            {text:'$x = 7$', correct:false},
+            {text:'$x = 3$', correct:false},
+            {text:'$x = 1.5$', correct:false}
+          ],
+          explanation:`<p>Substitute: $2x + (4x - 1) = 11 \Rightarrow 6x - 1 = 11 \Rightarrow 6x = 12 \Rightarrow x = 2$. <span class="tr">Substitusi dan selesaikan.</span></p>`},
+        { type:'task', pageTitle:'T5: Check Solution', pageTitleEn:'Periksa Solusi', taskType:'truefalse',
+          question:'True or False: If $x=2, y=7$ is the solution to $y = 4x - 1$ and $2x + y = 11$, both equations are satisfied.', questionEn:'Benar atau Salah: Jika $x=2, y=7$ adalah solusi, kedua persamaan dipenuhi.',
+          correctAnswer:'true',
+          explanation:`<p>Eq 1: $7 = 4(2) - 1 = 7$ ✓. Eq 2: $2(2) + 7 = 11$ ✓. <span class="tr">Keduanya benar.</span></p>
+            <p>Statement is <strong>True</strong>.</p>`},
+        { type:'task', pageTitle:'T6: Rearrange to Substitute', pageTitleEn:'Atur Ulang untuk Substitusi', taskType:'pairing',
+          question:'Match the equation with its rearranged form ($x=$ or $y=$).', questionEn:'Cocokkan persamaan dengan bentuk yang diatur ulang.',
+          pairs:[
+            {left:'$2x + y = 5$', right:'$y = 5 - 2x$'},
+            {left:'$x - 3y = 6$', right:'$x = 3y + 6$'},
+            {left:'$4x - y = 1$', right:'$y = 4x - 1$'},
+            {left:'$x + 5y = 0$', right:'$x = -5y$'}
+          ],
+          explanation:`<p>Move the other variable to the other side. <span class="tr">Pindahkan variabel lain ke sisi lain.</span></p>`},
+        { type:'task', pageTitle:'T7: Fractional Answer', pageTitleEn:'Jawaban Pecahan', taskType:'fill',
+          question:'System: $y = 2x + 1$ and $y = x + 4$. Find $x$. $x = \\dots$', questionEn:'Sistem: $y = 2x + 1$ dan $y = x + 4$. Cari $x$. $x = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$2x + 1 = x + 4 \Rightarrow x = 3$. <span class="tr">Samakan dan selesaikan.</span></p>`},
+        { type:'task', pageTitle:'T8: Substitute Expression', pageTitleEn:'Substitusi Ekspresi', taskType:'radio',
+          question:'System: $x = 2y - 3$ and $3x + y = 5$. Substitute $x$. What is the equation?', questionEn:'Sistem: $x = 2y - 3$ dan $3x + y = 5$. Substitusi $x$. Apa persamaannya?',
+          options:[
+            {text:'$3(2y - 3) + y = 5$', correct:true},
+            {text:'$3(2y) - 3 + y = 5$', correct:false},
+            {text:'$3x + 2y - 3 = 5$', correct:false},
+            {text:'$6y - 3 + y = 5$', correct:false}
+          ],
+          explanation:`<p>Replace $x$ with $(2y - 3)$. The bracket is crucial! <span class="tr">Ganti $x$ dengan $(2y - 3)$. Tanda kurung sangat penting!</span></p>`},
+        { type:'task', pageTitle:'T9: Solve for y', pageTitleEn:'Selesaikan untuk y', taskType:'fill',
+          question:'From T8: $3(2y - 3) + y = 5$. Expand and solve. $y = \\dots$', questionEn:'Dari T8. Kembangkan dan selesaikan. $y = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>$6y - 9 + y = 5 \Rightarrow 7y - 9 = 5 \Rightarrow 7y = 14 \Rightarrow y = 2$. <span class="tr">Kembangkan, gabungkan, selesaikan.</span></p>`},
+        { type:'task', pageTitle:'T10: Full Solve', pageTitleEn:'Selesaikan Penuh', taskType:'sorting',
+          question:'Order the steps to solve: $y = x + 2$ and $2x + 3y = 16$.', questionEn:'Urutkan langkah menyelesaikan.',
+          items:['Substitute: $2x + 3(x + 2) = 16$','Expand: $2x + 3x + 6 = 16$','Simplify: $5x + 6 = 16$','Solve for x: $5x = 10 \\Rightarrow x = 2$','Find y: $y = 2 + 2 = 4$'],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Standard substitution process. <span class="tr">Proses substitusi standar.</span></p>`}
+      ]
+    },
+    j: {
+      title: 'Task 3',
+      titleEn: 'Task 3',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Same Coefficients', pageTitleEn:'Koefisien Sama', taskType:'radio',
+          question:'System: $5x + 2y = 12$ and $5x - y = 3$. What is the easiest elimination?', questionEn:'Sistem: $5x + 2y = 12$ dan $5x - y = 3$. Eliminasi termudah?',
+          options:[
+            {text:'Subtract Eq 2 from Eq 1', correct:true},
+            {text:'Add both equations', correct:false},
+            {text:'Multiply Eq 2 by 2 and add', correct:false},
+            {text:'Multiply Eq 1 by -1 and add', correct:false}
+          ],
+          explanation:`<p>$5x$ and $5x$ have the same coefficient. Subtract to eliminate $x$. <span class="tr">Kurangkan untuk mengeliminasi $x$.</span></p>`},
+        { type:'task', pageTitle:'T2: Opposite Coefficients', pageTitleEn:'Koefisien Berlawanan', taskType:'truefalse',
+          question:'True or False: For $3x + y = 5$ and $2x - y = 4$, you should subtract to eliminate $y$.', questionEn:'Benar atau Salah: Untuk sistem ini, Anda harus mengurangi untuk eliminasi $y$.',
+          correctAnswer:'false',
+          explanation:`<p>$+y$ and $-y$ are opposite signs. You should <strong>add</strong> them to eliminate $y$. <span class="tr">Tanda berlawanan, jumlahkan.</span></p>
+            <p>Statement is <strong>False</strong>.</p>`},
+        { type:'task', pageTitle:'T3: Scale One Equation', pageTitleEn:'Skalakan Satu Persamaan', taskType:'fill',
+          question:'To eliminate $x$ in $2x + y = 5$ and $4x - 3y = 2$, multiply the first equation by what?', questionEn:'Untuk eliminasi $x$, kalikan persamaan pertama dengan apa?',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>LCM of $2$ and $4$ is $4$. Multiply the first equation by $2$ to get $4x$. <span class="tr">KPK dari 2 dan 4 adalah 4. Kalikan persamaan pertama dengan 2.</span></p>`},
+        { type:'task', pageTitle:'T4: Scale Both Equations', pageTitleEn:'Skalakan Kedua Persamaan', taskType:'pairing',
+          question:'To eliminate $x$ in $3x + y = 4$ and $2x - y = 1$, match the multiplier for each equation.', questionEn:'Untuk eliminasi $x$, cocokkan pengali untuk tiap persamaan.',
+          pairs:[
+            {left:'First equation ($3x$)', right:'Multiply by 2'},
+            {left:'Second equation ($2x$)', right:'Multiply by 3'},
+            {left:'Resulting coefficient of $x$', right:'$6x$'},
+            {left:'Action after scaling', right:'Subtract equations'}
+          ],
+          explanation:`<p>Make coefficients $6x$ and $6x$, then subtract since signs are same. <span class="tr">Buat koefisien $6x$ dan $6x$, lalu kurangkan.</span></p>`},
+        { type:'task', pageTitle:'T5: Execute Elimination', pageTitleEn:'Lakukan Eliminasi', taskType:'fill',
+          question:'System: $x + 2y = 7$ and $x - 2y = -1$. Add them. $x = \\dots$', questionEn:'Sistem: $x + 2y = 7$ dan $x - 2y = -1$. Jumlahkan. $x = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$(x + 2y) + (x - 2y) = 7 + (-1) \Rightarrow 2x = 6 \Rightarrow x = 3$. <span class="tr">Jumlahkan persamaan.</span></p>`},
+        { type:'task', pageTitle:'T6: Find Second Variable', pageTitleEn:'Cari Variabel Kedua', taskType:'fill',
+          question:'From T5, $x = 3$. Substitute into $x + 2y = 7$. $y = \\dots$', questionEn:'Dari T5, $x = 3$. Substitusi ke persamaan. $y = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>$3 + 2y = 7 \Rightarrow 2y = 4 \Rightarrow y = 2$. <span class="tr">Substitusi $x=3$.</span></p>`},
+        { type:'task', pageTitle:'T7: Eliminate y', pageTitleEn:'Eliminasi y', taskType:'radio',
+          question:'System: $3x + 5y = 21$ and $2x - y = 1$. What is the easiest way to eliminate $y$?', questionEn:'Sistem: $3x + 5y = 21$ dan $2x - y = 1$. Cara termudah eliminasi $y$?',
+          options:[
+            {text:'Multiply Eq 2 by 5, then add', correct:true},
+            {text:'Multiply Eq 2 by -5, then add', correct:false},
+            {text:'Multiply Eq 1 by 2, then subtract', correct:false},
+            {text:'Add them as they are', correct:false}
+          ],
+          explanation:`<p>Eq 1 has $+5y$. To cancel it, we need $-5y$. Multiply Eq 2 ($-y$) by $5$ to get $-5y$, then add. <span class="tr">Pers 1 punya $+5y$. Kalikan Pers 2 dengan 5 untuk dapat $-5y$, lalu jumlahkan.</span></p>`},
+        { type:'task', pageTitle:'T8: Verification', pageTitleEn:'Verifikasi', taskType:'checkbox',
+          question:'Solution is $(2, 3)$. Which systems does it satisfy?', questionEn:'Solusi adalah $(2, 3)$. Sistem mana yang memenuhinya?',
+          options:[
+            {text:'$x + y = 5$ and $y = x + 1$', correct:true},
+            {text:'$2x - y = 1$ and $x + y = 4$', correct:false},
+            {text:'$2x + y = 7$ and $x - y = -1$', correct:true},
+            {text:'$3x + y = 9$ and $x - y = -1$', correct:false}
+          ],
+          explanation:`<p>Check $(2,3)$: <span class="tr">Periksa $(2,3)$:</span></p>
+            <ul><li>$2+3=5$ ✓, $3=2+1$ ✓</li>
+            <li>$2(2)-3=1$ ✓, $2+3=5 \neq 4$ ✗</li>
+            <li>$2(2)+3=7$ ✓, $2-3=-1$ ✓</li></ul>`},
+        { type:'task', pageTitle:'T9: Word Problem', pageTitleEn:'Soal Cerita', taskType:'sorting',
+          question:'Order the elimination steps for: "Sum is 8 ($x+y=8$), Difference is 2 ($x-y=2$)."', questionEn:'Urutkan langkah eliminasi.',
+          items:['Add equations: $2x = 10$','Solve for x: $x = 5$','Substitute x=5 into $x+y=8$','Solve for y: $y = 3$','Final answer: (5, 3)'],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Classic sum/difference problem solved by adding. <span class="tr">Masalah klasik jumlah/selisih dipecahkan dengan penjumlahan.</span></p>`},
+        { type:'task', pageTitle:'T10: Messy Numbers', pageTitleEn:'Angka Berantakan', taskType:'fill',
+          question:'System: $2x + 3y = 5$ and $x - y = 0$ (so $x=y$). Substitute $x$ for $y$. $x = \\dots$', questionEn:'Sistem: $2x + 3y = 5$ dan $x - y = 0$. Substitusi $x$ untuk $y$. $x = \\dots$',
+          correctAnswer:'1', acceptableAnswers:['1'],
+          explanation:`<p>If $x=y$, then $2x + 3(x) = 5 \Rightarrow 5x = 5 \Rightarrow x = 1$. <span class="tr">Jika $x=y$, substitusi dan selesaikan.</span></p>`}
+      ]
+    },
+    k: {
+      title: 'Task 4',
+      titleEn: 'Task 4',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Define Variables', pageTitleEn:'Definisikan Variabel', taskType:'radio',
+          question:'"A large box holds 5kg, a small box holds 3kg. Total 17 boxes weigh 75kg." What should $x$ and $y$ be?', questionEn:'"Kotak besar berisi 5kg, kecil 3kg. Total 17 kotak beratnya 75kg." Apa seharusnya $x$ dan $y$?',
+          options:[
+            {text:'$x$ = large boxes, $y$ = small boxes', correct:true},
+            {text:'$x$ = weight of large, $y$ = weight of small', correct:false},
+            {text:'$x$ = total boxes, $y$ = total weight', correct:false},
+            {text:'$x$ = 5kg, $y$ = 3kg', correct:false}
+          ],
+          explanation:`<p>$x$ and $y$ should represent the unknown quantities (number of boxes), not the known weights. <span class="tr">$x$ dan $y$ harus mewakili kuantitas tidak diketahui (jumlah kotak).</span></p>`},
+        { type:'task', pageTitle:'T2: Formulate Equations', pageTitleEn:'Rumuskan Persamaan', taskType:'checkbox',
+          question:'From T1, select the two correct equations.', questionEn:'Dari T1, pilih dua persamaan yang benar.',
+          options:[
+            {text:'$x + y = 17$', correct:true},
+            {text:'$5x + 3y = 75$', correct:true},
+            {text:'$5x + 3y = 17$', correct:false},
+            {text:'$x + y = 75$', correct:false}
+          ],
+          explanation:`<p>Eq 1: Total boxes = 17 ($x + y = 17$). Eq 2: Total weight = 75 ($5x + 3y = 75$). <span class="tr">Total kotak dan total berat.</span></p>`},
+        { type:'task', pageTitle:'T3: Solve System', pageTitleEn:'Selesaikan Sistem', taskType:'fill',
+          question:'Solve: $x + y = 17$ and $5x + 3y = 75$. Find $x$. $x = \\dots$', questionEn:'Selesaikan: Cari $x$. $x = \\dots$',
+          correctAnswer:'12', acceptableAnswers:['12'],
+          explanation:`<p>From Eq 1: $y = 17 - x$. Substitute into Eq 2: $5x + 3(17 - x) = 75 \Rightarrow 5x + 51 - 3x = 75 \Rightarrow 2x = 24 \Rightarrow x = 12$. <span class="tr">Substitusi dan selesaikan.</span></p>`},
+        { type:'task', pageTitle:'T4: Find y', pageTitleEn:'Cari y', taskType:'fill',
+          question:'From T3, if $x = 12$, find $y$ using $x + y = 17$. $y = \\dots$', questionEn:'Dari T3, jika $x = 12$, cari $y$. $y = \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>$12 + y = 17 \Rightarrow y = 5$. <span class="tr">Substitusi $x=12$.</span></p>`},
+        { type:'task', pageTitle:'T5: Money Problem', pageTitleEn:'Soal Uang', taskType:'sorting',
+          question:'"Tickets cost $\\$5$ adult, $\\$2$ child. 20 people paid $\\$64$." Order steps to solve.', questionEn:'Urutkan langkah menyelesaikan.',
+          items:['Let $a$=adult, $c$=child','Equations: $a+c=20$ and $5a+2c=64$','Substitute $c=20-a$ into second','Expand: $5a + 40 - 2a = 64$','Solve: $3a = 24 \\Rightarrow a = 8$'],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Standard modeling and substitution process. <span class="tr">Proses pemodelan dan substitusi standar.</span></p>`},
+        { type:'task', pageTitle:'T6: Verify Answer', pageTitleEn:'Verifikasi Jawaban', taskType:'truefalse',
+          question:'True or False: From T5, if $a=8$, then $c=12$. The total money is $5(8) + 2(12) = 40 + 24 = 64$. This is correct.', questionEn:'Benar atau Salah: Dari T5, total uangnya cocok.',
+          correctAnswer:'true',
+          explanation:`<p>Check Eq 1: $8+12=20$ ✓. Check Eq 2: $40+24=64$ ✓. Both are satisfied. <span class="tr">Keduanya dipenuhi.</span></p>
+            <p>Statement is <strong>True</strong>.</p>`},
+        { type:'task', pageTitle:'T7: Perimeter Problem', pageTitleEn:'Soal Keliling', taskType:'pairing',
+          question:'Rectangle perimeter 20. Length 4 more than width. Match variable to equation.', questionEn:'Keliling persegi panjang 20. Panjang 4 lebih dari lebar. Cocokkan variabel ke persamaan.',
+          pairs:[
+            {left:'$w$ = width', right:'$w$'},
+            {left:'$l$ = length', right:'$l = w + 4$'},
+            {left:'Perimeter equation', right:'$2l + 2w = 20$'},
+            {left:'Substituted perimeter', right:'$2(w+4) + 2w = 20$'}
+          ],
+          explanation:`<p>Translate English to algebra carefully. <span class="tr">Terjemahkan bahasa Inggris ke aljabar dengan hati-hati.</span></p>`},
+        { type:'task', pageTitle:'T8: Solve Perimeter', pageTitleEn:'Selesaikan Keliling', taskType:'fill',
+          question:'Solve $2(w+4) + 2w = 20$. Find $w$. $w = \\dots$', questionEn:'Selesaikan. Cari $w$. $w = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$2w + 8 + 2w = 20 \Rightarrow 4w + 8 = 20 \Rightarrow 4w = 12 \Rightarrow w = 3$. <span class="tr">Kembangkan dan selesaikan.</span></p>`},
+        { type:'task', pageTitle:'T9: Find Length', pageTitleEn:'Cari Panjang', taskType:'radio',
+          question:'From T8, $w = 3$. Find length $l$.', questionEn:'Dari T8, $w = 3$. Cari panjang $l$.',
+          options:[
+            {text:'$l = 7$', correct:true},
+            {text:'$l = 3$', correct:false},
+            {text:'$l = 14$', correct:false},
+            {text:'$l = 10$', correct:false}
+          ],
+          explanation:`<p>$l = w + 4 = 3 + 4 = 7$. <span class="tr">Substitusi $w=3$.</span></p>`},
+        { type:'task', pageTitle:'T10: Age Problem', pageTitleEn:'Soal Umur', taskType:'sorting',
+          question:'"Bob is 2x as old as Alice. In 5 years, sum of their ages is 34." Order steps.', questionEn:'Urutkan langkah menyelesaikan soal umur.',
+          items:['Let Alice = $a$, Bob = $2a$','In 5 years: Alice = $a+5$, Bob = $2a+5$','Equation: $(a+5) + (2a+5) = 34$','Simplify: $3a + 10 = 34$','Solve: $3a = 24 \\Rightarrow a = 8$'],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Ages now vs ages in future are different equations. <span class="tr">Umur sekarang vs umur depan adalah persamaan berbeda.</span></p>`}
+      ]
+    },
+    l: {
+      title: 'Task 5',
+      titleEn: 'Task 5',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Line and Parabola', pageTitleEn:'Garis dan Parabola', taskType:'radio',
+          question:'System: $y = x + 2$ and $y = x^2 - 4$. What is the correct setup?', questionEn:'Sistem: $y = x + 2$ dan $y = x^2 - 4$. Pengaturan yang benar?',
+          options:[
+            {text:'$x + 2 = x^2 - 4$', correct:true},
+            {text:'$y + 2 = y^2 - 4$', correct:false},
+            {text:'$x^2 + x + 2 = 4$', correct:false},
+            {text:'$x + 2 = y^2 - 4$', correct:false}
+          ],
+          explanation:`<p>Set the two $y$ expressions equal to each other. <span class="tr">Samakan dua ekspresi $y$.</span></p>`},
+        { type:'task', pageTitle:'T2: Rearrange to Zero', pageTitleEn:'Atur Ulang ke Nol', taskType:'sorting',
+          question:'Order steps to rearrange $x + 2 = x^2 - 4$ into standard form.', questionEn:'Urutkan langkah mengatur ulang ke bentuk standar.',
+          items:['Subtract $x$ and $2$: $0 = x^2 - x - 6$','Or written as: $x^2 - x - 6 = 0$','Identify coefficients: $a=1, b=-1, c=-6$'],
+          correctOrder:[0,1,2],
+          explanation:`<p>Move everything to one side to equal zero. <span class="tr">Pindahkan semua ke satu sisi sama dengan nol.</span></p>`},
+        { type:'task', pageTitle:'T3: Factorise', pageTitleEn:'Faktorkan', taskType:'fill',
+          question:'Factorise $x^2 - x - 6 = 0$. One factor is $(x - 3)$. What is the other? $(x \\dots)$', questionEn:'Faktorkan. Satu faktor $(x - 3)$. Faktor lainnya?',
+          correctAnswer:'+ 2', acceptableAnswers:['+2',' + 2','+2 '],
+          explanation:`<p>Need numbers that multiply to $-6$ and add to $-1$. They are $-3$ and $+2$. So $(x - 3)(x + 2) = 0$. <span class="tr">Cari angka yang dikalikan jadi $-6$ dan dijumlahkan jadi $-1$.</span></p>`},
+        { type:'task', pageTitle:'T4: Find x values', pageTitleEn:'Cari nilai x', taskType:'checkbox',
+          question:'From T3: $(x - 3)(x + 2) = 0$. Select all valid $x$ solutions.', questionEn:'Pilih semua solusi $x$ yang valid.',
+          options:[
+            {text:'$x = 3$', correct:true},
+            {text:'$x = -2$', correct:true},
+            {text:'$x = -3$', correct:false},
+            {text:'$x = 2$', correct:false}
+          ],
+          explanation:`<p>If a product is zero, one factor must be zero. $x-3=0 \Rightarrow x=3$ or $x+2=0 \Rightarrow x=-2$. <span class="tr">Jika produk nol, salah satu faktor pasti nol.</span></p>`},
+        { type:'task', pageTitle:'T5: Find y values', pageTitleEn:'Cari nilai y', taskType:'pairing',
+          question:'Using $y = x + 2$, match the $x$ value with its $y$ value.', questionEn:'Menggunakan $y = x + 2$, cocokkan $x$ dengan $y$.',
+          pairs:[
+            {left:'$x = 3$', right:'$y = 5$'},
+            {left:'$x = -2$', right:'$y = 0$'},
+            {left:'$x = 0$', right:'$y = 2$'},
+            {left:'$x = -1$', right:'$y = 1$'}
+          ],
+          explanation:`<p>Substitute each $x$ into the linear equation. <span class="tr">Substitusi tiap $x$ ke persamaan linear.</span></p>`},
+        { type:'task', pageTitle:'T6: Final Points', pageTitleEn:'Titik Akhir', taskType:'radio',
+          question:'What are the two intersection points of $y = x + 2$ and $y = x^2 - 4$?', questionEn:'Apa dua titik potongnya?',
+          options:[
+            {text:'$(3, 5)$ and $(-2, 0)$', correct:true},
+            {text:'$(5, 3)$ and $(0, -2)$', correct:false},
+            {text:'$(3, 5)$ and $(2, 0)$', correct:false},
+            {text:'$(3, 5)$ only', correct:false}
+          ],
+          explanation:`<p>Combine the $x$ and $y$ values as ordered pairs $(x, y)$. <span class="tr">Gabungkan nilai $x$ dan $y$ sebagai pasangan berurutan.</span></p>`},
+        { type:'task', pageTitle:'T7: No Solution Case', pageTitleEn:'Kasus Tanpa Solusi', taskType:'truefalse',
+          question:'True or False: A line can intersect a parabola at exactly 3 points.', questionEn:'Benar atau Salah: Garis bisa memotong parabola di tepat 3 titik.',
+          correctAnswer:'false',
+          explanation:`<p>A straight line can intersect a parabola at most 2 points. <span class="tr">Garis lurus paling banyak memotong parabola di 2 titik.</span></p>
+            <p>Statement is <strong>False</strong>.</p>`},
+        { type:'task', pageTitle:'T8: Line and Circle', pageTitleEn:'Garis dan Lingkaran', taskType:'sorting',
+          question:'Order steps to solve: $y = 2x - 1$ and $x^2 + y^2 = 10$.', questionEn:'Urutkan langkah menyelesaikan.',
+          items:['Substitute: $x^2 + (2x - 1)^2 = 10$','Expand: $x^2 + 4x^2 - 4x + 1 = 10$','Simplify: $5x^2 - 4x - 9 = 0$','Factor/Solve for x','Back-substitute to find y'],
+          correctOrder:[0,1,2,3,4],
+          explanation:`<p>Substitute the linear into the non-linear, expand carefully, solve. <span class="tr">Substitusi linear ke non-linear, kembangkan, selesaikan.</span></p>`},
+        { type:'task', pageTitle:'T9: Expand Bracket', pageTitleEn:'Kembangkan Kurung', taskType:'fill',
+          question:'Expand $(2x - 1)^2$. $4x^2 - \\dots x + 1$', questionEn:'Kembangkan $(2x - 1)^2$.',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>$(2x - 1)(2x - 1) = 4x^2 - 2x - 2x + 1 = 4x^2 - 4x + 1$. <span class="tr">Gunakan FOIL.</span></p>`},
+        { type:'task', pageTitle:'T10: Discriminant Check', pageTitleEn:'Pemeriksaan Diskriminan', taskType:'radio',
+          question:'A line and circle result in $5x^2 - 4x - 9 = 0$. What does $b^2 - 4ac$ tell you?', questionEn:'Apa yang diberitahu oleh $b^2 - 4ac$?',
+          options:[
+            {text:'$b^2 - 4ac > 0$, so 2 solutions', correct:true},
+            {text:'$b^2 - 4ac = 0$, so 1 solution', correct:false},
+            {text:'$b^2 - 4ac < 0$, so 0 solutions', correct:false},
+            {text:'Cannot be determined', correct:false}
+          ],
+          explanation:`<p>$b^2 - 4ac = (-4)^2 - 4(5)(-9) = 16 + 180 = 196 > 0$. Positive means 2 distinct real roots. <span class="tr">Positif berarti 2 akar real berbeda.</span></p>`}
+      ]
+    }
+  };
+
+  // ================= STATE =================
+  let currentSection = 'a';
+  let currentPage = 0;
+  let userAnswers = {};
+
+  // ================= UTILITIES =================
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function renderMath(el){
+    if(window.renderMathInElement){
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$', right:'$$', display:true},
+          {left:'$', right:'$', display:false}
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  // ================= SIDEBAR =================
+  function renderSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const sectionKeys = ['a','b','c','d','e','f','g','h','i','j','k','l'];
+    const meta = {
+      a:{t:'Spiral Review Warm-up', e:'Spiral Review Warm-up', time:'00:00-00:10'},
+      b:{t:'Intro & Real-World', e:'Intro & Real-World', time:'00:10-00:15'},
+      c:{t:'Review of Prior Knowledge', e:'Review of Prior Knowledge', time:'00:15-00:20'},
+      d:{t:'Problem Introduction', e:'Problem Introduction', time:'00:20-00:30'},
+      e:{t:'Guided Practice', e:'Guided Practice', time:'00:30-00:45'},
+      f:{t:'Independent Practice', e:'Independent Practice', time:'00:45-00:55'},
+      g:{t:'Consolidation & Reflection', e:'Consolidation & Reflection', time:'00:55-01:00'},
+      h:{t:'Task 1', e:'Task 1', time:'Printable'},
+      i:{t:'Task 2', e:'Task 2', time:'Printable'},
+      j:{t:'Task 3', e:'Task 3', time:'Printable'},
+      k:{t:'Task 4', e:'Task 4', time:'Printable'},
+      l:{t:'Task 5', e:'Task 5', time:'Printable'}
+    };
+    let html = '<h3>Sections <span class="tr">Bagian</span></h3>';
+    sectionKeys.forEach(key => {
+      const section = sectionsData[key];
+      const isActive = currentSection === key;
+      if(section){
+        html += `<div class="nav-link ${isActive?'active':''}" data-section="${key}">
+          <span class="nl-title">${key.toUpperCase()}. ${meta[key].t}</span>
+          <span class="tr">${meta[key].e}</span>
+          <span class="time">${meta[key].time}</span>
+        </div>`;
+      } else {
+        html += `<div class="nav-link disabled">${key.toUpperCase()}. ${meta[key].t}<br><span class="tr">${meta[key].e}</span><br><span class="time">${meta[key].time} (segera)</span></div>`;
+      }
+    });
+    sidebar.innerHTML = html;
+    sidebar.querySelectorAll('.nav-link[data-section]').forEach(el => {
+      el.addEventListener('click', () => {
+        currentSection = el.dataset.section;
+        currentPage = 0;
+        renderSidebar();
+        renderPage();
+      });
+    });
+  }
+
+  // ================= PAGE RENDER =================
+  function renderPage(){
+    const section = sectionsData[currentSection];
+    if(!section) return;
+    const page = section.pages[currentPage];
+    const contentEl = document.getElementById('pageContent');
+
+    // Print button for H-L sections
+    let printBtnHtml = '';
+    if(['h','i','j','k','l'].includes(currentSection)){
+      printBtnHtml = '<button id="printBtnTop" style="background:var(--success);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap">🖨 Print to PDF <span class="tr">Cetak ke PDF</span></button>';
+    }
+
+    let html = '<div class="page-header"><h2>' + section.title + ' <span class="tr">' + section.titleEn + '</span></h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + printBtnHtml + '<span class="badge">' + page.pageTitle + '</span></div></div>';
+
+    if(page.type === 'explanation'){
+      html += '<div class="card explain"><h3>' + page.pageTitle + ' <span class="tr">' + page.pageTitleEn + '</span></h3>' + page.body + '</div>';
+    } else if(page.type === 'task'){
+      html += renderTask(page);
+    }
+    contentEl.innerHTML = html;
+    renderMath(contentEl);
+
+    // Numbered pagination
+    const total = section.pages.length;
+    const pageNumsEl = document.getElementById('pageNums');
+    let pageNumHtml = '';
+    section.pages.forEach(function(p, i){
+      var raw = p.pageTitle.split(':')[0].trim();
+      var type = raw.charAt(0);
+      var num = parseInt(raw.substring(1));
+      var label = type + '-' + String(num).padStart(2, '0');
+      var typeClass = (type === 'E') ? 'page-num-e' : 'page-num-t';
+      var isActive = (i === currentPage);
+      pageNumHtml += '<button class="page-num ' + typeClass + ' ' + (isActive ? 'active' : '') + '" data-page="' + i + '"' + (isActive ? ' disabled' : '') + '>' + label + '</button>';
+    });
+    pageNumsEl.innerHTML = pageNumHtml;
+
+    // Page number click handlers
+    pageNumsEl.querySelectorAll('.page-num').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        currentPage = parseInt(btn.dataset.page);
+        renderPage();
+      });
+    });
+
+    // Prev/Next
+    document.getElementById('prevBtn').disabled = (currentPage === 0);
+    document.getElementById('nextBtn').disabled = (currentPage === total - 1);
+
+    // Print button handler
+    var printBtnTop = document.getElementById('printBtnTop');
+    if(printBtnTop){
+      printBtnTop.addEventListener('click', function(){ printTask(currentSection); });
+    }
+
+    // Task handlers
+    if(page.type === 'task'){
+      attachTaskHandlers(page);
+    }
+  }
+
+  function renderTask(page){
+    let html = `<div class="card task"><h3>${page.pageTitle} <span class="tr">${page.pageTitleEn}</span></h3>`;
+    html += `<div class="q-text">${page.question} <span class="tr">${page.questionEn || ''}</span></div>`;
+
+    if(page.taskType === 'radio' || page.taskType === 'checkbox'){
+      const options = shuffle(page.options);
+      page._shuffledOptions = options;
+      html += '<div class="options">';
+      options.forEach((opt, i) => {
+        const cls = page.taskType === 'checkbox' ? 'option checkbox' : 'option radio';
+        html += `<div class="${cls}" data-idx="${i}">
+          <div class="marker"></div>
+          <div class="opt-text">${opt.text}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'fill'){
+      html += `<input type="text" class="fill-input" id="fillInput" placeholder="...">`;
+    } else if(page.taskType === 'truefalse'){
+      const opts = shuffle([
+        {text:'True <span class="tr">Benar</span>', val:'true'},
+        {text:'False <span class="tr">Salah</span>', val:'false'}
+      ]);
+      html += '<div class="options">';
+      opts.forEach(o => {
+        html += `<div class="option radio" data-val="${o.val}"><div class="marker"></div><div class="opt-text">${o.text}</div></div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'sorting'){
+      const shuffled = shuffle(page.items.map((item, idx) => ({text:item, originalIdx:idx})));
+      page._shuffledItems = shuffled;
+      html += '<div class="sort-list">';
+      shuffled.forEach((it, i) => {
+        html += `<div class="sort-item" data-pos="${i}" data-orig="${it.originalIdx}">
+          <span class="pos">${i+1}</span>
+          <span class="sort-text">${it.text}</span>
+        </div>`;
+      });
+      html += '</div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Click two items to swap. <span class="tr">Klik dua item untuk menukar.</span></p>';
+    } else if(page.taskType === 'pairing'){
+      const lefts = shuffle(page.pairs.map((p, idx) => ({text:p.left, originalIdx:idx})));
+      const rights = shuffle(page.pairs.map((p, idx) => ({text:p.right, originalIdx:idx})));
+      page._shuffledPairs = {lefts, rights};
+      html += '<div class="pair-grid">';
+      html += '<div class="pair-col"><h4>Left <span class="tr">Kiri</span></h4>';
+      lefts.forEach((l, i) => {
+        html += `<div class="pair-item" data-side="left" data-idx="${i}">${l.text}</div>`;
+      });
+      html += '</div>';
+      html += '<div class="pair-col"><h4>Right <span class="tr">Kanan</span></h4>';
+      rights.forEach((r, i) => {
+        html += `<div class="pair-item" data-side="right" data-idx="${i}">${r.text}</div>`;
+      });
+      html += '</div></div>';
+      html += '<div class="pairs-list" id="pairsList"></div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Click left then right to pair. <span class="tr">Klik kiri lalu kanan untuk memasangkan.</span></p>';
+    }
+    html += `<button class="btn-submit" id="submitBtn">Check Answer <span class="tr">Periksa Jawaban</span></button>`;
+    html += `<div class="feedback" id="feedback"></div></div>`;
+    return html;
+  }
+
+  function attachTaskHandlers(page){
+    const taskType = page.taskType;
+
+    if(taskType === 'radio' || taskType === 'truefalse'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    } else if(taskType === 'checkbox'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => opt.classList.toggle('selected'));
+      });
+    } else if(taskType === 'sorting'){
+      let firstClick = null;
+      document.querySelectorAll('.sort-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if(firstClick === null){
+            firstClick = item;
+            item.classList.add('selected');
+          } else if(firstClick === item){
+            item.classList.remove('selected');
+            firstClick = null;
+          } else {
+            const fText = firstClick.querySelector('.sort-text').innerHTML;
+            const sText = item.querySelector('.sort-text').innerHTML;
+            firstClick.querySelector('.sort-text').innerHTML = sText;
+            item.querySelector('.sort-text').innerHTML = fText;
+            const fOrig = firstClick.dataset.orig;
+            firstClick.dataset.orig = item.dataset.orig;
+            item.dataset.orig = fOrig;
+            firstClick.classList.remove('selected');
+            firstClick = null;
+          }
+        });
+      });
+    } else if(taskType === 'pairing'){
+      let selectedLeft = null;
+      document.querySelectorAll('.pair-item[data-side="left"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired')) return;
+          document.querySelectorAll('.pair-item[data-side="left"]').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedLeft = item;
+        });
+      });
+     document.querySelectorAll('.pair-item[data-side="right"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired') || !selectedLeft) return;
+          const leftIdx = selectedLeft.dataset.idx;
+          const rightIdx = item.dataset.idx;
+          const pairList = document.getElementById('pairsList');
+          const pairRow = document.createElement('div');
+          pairRow.className = 'pair-row';
+          pairRow.dataset.leftIdx = leftIdx;
+          pairRow.dataset.rightIdx = rightIdx;
+          pairRow.innerHTML = `<span>${selectedLeft.innerHTML}</span> <span>↔</span> <span>${item.innerHTML}</span> <span class="remove" title="Hapus">×</span>`;
+          pairRow.querySelector('.remove').addEventListener('click', () => {
+            selectedLeft_restore(pairRow);
+          });
+          pairList.appendChild(pairRow);
+          selectedLeft.classList.remove('selected');
+          selectedLeft.classList.add('paired');
+          item.classList.add('paired');
+          selectedLeft = null;
+        });
+      });
+      function selectedLeft_restore(row){
+        const lIdx = row.dataset.leftIdx;
+        const rIdx = row.dataset.rightIdx;
+        const lItem = document.querySelector(`.pair-item[data-side="left"][data-idx="${lIdx}"]`);
+        const rItem = document.querySelector(`.pair-item[data-side="right"][data-idx="${rIdx}"]`);
+        if(lItem) lItem.classList.remove('paired');
+        if(rItem) rItem.classList.remove('paired');
+        row.remove();
+      }
+      window._pairingRestore = selectedLeft_restore;
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', () => checkAnswer(page));
+  }
+
+  function checkAnswer(page){
+    const taskType = page.taskType;
+    let isCorrect = false;
+    let userAnswerStr = '';
+
+    if(taskType === 'radio'){
+      let selected = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selected = page._shuffledOptions[i];
+          selectedIdx = i;
+        }
+      });
+      if(!selected){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      isCorrect = selected.correct;
+      userAnswerStr = selected.text;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(i === selectedIdx && !selected.correct) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'checkbox'){
+      const selectedIdxs = [];
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')) selectedIdxs.push(i);
+      });
+      if(selectedIdxs.length === 0){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      const correctSet = new Set();
+      page._shuffledOptions.forEach((opt, i) => { if(opt.correct) correctSet.add(i); });
+      const selectedSet = new Set(selectedIdxs);
+      isCorrect = correctSet.size === selectedSet.size && [...correctSet].every(i => selectedSet.has(i));
+      userAnswerStr = selectedIdxs.map(i => page._shuffledOptions[i].text).join(', ');
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(selectedSet.has(i)) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'fill'){
+      const val = document.getElementById('fillInput').value.trim();
+      const acceptable = page.acceptableAnswers || [page.correctAnswer];
+      const norm = s => s.toLowerCase().replace(/\s+/g, '').trim();
+      isCorrect = acceptable.some(a => norm(a) === norm(val));
+      userAnswerStr = val;
+    } else if(page.taskType === 'truefalse'){
+      let selected = null;
+      document.querySelectorAll('.option').forEach(opt => {
+        if(opt.classList.contains('selected')) selected = opt.dataset.val;
+      });
+      if(!selected){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      isCorrect = selected === page.correctAnswer;
+      userAnswerStr = selected;
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('selected');
+        if(opt.dataset.val === page.correctAnswer) opt.classList.add('correct');
+        else opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'sorting'){
+      const currentOrder = [];
+      document.querySelectorAll('.sort-item').forEach(item => {
+        currentOrder.push(parseInt(item.dataset.orig));
+      });
+      isCorrect = currentOrder.every((idx, i) => idx === page.correctOrder[i]);
+      userAnswerStr = currentOrder.map((idx, i) => `${i+1}. ${page.items[idx] || '?'}`).join('  |  ');
+      document.querySelectorAll('.sort-item').forEach((item, i) => {
+        if(currentOrder[i] === page.correctOrder[i]) item.style.borderColor = 'var(--success)';
+        else item.style.borderColor = 'var(--danger)';
+      });
+    } else if(taskType === 'pairing'){
+      const pairRows = document.querySelectorAll('.pair-row');
+      if(pairRows.length === 0){
+        showFeedback(false, 'Please make pairs. <span class="tr">Silakan buat pasangan.</span>', false);
+        return;
+      }
+      const userPairs = [];
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        userPairs.push({
+          leftText: page._shuffledPairs.lefts[lIdx].text,
+          rightText: page._shuffledPairs.rights[rIdx].text
+        });
+      });
+      const correctPairs = page.pairs.map(p => ({left:p.left, right:p.right}));
+      const correctCount = userPairs.filter(up =>
+        correctPairs.some(cp => cp.left === up.leftText && cp.right === up.rightText)
+      ).length;
+      isCorrect = correctCount === correctPairs.length && userPairs.length === correctPairs.length;
+      userAnswerStr = userPairs.map(p => `${p.leftText}↔${p.rightText}`).join('  |  ');
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        const lText = page._shuffledPairs.lefts[lIdx].text;
+        const rText = page._shuffledPairs.rights[rIdx].text;
+        const ok = correctPairs.some(cp => cp.left === lText && cp.right === rText);
+        row.style.background = ok ? '#d1fae5' : '#fee2e2';
+      });
+    }
+
+    const pageKey = `${currentSection}-${currentPage}`;
+    userAnswers[pageKey] = {userAnswer:userAnswerStr, correct:isCorrect, pageTitle:page.pageTitle};
+    showFeedback(isCorrect, page.explanation, true);
+  }
+
+  function showFeedback(isCorrect, explanation, showAnswer){
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback show ${isCorrect?'correct':'incorrect'}`;
+    if(showAnswer){
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Correct!':'✗ Incorrect'} <span class="tr">${isCorrect?'Benar!':'Salah'}</span></h4>${explanation}`;
+    } else {
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Correct!':'✗ Incorrect'}</h4>`;
+    }
+    renderMath(feedback);
+  }
+
+  // ================= EVENT LISTENERS =================
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if(currentPage > 0){ currentPage--; renderPage(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const total = sectionsData[currentSection].pages.length;
+    if(currentPage < total - 1){ currentPage++; renderPage(); }
+  });
+
+  const modal = document.getElementById('classRulesModal');
+  document.getElementById('classRulesBtn').addEventListener('click', () => modal.classList.add('active'));
+  document.querySelector('.modal-close').addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+
+  // ================= PRINT TO PDF =================
+  function getCorrectAnswer(task){
+    if(task.taskType === 'radio'){
+      const c = task.options.find(o => o.correct);
+      return c ? c.text : '';
+    }
+    if(task.taskType === 'checkbox'){
+      return task.options.filter(o => o.correct).map(o => o.text).join(', ');
+    }
+    if(task.taskType === 'fill'){
+      return task.correctAnswer || '';
+    }
+    if(task.taskType === 'truefalse'){
+      return task.correctAnswer === 'true' ? 'True' : 'False';
+    }
+    if(task.taskType === 'sorting'){
+      return task.correctOrder.map(i => task.items[i]).join(' → ');
+    }
+    if(task.taskType === 'pairing'){
+      return task.pairs.map(p => p.left + ' ↔ ' + p.right).join('; ');
+    }
+    return '';
+  }
+
+  function printTask(sectionKey){
+    const section = sectionsData[sectionKey];
+    if(!section) return;
+    const tasks = section.pages;
+    let correctCount = 0;
+
+    const rows = tasks.map((task, idx) => {
+      const pageKey = sectionKey + '-' + idx;
+      const ua = userAnswers[pageKey];
+      const isCorrect = ua ? ua.correct : false;
+      const userAns = ua ? ua.userAnswer : '(unanswered)';
+      const correctAns = getCorrectAnswer(task);
+      if(ua && ua.correct) correctCount++;
+      return '<tr><td>' + (idx+1) + '</td><td>' + task.question + '</td><td>' + userAns + '</td><td>' + correctAns + '</td><td style="text-align:center;font-size:1.1em">' + (isCorrect ? '✓' : '✗') + '</td></tr>';
+    }).join('');
+
+    const score = correctCount + ' / ' + tasks.length;
+    const today = new Date().toLocaleDateString('en-US', {day:'numeric',month:'long',year:'numeric'});
+
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Print - ' + section.title + '</title>' +
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>' +
+      '<style>' +
+      'body{font-family:Segoe UI,sans-serif;padding:30px;color:#1e293b;line-height:1.5}' +
+      'h1{font-size:1.2em;margin-bottom:5px}' +
+      '.info{margin-bottom:15px;font-size:.88em}' +
+      '.info div{margin:3px 0}' +
+      'table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.82em}' +
+      'th,td{border:1px solid #cbd5e1;padding:6px 8px;text-align:left;vertical-align:top}' +
+      'th{background:#f1f5f9;font-weight:600}' +
+      '.checked-by{margin-top:30px;text-align:right;font-style:italic}' +
+      '.tr{font-style:italic;font-size:.85em;color:#64748b}' +
+      '@media print{body{padding:15px}}' +
+      '</style></head><body>' +
+      '<h1>Math Tutoring by Deni</h1>' +
+      '<div class="info">' +
+      '<div>Name: ____________________________</div>' +
+      '<div>Date: ' + today + '</div>' +
+      '<div>Topic: Simultaneous Equations <span class="tr">Topik: Persamaan Simultan</span></div>' +
+      '<div>Task Group: ' + section.title + ' <span class="tr">Grup Tugas</span></div>' +
+      '<div>Score: <strong>' + score + '</strong></div>' +
+      '</div>' +
+      '<table><thead><tr>' +
+      '<th style="width:30px">No.</th>' +
+      '<th>Question <span class="tr">Pertanyaan</span></th>' +
+      '<th>Student Answer <span class="tr">Jawaban Siswa</span></th>' +
+      '<th>Correct Answer <span class="tr">Jawaban Benar</span></th>' +
+      '<th style="width:50px">Note <span class="tr">Ket.</span></th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="checked-by">Checked by,<br>Deni</div>' +
+      '<script>document.addEventListener("DOMContentLoaded",function(){' +
+      'if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}' +
+      'setTimeout(function(){window.print();},500);});<\/script>' +
+      '</body></html>';
+
+    const w = window.open('', '_blank');
+    if(w){
+      w.document.write(html);
+      w.document.close();
+    } else {
+      alert('Please allow pop-ups to print. <span class="tr">Mohon izinkan pop-up untuk mencetak.</span>');
+    }
+  }
+
+  // ================= INIT =================
+  renderSidebar();
+  renderPage();
+});
+</script>
+</body>
+</html>
