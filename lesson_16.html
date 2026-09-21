@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni - Inequalities</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#f59e0b;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.tr{font-style:italic;font-size:.82em;color:var(--muted);display:block;margin-top:2px}
+header{background:var(--primary);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
+header .brand{font-weight:700;font-size:1.05em}
+header .topic{font-size:.88em;text-align:center;flex:1}
+header .topic .tr{color:rgba(255,255,255,.85)}
+header button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85em;white-space:nowrap}
+header button:hover{background:rgba(255,255,255,.25)}
+.main-container{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 52px)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);padding:14px;overflow-y:auto;position:sticky;top:52px;height:calc(100vh - 52px)}
+.sidebar h3{font-size:.72em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
+.nav-link{display:block;padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:3px;font-size:.84em;border:1px solid transparent;transition:all .15s}
+.nav-link:hover{background:#eff6ff}
+.nav-link.active{background:var(--primary);color:#fff;pointer-events:none;cursor:default}
+.nav-link .nl-title{display:block;font-weight:600}
+.nav-link .time{font-size:.76em;color:var(--muted);display:block;margin-top:2px}
+.nav-link.active .time,.nav-link.active .tr{color:rgba(255,255,255,.85)}
+.nav-link.disabled{opacity:.45;cursor:not-allowed;font-size:.8em;padding:6px 10px}
+.content-area{padding:22px 28px;overflow-y:auto;max-width:1100px;margin:0 auto;width:100%}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:8px}
+.page-header h2{color:var(--primary-dark);font-size:1.1em}
+.page-header .badge{background:var(--secondary);color:#fff;padding:4px 10px;border-radius:20px;font-size:.76em;font-weight:600}
+.card{background:var(--card);border-radius:10px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:16px;border:1px solid var(--border)}
+.card.explain{border-left:4px solid var(--primary)}
+.card.task{border-left:4px solid var(--secondary)}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.1em}
+.math-block{background:#f1f5f9;padding:12px 14px;border-radius:8px;margin:12px 0;overflow-x:auto}
+.example-box{background:#fef3c7;border-left:4px solid var(--secondary);padding:12px 16px;margin:12px 0;border-radius:6px}
+.example-box h4{color:#92400e;margin-bottom:6px;font-size:.95em}
+.tip-box{background:#dbeafe;border-left:4px solid var(--primary);padding:10px 14px;margin:10px 0;border-radius:6px}
+.tip-box h4{color:#1e40af;margin-bottom:4px;font-size:.9em}
+.illustration{text-align:center;margin:14px 0;padding:14px;background:#f1f5f9;border-radius:8px}
+.q-text{font-size:1em;margin-bottom:12px;line-height:1.7}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;transition:all .15s}
+.option:hover{border-color:var(--primary);background:#eff6ff}
+.option.selected{border-color:var(--primary);background:#dbeafe}
+.option.correct{border-color:var(--success);background:#d1fae5}
+.option.incorrect{border-color:var(--danger);background:#fee2e2}
+.option .marker{min-width:18px;width:18px;height:18px;border:2px solid var(--muted);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.7em;color:#fff}
+.option.selected .marker{background:var(--primary);border-color:var(--primary)}
+.option.correct .marker{background:var(--success);border-color:var(--success)}
+.option.incorrect .marker{background:var(--danger);border-color:var(--danger)}
+.option.checkbox .marker{border-radius:3px}
+.option .opt-text{flex:1}
+.fill-input{padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-size:1em;width:100%;margin:8px 0;font-family:inherit}
+.fill-input:focus{border-color:var(--primary);outline:none}
+.btn-submit{background:var(--primary);color:#fff;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-size:.88em;font-weight:600;margin-top:12px}
+.btn-submit:hover{background:var(--primary-dark)}
+.feedback{margin-top:12px;padding:14px;border-radius:8px;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#d1fae5;border:1px solid var(--success)}
+.feedback.incorrect{background:#fee2e2;border:1px solid var(--danger)}
+.feedback h4{margin-bottom:6px}
+.feedback ol,.feedback ul{margin:6px 0;padding-left:22px}
+.feedback li{margin:4px 0}
+
+.card ol, .card ul { padding-left: 26px; margin: 10px 0; }
+.card li { margin: 5px 0; }
+.example-box ol, .example-box ul { padding-left: 22px; margin: 8px 0; }
+.tip-box ol, .tip-box ul { padding-left: 22px; margin: 8px 0; }
+.math-block ol, .math-block ul { padding-left: 22px; margin: 8px 0; }
+
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.pagination button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.84em}
+.pagination button:disabled{background:#cbd5e1;cursor:not-allowed}
+.pagination .indicator{font-size:.82em;color:var(--muted);text-align:center;flex:1;padding:0 10px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#fff;padding:22px;border-radius:12px;max-width:460px;width:90%}
+.modal-content h3{color:var(--primary-dark);margin-bottom:12px}
+.modal-content ul{list-style:none;padding-left:0}
+.modal-content li{padding:10px 0;border-bottom:1px solid var(--border)}
+.modal-content li:last-child{border-bottom:none}
+.modal-close{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px}
+.sort-list{display:flex;flex-direction:column;gap:6px}
+.sort-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.sort-item:hover{border-color:var(--primary)}
+.sort-item.selected{border-color:var(--primary);background:#dbeafe}
+.sort-item .pos{background:var(--primary);color:#fff;min-width:24px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em;flex-shrink:0}
+.sort-item .sort-text{flex:1}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair-col h4{font-size:.85em;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.pair-col{display:flex;flex-direction:column;gap:6px}
+.pair-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;font-size:.92em}
+.pair-item.selected{border-color:var(--primary);background:#dbeafe}
+.pair-item.paired{opacity:.5;cursor:default;border-color:var(--success);background:#d1fae5}
+.pairs-list{margin-top:10px}
+.pair-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f1f5f9;border-radius:6px;margin-bottom:4px;font-size:.85em}
+.pair-row .remove{cursor:pointer;color:var(--danger);font-weight:700;margin-left:6px}
+
+.page-numbers {
+  display: flex;
+  gap: 3px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  flex: 1;
+  overflow-x: auto;
+  padding: 0 3px;
+}
+.page-num {
+  min-width: 28px;
+  height: 26px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: .7em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  white-space: nowrap;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.page-num.page-num-e { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+.page-num.page-num-t { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+.page-num.page-num-e:hover { background: #dbeafe; border-color: var(--primary); }
+.page-num.page-num-t:hover { background: #fef3c7; border-color: var(--secondary); }
+.page-num.page-num-e.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+.page-num.page-num-t.active { background: var(--secondary); color: #fff; border-color: var(--secondary); font-weight: 600; }
+.page-num:disabled { opacity: 1; cursor: default; }
+.page-num.page-num-e:disabled:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.page-num.page-num-t:disabled:hover { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+
+@media(max-width:1100px){
+  .main-container{grid-template-columns:180px 1fr}
+  .content-area{padding:18px 20px}
+}
+@media(max-width:760px){
+  .main-container{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .content-area{padding:16px}
+  header{font-size:.9em}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Math Tutoring by Deni</div>
+  <div class="topic">Topic: Inequalities <span class="tr">Topik: Pertidaksamaan</span></div>
+  <button id="classRulesBtn">Class Rules <span class="tr">Aturan Kelas</span></button>
+</header>
+<div class="main-container">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content-area">
+    <div id="pageContent"></div>
+    <div class="pagination">
+      <button id="prevBtn">← Previous <span class="tr">Sebelumnya</span></button>
+      <div class="page-numbers" id="pageNums"></div>
+      <button id="nextBtn">Next <span class="tr">Berikutnya</span> →</button>
+    </div>
+  </main>
+</div>
+<div id="classRulesModal" class="modal">
+  <div class="modal-content">
+    <h3>Class Rules <span class="tr">Aturan Kelas</span></h3>
+    <ul>
+      <li>Speak in turn <span class="tr">Berbicara secara bergantian</span></li>
+      <li>Ask permission before leaving the class <span class="tr">Meminta izin jika ingin meninggalkan kelas</span></li>
+      <li>Turn on microphone and camera when needed <span class="tr">Menyalakan microphone dan camera jika diperlukan</span></li>
+    </ul>
+    <button class="modal-close">Close <span class="tr">Tutup</span></button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.renderMathInElement){setTimeout(arguments.callee,50);return;}
+  // ================= CONTENT DATA =================
+  const sectionsData = {
+    a: {
+      title: 'Spiral Review Warm-up',
+      titleEn: 'Spiral Review Warm-up',
+      time: '00:00 - 00:10',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Linear Equations', pageTitleEn:'Persamaan Linear',
+          body:`
+            <p><strong>Linear Equations</strong> are equations that form a straight line when graphed. They have variables with a highest power of 1.
+              <span class="tr"><strong>Persamaan Linear</strong> adalah persamaan yang membentuk garis lurus saat digambar. Variabelnya memiliki pangkat tertinggi 1.</span></p>
+            <div class="math-block"><strong>General Form:</strong> $ax + b = 0$, where $a \\neq 0$.
+              <span class="tr">Bentuk Umum</span></div>
+            <p>To solve a linear equation, we must keep the equation balanced. Whatever operation you do to the left side, you must do to the right side.
+              <span class="tr">Untuk menyelesaikan persamaan linear, kita harus menjaga keseimbangan. Operasi yang dilakukan di ruas kiri harus sama dengan ruas kanan.</span></p>
+            <div class="example-box">
+              <h4>Example <span class="tr">Contoh</span></h4>
+              Solve $2x + 3 = 11$. <span class="tr">Selesaikan $2x + 3 = 11$.</span>
+              <ol>
+                <li>$2x + 3 = 11$ <span class="tr">Original equation</span></li>
+                <li>$2x = 11 - 3$ <span class="tr">Subtract 3 from both sides</span></li>
+                <li>$2x = 8$ <span class="tr">Simplify</span></li>
+                <li>$x = \\dfrac{8}{2}$ <span class="tr">Divide by 2</span></li>
+                <li>$x = 4$ <span class="tr">Solution</span></li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Tip <span class="tr">Tips</span></h4>
+              Our goal is always to isolate the variable $x$ on one side of the equals sign.
+              <span class="tr">Tujuan kita selalu mengisolasi variabel $x$ di satu sisi tanda sama dengan.</span></div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Solve Linear Equation', pageTitleEn:'Selesaikan Persamaan Linear', taskType:'fill',
+          question:'Solve $3x - 5 = 16$. The value of $x = \\dots$', questionEn:'Selesaikan $3x - 5 = 16$. Nilai $x = \\dots$',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>Step-by-step solution: <span class="tr">Penyelesaian langkah demi langkah:</span></p>
+            <ol><li>$3x - 5 = 16$</li>
+            <li>$3x = 16 + 5$ <span class="tr">Add 5 to both sides</span></li>
+            <li>$3x = 21$ <span class="tr">Simplify</span></li>
+            <li>$x = \\dfrac{21}{3}$ <span class="tr">Divide by 3</span></li>
+            <li>$x = 7$</li></ol>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Identify Linear Equation', pageTitleEn:'Identifikasi Persamaan Linear', taskType:'radio',
+          question:'Which of the following is a linear equation in one variable?', questionEn:'Manakah yang merupakan persamaan linear satu variabel?',
+          options:[
+            {text:'$x^2 - 4 = 0$', correct:false},
+            {text:'$2x + 5 = 9$', correct:true},
+            {text:'$x + y = 3$', correct:false},
+            {text:'$\\sqrt{x} = 4$', correct:false}
+          ],
+          explanation:`<p>A linear equation in one variable must have exactly one variable, and its highest power must be 1. <span class="tr">Persamaan linear satu variabel harus memiliki tepat satu variabel, dan pangkat tertingginya harus 1.</span></p>
+            <ul><li>$x^2 - 4 = 0$: Power is 2 (Quadratic). <span class="tr">Pangkat 2 (Kuadratik).</span></li>
+            <li>$2x + 5 = 9$: One variable, power 1. ✓ <span class="tr">Satu variabel, pangkat 1.</span></li>
+            <li>$x + y = 3$: Two variables. <span class="tr">Dua variabel.</span></li>
+            <li>$\\sqrt{x} = 4$: Power is $\\frac{1}{2}$. <span class="tr">Pangkat $\\frac{1}{2}$.</span></li></ul>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $4x - 2 = 10$.', questionEn:'Urutkan langkah menyelesaikan $4x - 2 = 10$.',
+          items:[
+            '$4x - 2 = 10$',
+            '$4x = 12$',
+            '$x = \\dfrac{12}{4}$',
+            '$x = 3$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Correct order: <span class="tr">Urutan benar:</span></p>
+            <ol><li>Start with $4x - 2 = 10$.</li>
+            <li>Add 2 to both sides: $4x = 12$.</li>
+            <li>Divide by 4: $x = \\dfrac{12}{4}$.</li>
+            <li>Simplify: $x = 3$.</li></ol>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Simultaneous Equations Review', pageTitleEn:'Tinjauan Persamaan Simultan',
+          body:`
+            <p>Since you were still confused about <strong>Simultaneous Equations</strong>, let's review them. These are two equations with two variables (usually $x$ and $y$) that are solved together.
+              <span class="tr">Karena kamu masih bingung dengan <strong>Persamaan Simultan</strong>, mari kita tinjau. Ini adalah dua persamaan dengan dua variabel (biasanya $x$ dan $y$) yang diselesaikan bersamaan.</span></p>
+            <div class="illustration">
+              <svg width="240" height="80" viewBox="0 0 240 80">
+                <rect x="10" y="10" width="100" height="60" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="6"/>
+                <text x="60" y="45" text-anchor="middle" font-size="14" fill="#1e40af">Eq 1</text>
+                <text x="120" y="45" font-size="20" fill="#10b981">+</text>
+                <rect x="130" y="10" width="100" height="60" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="6"/>
+                <text x="180" y="45" text-anchor="middle" font-size="14" fill="#92400e">Eq 2</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Two equations working together <span class="tr">Dua persamaan bekerja sama</span></div>
+            </div>
+            <div class="example-box"><h4>Example: Elimination Method <span class="tr">Contoh: Metode Eliminasi</span></h4>
+              <p>Eq 1: $x + y = 5$<br>Eq 2: $x - y = 1$</p>
+              <p><strong>Step 1:</strong> Notice the $+y$ and $-y$. If we add the equations, $y$ will disappear (be eliminated). <span class="tr"><strong>Langkah 1:</strong> Perhatikan $+y$ dan $-y$. Jika dijumlahkan, $y$ akan hilang (dieliminasi).</span></p>
+              <p><strong>Step 2:</strong> Add left sides and right sides. <span class="tr"><strong>Langkah 2:</strong> Jumlahkan ruas kiri dan ruas kanan.</span></p>
+              <p>$(x + y) + (x - y) = 5 + 1 \\Rightarrow 2x = 6$</p>
+              <p><strong>Step 3:</strong> Solve for $x$. $x = \\dfrac{6}{2} = 3$. <span class="tr"><strong>Langkah 3:</strong> Selesaikan untuk $x$.</span></p>
+              <p><strong>Step 4:</strong> Put $x=3$ back into Eq 1 to find $y$. $3 + y = 5 \\Rightarrow y = 2$. <span class="tr"><strong>Langkah 4:</strong> Substitusi $x=3$ ke Eq 1 untuk mencari $y$.</span></p>
+            </div>
+          `
+        },
+        // T4
+        { type:'task', pageTitle:'T4: First Step of Elimination', pageTitleEn:'Langkah Pertama Eliminasi', taskType:'radio',
+          question:'Given Eq 1: $2x + y = 10$ and Eq 2: $2x - y = 4$. What is the result of adding Eq 1 and Eq 2?', questionEn:'Diketahui Eq 1: $2x + y = 10$ dan Eq 2: $2x - y = 4$. Berapa hasil penjumlahan Eq 1 dan Eq 2?',
+          options:[
+            {text:'$4x = 14$', correct:true},
+            {text:'$4x + 2y = 14$', correct:false},
+            {text:'$2y = 6$', correct:false},
+            {text:'$4x = 6$', correct:false}
+          ],
+          explanation:`<p>Add the left sides: $(2x + y) + (2x - y) = 2x + 2x + y - y = 4x$. <span class="tr">Jumlahkan ruas kiri.</span></p>
+            <p>Add the right sides: $10 + 4 = 14$.</p>
+            <p>Result: $4x = 14$.</p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Solve for x', pageTitleEn:'Selesaikan untuk x', taskType:'fill',
+          question:'From the previous question, we got $4x = 14$. The value of $x = \\dots$', questionEn:'Dari soal sebelumnya, kita dapat $4x = 14$. Nilai $x = \\dots$',
+          correctAnswer:'3.5', acceptableAnswers:['3.5','7/2','3,5'],
+          explanation:`<p>$4x = 14 \\Rightarrow x = \\dfrac{14}{4} = \\dfrac{7}{2} = 3.5$. <span class="tr">Bagi kedua ruas dengan 4.</span></p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Match Solutions', pageTitleEn:'Pasangkan Solusi', taskType:'pairing',
+          question:'Match each simultaneous system with its correct $x$ value.', questionEn:'Pasangkan setiap sistem dengan nilai $x$ yang benar.',
+          pairs:[
+            {left:'$x+y=4; x-y=2$', right:'$x=3$'},
+            {left:'$2x+y=7; x+y=4$', right:'$x=3$'},
+            {left:'$x+y=5; 2x+y=8$', right:'$x=3$'},
+            {left:'$3x+y=10; x-y=0$', right:'$x=2.5$'}
+          ],
+          explanation:`<p>Verify by substituting $x$ back into the equations: <span class="tr">Verifikasi dengan substitusi $x$ kembali:</span></p>
+            <ul><li>$3+y=4 \\Rightarrow y=1$, $3-y=2 \\Rightarrow y=1$ ✓</li>
+            <li>$2(3)+y=7 \\Rightarrow y=1$, $3+y=4 \\Rightarrow y=1$ ✓</li>
+            <li>$3+y=5 \\Rightarrow y=2$, $2(3)+y=8 \\Rightarrow y=2$ ✓</li>
+            <li>$3(2.5)+y=10 \\Rightarrow y=2.5$, $2.5-y=0 \\Rightarrow y=2.5$ ✓</li></ul>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Number Line Basics', pageTitleEn:'Dasar-Dasar Garis Bilangan',
+          body:`
+            <p>Before learning inequalities, we must understand the <strong>Number Line</strong>. It is a straight line with numbers placed at equal intervals.
+              <span class="tr">Sebelum mempelajari pertidaksamaan, kita harus memahami <strong>Garis Bilangan</strong>. Ini adalah garis lurus dengan angka yang ditempatkan pada jarak yang sama.</span></p>
+            <div class="illustration">
+              <svg width="280" height="60" viewBox="0 0 280 60">
+                <line x1="20" y1="30" x2="260" y2="30" stroke="#333" stroke-width="2"/>
+                <polygon points="260,30 250,25 250,35" fill="#333"/>
+                <line x1="40" y1="25" x2="40" y2="35" stroke="#333" stroke-width="2"/><text x="40" y="50" font-size="10" text-anchor="middle">-2</text>
+                <line x1="80" y1="25" x2="80" y2="35" stroke="#333" stroke-width="2"/><text x="80" y="50" font-size="10" text-anchor="middle">-1</text>
+                <line x1="120" y1="25" x2="120" y2="35" stroke="#333" stroke-width="2"/><text x="120" y="50" font-size="10" text-anchor="middle">0</text>
+                <line x1="160" y1="25" x2="160" y2="35" stroke="#333" stroke-width="2"/><text x="160" y="50" font-size="10" text-anchor="middle">1</text>
+                <line x1="200" y1="25" x2="200" y2="35" stroke="#333" stroke-width="2"/><text x="200" y="50" font-size="10" text-anchor="middle">2</text>
+                <line x1="240" y1="25" x2="240" y2="35" stroke="#333" stroke-width="2"/><text x="240" y="50" font-size="10" text-anchor="middle">3</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Numbers increase to the right <span class="tr">Bilangan bertambah ke kanan</span></div>
+            </div>
+            <p>Key rules:<br>
+              1. Numbers to the right are <strong>greater</strong>.<br>
+              2. Numbers to the left are <strong>smaller</strong>.
+              <span class="tr">Aturan utama:<br>1. Bilangan di kanan lebih besar.<br>2. Bilangan di kiri lebih kecil.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              $3 > 1$ (3 is to the right of 1, so 3 is greater than 1). <span class="tr">$3 > 1$ (3 ada di kanan 1, jadi 3 lebih besar dari 1).</span><br>
+              $-2 < -1$ (-2 is to the left of -1, so -2 is smaller than -1). <span class="tr">$-2 < -1$ (-2 ada di kiri -1, jadi -2 lebih kecil dari -1).</span>
+            </div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Compare Numbers', pageTitleEn:'Bandingkan Bilangan', taskType:'radio',
+          question:'Which number is greater?', questionEn:'Bilangan mana yang lebih besar?',
+          options:[
+            {text:'$-5$', correct:false},
+            {text:'$-2$', correct:true}
+          ],
+          explanation:`<p>On the number line, $-2$ is to the right of $-5$. Therefore, $-2 > -5$. <span class="tr">Pada garis bilangan, $-2$ ada di kanan $-5$. Jadi, $-2 > -5$.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or false: $-4 > -1$.', questionEn:'Benar atau salah: $-4 > -1$.',
+          correctAnswer:'false',
+          explanation:`<p>$-4$ is to the left of $-1$ on the number line, so it is smaller. The correct statement is $-4 < -1$. <span class="tr">$-4$ ada di kiri $-1$, jadi lebih kecil. Pernyataan yang benar adalah $-4 < -1$.</span></p>
+            <p>Answer: <strong>False</strong>.</p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Order the Numbers', pageTitleEn:'Urutkan Bilangan', taskType:'sorting',
+          question:'Order these numbers from smallest to largest.', questionEn:'Urutkan bilangan ini dari terkecil ke terbesar.',
+          items:[
+            '$-3$',
+            '$0$',
+            '$-1$',
+            '$2$'
+          ],
+          correctOrder:[0,2,1,3],
+          explanation:`<p>Smallest to largest means left to right on the number line. <span class="tr">Terkecil ke terbesar berarti kiri ke kanan pada garis bilangan.</span></p>
+            <ol><li>$-3$ (leftmost)</li><li>$-1$</li><li>$0$</li><li>$2$ (rightmost)</li></ol>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Identify Values', pageTitleEn:'Identifikasi Nilai', taskType:'checkbox',
+          question:'Select all numbers that are greater than 0.', questionEn:'Pilih semua bilangan yang lebih besar dari 0.',
+          options:[
+            {text:'$-1$', correct:false},
+            {text:'$0$', correct:false},
+            {text:'$1.5$', correct:true},
+            {text:'$5$', correct:true}
+          ],
+          explanation:`<p>Numbers greater than 0 are strictly to the right of 0. So, 0 itself is not included, but 1.5 and 5 are. <span class="tr">Bilangan lebih besar dari 0 berada di kanan 0. Jadi, 0 tidak termasuk, tapi 1.5 dan 5 iya.</span></p>`
+        }
+      ]
+    },
+    b: {
+      title: 'Introduction & Real-World Connection',
+      titleEn: 'Introduction & Real-World Connection',
+      time: '00:10 - 00:15',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Real-World Problem', pageTitleEn:'Masalah Dunia Nyata',
+          body:`
+            <p>Imagine you have $\\$10$ to buy apples and bananas. Apples cost $\\$2$ each, and bananas cost $\\$1$ each. Can you buy exactly 4 apples and 3 bananas?
+              <span class="tr">Bayangkan kamu punya $\\$10$ untuk beli apel dan pisang. Apel harganya $\\$2$ buahnya, pisang $\\$1$ buahnya. Bisakah kamu beli tepat 4 apel dan 3 pisang?</span></p>
+            <div class="illustration">
+              <svg width="280" height="100" viewBox="0 0 280 100">
+                <circle cx="40" cy="42" r="18" fill="#ef4444"/><text x="40" y="47" text-anchor="middle" fill="white" font-size="13" font-weight="bold">A</text>
+                <text x="40" y="78" text-anchor="middle" font-size="11" fill="#666">$2</text>
+                <text x="80" y="50" font-size="16">+</text>
+                <circle cx="120" cy="42" r="18" fill="#f59e0b"/><text x="120" y="47" text-anchor="middle" fill="white" font-size="13" font-weight="bold">B</text>
+                <text x="120" y="78" text-anchor="middle" font-size="11" fill="#666">$1</text>
+                <text x="165" y="50" font-size="14">=</text>
+                <text x="190" y="50" font-size="14" font-weight="bold" fill="#10b981">$10 max</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Budget constraint <span class="tr">Batas anggaran</span></div>
+            </div>
+            <p>If you buy 4 apples ($4 \\times 2 = 8$) and 3 bananas ($3 \\times 1 = 3$), the total is $8 + 3 = 11$ dollars. You only have 10! 
+              <span class="tr">Jika beli 4 apel ($4 \\times 2 = 8$) dan 3 pisang ($3 \\times 1 = 3$), totalnya $8 + 3 = 11$ dolar. Kamu cuma punya 10!</span></p>
+            <p>So, the total cost must be <strong>less than or equal to</strong> 10. This is an <strong>Inequality</strong>.
+              <span class="tr">Jadi, total biaya harus <strong>kurang dari atau sama dengan</strong> 10. Ini adalah <strong>Pertidaksamaan</strong>.</span></p>
+            <div class="math-block">
+              Let $x$ = number of apples, $y$ = number of bananas. <span class="tr">Misal $x$ = jumlah apel, $y$ = jumlah pisang.</span><br>
+              $2x + y \\le 10$ <span class="tr">Total cost must be less than or equal to 10</span>
+            </div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Identify Variables', pageTitleEn:'Identifikasi Variabel', taskType:'radio',
+          question:'In the problem above, what does $2x + y \\le 10$ mean?', questionEn:'Pada masalah di atas, apa arti $2x + y \\le 10$?',
+          options:[
+            {text:'You must spend exactly 10 dollars.', correct:false},
+            {text:'You can spend up to 10 dollars, but not more.', correct:true},
+            {text:'You must spend more than 10 dollars.', correct:false},
+            {text:'You have exactly 2 apples and 1 banana.', correct:false}
+          ],
+          explanation:`<p>The symbol $\\le$ means "less than or equal to". It sets a maximum limit. You can spend 10, or anything below 10. <span class="tr">Simbol $\\le$ berarti "kurang dari atau sama dengan". Ini menetapkan batas maksimum. Kamu bisa membelanjakan 10, atau kurang dari itu.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Form the Inequality', pageTitleEn:'Susun Pertidaksamaan', taskType:'fill',
+          question:'You have $\\$20$. Pencils cost $\\$3$, erasers cost $\\$2$. If you buy $p$ pencils and $e$ erasers, the inequality is $3p + 2e \\dots 20$. (Use <=)', questionEn:'Kamu punya $\\$20$. Pensil harganya $\\$3$, penghapus $\\$2$. Jika beli $p$ pensil dan $e$ penghapus, pertidaksamaannya $3p + 2e \\dots 20$. (Gunakan <=)',
+          correctAnswer:'<=', acceptableAnswers:['<=','≤','<= '],
+          explanation:`<p>The total cost $3p + 2e$ cannot exceed 20. So it must be less than or equal to 20: $3p + 2e \\le 20$. <span class="tr">Total biaya tidak boleh melebihi 20. Jadi harus kurang dari atau sama dengan 20.</span></p>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or false: The equation $x = 5$ represents an inequality.', questionEn:'Benar atau salah: Persamaan $x = 5$ mewakili pertidaksamaan.',
+          correctAnswer:'false',
+          explanation:`<p>$x = 5$ is an <strong>equation</strong> because it uses the equals sign ($=$). An inequality uses symbols like $<, >, \\le, \\ge$. <span class="tr">$x = 5$ adalah persamaan karena menggunakan tanda sama dengan. Pertidaksamaan menggunakan simbol seperti $<, >, \\le, \\ge$.</span></p>
+            <p>Answer: <strong>False</strong>.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Inequality Symbols', pageTitleEn:'Simbol Pertidaksamaan',
+          body:`
+            <p>Unlike equations that show exact equality, inequalities show a range of values. Here are the four main symbols:
+              <span class="tr">Berbeda dengan persamaan yang menunjukkan kesetaraan tepat, pertidaksamaan menunjukkan rentang nilai. Berikut empat simbol utama:</span></p>
+            <div class="math-block">
+              <ul>
+                <li>$<$ : Less than (Strictly smaller) <span class="tr">Kurang dari</span></li>
+                <li>$>$ : Greater than (Strictly larger) <span class="tr">Lebih dari</span></li>
+                <li>$\\le$ : Less than or equal to <span class="tr">Kurang dari atau sama dengan</span></li>
+                <li>$\\ge$ : Greater than or equal to <span class="tr">Lebih dari atau sama dengan</span></li>
+              </ul>
+            </div>
+            <p>The "crocodile mouth" always eats the larger number! $3 < 5$ (3 is smaller, mouth points to 5). 
+              <span class="tr">"Mulut buaya" selalu memakan bilangan yang lebih besar! $3 < 5$ (3 lebih kecil, mulut menunjuk ke 5).</span></p>
+            <div class="example-box"><h4>Examples <span class="tr">Contoh</span></h4>
+              <ul>
+                <li>$x > 2$: $x$ can be 3, 4, 5.5, 100, etc. (Not 2). <span class="tr">$x$ bisa 3, 4, dst. (Bukan 2).</span></li>
+                <li>$x \\le 5$: $x$ can be 5, 4, 0, -3, etc. <span class="tr">$x$ bisa 5, 4, 0, -3, dst.</span></li>
+              </ul>
+            </div>
+          `
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Match Symbols', pageTitleEn:'Pasangkan Simbol', taskType:'pairing',
+          question:'Match each symbol with its meaning.', questionEn:'Pasangkan setiap simbol dengan artinya.',
+          pairs:[
+            {left:'$>$', right:'Greater than'},
+            {left:'$<$', right:'Less than'},
+            {left:'$\\ge$', right:'Greater than or equal to'},
+            {left:'$\\le$', right:'Less than or equal to'}
+          ],
+          explanation:`<p>Memorize these four symbols as they are the foundation of inequalities. <span class="tr">Hafalkan keempat simbol ini karena merupakan dasar pertidaksamaan.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Choose the Symbol', pageTitleEn:'Pilih Simbol', taskType:'radio',
+          question:'"You must be at least 18 years old to vote." If $y$ is your age, which inequality represents this?', questionEn:'"Kamu harus berusia minimal 18 tahun untuk memilih." Jika $y$ adalah usiamu, pertidaksamaan manakah yang mewakili ini?',
+          options:[
+            {text:'$y < 18$', correct:false},
+            {text:'$y > 18$', correct:false},
+            {text:'$y \\ge 18$', correct:true},
+            {text:'$y \\le 18$', correct:false}
+          ],
+          explanation:`<p>"At least 18" means 18 is allowed, and anything older is allowed. So, age is greater than or equal to 18: $y \\ge 18$. <span class="tr">"Minimal 18" berarti 18 diperbolehkan, dan lebih tua juga. Jadi, usia lebih dari atau sama dengan 18.</span></p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Identify Inequalities', pageTitleEn:'Identifikasi Pertidaksamaan', taskType:'checkbox',
+          question:'Select all mathematical expressions that are inequalities.', questionEn:'Pilih semua ekspresi matematika yang merupakan pertidaksamaan.',
+          options:[
+            {text:'$x + 2 = 5$', correct:false},
+            {text:'$3x - 1 < 8$', correct:true},
+            {text:'$y \\ge 4y + 2$', correct:true},
+            {text:'$2x = 10$', correct:false}
+          ],
+          explanation:`<p>Inequalities must contain $<, >, \\le,$ or $\\ge$. Equations contain $=$. <span class="tr">Pertidaksamaan harus mengandung $<, >, \\le,$ atau $\\ge$. Persamaan mengandung $=$.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Graphing Inequalities', pageTitleEn:'Grafik Pertidaksamaan',
+          body:`
+            <p>Solutions to inequalities are ranges of numbers. We represent them on a number line.
+              <span class="tr">Solusi pertidaksamaan adalah rentang bilangan. Kita gambarkan pada garis bilangan.</span></p>
+            <div class="math-block"><strong>Rules for Graphing:</strong> <span class="tr">Aturan Menggambar:</span>
+              <ol>
+                <li><strong>Open Circle ($\\circ$):</strong> Used for $<$ and $>$. The number is NOT included. <span class="tr">Lingkaran Terbuka: Untuk $<$ dan $>$. Bilangan tidak termasuk.</span></li>
+                <li><strong>Closed Circle ($\\bullet$):</strong> Used for $\\le$ and $\\ge$. The number IS included. <span class="tr">Lingkaran Tertutup: Untuk $\\le$ and $\\ge$. Bilangan termasuk.</span></li>
+                <li><strong>Arrow:</strong> Points in the direction of the valid numbers. <span class="tr">Panah: Menunjuk ke arah bilangan yang valid.</span></li>
+              </ol>
+            </div>
+            <div class="illustration">
+              <svg width="280" height="100" viewBox="0 0 280 100">
+                <text x="10" y="30" font-size="12">x &gt; 2</text>
+                <line x1="20" y1="40" x2="260" y2="40" stroke="#333" stroke-width="2"/>
+                <polygon points="260,40 250,35 250,45" fill="#333"/>
+                <line x1="160" y1="35" x2="160" y2="45" stroke="#333" stroke-width="2"/><text x="160" y="60" font-size="10" text-anchor="middle">2</text>
+                <circle cx="160" cy="40" r="5" stroke="#ef4444" stroke-width="2" fill="#fff"/>
+                <line x1="165" y1="40" x2="250" y2="40" stroke="#ef4444" stroke-width="3"/>
+
+                <text x="10" y="80" font-size="12">x ≤ 1</text>
+                <line x1="20" y1="90" x2="260" y2="90" stroke="#333" stroke-width="2"/>
+                <polygon points="20,90 30,85 30,95" fill="#333"/>
+                <line x1="120" y1="85" x2="120" y2="95" stroke="#333" stroke-width="2"/><text x="120" y="110" font-size="10" text-anchor="middle">1</text>
+                <circle cx="120" cy="90" r="5" stroke="#10b981" stroke-width="2" fill="#10b981"/>
+                <line x1="30" y1="90" x2="115" y2="90" stroke="#10b981" stroke-width="3"/>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Open vs Closed Circles <span class="tr">Lingkaran Terbuka vs Tertutup</span></div>
+            </div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Open or Closed?', pageTitleEn:'Terbuka atau Tertutup?', taskType:'radio',
+          question:'When graphing $x \\ge 4$, what type of circle do you use at 4?', questionEn:'Saat menggambar $x \\ge 4$, jenis lingkaran apa yang digunakan pada angka 4?',
+          options:[
+            {text:'Open circle, because 4 is not included.', correct:false},
+            {text:'Closed circle, because 4 is included.', correct:true}
+          ],
+          explanation:`<p>The symbol $\\ge$ means "greater than or equal to". Because 4 is included (the "equal to" part), we use a closed circle. <span class="tr">Simbol $\\ge$ berarti "lebih dari atau sama dengan". Karena 4 termasuk, kita gunakan lingkaran tertutup.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Graph Direction', pageTitleEn:'Arah Grafik', taskType:'fill',
+          question:'To graph $x < 3$, the arrow must point to the \\dots (left / right)', questionEn:'Untuk menggambar $x < 3$, panah harus menunjuk ke \\dots (kiri / kanan)',
+          correctAnswer:'left', acceptableAnswers:['left','Left','LEFT'],
+          explanation:`<p>$x < 3$ means $x$ can be 2, 1, 0, -1, etc. These numbers are to the left of 3 on the number line. <span class="tr">$x < 3$ berarti $x$ bisa 2, 1, 0, -1. Bilangan ini ada di sebelah kiri 3.</span></p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Order Graphing Steps', pageTitleEn:'Urutkan Langkah Menggambar', taskType:'sorting',
+          question:'Order the steps to graph $x \\le 5$.', questionEn:'Urutkan langkah menggambar $x \\le 5$.',
+          items:[
+            'Draw a number line and mark 5',
+            'Draw a closed circle at 5',
+            'Draw an arrow pointing to the left',
+            'Shade the line from 5 leftwards'
+          ],
+          correctOrder:[0,1,3,2],
+          explanation:`<p>Steps to graph: <span class="tr">Langkah menggambar:</span></p>
+            <ol><li>Mark the number 5.</li><li>Use a closed circle because of $\\le$.</li><li>Shade towards the left (smaller numbers).</li><li>End with an arrow indicating it goes forever.</li></ol>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Match Graphs', pageTitleEn:'Pasangkan Grafik', taskType:'pairing',
+          question:'Match each inequality with its correct graph description.', questionEn:'Pasangkan setiap pertidaksamaan dengan deskripsi grafiknya.',
+          pairs:[
+            {left:'$x > 2$', right:'Open at 2, points right'},
+            {left:'$x \\le -1$', right:'Closed at -1, points left'},
+            {left:'$x < 4$', right:'Open at 4, points left'},
+            {left:'$x \\ge 0$', right:'Closed at 0, points right'}
+          ],
+          explanation:`<p>Remember: $<$ and $>$ are open; $\\le$ and $\\ge$ are closed. $>$ and $\\ge$ point right; $<$ and $\\le$ point left. <span class="tr">Ingat: $<$ dan $>$ terbuka; $\\le$ dan $\\ge$ tertutup. $>$ dan $\\ge$ ke kanan; $<$ dan $\\le$ ke kiri.</span></p>`
+        }
+      ]
+    },
+    c: {
+      title: 'Review of Prior Knowledge',
+      titleEn: 'Review of Prior Knowledge',
+      time: '00:15 - 00:20',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Solving Linear Equations Review', pageTitleEn:'Tinjauan Penyelesaian Persamaan Linear',
+          body:`
+            <p>Before solving inequalities, we must be experts at solving equations. Let's review the balance method.
+              <span class="tr">Sebelum menyelesaikan pertidaksamaan, kita harus mahir menyelesaikan persamaan. Mari kita tinjau metode keseimbangan.</span></p>
+            <p>The goal is to isolate $x$. Whatever you do to one side, you MUST do to the other side.
+              <span class="tr">Tujuannya adalah mengisolasi $x$. Apa pun yang kamu lakukan di satu sisi, HARUS dilakukan di sisi lainnya.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $\\dfrac{2x}{3} - 1 = 5$. <span class="tr">Selesaikan $\\dfrac{2x}{3} - 1 = 5$.</span>
+              <ol>
+                <li>$\\dfrac{2x}{3} - 1 = 5$</li>
+                <li>$\\dfrac{2x}{3} = 5 + 1$ <span class="tr">Add 1 to both sides</span></li>
+                <li>$\\dfrac{2x}{3} = 6$ <span class="tr">Simplify</span></li>
+                <li>$2x = 6 \\times 3$ <span class="tr">Multiply both sides by 3 to cancel the fraction</span></li>
+                <li>$2x = 18$ <span class="tr">Simplify</span></li>
+                <li>$x = \\dfrac{18}{2}$ <span class="tr">Divide by 2</span></li>
+                <li>$x = 9$</li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Tip <span class="tr">Tips</span></h4>
+              Always perform the inverse operation. If it's $+1$, do $-1$. If it's $\\times 3$, do $\\div 3$.
+              <span class="tr">Selalu lakukan operasi invers (kebalikannya). Jika $+1$, lakukan $-1$. Jika $\\times 3$, lakukan $\\div 3$.</span></div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: First Step', pageTitleEn:'Langkah Pertama', taskType:'radio',
+          question:'What is the first step to solve $\\dfrac{x}{4} + 2 = 5$?', questionEn:'Apa langkah pertama untuk menyelesaikan $\\dfrac{x}{4} + 2 = 5$?',
+          options:[
+            {text:'Multiply by 4', correct:false},
+            {text:'Subtract 2 from both sides', correct:true},
+            {text:'Divide by 4', correct:false},
+            {text:'Subtract 5 from both sides', correct:false}
+          ],
+          explanation:`<p>We must isolate the term with $x$ first. To remove the $+2$, we subtract 2 from both sides. <span class="tr">Kita harus mengisolasi suku dengan $x$ terlebih dahulu. Untuk menghapus $+2$, kita kurangi 2 dari kedua sisi.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Solve the Equation', pageTitleEn:'Selesaikan Persamaan', taskType:'fill',
+          question:'Solve $\\dfrac{x}{4} + 2 = 5$. The value of $x = \\dots$', questionEn:'Selesaikan $\\dfrac{x}{4} + 2 = 5$. Nilai $x = \\dots$',
+          correctAnswer:'12', acceptableAnswers:['12'],
+          explanation:`<ol><li>$\\dfrac{x}{4} = 5 - 2$</li><li>$\\dfrac{x}{4} = 3$</li><li>$x = 3 \\times 4$</li><li>$x = 12$</li></ol>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $3x - 5 = 10$.', questionEn:'Urutkan langkah menyelesaikan $3x - 5 = 10$.',
+          items:[
+            '$3x - 5 = 10$',
+            '$3x = 15$',
+            '$x = \\dfrac{15}{3}$',
+            '$x = 5$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Add 5 to both sides ($3x=15$), then divide by 3 ($x=5$). <span class="tr">Tambahkan 5 ke kedua sisi, lalu bagi dengan 3.</span></p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Inverse Operations & Inequalities', pageTitleEn:'Operasi Invers & Pertidaksamaan',
+          body:`
+            <p>Solving inequalities is <strong>exactly the same</strong> as solving equations when you add or subtract. 
+              <span class="tr">Menyelesaikan pertidaksamaan <strong>persis sama</strong> dengan menyelesaikan persamaan saat kamu menjumlahkan atau mengurangkan.</span></p>
+            <div class="math-block">
+              If $x + 2 < 5$, then $x < 5 - 2 \\Rightarrow x < 3$. <span class="tr">Sama seperti persamaan, kurangi 2 dari kedua sisi.</span>
+            </div>
+            <div class="illustration">
+              <svg width="280" height="60" viewBox="0 0 280 60">
+                <text x="10" y="30" font-size="12">x &lt; 3</text>
+                <line x1="20" y1="40" x2="260" y2="40" stroke="#333" stroke-width="2"/>
+                <polygon points="20,40 30,35 30,45" fill="#333"/>
+                <line x1="160" y1="35" x2="160" y2="45" stroke="#333" stroke-width="2"/><text x="160" y="60" font-size="10" text-anchor="middle">3</text>
+                <circle cx="160" cy="40" r="5" stroke="#ef4444" stroke-width="2" fill="#fff"/>
+                <line x1="30" y1="40" x2="155" y2="40" stroke="#ef4444" stroke-width="3"/>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Graph of x &lt; 3 <span class="tr">Grafik x &lt; 3</span></div>
+            </div>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $y - 4 \\ge 7$. <span class="tr">Selesaikan $y - 4 \\ge 7$.</span><br>
+              $y \\ge 7 + 4 \\Rightarrow y \\ge 11$. <span class="tr">Tambahkan 4 ke kedua sisi. Tanda tetap $\\ge$.</span>
+            </div>
+          `
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Add/Subtract in Inequalities', pageTitleEn:'Jumlah/Kurang dalam Pertidaksamaan', taskType:'truefalse',
+          question:'True or false: When solving $x + 5 > 10$, you subtract 5 from both sides and the sign remains $>$.', questionEn:'Benar atau salah: Saat menyelesaikan $x + 5 > 10$, kamu kurangi 5 dari kedua sisi dan tandanya tetap $>$.',
+          correctAnswer:'true',
+          explanation:`<p>Adding or subtracting a number does NOT change the inequality sign. $x + 5 > 10 \\Rightarrow x > 5$. <span class="tr">Menambah atau mengurangi tidak mengubah tanda pertidaksamaan.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Solve Inequality', pageTitleEn:'Selesaikan Pertidaksamaan', taskType:'fill',
+          question:'Solve $x - 8 < 2$. $x < \\dots$', questionEn:'Selesaikan $x - 8 < 2$. $x < \\dots$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<p>$x - 8 < 2 \\Rightarrow x < 2 + 8 \\Rightarrow x < 10$. <span class="tr">Tambahkan 8 ke kedua sisi.</span></p>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Match Solutions', pageTitleEn:'Pasangkan Solusi', taskType:'pairing',
+          question:'Match each inequality with its solution.', questionEn:'Pasangkan setiap pertidaksamaan dengan solusinya.',
+          pairs:[
+            {left:'$x + 3 < 5$', right:'$x < 2$'},
+            {left:'$x - 2 \\ge 4$', right:'$x \\ge 6$'},
+            {left:'$x + 10 \\le 15$', right:'$x \\le 5$'},
+            {left:'$x - 1 > -3$', right:'$x > -2$'}
+          ],
+          explanation:`<p>Use inverse operations (add/subtract) just like normal equations. <span class="tr">Gunakan operasi invers (tambah/kurang) seperti persamaan biasa.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Multiplying and Dividing Positives', pageTitleEn:'Mengali dan Membagi Positif',
+          body:`
+            <p>What happens when we multiply or divide an inequality? 
+              <span class="tr">Apa yang terjadi saat kita mengali atau membagi pertidaksamaan?</span></p>
+            <p>As long as the number is <strong>POSITIVE</strong>, the rules are still the same as equations!
+              <span class="tr">Selama bilangannya <strong>POSITIF</strong>, aturannya tetap sama dengan persamaan!</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $3x > 12$. <span class="tr">Selesaikan $3x > 12$.</span><br>
+              Divide both sides by 3: $\\dfrac{3x}{3} > \\dfrac{12}{3} \\Rightarrow x > 4$. <span class="tr">Bagi kedua sisi dengan 3.</span><br><br>
+              Solve $\\dfrac{x}{2} \\le -5$. <span class="tr">Selesaikan $\\dfrac{x}{2} \\le -5$.</span><br>
+              Multiply both sides by 2: $x \\le -5 \\times 2 \\Rightarrow x \\le -10$. <span class="tr">Kali kedua sisi dengan 2.</span>
+            </div>
+            <div class="tip-box"><h4>Crucial Rule <span class="tr">Aturan Penting</span></h4>
+              Multiplying or dividing by a positive number keeps the inequality sign exactly the same.
+              <span class="tr">Mengali atau membagi dengan bilangan positif menjaga tanda pertidaksamaan tetap sama.</span></div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Solve by Dividing', pageTitleEn:'Selesaikan dengan Membagi', taskType:'fill',
+          question:'Solve $4x \\le 20$. $x \\le \\dots$', questionEn:'Selesaikan $4x \\le 20$. $x \\le \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Divide both sides by 4: $x \\le \\dfrac{20}{4} \\Rightarrow x \\le 5$. <span class="tr">Bagi kedua sisi dengan 4.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Solve by Multiplying', pageTitleEn:'Selesaikan dengan Mengali', taskType:'fill',
+          question:'Solve $\\dfrac{x}{3} > 4$. $x > \\dots$', questionEn:'Selesaikan $\\dfrac{x}{3} > 4$. $x > \\dots$',
+          correctAnswer:'12', acceptableAnswers:['12'],
+          explanation:`<p>Multiply both sides by 3: $x > 4 \\times 3 \\Rightarrow x > 12$. <span class="tr">Kali kedua sisi dengan 3.</span></p>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $2x - 3 < 7$.', questionEn:'Urutkan langkah menyelesaikan $2x - 3 < 7$.',
+          items:[
+            '$2x - 3 < 7$',
+            '$2x < 10$',
+            '$x < 5$'
+          ],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Add 3 to both sides: $2x < 10$.</li><li>Divide by 2: $x < 5$.</li></ol>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Check Validity', pageTitleEn:'Periksa Validitas', taskType:'checkbox',
+          question:'Select all values of $x$ that satisfy $2x \\le 8$.', questionEn:'Pilih semua nilai $x$ yang memenuhi $2x \\le 8$.',
+          options:[
+            {text:'$2$', correct:true},
+            {text:'$4$', correct:true},
+            {text:'$5$', correct:false},
+            {text:'$0$', correct:true}
+          ],
+          explanation:`<p>First solve: $2x \\le 8 \\Rightarrow x \\le 4$. Any number 4 or less is correct. <span class="tr">Selesaikan dulu: $x \\le 4$. Bilangan 4 atau kurang benar.</span></p>`
+        }
+      ]
+    },
+    d: {
+      title: 'Problem Introduction',
+      titleEn: 'Problem Introduction',
+      time: '00:20 - 00:30',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: The Negative Number Rule', pageTitleEn:'Aturan Bilangan Negatif',
+          body:`
+            <p>This is the most important rule in inequalities! <strong>When you multiply or divide by a NEGATIVE number, you MUST FLIP the inequality sign.</strong>
+              <span class="tr">Ini adalah aturan terpenting dalam pertidaksamaan! <strong>Saat kamu mengali atau membagi dengan bilangan NEGATIF, kamu HARUS MEMBALIK tanda pertidaksamaan.</strong></span></p>
+            <div class="math-block"><strong>Why? <span class="tr">Mengapa?</strong></span>
+              <p>Imagine $3 < 5$. This is true. <span class="tr">Bayangkan $3 < 5$. Ini benar.</span></p>
+              <p>If we multiply by -1 without flipping: $-3 < -5$. Is this true? No! -3 is to the right of -5 on the number line, so -3 is GREATER than -5. <span class="tr">Jika dikali -1 tanpa dibalik: $-3 < -5$. Benarkah? Tidak! -3 ada di kanan -5, jadi -3 LEBIH BESAR dari -5.</span></p>
+              <p>To keep it true, we must flip the sign: $-3 > -5$. <span class="tr">Untuk tetap benar, kita balik tandanya: $-3 > -5$.</span></p>
+            </div>
+            <div class="illustration">
+              <svg width="280" height="80" viewBox="0 0 280 80">
+                <text x="10" y="30" font-size="14" fill="#10b981">3 &lt; 5</text>
+                <text x="80" y="30" font-size="14">Multiply by -1</text>
+                <text x="200" y="30" font-size="14" fill="#ef4444">-3 &gt; -5 (Flipped!)</text>
+                <line x1="20" y1="60" x2="260" y2="60" stroke="#333" stroke-width="2"/>
+                <polygon points="20,60 30,55 30,65" fill="#333"/>
+                <circle cx="180" cy="60" r="4" fill="#333"/><text x="180" y="75" font-size="10" text-anchor="middle">-3</text>
+                <circle cx="220" cy="60" r="4" fill="#333"/><text x="220" y="75" font-size="10" text-anchor="middle">-5</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Visualizing the flip <span class="tr">Visualisasi pembalikan</span></div>
+            </div>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $-2x < 6$. <span class="tr">Selesaikan $-2x < 6$.</span><br>
+              Divide by -2: $\\dfrac{-2x}{-2} \\quad \\boxed{>} \\quad \\dfrac{6}{-2}$ <span class="tr">Notice the sign flipped from < to >!</span><br>
+              $x > -3$             </div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: The Golden Rule', pageTitleEn:'Aturan Emas', taskType:'radio',
+          question:'What happens to the inequality sign when you divide both sides by -4?', questionEn:'Apa yang terjadi pada tanda pertidaksamaan saat kamu membagi kedua sisi dengan -4?',
+          options:[
+            {text:'It stays the same.', correct:false},
+            {text:'It flips direction (e.g., < becomes >).', correct:true},
+            {text:'It becomes an equals sign.', correct:false},
+            {text:'It disappears.', correct:false}
+          ],
+          explanation:`<p>Multiplying or dividing by a negative number requires flipping the sign to keep the inequality true. <span class="tr">Mengali atau membagi dengan bilangan negatif mengharuskan membalik tanda agar pertidaksamaan tetap benar.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Solve Negative Inequality', pageTitleEn:'Selesaikan Pertidaksamaan Negatif', taskType:'fill',
+          question:'Solve $-3x \\le 12$. $x \\dots$ (Write your answer like: >= 5 or <= -2 or > 0)', questionEn:'Selesaikan $-3x \\le 12$. $x \\dots$ (Tulis jawaban seperti: >= 5 atau <= -2 atau > 0)',
+          correctAnswer:'>= -4', acceptableAnswers:['>= -4','>=-4','≥-4','≥ -4','>= - 4'],
+          explanation:`<ol><li>Divide by -3: $x \\dots \\dfrac{12}{-3}$</li><li>Flip the sign because of -3: $\\le$ becomes $\\ge$</li><li>$x \\ge -4$</li></ol>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: Spot the Error', pageTitleEn:'Temukan Kesalahan', taskType:'truefalse',
+          question:'True or false: The solution to $-5x > 10$ is $x > -2$.', questionEn:'Benar atau salah: Solusi dari $-5x > 10$ adalah $x > -2$.',
+          correctAnswer:'false',
+          explanation:`<p>The correct solution is $x < -2$. The sign must flip because we divided by -5. <span class="tr">Solusi yang benar adalah $x < -2$. Tanda harus dibalik karena kita bagi dengan -5.</span></p>
+            <p>Answer: <strong>False</strong>.</p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Expanding Brackets', pageTitleEn:'Menguraikan Kurung',
+          body:`
+            <p>Sometimes inequalities have brackets. We must expand them first using the distributive property.
+              <span class="tr">Kadang pertidaksamaan memiliki kurung. Kita harus mengurainya terlebih dahulu menggunakan sifat distributif.</span></p>
+            <div class="math-block">$a(b + c) = ab + ac$</div>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $2(x - 3) < 4$. <span class="tr">Selesaikan $2(x - 3) < 4$.</span>
+              <ol>
+                <li>Expand: $2x - 6 < 4$ <span class="tr">Multiply 2 by $x$ and 2 by $-3$</span></li>
+                <li>Add 6: $2x < 4 + 6$</li>
+                <li>Simplify: $2x < 10$</li>
+                <li>Divide by 2: $x < 5$ <span class="tr">No flipping needed because 2 is positive</span></li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Warning! <span class="tr">Peringatan!</span></h4>
+              If you multiply by a negative number outside the bracket, the signs inside flip. E.g., $-2(x - 1) = -2x + 2$.
+              <span class="tr">Jika mengali dengan negatif di luar kurung, tanda di dalam ikut terbalik. Cth: $-2(x - 1) = -2x + 2$.</span></div>
+          `
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Expand Correctly', pageTitleEn:'Urai dengan Benar', taskType:'radio',
+          question:'What is the correct expansion of $-3(x + 4)$?', questionEn:'Apa penguraian yang benar dari $-3(x + 4)$?',
+          options:[
+            {text:'$-3x + 4$', correct:false},
+            {text:'$-3x - 12$', correct:true},
+            {text:'$-3x + 12$', correct:false},
+            {text:'$3x - 12$', correct:false}
+          ],
+          explanation:`<p>$-3 \\times x = -3x$. $-3 \\times 4 = -12$. So, $-3x - 12$. <span class="tr">$-3 \\times x = -3x$. $-3 \\times 4 = -12$. Jadi, $-3x - 12$.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Solve with Brackets', pageTitleEn:'Selesaikan dengan Kurung', taskType:'fill',
+          question:'Solve $3(x + 2) \\ge 9$. $x \\ge \\dots$', questionEn:'Selesaikan $3(x + 2) \\ge 9$. $x \\ge \\dots$',
+          correctAnswer:'1', acceptableAnswers:['1'],
+          explanation:`<ol><li>$3x + 6 \\ge 9$</li><li>$3x \\ge 9 - 6$</li><li>$3x \\ge 3$</li><li>$x \\ge 1$</li></ol>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Match Expanded Forms', pageTitleEn:'Pasangkan Bentuk Uraian', taskType:'pairing',
+          question:'Match the expressions with their expanded forms.', questionEn:'Pasangkan ekspresi dengan bentuk uraiannya.',
+          pairs:[
+            {left:'$2(x - 5)$', right:'$2x - 10$'},
+            {left:'$-2(x - 5)$', right:'$-2x + 10$'},
+            {left:'$-3(x + 1)$', right:'$-3x - 3$'},
+            {left:'$4(x + 2)$', right:'$4x + 8$'}
+          ],
+          explanation:`<p>Remember that multiplying by a negative flips the signs inside the brackets. <span class="tr">Ingat bahwa mengali dengan negatif membalik tanda di dalam kurung.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Variables on Both Sides', pageTitleEn:'Variabel di Kedua Sisi',
+          body:`
+            <p>When $x$ appears on both sides of the inequality, move all $x$ terms to one side and all numbers to the other side.
+              <span class="tr">Ketika $x$ muncul di kedua sisi pertidaksamaan, pindahkan semua suku $x$ ke satu sisi dan semua angka ke sisi lainnya.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $4x - 2 > 2x + 6$. <span class="tr">Selesaikan $4x - 2 > 2x + 6$.</span>
+              <ol>
+                <li>Subtract $2x$ from both sides: $4x - 2x - 2 > 6 \\Rightarrow 2x - 2 > 6$. <span class="tr">Pindahkan $x$ ke kiri.</span></li>
+                <li>Add 2 to both sides: $2x > 6 + 2 \\Rightarrow 2x > 8$. <span class="tr">Pindahkan angka ke kanan.</span></li>
+                <li>Divide by 2: $x > 4$. <span class="tr">Bagi dengan 2.</span></li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Strategy <span class="tr">Strategi</span></h4>
+              It is usually easier to keep the $x$ coefficient positive to avoid flipping signs unnecessarily. 
+              <span class="tr">Biasanya lebih mudah menjaga koefisien $x$ tetap positif untuk menghindari pembalikan tanda yang tidak perlu.</span></div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: First Step', pageTitleEn:'Langkah Pertama', taskType:'radio',
+          question:'What is the best first step to solve $5x + 1 < 3x + 7$?', questionEn:'Apa langkah pertama terbaik untuk menyelesaikan $5x + 1 < 3x + 7$?',
+          options:[
+            {text:'Subtract 1 from both sides', correct:false},
+            {text:'Subtract $3x$ from both sides', correct:true},
+            {text:'Divide by 5', correct:false},
+            {text:'Subtract 7 from both sides', correct:false}
+          ],
+          explanation:`<p>Getting the $x$ terms together first is the standard algebraic practice. $5x - 3x + 1 < 7$. <span class="tr">Mengumpulkan suku $x$ lebih dulu adalah praktik aljabar standar.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Solve Both Sides', pageTitleEn:'Selesaikan Dua Sisi', taskType:'fill',
+          question:'Solve $3x + 2 \\le x + 6$. $x \\le \\dots$', questionEn:'Selesaikan $3x + 2 \\le x + 6$. $x \\le \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<ol><li>$3x - x + 2 \\le 6$</li><li>$2x + 2 \\le 6$</li><li>$2x \\le 4$</li><li>$x \\le 2$</li></ol>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $4x - 3 > 2x + 5$.', questionEn:'Urutkan langkah menyelesaikan $4x - 3 > 2x + 5$.',
+          items:[
+            '$2x - 3 > 5$',
+            '$2x > 8$',
+            '$x > 4$'
+          ],
+          correctOrder:[0,1,2],
+          explanation:`<p>Subtract $2x$, then add 3, then divide by 2. <span class="tr">Kurangi $2x$, lalu tambah 3, lalu bagi 2.</span></p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Which is True?', pageTitleEn:'Mana yang Benar?', taskType:'checkbox',
+          question:'Select all values of $x$ that satisfy $2x + 1 < 3x - 2$. (Hint: solve for $x$ first)', questionEn:'Pilih semua nilai $x$ yang memenuhi $2x + 1 < 3x - 2$. (Petunjuk: selesaikan untuk $x$ dulu)',
+          options:[
+            {text:'$4$', correct:true},
+            {text:'$3$', correct:true},
+            {text:'$2$', correct:false},
+            {text:'$5$', correct:true}
+          ],
+          explanation:`<p>$2x + 1 < 3x - 2 \\Rightarrow 1 + 2 < 3x - 2x \\Rightarrow 3 < x$. So $x > 3$. Any number strictly greater than 3 is correct. <span class="tr">$2x + 1 < 3x - 2 \\Rightarrow 1 + 2 < 3x - 2x \\Rightarrow 3 < x$. Jadi $x > 3$. Bilangan lebih dari 3 benar.</span></p>`
+        }
+      ]
+    },
+    e: {
+      title: 'Guided Practice',
+      titleEn: 'Guided Practice',
+      time: '00:30 - 00:45',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Fractions in Inequalities', pageTitleEn:'Pecahan dalam Pertidaksamaan',
+          body:`
+            <p>When an inequality has fractions, it is easiest to multiply both sides by the denominator to eliminate the fraction.
+              <span class="tr">Ketika pertidaksamaan memiliki pecahan, termudah adalah mengali kedua sisi dengan penyebut untuk menghilangkan pecahan.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $\\dfrac{x + 1}{2} \\le 3$. <span class="tr">Selesaikan $\\dfrac{x + 1}{2} \\le 3$.</span>
+              <ol>
+                <li>Multiply both sides by 2: $2 \\times \\dfrac{x + 1}{2} \\le 3 \\times 2$ <span class="tr">No sign flip, 2 is positive</span></li>
+                <li>$x + 1 \\le 6$ <span class="tr">Fraction eliminated</span></li>
+                <li>$x \\le 6 - 1$ <span class="tr">Subtract 1</span></li>
+                <li>$x \\le 5$</li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Multiple Fractions <span class="tr">Pecahan Ganda</span></h4>
+              If there are multiple denominators, multiply by the Lowest Common Multiple (LCM) of all denominators.
+              <span class="tr">Jika ada beberapa penyebut, kalikan dengan KPK dari semua penyebut.</span></div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Clear the Fraction', pageTitleEn:'Hilangkan Pecahan', taskType:'radio',
+          question:'What is the best first step to solve $\\dfrac{2x - 3}{4} > 1$?', questionEn:'Apa langkah pertama terbaik untuk menyelesaikan $\\dfrac{2x - 3}{4} > 1$?',
+          options:[
+            {text:'Divide by 4', correct:false},
+            {text:'Multiply by 4', correct:true},
+            {text:'Add 3', correct:false},
+            {text:'Multiply by 2', correct:false}
+          ],
+          explanation:`<p>Multiplying both sides by 4 will cancel the denominator, making the inequality easier to solve. <span class="tr">Mengali kedua sisi dengan 4 akan menghapus penyebut, membuat pertidaksamaan lebih mudah diselesaikan.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Solve Fraction Inequality', pageTitleEn:'Selesaikan Pertidaksamaan Pecahan', taskType:'fill',
+          question:'Solve $\\dfrac{x - 2}{3} \\ge 4$. $x \\ge \\dots$', questionEn:'Selesaikan $\\dfrac{x - 2}{3} \\ge 4$. $x \\ge \\dots$',
+          correctAnswer:'14', acceptableAnswers:['14'],
+          explanation:`<ol><li>Multiply by 3: $x - 2 \\ge 12$</li><li>Add 2: $x \\ge 12 + 2$</li><li>$x \\ge 14$</li></ol>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or false: $\\dfrac{x}{-2} < 5$ is the same as $x < -10$.', questionEn:'Benar atau salah: $\\dfrac{x}{-2} < 5$ sama dengan $x < -10$.',
+          correctAnswer:'false',
+          explanation:`<p>When multiplying by -2 to clear the fraction, the sign MUST flip. It should be $x > -10$. <span class="tr">Saat mengali dengan -2 untuk menghapus pecahan, tanda HARUS dibalik. Seharusnya $x > -10$.</span></p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Graphing Solution Sets', pageTitleEn:'Grafik Himpunan Penyelesaian',
+          body:`
+            <p>Let's combine solving and graphing. A solution set is the range of numbers that make the inequality true.
+              <span class="tr">Mari gabungkan penyelesaian dan grafik. Himpunan penyelesaian adalah rentang bilangan yang membuat pertidaksamaan benar.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve and graph $-2x + 1 \\le 5$. <span class="tr">Selesaikan dan gambar $-2x + 1 \\le 5$.</span>
+              <ol>
+                <li>$-2x \\le 5 - 1$</li>
+                <li>$-2x \\le 4$</li>
+                <li>Divide by -2 and FLIP: $x \\ge -2$ <span class="tr">Pembalikan terjadi!</span></li>
+              </ol>
+              <div class="illustration">
+                <svg width="280" height="60" viewBox="0 0 280 60">
+                  <text x="10" y="30" font-size="12">x ≥ -2</text>
+                  <line x1="20" y1="40" x2="260" y2="40" stroke="#333" stroke-width="2"/>
+                  <polygon points="260,40 250,35 250,45" fill="#333"/>
+                  <line x1="120" y1="35" x2="120" y2="45" stroke="#333" stroke-width="2"/><text x="120" y="60" font-size="10" text-anchor="middle">-2</text>
+                  <circle cx="120" cy="40" r="5" stroke="#10b981" stroke-width="2" fill="#10b981"/>
+                  <line x1="125" y1="40" x2="250" y2="40" stroke="#10b981" stroke-width="3"/>
+                </svg>
+              </div>
+            </div>
+          `
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Match Graphs', pageTitleEn:'Pasangkan Grafik', taskType:'pairing',
+          question:'Match each inequality with its graph description.', questionEn:'Pasangkan setiap pertidaksamaan dengan deskripsi grafiknya.',
+          pairs:[
+            {left:'$x > -1$', right:'Open at -1, points right'},
+            {left:'$x \\le 2$', right:'Closed at 2, points left'},
+            {left:'$x \\ge -3$', right:'Closed at -3, points right'},
+            {left:'$x < 0$', right:'Open at 0, points left'}
+          ],
+          explanation:`<p>Remember: $<$ and $>$ are open; $\\le$ and $\\ge$ are closed. <span class="tr">Ingat: $<$ dan $>$ terbuka; $\\le$ dan $\\ge$ tertutup.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Solve and Graph', pageTitleEn:'Selesaikan dan Gambar', taskType:'fill',
+          question:'Solve $3x - 2 < 4$. $x < \\dots$', questionEn:'Selesaikan $3x - 2 < 4$. $x < \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<ol><li>$3x < 4 + 2$</li><li>$3x < 6$</li><li>$x < 2$</li></ol>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Valid Solutions', pageTitleEn:'Solusi Valid', taskType:'checkbox',
+          question:'Select all values that satisfy $x \\ge -2$.', questionEn:'Pilih semua nilai yang memenuhi $x \\ge -2$.',
+          options:[
+            {text:'$-2$', correct:true},
+            {text:'$0$', correct:true},
+            {text:'$-3$', correct:false},
+            {text:'$1.5$', correct:true}
+          ],
+          explanation:`<p>$x \\ge -2$ means $x$ can be -2 or anything greater. <span class="tr">$x \\ge -2$ berarti $x$ bisa -2 atau lebih besar.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Real-World Application', pageTitleEn:'Aplikasi Dunia Nyata',
+          body:`
+            <p>Let's translate a word problem into an inequality.
+              <span class="tr">Mari kita terjemahkan soal cerita menjadi pertidaksamaan.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              <p>A taxi charges $\\$3$ base fare plus $\\$2$ per kilometer. You have $\\$15$. How many kilometers can you travel? <span class="tr">Taksi menarik $\\$3$ tarif dasar ditambah $\\$2$ per km. Kamu punya $\\$15$. Berapa km kamu bisa bepergian?</span></p>
+              <p>Let $k$ = kilometers. <span class="tr">Misal $k$ = kilometer.</span></p>
+              <p>Total cost = Base fare + (Cost per km $\\times$ km)</p>
+              <p>Total cost = $3 + 2k$</p>
+              <p>You have $\\$15$, so total cost must be less than or equal to 15: <span class="tr">Kamu punya $\\$15$, jadi total biaya harus kurang dari atau sama dengan 15:</span></p>
+              <p>$3 + 2k \\le 15$</p>
+              <ol>
+                <li>$2k \\le 15 - 3$</li>
+                <li>$2k \\le 12$</li>
+                <li>$k \\le 6$</li>
+              </ol>
+              You can travel up to 6 kilometers. <span class="tr">Kamu bisa bepergian hingga 6 km.</span>
+            </div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Formulate Inequality', pageTitleEn:'Susun Pertidaksamaan', taskType:'radio',
+          question:'A plumber charges $\\$40$ to visit plus $\\$25$ per hour. You have a budget of $\\$140$. If $h$ is hours, which inequality models this?', questionEn:'Tukang ledeng menarik $\\$40$ untuk berkunjung ditambah $\\$25$ per jam. Kamu punya anggaran $\\$140$. Jika $h$ adalah jam, pertidaksamaan mana yang cocok?',
+          options:[
+            {text:'$40h + 25 \\le 140$', correct:false},
+            {text:'$40 + 25h \\le 140$', correct:true},
+            {text:'$40 + 25h \\ge 140$', correct:false},
+            {text:'$40h - 25 \\le 140$', correct:false}
+          ],
+          explanation:`<p>Base charge is 40. Hourly charge is $25 \\times h$. Total must be $\\le 140$. So, $40 + 25h \\le 140$. <span class="tr">Biaya dasar 40. Biaya per jam $25 \\times h$. Total harus $\\le 140$.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Solve the Word Problem', pageTitleEn:'Selesaikan Soal Cerita', taskType:'fill',
+          question:'Solve the plumber problem: $40 + 25h \\le 140$. Maximum hours $h = \\dots$', questionEn:'Selesaikan masalah tukang ledeng: $40 + 25h \\le 140$. Jam maksimum $h = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<ol><li>$25h \\le 140 - 40$</li><li>$25h \\le 100$</li><li>$h \\le \\dfrac{100}{25}$</li><li>$h \\le 4$</li></ol>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Choose the Graph', pageTitleEn:'Pilih Grafik', taskType:'radio',
+          question:'If a word problem results in $x \\le 4$, how is the graph drawn at 4?', questionEn:'Jika soal cerita menghasilkan $x \\le 4$, bagaimana grafik digambar pada angka 4?',
+          options:[
+            {text:'Open circle at 4, arrow left.', correct:false},
+            {text:'Closed circle at 4, arrow left.', correct:true},
+            {text:'Open circle at 4, arrow right.', correct:false},
+            {text:'Closed circle at 4, arrow right.', correct:false}
+          ],
+          explanation:`<p>$\\le$ means 4 is included, so it's a closed circle. The values smaller than 4 are to the left. <span class="tr">$\\le$ berarti 4 termasuk, jadi lingkaran tertutup. Nilai lebih kecil dari 4 ada di kiri.</span></p>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Order the Word Problem', pageTitleEn:'Urutkan Soal Cerita', taskType:'sorting',
+          question:'Order the steps to solve: "You have $\\$50$. Each item costs $\\$8$. How many can you buy?"', questionEn:'Urutkan langkah menyelesaikan: "Kamu punya $\\$50$. Setiap barang $\\$8$. Berapa banyak yang bisa dibeli?"',
+          items:[
+            'Form inequality: $8x \\le 50$',
+            'Divide by 8: $x \\le 6.25$',
+            'Interpret: You can buy 6 items (whole numbers only)'
+          ],
+          correctOrder:[0,1,2],
+          explanation:`<p>You cannot buy 0.25 of an item, so you round down to 6. <span class="tr">Kamu tidak bisa membeli 0.25 barang, jadi dibulatkan turun menjadi 6.</span></p>`
+        }
+      ]
+    },
+    f: {
+      title: 'Independent Practice',
+      titleEn: 'Independent Practice',
+      time: '00:45 - 00:55',
+      pages: [
+        // E1
+        { type:'explanation', pageTitle:'E1: Compound Inequalities', pageTitleEn:'Pertidaksamaan Majemuk',
+          body:`
+            <p>A compound inequality contains two inequality signs. It represents a range of values.
+              <span class="tr">Pertidaksamaan majemuk memiliki dua tanda pertidaksamaan. Ini mewakili rentang nilai.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $-2 < x + 1 < 4$. <span class="tr">Selesaikan $-2 < x + 1 < 4$.</span><br>
+              <p>This means $x + 1$ is between -2 and 4. To solve, we isolate $x$ in the middle. We subtract 1 from ALL three parts. <span class="tr">Ini berarti $x + 1$ di antara -2 dan 4. Untuk menyelesaikan, kita isolasi $x$ di tengah. Kurangi 1 dari KETIGA bagian.</span></p>
+              <ol>
+                <li>$-2 - 1 < x + 1 - 1 < 4 - 1$</li>
+                <li>$-3 < x < 3$</li>
+              </ol>
+              <p>$x$ is between -3 and 3. <span class="tr">$x$ ada di antara -3 dan 3.</span></p>
+            </div>
+          `
+        },
+        // T1
+        { type:'task', pageTitle:'T1: Solve Compound', pageTitleEn:'Selesaikan Majemuk', taskType:'fill',
+          question:'Solve $1 < x - 2 < 5$. The lower bound is $x > \\dots$', questionEn:'Selesaikan $1 < x - 2 < 5$. Batas bawahnya adalah $x > \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>Add 2 to all parts: $1 + 2 < x < 5 + 2 \\Rightarrow 3 < x < 7$. The lower bound is 3. <span class="tr">Tambahkan 2 ke semua bagian. Batas bawah adalah 3.</span></p>`
+        },
+        // T2
+        { type:'task', pageTitle:'T2: Solve Compound (Multiply)', pageTitleEn:'Selesaikan Majemuk (Kali)', taskType:'fill',
+          question:'Solve $-4 \\le 2x \\le 6$. The upper bound is $x \\le \\dots$', questionEn:'Selesaikan $-4 \\le 2x \\le 6$. Batas atasnya adalah $x \\le \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>Divide all parts by 2: $\\dfrac{-4}{2} \\le x \\le \\dfrac{6}{2} \\Rightarrow -2 \\le x \\le 3$. Upper bound is 3. <span class="tr">Bagi semua bagian dengan 2. Batas atas adalah 3.</span></p>`
+        },
+        // T3
+        { type:'task', pageTitle:'T3: Negative Compound', pageTitleEn:'Majemuk Negatif', taskType:'truefalse',
+          question:'True or false: To solve $-6 < -3x < 9$, you divide by -3 and DO NOT flip the signs.', questionEn:'Benar atau salah: Untuk menyelesaikan $-6 < -3x < 9$, kamu bagi -3 dan TIDAK membalik tanda.',
+          correctAnswer:'false',
+          explanation:`<p>You MUST flip both signs! $-6 < -3x < 9 \\Rightarrow \\dfrac{-6}{-3} > x > \\dfrac{9}{-3} \\Rightarrow 2 > x > -3$, which is $-3 < x < 2$. <span class="tr">Kamu HARUS membalik kedua tanda!</span></p>`
+        },
+        // E2
+        { type:'explanation', pageTitle:'E2: Advanced Brackets & Negatives', pageTitleEn:'Kurung & Negatif Lanjutan',
+          body:`
+            <p>Let's combine expanding brackets with the negative rule. This is tricky!
+              <span class="tr">Mari kita gabungkan mengurai kurung dengan aturan negatif. Ini sulit!</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $5 - 2(x - 3) \\ge 11$. <span class="tr">Selesaikan $5 - 2(x - 3) \\ge 11$.</span>
+              <ol>
+                <li>Expand: $5 - 2x + 6 \\ge 11$ <span class="tr">Remember $-2 \\times -3 = +6$</span></li>
+                <li>Simplify: $11 - 2x \\ge 11$ <span class="tr">$5 + 6 = 11$</span></li>
+                <li>Subtract 11: $-2x \\ge 0$</li>
+                <li>Divide by -2 and FLIP: $x \\le 0$</li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Careful! <span class="tr">Hati-hati!</span></h4>
+              A common mistake is to write $-2(x - 3) = -2x - 6$. This is wrong. It is $-2x + 6$.
+              <span class="tr">Kesalahan umum adalah menulis $-2(x - 3) = -2x - 6$. Ini salah. Seharusnya $-2x + 6$.</span></div>
+          `
+        },
+        // T4
+        { type:'task', pageTitle:'T4: Expand the Negative', pageTitleEn:'Urai Negatifnya', taskType:'radio',
+          question:'What is the correct expansion of $4 - 3(x + 2)$?', questionEn:'Apa penguraian yang benar dari $4 - 3(x + 2)$?',
+          options:[
+            {text:'$4 - 3x + 2$', correct:false},
+            {text:'$4 - 3x - 6$', correct:true},
+            {text:'$4 + 3x - 6$', correct:false},
+            {text:'$4 - 3x + 6$', correct:false}
+          ],
+          explanation:`<p>$-3 \\times x = -3x$. $-3 \\times 2 = -6$. So, $4 - 3x - 6$. <span class="tr">$-3 \\times x = -3x$. $-3 \\times 2 = -6$. Jadi, $4 - 3x - 6$.</span></p>`
+        },
+        // T5
+        { type:'task', pageTitle:'T5: Solve Advanced', pageTitleEn:'Selesaikan Lanjutan', taskType:'fill',
+          question:'Solve $3 - 2(x - 1) < 7$. $x > \\dots$', questionEn:'Selesaikan $3 - 2(x - 1) < 7$. $x > \\dots$',
+          correctAnswer:'-1', acceptableAnswers:['-1'],
+          explanation:`<ol><li>$3 - 2x + 2 < 7$</li><li>$5 - 2x < 7$</li><li>$-2x < 2$</li><li>Divide by -2, flip sign: $x > -1$</li></ol>`
+        },
+        // T6
+        { type:'task', pageTitle:'T6: Find the Error', pageTitleEn:'Temukan Kesalahan', taskType:'checkbox',
+          question:'Select all correct statements about solving $-x + 5 \\le 10$.', questionEn:'Pilih semua pernyataan benar tentang menyelesaikan $-x + 5 \\le 10$.',
+          options:[
+            {text:'Subtract 5: $-x \\le 5$', correct:true},
+            {text:'Divide by -1: $x \\le -5$', correct:false},
+            {text:'Divide by -1 and flip: $x \\ge -5$', correct:true},
+            {text:'The solution is $x \\ge 5$', correct:false}
+          ],
+          explanation:`<p>Subtract 5 gives $-x \\le 5$. Dividing by -1 requires a sign flip, giving $x \\ge -5$. <span class="tr">Kurangi 5 menghasilkan $-x \\le 5$. Membagi dengan -1 memerlukan pembalikan tanda, menghasilkan $x \\ge -5$.</span></p>`
+        },
+        // E3
+        { type:'explanation', pageTitle:'E3: Inequalities with Fractions on Both Sides', pageTitleEn:'Pertidaksamaan Pecahan di Dua Sisi',
+          body:`
+            <p>When fractions are on both sides, multiply by the LCM to clear them, OR cross-multiply carefully.
+              <span class="tr">Ketika pecahan ada di kedua sisi, kalikan dengan KPK untuk menghilangkannya, ATAU silang-kali dengan hati-hati.</span></p>
+            <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>
+              Solve $\\dfrac{2x - 1}{3} > \\dfrac{x + 2}{2}$. <span class="tr">Selesaikan $\\dfrac{2x - 1}{3} > \\dfrac{x + 2}{2}$.</span>
+              <ol>
+                <li>LCM of 3 and 2 is 6. Multiply all terms by 6: <span class="tr">KPK dari 3 dan 2 adalah 6. Kali semua suku dengan 6:</span></li>
+                <li>$6 \\cdot \\dfrac{2x - 1}{3} > 6 \\cdot \\dfrac{x + 2}{2}$</li>
+                <li>$2(2x - 1) > 3(x + 2)$ <span class="tr">Simplify fractions</span></li>
+                <li>$4x - 2 > 3x + 6$ <span class="tr">Expand</span></li>
+                <li>$4x - 3x > 6 + 2$</li>
+                <li>$x > 8$</li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Warning! <span class="tr">Peringatan!</span></h4>
+              Only cross-multiply if you are SURE both denominators are positive. If they might be negative, you don't know if you need to flip the sign! Using LCM is safer.
+              <span class="tr">Hanya silang-kali jika kamu YAKIN kedua penyebut positif. Jika mungkin negatif, kamu tidak tahu apakah perlu membalik tanda! Menggunakan KPK lebih aman.</span></div>
+          `
+        },
+        // T7
+        { type:'task', pageTitle:'T7: Clear Both Fractions', pageTitleEn:'Hilangkan Dua Pecahan', taskType:'radio',
+          question:'What is the best multiplier to clear fractions in $\\dfrac{x}{4} + 1 \\le \\dfrac{x}{2} - 2$?', questionEn:'Apa pengali terbaik untuk menghapus pecahan di $\\dfrac{x}{4} + 1 \\le \\dfrac{x}{2} - 2$?',
+          options:[
+            {text:'2', correct:false},
+            {text:'4', correct:true},
+            {text:'8', correct:false},
+            {text:'1', correct:false}
+          ],
+          explanation:`<p>The denominators are 4 and 2 (for the whole number 1, denominator is 1). The LCM of 4, 2, and 1 is 4. <span class="tr">Penyebutnya 4 dan 2. KPK dari 4, 2, dan 1 adalah 4.</span></p>`
+        },
+        // T8
+        { type:'task', pageTitle:'T8: Solve Both Sides Fractions', pageTitleEn:'Selesaikan Pecahan Dua Sisi', taskType:'fill',
+          question:'Solve $\\dfrac{x}{2} < \\dfrac{x}{3} + 1$. $x < \\dots$', questionEn:'Selesaikan $\\dfrac{x}{2} < \\dfrac{x}{3} + 1$. $x < \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<ol><li>Times 6: $3x < 2x + 6$</li><li>$3x - 2x < 6$</li><li>$x < 6$</li></ol>`
+        },
+        // T9
+        { type:'task', pageTitle:'T9: Order the Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $\\dfrac{2x}{3} \\ge \\frac{x}{2} + 1$.', questionEn:'Urutkan langkah menyelesaikan $\\dfrac{2x}{3} \\ge \\frac{x}{2} + 1$.',
+          items:[
+            'Multiply by 6: $4x \\ge 3x + 6$',
+            'Subtract $3x$: $x \\ge 6$'
+          ],
+          correctOrder:[0,1],
+          explanation:`<ol><li>Multiply all by 6.</li><li>Subtract $3x$ from both sides.</li></ol>`
+        },
+        // T10
+        { type:'task', pageTitle:'T10: Final Check', pageTitleEn:'Cek Akhir', taskType:'checkbox',
+          question:'Select all values that satisfy $\\dfrac{2x - 1}{3} > \\dfrac{x + 2}{2}$. (Hint: from E3, $x > 8$)', questionEn:'Pilih semua nilai yang memenuhi $\\dfrac{2x - 1}{3} > \\dfrac{x + 2}{2}$. (Petunjuk: dari E3, $x > 8$)',
+          options:[
+            {text:'$9$', correct:true},
+            {text:'$10$', correct:true},
+            {text:'$8$', correct:false},
+            {text:'$7.5$', correct:false}
+          ],
+          explanation:`<p>From E3, the solution is $x > 8$. Only numbers strictly greater than 8 are correct. <span class="tr">Dari E3, solusinya $x > 8$. Hanya bilangan lebih dari 8 yang benar.</span></p>`
+        }
+      ]
+    },
+    g: {
+      title: 'Consolidation & Reflection',
+      titleEn: 'Consolidation & Reflection',
+      time: '00:55 - 01:00',
+      pages: [
+        // E1: Key Takeaways
+        { type:'explanation', pageTitle:'E1: Key Takeaways', pageTitleEn:'Poin Penting',
+          body:`
+            <div class="illustration">
+              <svg width="220" height="80" viewBox="0 0 220 80">
+                <circle cx="40" cy="40" r="28" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="40" y="48" text-anchor="middle" font-size="22" fill="#2563eb">★</text>
+                <text x="85" y="35" font-size="13" fill="#1e40af" font-weight="bold">Inequalities</text>
+                <text x="85" y="52" font-size="10" fill="#64748b"><, >, ≤, ≥</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Symbols & Rules <span class="tr">Simbol & Aturan</span></div>
+            </div>
+            <p>Today we learned about <strong>Inequalities</strong>. Here are the most important points to remember:
+              <span class="tr">Hari ini kita belajar tentang <strong>Pertidaksamaan</strong>. Berikut poin terpenting yang harus diingat:</span></p>
+            <div class="math-block">
+              <ol>
+                <li><strong>Symbols:</strong> $<$ (less than), $>$ (greater than), $\\le$ (less than or equal to), $\\ge$ (greater than or equal to). <span class="tr">Simbol: $<$ kurang dari, $>$ lebih dari, $\\le$ kurang dari atau sama dengan, $\\ge$ lebih dari atau sama dengan.</span></li>
+                <li><strong>Solving:</strong> Treat it exactly like an equation when adding, subtracting, multiplying, or dividing by POSITIVE numbers. <span class="tr">Penyelesaian: Perlakukan seperti persamaan saat menambah, mengurangi, mengali, atau membagi dengan bilangan POSITIF.</span></li>
+                <li><strong>The Golden Rule:</strong> When multiplying or dividing by a NEGATIVE number, you MUST FLIP the inequality sign! <span class="tr">Aturan Emas: Saat mengali atau membagi dengan bilangan NEGATIF, kamu HARUS MEMBALIK tanda pertidaksamaan!</span></li>
+                <li><strong>Graphing:</strong> Open circle ($\\circ$) for $<$ and $>$. Closed circle ($\\bullet$) for $\\le$ and $\\ge$. <span class="tr">Grafik: Lingkaran terbuka untuk $<$ dan $>$. Lingkaran tertutup untuk $\\le$ dan $\\ge$.</span></li>
+              </ol>
+            </div>
+            <div class="tip-box">
+              <h4>Tip <span class="tr">Tips</span></h4>
+              <ul>
+                <li>Always isolate the variable $x$.</li>
+                <li>Clear fractions by multiplying by the LCM.</li>
+                <li>Expand brackets carefully, especially with negatives!</li>
+              </ul>
+            </div>
+          `
+        },
+        // T1: Reflection Question
+        { type:'task', pageTitle:'T1: Reflection Question', pageTitleEn:'Pertanyaan Refleksi', taskType:'truefalse',
+          question:'True or false: I understand that multiplying by a negative number requires me to flip the inequality sign.', questionEn:'Benar atau salah: Saya mengerti bahwa mengali dengan bilangan negatif mengharuskan saya membalik tanda pertidaksamaan.',
+          correctAnswer:'true',
+          explanation:`<p>If you answered <strong>True</strong>, you are ready for the practice tasks! <span class="tr">Jika kamu menjawab Benar, kamu siap untuk latihan!</span></p>
+            <p>If <strong>False</strong>, please review the Golden Rule in Section D. <span class="tr">Jika Salah, silakan tinjau Aturan Emas di Bagian D.</span></p>`
+        },
+        // T2: Exit Ticket
+        { type:'task', pageTitle:'T2: Exit Ticket', pageTitleEn:'Exit Ticket', taskType:'fill',
+          question:'Solve: $-3x + 2 \\le 11$. The value of $x = \\dots$ (Remember the flip rule! Write answer like: >= -3)', questionEn:'Selesaikan: $-3x + 2 \\le 11$. Nilai $x = \\dots$ (Ingat aturan pembalikan! Tulis jawaban seperti: >= -3)',
+          correctAnswer:'>= -3', acceptableAnswers:['>= -3','>=-3','≥-3','≥ -3'],
+          explanation:`<p>Step-by-step solution: <span class="tr">Penyelesaian langkah demi langkah:</span></p>
+            <ol>
+              <li>$-3x + 2 \\le 11$</li>
+              <li>$-3x \\le 11 - 2$ <span class="tr">Subtract 2</span></li>
+              <li>$-3x \\le 9$ <span class="tr">Simplify</span></li>
+              <li>Divide by -3 and FLIP sign: $x \\ge -3$ <span class="tr">Bagi -3 dan BALIK tanda</span></li>
+            </ol>`
+        },
+        // E2: Follow-up Practice
+        { type:'explanation', pageTitle:'E2: Follow-up Practice', pageTitleEn:'Latihan Lanjutan',
+          body:`
+            <p>Additional practice is available in <strong>Sections H–L (Tasks 1–5)</strong>. Each section contains 10 questions of various types:
+              <span class="tr">Latihan tambahan tersedia di Bagian H–L. Setiap bagian berisi 10 soal dengan berbagai tipe:</span>
+            </p>
+            <div class="math-block">
+              <ul>
+                <li><strong>Task 1 (H):</strong> Basic inequalities & graphing <span class="tr">Pertidaksamaan dasar & grafik</span></li>
+                <li><strong>Task 2 (I):</strong> Brackets & variables on both sides <span class="tr">Kurung & variabel di dua sisi</span></li>
+                <li><strong>Task 3 (J):</strong> Fractions & word problems <span class="tr">Pecahan & soal cerita</span></li>
+                <li><strong>Task 4 (K):</strong> Advanced mixed practice <span class="tr">Campuran lanjutan</span></li>
+                <li><strong>Task 5 (L):</strong> Exam-style questions <span class="tr">Soal tipe ujian</span></li>
+              </ul>
+            </div>
+            <div class="tip-box">
+              <h4>How to use <span class="tr">Cara menggunakan</span></h4>
+              <ol>
+                <li>Open sections H–L from the left sidebar.</li>
+                <li>Answer each question, then click <strong>"Check Answer"</strong>.</li>
+                <li>After finishing all 10 questions in a section, click the <strong>🖨 Print to PDF</strong> button at the top right.</li>
+                <li>Print or save as a PDF for your tutor to check.</li>
+              </ol>
+            </div>
+            <div class="example-box">
+              <h4>Tips for success <span class="tr">Tips sukses</span></h4>
+              <ul>
+                <li>Work sequentially from Task 1 to Task 5.</li>
+                <li>If confused, review the explanations in Sections C–F.</li>
+                <li>Use scratch paper for your calculations.</li>
+                <li>Always double-check if you need to flip the sign!</li>
+              </ul>
+            </div>
+          `
+        }
+      ]
+    },
+    h: {
+      title: 'Task 1',
+      titleEn: 'Task 1',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Identify Inequality', pageTitleEn:'Identifikasi Pertidaksamaan', taskType:'radio',
+          question:'Which of the following is an inequality?', questionEn:'Manakah yang merupakan pertidaksamaan?',
+          options:[
+            {text:'$x + 2 = 5$', correct:false},
+            {text:'$3x - 1 < 8$', correct:true},
+            {text:'$y = 4y + 2$', correct:false},
+            {text:'$2x$', correct:false}
+          ],
+          explanation:`<p>Inequalities must contain $<, >, \\le,$ or $\\ge$. <span class="tr">Pertidaksamaan harus mengandung $<, >, \\le,$ atau $\\ge$.</span></p>`},
+        { type:'task', pageTitle:'T2: Solve Basic', pageTitleEn:'Selesaikan Dasar', taskType:'fill',
+          question:'Solve $x - 4 > 2$. $x > \\dots$', questionEn:'Selesaikan $x - 4 > 2$. $x > \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<p>Add 4 to both sides: $x > 2 + 4 \\Rightarrow x > 6$. <span class="tr">Tambah 4 ke kedua sisi.</span></p>`},
+        { type:'task', pageTitle:'T3: Flip Rule', pageTitleEn:'Aturan Balik', taskType:'truefalse',
+          question:'True or false: Solving $-x \\le 4$ results in $x \\le -4$.', questionEn:'Benar atau salah: Menyelesaikan $-x \\le 4$ menghasilkan $x \\le -4$.',
+          correctAnswer:'false',
+          explanation:`<p>Dividing by -1 requires a flip! The correct answer is $x \\ge -4$. <span class="tr">Membagi dengan -1 memerlukan pembalikan! Jawaban yang benar $x \\ge -4$.</span></p>`},
+        { type:'task', pageTitle:'T4: Negative Coefficient', pageTitleEn:'Koefisien Negatif', taskType:'fill',
+          question:'Solve $-3x \\le 9$. $x \\dots$ (Write like >= 3 or < 2)', questionEn:'Selesaikan $-3x \\le 9$. $x \\dots$ (Tulis seperti >= 3 atau < 2)',
+          correctAnswer:'>= -3', acceptableAnswers:['>= -3','>=-3','≥-3','≥ -3'],
+          explanation:`<ol><li>Divide by -3.</li><li>Flip sign: $\\le$ becomes $\\ge$.</li><li>$x \\ge -3$.</li></ol>`},
+        { type:'task', pageTitle:'T5: Graphing', pageTitleEn:'Grafik', taskType:'radio',
+          question:'How do you graph $x \\ge 2$?', questionEn:'Bagaimana kamu menggambar $x \\ge 2$?',
+          options:[
+            {text:'Open circle at 2, arrow right.', correct:false},
+            {text:'Closed circle at 2, arrow right.', correct:true},
+            {text:'Closed circle at 2, arrow left.', correct:false},
+            {text:'Open circle at 2, arrow left.', correct:false}
+          ],
+          explanation:`<p>$\\ge$ means 2 is included (closed circle), and it goes to larger numbers (right). <span class="tr">$\\ge$ berarti 2 termasuk (tertutup), dan menuju bilangan lebih besar (kanan).</span></p>`},
+        { type:'task', pageTitle:'T6: Match Graphs', pageTitleEn:'Pasangkan Grafik', taskType:'pairing',
+          question:'Match the inequality to its graph.', questionEn:'Pasangkan pertidaksamaan dengan grafiknya.',
+          pairs:[
+            {left:'$x > -1$', right:'Open at -1, right'},
+            {left:'$x \\le 3$', right:'Closed at 3, left'},
+            {left:'$x < 0$', right:'Open at 0, left'},
+            {left:'$x \\ge -2$', right:'Closed at -2, right'}
+          ],
+          explanation:`<p>Check the symbol for open/closed, and the direction for left/right. <span class="tr">Periksa simbol untuk terbuka/tertutup, dan arah untuk kiri/kanan.</span></p>`},
+        { type:'task', pageTitle:'T7: Valid Solutions', pageTitleEn:'Solusi Valid', taskType:'checkbox',
+          question:'Select all values that satisfy $x < 5$.', questionEn:'Pilih semua nilai yang memenuhi $x < 5$.',
+          options:[
+            {text:'$4$', correct:true},
+            {text:'$5$', correct:false},
+            {text:'$0$', correct:true},
+            {text:'$-1$', correct:true}
+          ],
+          explanation:`<p>$x < 5$ means any number strictly smaller than 5. 5 itself is not included. <span class="tr">$x < 5$ berarti bilangan lebih kecil dari 5. 5 tidak termasuk.</span></p>`},
+        { type:'task', pageTitle:'T8: Order Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $2x + 1 < 7$.', questionEn:'Urutkan langkah menyelesaikan $2x + 1 < 7$.',
+          items:['$2x + 1 < 7$','$2x < 6$','$x < 3$'],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Subtract 1.</li><li>Divide by 2.</li></ol>`},
+        { type:'task', pageTitle:'T9: Multiply Inequality', pageTitleEn:'Kali Pertidaksamaan', taskType:'fill',
+          question:'Solve $\\dfrac{x}{3} \\ge 4$. $x \\ge \\dots$', questionEn:'Selesaikan $\\dfrac{x}{3} \\ge 4$. $x \\ge \\dots$',
+          correctAnswer:'12', acceptableAnswers:['12'],
+          explanation:`<p>Multiply both sides by 3: $x \\ge 4 \\times 3 \\Rightarrow x \\ge 12$. <span class="tr">Kali kedua sisi dengan 3.</span></p>`},
+        { type:'task', pageTitle:'T10: Word Problem', pageTitleEn:'Soal Cerita', taskType:'radio',
+          question:'You have $\\$20$. Each book costs $\\$4$. If $b$ is books, which inequality shows how many you can buy?', questionEn:'Kamu punya $\\$20$. Setiap buku $\\$4$. Jika $b$ adalah buku, pertidaksamaan mana yang menunjukkan berapa banyak yang bisa dibeli?',
+          options:[
+            {text:'$4b > 20$', correct:false},
+            {text:'$4b \\le 20$', correct:true},
+            {text:'$20b \\le 4$', correct:false},
+            {text:'$4 + b \\le 20$', correct:false}
+          ],
+          explanation:`<p>Total cost is $4 \\times b$. You can spend up to 20, so $4b \\le 20$. <span class="tr">Total biaya $4 \\times b$. Kamu bisa membelanjakan hingga 20, jadi $4b \\le 20$.</span></p>`}
+      ]
+    },
+    i: {
+      title: 'Task 2',
+      titleEn: 'Task 2',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Expand and Solve', pageTitleEn:'Urai dan Selesaikan', taskType:'fill',
+          question:'Solve $2(x - 3) < 4$. $x < \\dots$', questionEn:'Selesaikan $2(x - 3) < 4$. $x < \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<ol><li>$2x - 6 < 4$</li><li>$2x < 10$</li><li>$x < 5$</li></ol>`},
+        { type:'task', pageTitle:'T2: Expand Negative', pageTitleEn:'Urai Negatif', taskType:'radio',
+          question:'What is the expansion of $-3(x + 4)$?', questionEn:'Apa penguraian dari $-3(x + 4)$?',
+          options:[
+            {text:'$-3x + 4$', correct:false},
+            {text:'$-3x - 12$', correct:true},
+            {text:'$-3x + 12$', correct:false},
+            {text:'$3x - 12$', correct:false}
+          ],
+          explanation:`<p>$-3 \\times x = -3x$, $-3 \\times 4 = -12$. <span class="tr">$-3 \\times x = -3x$, $-3 \\times 4 = -12$.</span></p>`},
+        { type:'task', pageTitle:'T3: Both Sides', pageTitleEn:'Dua Sisi', taskType:'fill',
+          question:'Solve $3x + 1 \\ge x + 5$. $x \\ge \\dots$', questionEn:'Selesaikan $3x + 1 \\ge x + 5$. $x \\ge \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<ol><li>$2x + 1 \\ge 5$</li><li>$2x \\ge 4$</li><li>$x \\ge 2$</li></ol>`},
+        { type:'task', pageTitle:'T4: Order Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $4x - 2 > 2x + 6$.', questionEn:'Urutkan langkah menyelesaikan $4x - 2 > 2x + 6$.',
+          items:['$2x - 2 > 6$','$2x > 8$','$x > 4$'],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Subtract $2x$.</li><li>Add 2.</li><li>Divide by 2.</li></ol>`},
+        { type:'task', pageTitle:'T5: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or false: $-2(x - 1) = -2x - 2$.', questionEn:'Benar atau salah: $-2(x - 1) = -2x - 2$.',
+          correctAnswer:'false',
+          explanation:`<p>It is $-2x + 2$ because $-2 \\times -1 = +2$. <span class="tr">Seharusnya $-2x + 2$ karena $-2 \\times -1 = +2$.</span></p>`},
+        { type:'task', pageTitle:'T6: Valid Solutions', pageTitleEn:'Solusi Valid', taskType:'checkbox',
+          question:'Select all values that satisfy $x \\ge 2$.', questionEn:'Pilih semua nilai yang memenuhi $x \\ge 2$.',
+          options:[
+            {text:'$1$', correct:false},
+            {text:'$2$', correct:true},
+            {text:'$3.5$', correct:true},
+            {text:'$0$', correct:false}
+          ],
+          explanation:`<p>$x \\ge 2$ includes 2 and anything larger. <span class="tr">$x \\ge 2$ termasuk 2 dan lebih besar.</span></p>`},
+        { type:'task', pageTitle:'T7: Match Expansions', pageTitleEn:'Pasangkan Uraian', taskType:'pairing',
+          question:'Match the expressions.', questionEn:'Pasangkan ekspresi.',
+          pairs:[
+            {left:'$3(x + 2)$', right:'$3x + 6$'},
+            {left:'$-3(x + 2)$', right:'$-3x - 6$'},
+            {left:'$-3(x - 2)$', right:'$-3x + 6$'},
+            {left:'$3(x - 2)$', right:'$3x - 6$'}
+          ],
+          explanation:`<p>Watch the signs carefully when distributing! <span class="tr">Perhatikan tanda saat mendistribusikan!</span></p>`},
+        { type:'task', pageTitle:'T8: Negative Bracket Solve', pageTitleEn:'Selesaikan Kurung Negatif', taskType:'fill',
+          question:'Solve $-2(x - 1) \\le 6$. $x \\dots$ (Write like >= 3)', questionEn:'Selesaikan $-2(x - 1) \\le 6$. $x \\dots$ (Tulis seperti >= 3)',
+          correctAnswer:'>= -2', acceptableAnswers:['>= -2','>=-2','≥-2','≥ -2'],
+          explanation:`<ol><li>$-2x + 2 \\le 6$</li><li>$-2x \\le 4$</li><li>Divide by -2, FLIP: $x \\ge -2$</li></ol>`},
+        { type:'task', pageTitle:'T9: First Step', pageTitleEn:'Langkah Pertama', taskType:'radio',
+          question:'What is the best first step for $5x + 2 < 3x + 8$?', questionEn:'Apa langkah pertama terbaik untuk $5x + 2 < 3x + 8$?',
+          options:[
+            {text:'Subtract 2', correct:false},
+            {text:'Subtract $3x$', correct:true},
+            {text:'Divide by 5', correct:false},
+            {text:'Subtract 8', correct:false}
+          ],
+          explanation:`<p>Get variables on one side first. <span class="tr">Kumpulkan variabel di satu sisi dulu.</span></p>`},
+        { type:'task', pageTitle:'T10: Fraction Inequality', pageTitleEn:'Pertidaksamaan Pecahan', taskType:'fill',
+          question:'Solve $\\dfrac{x}{2} + 1 > 3$. $x > \\dots$', questionEn:'Selesaikan $\\dfrac{x}{2} + 1 > 3$. $x > \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<ol><li>$\\dfrac{x}{2} > 2$</li><li>$x > 4$</li></ol>`}
+      ]
+    },
+    j: {
+      title: 'Task 3',
+      titleEn: 'Task 3',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Clear Fraction', pageTitleEn:'Hilangkan Pecahan', taskType:'fill',
+          question:'Solve $\\dfrac{x + 1}{3} \\le 4$. $x \\le \\dots$', questionEn:'Selesaikan $\\dfrac{x + 1}{3} \\le 4$. $x \\le \\dots$',
+          correctAnswer:'11', acceptableAnswers:['11'],
+          explanation:`<ol><li>$x + 1 \\le 12$</li><li>$x \\le 11$</li></ol>`},
+        { type:'task', pageTitle:'T2: Find LCM', pageTitleEn:'Cari KPK', taskType:'radio',
+          question:'What is the LCM of 2 and 4?', questionEn:'Berapa KPK dari 2 dan 4?',
+          options:[
+            {text:'2', correct:false},
+            {text:'4', correct:true},
+            {text:'8', correct:false},
+            {text:'1', correct:false}
+          ],
+          explanation:`<p>4 is the smallest number divisible by both 2 and 4. <span class="tr">4 adalah bilangan terkecil yang habis dibagi 2 dan 4.</span></p>`},
+        { type:'task', pageTitle:'T3: Solve Fraction', pageTitleEn:'Selesaikan Pecahan', taskType:'fill',
+          question:'Solve $\\dfrac{2x}{3} > 4$. $x > \\dots$', questionEn:'Selesaikan $\\dfrac{2x}{3} > 4$. $x > \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<ol><li>$2x > 12$</li><li>$x > 6$</li></ol>`},
+        { type:'task', pageTitle:'T4: Negative Fraction', pageTitleEn:'Pecahan Negatif', taskType:'truefalse',
+          question:'True or false: $\\dfrac{x}{-2} \\le 3$ is solved as $x \\le -6$.', questionEn:'Benar atau salah: $\\dfrac{x}{-2} \\le 3$ diselesaikan menjadi $x \\le -6$.',
+          correctAnswer:'false',
+          explanation:`<p>Multiplying by -2 requires a flip! It should be $x \\ge -6$. <span class="tr">Mengali dengan -2 memerlukan pembalikan! Seharusnya $x \\ge -6$.</span></p>`},
+        { type:'task', pageTitle:'T5: Match LCM Step', pageTitleEn:'Pasangkan Langkah KPK', taskType:'pairing',
+          question:'Match the fraction inequality with the correct multiplication step.', questionEn:'Pasangkan pertidaksamaan pecahan dengan langkah perkalian yang benar.',
+          pairs:[
+            {left:'$\\dfrac{x}{2} < 3$', right:'$x < 6$'},
+            {left:'$\\dfrac{x}{4} \\ge 2$', right:'$x \\ge 8$'},
+            {left:'$\\dfrac{2x}{3} \\le 4$', right:'$2x \\le 12$'},
+            {left:'$\\dfrac{3x}{5} > 1$', right:'$3x > 5$'}
+          ],
+          explanation:`<p>Multiply both sides by the denominator. <span class="tr">Kali kedua sisi dengan penyebut.</span></p>`},
+        { type:'task', pageTitle:'T6: Valid Solutions', pageTitleEn:'Solusi Valid', taskType:'checkbox',
+          question:'Select all values that satisfy $\\dfrac{x}{2} \\le 3$.', questionEn:'Pilih semua nilai yang memenuhi $\\dfrac{x}{2} \\le 3$.',
+          options:[
+            {text:'$4$', correct:true},
+            {text:'$6$', correct:true},
+            {text:'$8$', correct:false},
+            {text:'$0$', correct:true}
+          ],
+          explanation:`<p>$\\dfrac{x}{2} \\le 3 \\Rightarrow x \\le 6$. So 6 and below are correct. <span class="tr">$x \\le 6$. Jadi 6 dan di bawahnya benar.</span></p>`},
+        { type:'task', pageTitle:'T7: Order Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $\\dfrac{x - 2}{4} \\ge 1$.', questionEn:'Urutkan langkah menyelesaikan $\\dfrac{x - 2}{4} \\ge 1$.',
+          items:['$x - 2 \\ge 4$','$x \\ge 6$'],
+          correctOrder:[0,1],
+          explanation:`<ol><li>Multiply by 4.</li><li>Add 2.</li></ol>`},
+        { type:'task', pageTitle:'T8: Word Problem', pageTitleEn:'Soal Cerita', taskType:'fill',
+          question:'Taxi charges $\\$3$ base + $\\$2$ per km. You have $\\$11$. Max km you can travel? $k = \\dots$', questionEn:'Taksi menarik $\\$3$ dasar + $\\$2$ per km. Kamu punya $\\$11$. Maks km kamu bisa bepergian? $k = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>$3 + 2k \\le 11 \\Rightarrow 2k \\le 8 \\Rightarrow k \\le 4$. <span class="tr">Maks km adalah 4.</span></p>`},
+        { type:'task', pageTitle:'T9: Word Problem Setup', pageTitleEn:'Susun Soal Cerita', taskType:'radio',
+          question:'Plumber charges $\\$40$ visit + $\\$25$ per hour. Budget $\\$140$. Inequality for $h$ hours?', questionEn:'Tukang ledeng menarik $\\$40$ kunjungan + $\\$25$ per jam. Anggaran $\\$140$. Pertidaksamaan untuk $h$ jam?',
+          options:[
+            {text:'$40 + 25h \\le 140$', correct:true},
+            {text:'$40h + 25 \\le 140$', correct:false},
+            {text:'$40 + 25h \\ge 140$', correct:false},
+            {text:'$25 + 40h \\le 140$', correct:false}
+          ],
+          explanation:`<p>Base is 40, hourly is $25h$. Total $\\le 140$. <span class="tr">Dasar 40, per jam $25h$. Total $\\le 140$.</span></p>`},
+        { type:'task', pageTitle:'T10: Compound', pageTitleEn:'Majemuk', taskType:'fill',
+          question:'Solve $-1 \\le x - 2 < 3$. Upper bound: $x < \\dots$', questionEn:'Selesaikan $-1 \\le x - 2 < 3$. Batas atas: $x < \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Add 2 to all parts: $1 \\le x < 5$. Upper bound is 5. <span class="tr">Tambah 2 ke semua bagian. Batas atas 5.</span></p>`}
+      ]
+    },
+    k: {
+      title: 'Task 4',
+      titleEn: 'Task 4',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Expand and Solve', pageTitleEn:'Urai dan Selesaikan', taskType:'fill',
+          question:'Solve $5(x - 1) > 10$. $x > \\dots$', questionEn:'Selesaikan $5(x - 1) > 10$. $x > \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<ol><li>$5x - 5 > 10$</li><li>$5x > 15$</li><li>$x > 3$</li></ol>`},
+        { type:'task', pageTitle:'T2: Negative Flip', pageTitleEn:'Balik Negatif', taskType:'fill',
+          question:'Solve $-4x + 3 \\le 15$. $x \\ge \\dots$', questionEn:'Selesaikan $-4x + 3 \\le 15$. $x \\ge \\dots$',
+          correctAnswer:'-3', acceptableAnswers:['-3'],
+          explanation:`<ol><li>$-4x \\le 12$</li><li>Divide by -4, FLIP: $x \\ge -3$</li></ol>`},
+        { type:'task', pageTitle:'T3: True or False', pageTitleEn:'Benar atau Salah', taskType:'truefalse',
+          question:'True or false: The expansion of $-2(x - 3)$ is $-2x - 6$.', questionEn:'Benar atau salah: Hasil uraian $-2(x - 3)$ adalah $-2x - 6$.',
+          correctAnswer:'false',
+          explanation:`<p>It is $-2x + 6$ because $-2 \\times -3 = +6$. <span class="tr">Seharusnya $-2x + 6$ karena $-2 \\times -3 = +6$.</span></p>`},
+        { type:'task', pageTitle:'T4: Order Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $\\dfrac{2x - 1}{3} < 5$.', questionEn:'Urutkan langkah menyelesaikan $\\dfrac{2x - 1}{3} < 5$.',
+          items:['$2x - 1 < 15$','$2x < 16$','$x < 8$'],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Multiply by 3.</li><li>Add 1.</li><li>Divide by 2.</li></ol>`},
+        { type:'task', pageTitle:'T5: Valid Solutions', pageTitleEn:'Solusi Valid', taskType:'checkbox',
+          question:'Select all values that satisfy $x \\ge -1$.', questionEn:'Pilih semua nilai yang memenuhi $x \\ge -1$.',
+          options:[
+            {text:'$-1$', correct:true},
+            {text:'$0$', correct:true},
+            {text:'$-2$', correct:false},
+            {text:'$0.5$', correct:true}
+          ],
+          explanation:`<p>$x \\ge -1$ includes -1 and anything larger. <span class="tr">$x \\ge -1$ termasuk -1 dan lebih besar.</span></p>`},
+        { type:'task', pageTitle:'T6: Match Graphs', pageTitleEn:'Pasangkan Grafik', taskType:'pairing',
+          question:'Match the inequality to its graph.', questionEn:'Pasangkan pertidaksamaan dengan grafiknya.',
+          pairs:[
+            {left:'$x > 3$', right:'Open at 3, right'},
+            {left:'$x \\le -2$', right:'Closed at -2, left'},
+            {left:'$x < 0$', right:'Open at 0, left'},
+            {left:'$x \\ge 1$', right:'Closed at 1, right'}
+          ],
+          explanation:`<p>Check symbol for open/closed, check direction. <span class="tr">Periksa simbol untuk terbuka/tertutup, periksa arah.</span></p>`},
+        { type:'task', pageTitle:'T7: Both Sides', pageTitleEn:'Dua Sisi', taskType:'fill',
+          question:'Solve $3x + 2 \\ge x + 6$. $x \\ge \\dots$', questionEn:'Selesaikan $3x + 2 \\ge x + 6$. $x \\ge \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<ol><li>$2x + 2 \\ge 6$</li><li>$2x \\ge 4$</li><li>$x \\ge 2$</li></ol>`},
+        { type:'task', pageTitle:'T8: Word Problem', pageTitleEn:'Soal Cerita', taskType:'radio',
+          question:'You have $\\$50$. Each item costs $\\$8$. If $x$ is items, which inequality shows how many you can buy?', questionEn:'Kamu punya $\\$50$. Setiap barang $\\$8$. Jika $x$ adalah barang, pertidaksamaan mana yang menunjukkan berapa banyak yang bisa dibeli?',
+          options:[
+            {text:'$8x > 50$', correct:false},
+            {text:'$8x \\le 50$', correct:true},
+            {text:'$50x \\le 8$', correct:false},
+            {text:'$8 + x \\le 50$', correct:false}
+          ],
+          explanation:`<p>Total cost is $8x$. You can spend up to 50, so $8x \\le 50$. <span class="tr">Total biaya $8x$. Kamu bisa membelanjakan hingga 50, jadi $8x \\le 50$.</span></p>`},
+        { type:'task', pageTitle:'T9: Word Problem Solve', pageTitleEn:'Selesaikan Soal Cerita', taskType:'fill',
+          question:'Solve $8x \\le 50$. Maximum whole items $x = \\dots$', questionEn:'Selesaikan $8x \\le 50$. Maksimum barang utuh $x = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<p>$x \\le \\dfrac{50}{8} = 6.25$. You can't buy 0.25 of an item, so max is 6. <span class="tr">$x \\le 6.25$. Kamu tidak bisa membeli 0.25 barang, jadi maksimal 6.</span></p>`},
+        { type:'task', pageTitle:'T10: Compound', pageTitleEn:'Majemuk', taskType:'fill',
+          question:'Solve $0 \\le 2x - 1 < 5$. Upper bound: $x < \\dots$', questionEn:'Selesaikan $0 \\le 2x - 1 < 5$. Batas atas: $x < \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<ol><li>Add 1 to all: $1 \\le 2x < 6$</li><li>Divide by 2: $0.5 \\le x < 3$</li></ol>
+            <p>Upper bound is 3. <span class="tr">Batas atas adalah 3.</span></p>`}
+      ]
+    },
+    l: {
+      title: 'Task 5',
+      titleEn: 'Task 5',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Expand Negative', pageTitleEn:'Urai Negatif', taskType:'radio',
+          question:'What is the expansion of $-3(2x - 4)$?', questionEn:'Apa hasil uraian dari $-3(2x - 4)$?',
+          options:[
+            {text:'$-6x - 12$', correct:false},
+            {text:'$-6x + 12$', correct:true},
+            {text:'$6x - 12$', correct:false},
+            {text:'$-6x - 4$', correct:false}
+          ],
+          explanation:`<p>$-3 \\times 2x = -6x$. $-3 \\times -4 = +12$. <span class="tr">$-3 \\times 2x = -6x$. $-3 \\times -4 = +12$.</span></p>`},
+        { type:'task', pageTitle:'T2: Solve Fraction', pageTitleEn:'Selesaikan Pecahan', taskType:'fill',
+          question:'Solve $\\dfrac{x}{-2} > 3$. $x < \\dots$ (Remember the flip!)', questionEn:'Selesaikan $\\dfrac{x}{-2} > 3$. $x < \\dots$ (Ingat pembalikan!)',
+          correctAnswer:'-6', acceptableAnswers:['-6'],
+          explanation:`<ol><li>Multiply by -2.</li><li>FLIP sign: $>$ becomes $<$.</li><li>$x < -6$</li></ol>`},
+        { type:'task', pageTitle:'T3: Compound Logic', pageTitleEn:'Logika Majemuk', taskType:'truefalse',
+          question:'True or false: $x > 2$ and $x < 5$ can be written as $2 < x < 5$.', questionEn:'Benar atau salah: $x > 2$ dan $x < 5$ bisa ditulis $2 < x < 5$.',
+          correctAnswer:'true',
+          explanation:`<p>Yes, $x$ is between 2 and 5, so $2 < x < 5$ is the correct compound notation. <span class="tr">Ya, $x$ di antara 2 dan 5, jadi $2 < x < 5$ adalah notasi majemuk yang benar.</span></p>`},
+        { type:'task', pageTitle:'T4: Valid Solutions', pageTitleEn:'Solusi Valid', taskType:'checkbox',
+          question:'Select all values that satisfy $x < 4$.', questionEn:'Pilih semua nilai yang memenuhi $x < 4$.',
+          options:[
+            {text:'$3.9$', correct:true},
+            {text:'$4$', correct:false},
+            {text:'$-1$', correct:true},
+            {text:'$5$', correct:false}
+          ],
+          explanation:`<p>$x < 4$ means strictly smaller than 4. <span class="tr">$x < 4$ berarti lebih kecil dari 4.</span></p>`},
+        { type:'task', pageTitle:'T5: Order Steps', pageTitleEn:'Urutkan Langkah', taskType:'sorting',
+          question:'Order the steps to solve $-2(x + 1) \\ge 4$.', questionEn:'Urutkan langkah menyelesaikan $-2(x + 1) \\ge 4$.',
+          items:['$-2x - 2 \\ge 4$','$-2x \\ge 6$','$x \\le -3$'],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Expand.</li><li>Add 2.</li><li>Divide by -2 and FLIP.</li></ol>`},
+        { type:'task', pageTitle:'T6: Match LCM', pageTitleEn:'Pasangkan KPK', taskType:'pairing',
+          question:'Match the fraction inequality with the correct LCM multiplier.', questionEn:'Pasangkan pertidaksamaan pecahan dengan pengali KPK yang benar.',
+          pairs:[
+            {left:'$\\dfrac{x}{2} + \\dfrac{x}{3} < 1$', right:'Multiply by 6'},
+            {left:'$\\dfrac{x}{4} \\ge 2$', right:'Multiply by 4'},
+            {left:'$\\dfrac{2x}{5} \\le 1$', right:'Multiply by 5'},
+            {left:'$\\dfrac{x}{6} > 0$', right:'Multiply by 6'}
+          ],
+          explanation:`<p>Find the Lowest Common Multiple of the denominators. <span class="tr">Cari KPK dari penyebutnya.</span></p>`},
+        { type:'task', pageTitle:'T7: Advanced Solve', pageTitleEn:'Selesaikan Lanjutan', taskType:'fill',
+          question:'Solve $4(1 - x) < 8$. $x > \\dots$', questionEn:'Selesaikan $4(1 - x) < 8$. $x > \\dots$',
+          correctAnswer:'-1', acceptableAnswers:['-1'],
+          explanation:`<ol><li>$4 - 4x < 8$</li><li>$-4x < 4$</li><li>Divide by -4, FLIP: $x > -1$</li></ol>`},
+        { type:'task', pageTitle:'T8: Word Problem Setup', pageTitleEn:'Susun Soal Cerita', taskType:'radio',
+          question:'Taxi charges $\\$3$ base + $\\$2$ per km. You have $\\$15$. Which inequality for $k$ km?', questionEn:'Taksi menarik $\\$3$ dasar + $\\$2$ per km. Kamu punya $\\$15$. Pertidaksamaan untuk $k$ km?',
+          options:[
+            {text:'$3 + 2k \\le 15$', correct:true},
+            {text:'$3k + 2 \\le 15$', correct:false},
+            {text:'$3 + 2k \\ge 15$', correct:false},
+            {text:'$2 + 3k \\le 15$', correct:false}
+          ],
+          explanation:`<p>Base 3, per km $2k$. Total $\\le 15$. <span class="tr">Dasar 3, per km $2k$. Total $\\le 15$.</span></p>`},
+        { type:'task', pageTitle:'T9: Word Problem Solve', pageTitleEn:'Selesaikan Soal Cerita', taskType:'fill',
+          question:'Solve $3 + 2k \\le 15$. Max km $k = \\dots$', questionEn:'Selesaikan $3 + 2k \\le 15$. Maks km $k = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<ol><li>$2k \\le 12$</li><li>$k \\le 6$</li></ol>`},
+        { type:'task', pageTitle:'T10: Exam Style', pageTitleEn:'Tipe Ujian', taskType:'fill',
+          question:'Solve $2(x - 3) \\le 3(x + 1)$. $x \\ge \\dots$', questionEn:'Selesaikan $2(x - 3) \\le 3(x + 1)$. $x \\ge \\dots$',
+          correctAnswer:'-9', acceptableAnswers:['-9'],
+          explanation:`<ol><li>$2x - 6 \\le 3x + 3$</li><li>$-6 - 3 \\le 3x - 2x$</li><li>$-9 \\le x$</li><li>$x \\ge -9$</li></ol>
+            <p>Notice that moving $x$ to the right avoided dividing by a negative! <span class="tr">Perhatikan bahwa memindahkan $x$ ke kanan menghindari pembagian dengan negatif!</span></p>`}
+      ]
+    }
+  };
+
+  // ================= STATE =================
+  let currentSection = 'a';
+  let currentPage = 0;
+  let userAnswers = {};
+
+  // ================= UTILITIES =================
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function renderMath(el){
+    if(window.renderMathInElement){
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$', right:'$$', display:true},
+          {left:'$', right:'$', display:false}
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  // ================= SIDEBAR =================
+  function renderSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const sectionKeys = ['a','b','c','d','e','f','g','h','i','j','k','l'];
+    const meta = {
+      a:{t:'Spiral Review Warm-up', e:'Spiral Review Warm-up', time:'00:00-00:10'},
+      b:{t:'Intro & Real-World', e:'Intro & Real-World', time:'00:10-00:15'},
+      c:{t:'Review of Prior Knowledge', e:'Review of Prior Knowledge', time:'00:15-00:20'},
+      d:{t:'Problem Introduction', e:'Problem Introduction', time:'00:20-00:30'},
+      e:{t:'Guided Practice', e:'Guided Practice', time:'00:30-00:45'},
+      f:{t:'Independent Practice', e:'Independent Practice', time:'00:45-00:55'},
+      g:{t:'Consolidation & Reflection', e:'Consolidation & Reflection', time:'00:55-01:00'},
+      h:{t:'Task 1', e:'Task 1', time:'Printable'},
+      i:{t:'Task 2', e:'Task 2', time:'Printable'},
+      j:{t:'Task 3', e:'Task 3', time:'Printable'},
+      k:{t:'Task 4', e:'Task 4', time:'Printable'},
+      l:{t:'Task 5', e:'Task 5', time:'Printable'}
+    };
+    let html = '<h3>Sections <span class="tr">Bagian</span></h3>';
+    sectionKeys.forEach(key => {
+      const section = sectionsData[key];
+      const isActive = currentSection === key;
+      if(section){
+        html += `<div class="nav-link ${isActive?'active':''}" data-section="${key}">
+          <span class="nl-title">${key.toUpperCase()}. ${meta[key].t}</span>
+          <span class="tr">${meta[key].e}</span>
+          <span class="time">${meta[key].time}</span>
+        </div>`;
+      } else {
+        html += `<div class="nav-link disabled">${key.toUpperCase()}. ${meta[key].t}<br><span class="tr">${meta[key].e}</span><br><span class="time">${meta[key].time} (segera)</span></div>`;
+      }
+    });
+    sidebar.innerHTML = html;
+    sidebar.querySelectorAll('.nav-link[data-section]').forEach(el => {
+      el.addEventListener('click', () => {
+        currentSection = el.dataset.section;
+        currentPage = 0;
+        renderSidebar();
+        renderPage();
+      });
+    });
+  }
+
+  // ================= PAGE RENDER =================
+  function renderPage(){
+    const section = sectionsData[currentSection];
+    if(!section) return;
+    const page = section.pages[currentPage];
+    const contentEl = document.getElementById('pageContent');
+
+    let printBtnHtml = '';
+    if(['h','i','j','k','l'].includes(currentSection)){
+      printBtnHtml = '<button id="printBtnTop" style="background:var(--success);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap">🖨 Print to PDF <span class="tr">Cetak ke PDF</span></button>';
+    }
+
+    let html = '<div class="page-header"><h2>' + section.title + ' <span class="tr">' + section.titleEn + '</span></h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + printBtnHtml + '<span class="badge">' + page.pageTitle.split(':')[0] + '</span></div></div>';
+
+    if(page.type === 'explanation'){
+      html += '<div class="card explain"><h3>' + page.pageTitle + ' <span class="tr">' + page.pageTitleEn + '</span></h3>' + page.body + '</div>';
+    } else if(page.type === 'task'){
+      html += renderTask(page);
+    }
+    contentEl.innerHTML = html;
+    renderMath(contentEl);
+
+    const total = section.pages.length;
+    const pageNumsEl = document.getElementById('pageNums');
+    let pageNumHtml = '';
+    section.pages.forEach(function(p, i){
+      var raw = p.pageTitle.split(':')[0].trim();
+      var type = raw.charAt(0);
+      var num = parseInt(raw.substring(1));
+      var label = type + '-' + String(num).padStart(2, '0');
+      var typeClass = (type === 'E') ? 'page-num-e' : 'page-num-t';
+      var isActive = (i === currentPage);
+      pageNumHtml += '<button class="page-num ' + typeClass + ' ' + (isActive ? 'active' : '') + '" data-page="' + i + '"' + (isActive ? ' disabled' : '') + '>' + label + '</button>';
+    });
+    pageNumsEl.innerHTML = pageNumHtml;
+
+    pageNumsEl.querySelectorAll('.page-num').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        currentPage = parseInt(btn.dataset.page);
+        renderPage();
+      });
+    });
+
+    document.getElementById('prevBtn').disabled = (currentPage === 0);
+    document.getElementById('nextBtn').disabled = (currentPage === total - 1);
+
+    var printBtnTop = document.getElementById('printBtnTop');
+    if(printBtnTop){
+      printBtnTop.addEventListener('click', function(){ printTask(currentSection); });
+    }
+
+    if(page.type === 'task'){
+      attachTaskHandlers(page);
+    }
+  }
+
+  function renderTask(page){
+    let html = `<div class="card task"><h3>${page.pageTitle} <span class="tr">${page.pageTitleEn}</span></h3>`;
+    html += `<div class="q-text">${page.question} <span class="tr">${page.questionEn || ''}</span></div>`;
+
+    if(page.taskType === 'radio' || page.taskType === 'checkbox'){
+      const options = shuffle(page.options);
+      page._shuffledOptions = options;
+      html += '<div class="options">';
+      options.forEach((opt, i) => {
+        const cls = page.taskType === 'checkbox' ? 'option checkbox' : 'option radio';
+        html += `<div class="${cls}" data-idx="${i}">
+          <div class="marker"></div>
+          <div class="opt-text">${opt.text}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'fill'){
+      html += `<input type="text" class="fill-input" id="fillInput" placeholder="...">`;
+    } else if(page.taskType === 'truefalse'){
+      const opts = shuffle([
+        {text:'True <span class="tr">Benar</span>', val:'true'},
+        {text:'False <span class="tr">Salah</span>', val:'false'}
+      ]);
+      page._shuffledTF = opts;
+      html += '<div class="options">';
+      opts.forEach((o, i) => {
+        html += `<div class="option radio" data-val="${o.val}" data-idx="${i}"><div class="marker"></div><div class="opt-text">${o.text}</div></div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'sorting'){
+      const shuffled = shuffle(page.items.map((item, idx) => ({text:item, originalIdx:idx})));
+      page._shuffledItems = shuffled;
+      html += '<div class="sort-list">';
+      shuffled.forEach((it, i) => {
+        html += `<div class="sort-item" data-pos="${i}" data-orig="${it.originalIdx}">
+          <span class="pos">${i+1}</span>
+          <span class="sort-text">${it.text}</span>
+        </div>`;
+      });
+      html += '</div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Click two items to swap. <span class="tr">Klik dua item untuk menukar.</span></p>';
+    } else if(page.taskType === 'pairing'){
+      const lefts = shuffle(page.pairs.map((p, idx) => ({text:p.left, originalIdx:idx})));
+      const rights = shuffle(page.pairs.map((p, idx) => ({text:p.right, originalIdx:idx})));
+      page._shuffledPairs = {lefts, rights};
+      html += '<div class="pair-grid">';
+      html += '<div class="pair-col"><h4>Left <span class="tr">Kiri</span></h4>';
+      lefts.forEach((l, i) => {
+        html += `<div class="pair-item" data-side="left" data-idx="${i}">${l.text}</div>`;
+      });
+      html += '</div>';
+      html += '<div class="pair-col"><h4>Right <span class="tr">Kanan</span></h4>';
+      rights.forEach((r, i) => {
+        html += `<div class="pair-item" data-side="right" data-idx="${i}">${r.text}</div>`;
+      });
+      html += '</div></div>';
+      html += '<div class="pairs-list" id="pairsList"></div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Click left then right to pair. <span class="tr">Klik kiri lalu kanan untuk memasangkan.</span></p>';
+    }
+    html += `<button class="btn-submit" id="submitBtn">Check Answer <span class="tr">Periksa Jawaban</span></button>`;
+    html += `<div class="feedback" id="feedback"></div></div>`;
+    return html;
+  }
+
+  function attachTaskHandlers(page){
+    const taskType = page.taskType;
+
+    if(taskType === 'radio' || taskType === 'truefalse'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    } else if(taskType === 'checkbox'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => opt.classList.toggle('selected'));
+      });
+    } else if(taskType === 'sorting'){
+      let firstClick = null;
+      document.querySelectorAll('.sort-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if(firstClick === null){
+            firstClick = item;
+            item.classList.add('selected');
+          } else if(firstClick === item){
+            item.classList.remove('selected');
+            firstClick = null;
+          } else {
+            const fText = firstClick.querySelector('.sort-text').innerHTML;
+            const sText = item.querySelector('.sort-text').innerHTML;
+            firstClick.querySelector('.sort-text').innerHTML = sText;
+            item.querySelector('.sort-text').innerHTML = fText;
+            const fOrig = firstClick.dataset.orig;
+            firstClick.dataset.orig = item.dataset.orig;
+            item.dataset.orig = fOrig;
+            firstClick.classList.remove('selected');
+            firstClick = null;
+          }
+        });
+      });
+    } else if(taskType === 'pairing'){
+      let selectedLeft = null;
+      document.querySelectorAll('.pair-item[data-side="left"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired')) return;
+          document.querySelectorAll('.pair-item[data-side="left"]').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedLeft = item;
+        });
+      });
+      document.querySelectorAll('.pair-item[data-side="right"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired') || !selectedLeft) return;
+          const leftIdx = selectedLeft.dataset.idx;
+          const rightIdx = item.dataset.idx;
+          const pairList = document.getElementById('pairsList');
+          const pairRow = document.createElement('div');
+          pairRow.className = 'pair-row';
+          pairRow.dataset.leftIdx = leftIdx;
+          pairRow.dataset.rightIdx = rightIdx;
+          pairRow.innerHTML = `<span>${selectedLeft.innerHTML}</span> <span>↔</span> <span>${item.innerHTML}</span> <span class="remove" title="Remove">×</span>`;
+          pairRow.querySelector('.remove').addEventListener('click', function() {
+            const lIdx = pairRow.dataset.leftIdx;
+            const rIdx = pairRow.dataset.rightIdx;
+            const lItem = document.querySelector(`.pair-item[data-side="left"][data-idx="${lIdx}"]`);
+            const rItem = document.querySelector(`.pair-item[data-side="right"][data-idx="${rIdx}"]`);
+            if(lItem) lItem.classList.remove('paired');
+            if(rItem) rItem.classList.remove('paired');
+            pairRow.remove();
+          });
+          pairList.appendChild(pairRow);
+          selectedLeft.classList.remove('selected');
+          selectedLeft.classList.add('paired');
+          item.classList.add('paired');
+          selectedLeft = null;
+        });
+      });
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', () => checkAnswer(page));
+  }
+
+  function checkAnswer(page){
+    const taskType = page.taskType;
+    let isCorrect = false;
+    let userAnswerStr = '';
+
+    if(taskType === 'radio'){
+      let selected = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selected = page._shuffledOptions[i];
+          selectedIdx = i;
+        }
+      });
+      if(!selected){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      isCorrect = selected.correct;
+      userAnswerStr = selected.text;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(i === selectedIdx && !selected.correct) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'checkbox'){
+      const selectedIdxs = [];
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')) selectedIdxs.push(i);
+      });
+      if(selectedIdxs.length === 0){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      const correctSet = new Set();
+      page._shuffledOptions.forEach((opt, i) => { if(opt.correct) correctSet.add(i); });
+      const selectedSet = new Set(selectedIdxs);
+      isCorrect = correctSet.size === selectedSet.size && [...correctSet].every(i => selectedSet.has(i));
+      userAnswerStr = selectedIdxs.map(i => page._shuffledOptions[i].text).join(', ');
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(selectedSet.has(i)) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'fill'){
+      const val = document.getElementById('fillInput').value.trim();
+      const acceptable = page.acceptableAnswers || [page.correctAnswer];
+      const norm = s => s.toLowerCase().replace(/\s+/g, '').trim();
+      isCorrect = acceptable.some(a => norm(a) === norm(val));
+      userAnswerStr = val;
+    } else if(taskType === 'truefalse'){
+      let selectedVal = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selectedVal = opt.dataset.val;
+          selectedIdx = i;
+        }
+      });
+      if(!selectedVal){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      isCorrect = selectedVal === page.correctAnswer;
+      userAnswerStr = selectedVal === 'true' ? 'True' : 'False';
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(opt.dataset.val === page.correctAnswer) opt.classList.add('correct');
+        else if(i === selectedIdx) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'sorting'){
+      const currentOrder = [];
+      document.querySelectorAll('.sort-item').forEach(item => {
+        currentOrder.push(parseInt(item.dataset.orig));
+      });
+      isCorrect = currentOrder.every((idx, i) => idx === page.correctOrder[i]);
+      userAnswerStr = currentOrder.map((idx, i) => `${i+1}. ${page.items[idx] || '?'}`).join('  |  ');
+      document.querySelectorAll('.sort-item').forEach((item, i) => {
+        if(currentOrder[i] === page.correctOrder[i]) item.style.borderColor = 'var(--success)';
+        else item.style.borderColor = 'var(--danger)';
+      });
+    } else if(taskType === 'pairing'){
+      const pairRows = document.querySelectorAll('.pair-row');
+      if(pairRows.length === 0){
+        showFeedback(false, 'Please make pairs. <span class="tr">Silakan buat pasangan.</span>', false);
+        return;
+      }
+      const userPairs = [];
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        userPairs.push({
+          leftText: page._shuffledPairs.lefts[lIdx].text,
+          rightText: page._shuffledPairs.rights[rIdx].text
+        });
+      });
+      const correctPairs = page.pairs.map(p => ({left:p.left, right:p.right}));
+      const correctCount = userPairs.filter(up =>
+        correctPairs.some(cp => cp.left === up.leftText && cp.right === up.rightText)
+      ).length;
+      isCorrect = correctCount === correctPairs.length && userPairs.length === correctPairs.length;
+      userAnswerStr = userPairs.map(p => `${p.leftText}↔${p.rightText}`).join('  |  ');
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        const lText = page._shuffledPairs.lefts[lIdx].text;
+        const rText = page._shuffledPairs.rights[rIdx].text;
+        const ok = correctPairs.some(cp => cp.left === lText && cp.right === rText);
+        row.style.background = ok ? '#d1fae5' : '#fee2e2';
+      });
+    }
+
+    const pageKey = `${currentSection}-${currentPage}`;
+    userAnswers[pageKey] = {userAnswer:userAnswerStr, correct:isCorrect, pageTitle:page.pageTitle};
+    showFeedback(isCorrect, page.explanation, true);
+  }
+
+  function showFeedback(isCorrect, explanation, showAnswer){
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback show ${isCorrect?'correct':'incorrect'}`;
+    if(showAnswer){
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Correct!':'✗ Incorrect'} <span class="tr">${isCorrect?'Benar!':'Salah'}</span></h4>${explanation}`;
+    } else {
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Correct!':'✗ Incorrect'}</h4>`;
+    }
+    renderMath(feedback);
+  }
+
+  // ================= EVENT LISTENERS =================
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if(currentPage > 0){ currentPage--; renderPage(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const total = sectionsData[currentSection].pages.length;
+    if(currentPage < total - 1){ currentPage++; renderPage(); }
+  });
+
+  const modal = document.getElementById('classRulesModal');
+  document.getElementById('classRulesBtn').addEventListener('click', () => modal.classList.add('active'));
+  document.querySelector('.modal-close').addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+
+  // ================= PRINT TO PDF =================
+  function getCorrectAnswer(task){
+    if(task.taskType === 'radio'){
+      const c = task.options.find(o => o.correct);
+      return c ? c.text : '';
+    }
+    if(task.taskType === 'checkbox'){
+      return task.options.filter(o => o.correct).map(o => o.text).join(', ');
+    }
+    if(task.taskType === 'fill'){
+      return task.correctAnswer || '';
+    }
+    if(task.taskType === 'truefalse'){
+      return task.correctAnswer === 'true' ? 'True' : 'False';
+    }
+    if(task.taskType === 'sorting'){
+      return task.correctOrder.map(i => task.items[i]).join(' → ');
+    }
+    if(task.taskType === 'pairing'){
+      return task.pairs.map(p => p.left + ' ↔ ' + p.right).join('; ');
+    }
+    return '';
+  }
+
+  function printTask(sectionKey){
+    const section = sectionsData[sectionKey];
+    if(!section) return;
+    const tasks = section.pages;
+    let correctCount = 0;
+
+    const rows = tasks.map((task, idx) => {
+      const pageKey = sectionKey + '-' + idx;
+      const ua = userAnswers[pageKey];
+      const isCorrect = ua ? ua.correct : false;
+      const userAns = ua ? ua.userAnswer : '(not answered)';
+      const correctAns = getCorrectAnswer(task);
+      if(ua && ua.correct) correctCount++;
+      return '<tr><td>' + (idx+1) + '</td><td>' + task.question + '</td><td>' + userAns + '</td><td>' + correctAns + '</td><td style="text-align:center;font-size:1.1em">' + (isCorrect ? '✓' : '✗') + '</td></tr>';
+    }).join('');
+
+    const score = correctCount + ' / ' + tasks.length;
+    const today = new Date().toLocaleDateString('en-US', {day:'numeric',month:'long',year:'numeric'});
+
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Print - ' + section.title + '</title>' +
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>' +
+      '<style>' +
+      'body{font-family:Segoe UI,sans-serif;padding:30px;color:#1e293b;line-height:1.5}' +
+      'h1{font-size:1.2em;margin-bottom:5px}' +
+      '.info{margin-bottom:15px;font-size:.88em}' +
+      '.info div{margin:3px 0}' +
+      'table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.82em}' +
+      'th,td{border:1px solid #cbd5e1;padding:6px 8px;text-align:left;vertical-align:top}' +
+      'th{background:#f1f5f9;font-weight:600}' +
+      '.checked-by{margin-top:30px;text-align:right;font-style:italic}' +
+      '.tr{font-style:italic;font-size:.85em;color:#64748b}' +
+      '@media print{body{padding:15px}}' +
+      '</style></head><body>' +
+      '<h1>Math Tutoring by Deni</h1>' +
+      '<div class="info">' +
+      '<div>Name: ____________________________ <span class="tr">Nama</span></div>' +
+      '<div>Date: ' + today + ' <span class="tr">Tanggal</span></div>' +
+      '<div>Topic: Inequalities <span class="tr">Topik: Pertidaksamaan</span></div>' +
+      '<div>Task Group: ' + section.title + ' <span class="tr">Grup Task</span></div>' +
+      '<div>Score: <strong>' + score + '</strong> <span class="tr">Skor</span></div>' +
+      '</div>' +
+      '<table><thead><tr>' +
+      '<th style="width:30px">No.</th>' +
+      '<th>Question <span class="tr">Pertanyaan</span></th>' +
+      '<th>Student Answer <span class="tr">Jawaban Siswa</span></th>' +
+      '<th>Correct Answer <span class="tr">Jawaban Benar</span></th>' +
+      '<th style="width:50px">Note <span class="tr">Ket.</span></th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="checked-by">Checked by,<br>Deni</div>' +
+      '<script>document.addEventListener("DOMContentLoaded",function(){' +
+      'if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}' +
+      'setTimeout(function(){window.print();},500);});<\/script>' +
+      '</body></html>';
+
+    const w = window.open('', '_blank');
+    if(w){
+      w.document.write(html);
+      w.document.close();
+    } else {
+      alert('Please allow pop-ups to print. <span class="tr">Mohon izinkan pop-up untuk mencetak.</span>');
+    }
+  }
+
+  // ================= INIT =================
+  renderSidebar();
+  renderPage();
+});
+</script>
+</body>
+</html>
