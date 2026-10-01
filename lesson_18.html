@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni - Coordinate Geometry: Plotting, sketching and drawing</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#f59e0b;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.tr{font-style:italic;font-size:.82em;color:var(--muted);display:block;margin-top:2px}
+header{background:var(--primary);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
+header .brand{font-weight:700;font-size:1.05em}
+header .topic{font-size:.88em;text-align:center;flex:1}
+header .topic .tr{color:rgba(255,255,255,.85)}
+header button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85em;white-space:nowrap}
+header button:hover{background:rgba(255,255,255,.25)}
+.main-container{display:grid;grid-template-columns:1fr 3fr;min-height:calc(100vh - 52px)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);padding:14px;overflow-y:auto;position:sticky;top:52px;height:calc(100vh - 52px)}
+.sidebar h3{font-size:.72em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
+.nav-link{display:block;padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:3px;font-size:.84em;border:1px solid transparent;transition:all .15s}
+.nav-link:hover{background:#eff6ff}
+.nav-link.active{background:var(--primary);color:#fff;pointer-events:none;cursor:default}
+.nav-link .nl-title{display:block;font-weight:600}
+.nav-link .time{font-size:.76em;color:var(--muted);display:block;margin-top:2px}
+.nav-link.active .time,.nav-link.active .tr{color:rgba(255,255,255,.85)}
+.nav-link.disabled{opacity:.45;cursor:not-allowed;font-size:.8em;padding:6px 10px}
+.content-area{padding:22px 28px;overflow-y:auto;max-width:1100px;margin:0 auto;width:100%}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:8px}
+.page-header h2{color:var(--primary-dark);font-size:1.1em}
+.page-header .badge{background:var(--secondary);color:#fff;padding:4px 10px;border-radius:20px;font-size:.76em;font-weight:600}
+.card{background:var(--card);border-radius:10px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:16px;border:1px solid var(--border)}
+.card.explain{border-left:4px solid var(--primary)}
+.card.task{border-left:4px solid var(--secondary)}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.1em}
+.math-block{background:#f1f5f9;padding:12px 14px;border-radius:8px;margin:12px 0;overflow-x:auto}
+.example-box{background:#fef3c7;border-left:4px solid var(--secondary);padding:12px 16px;margin:12px 0;border-radius:6px}
+.example-box h4{color:#92400e;margin-bottom:6px;font-size:.95em}
+.tip-box{background:#dbeafe;border-left:4px solid var(--primary);padding:10px 14px;margin:10px 0;border-radius:6px}
+.tip-box h4{color:#1e40af;margin-bottom:4px;font-size:.9em}
+.illustration{text-align:center;margin:14px 0;padding:14px;background:#f1f5f9;border-radius:8px}
+.q-text{font-size:1em;margin-bottom:12px;line-height:1.7}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;transition:all .15s}
+.option:hover{border-color:var(--primary);background:#eff6ff}
+.option.selected{border-color:var(--primary);background:#dbeafe}
+.option.correct{border-color:var(--success);background:#d1fae5}
+.option.incorrect{border-color:var(--danger);background:#fee2e2}
+.option .marker{min-width:18px;width:18px;height:18px;border:2px solid var(--muted);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.7em;color:#fff}
+.option.selected .marker{background:var(--primary);border-color:var(--primary)}
+.option.correct .marker{background:var(--success);border-color:var(--success)}
+.option.incorrect .marker{background:var(--danger);border-color:var(--danger)}
+.option.checkbox .marker{border-radius:3px}
+.option .opt-text{flex:1}
+.fill-input{padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-size:1em;width:100%;margin:8px 0;font-family:inherit}
+.fill-input:focus{border-color:var(--primary);outline:none}
+.btn-submit{background:var(--primary);color:#fff;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-size:.88em;font-weight:600;margin-top:12px}
+.btn-submit:hover{background:var(--primary-dark)}
+.feedback{margin-top:12px;padding:14px;border-radius:8px;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#d1fae5;border:1px solid var(--success)}
+.feedback.incorrect{background:#fee2e2;border:1px solid var(--danger)}
+.feedback h4{margin-bottom:6px}
+.feedback ol,.feedback ul{margin:6px 0;padding-left:22px}
+.feedback li{margin:4px 0}
+.card ol, .card ul { padding-left: 26px; margin: 10px 0; }
+.card li { margin: 5px 0; }
+.example-box ol, .example-box ul { padding-left: 22px; margin: 8px 0; }
+.tip-box ol, .tip-box ul { padding-left: 22px; margin: 8px 0; }
+.math-block ol, .math-block ul { padding-left: 22px; margin: 8px 0; }
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.pagination button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.84em}
+.pagination button:disabled{background:#cbd5e1;cursor:not-allowed}
+.pagination .indicator{font-size:.82em;color:var(--muted);text-align:center;flex:1;padding:0 10px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#fff;padding:22px;border-radius:12px;max-width:460px;width:90%}
+.modal-content h3{color:var(--primary-dark);margin-bottom:12px}
+.modal-content ul{list-style:none;padding-left:0}
+.modal-content li{padding:10px 0;border-bottom:1px solid var(--border)}
+.modal-content li:last-child{border-bottom:none}
+.modal-close{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px}
+.sort-list{display:flex;flex-direction:column;gap:6px}
+.sort-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.sort-item:hover{border-color:var(--primary)}
+.sort-item.selected{border-color:var(--primary);background:#dbeafe}
+.sort-item .pos{background:var(--primary);color:#fff;min-width:24px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em;flex-shrink:0}
+.sort-item .sort-text{flex:1}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair-col h4{font-size:.85em;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.pair-col{display:flex;flex-direction:column;gap:6px}
+.pair-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;font-size:.92em}
+.pair-item.selected{border-color:var(--primary);background:#dbeafe}
+.pair-item.paired{opacity:.5;cursor:default;border-color:var(--success);background:#d1fae5}
+.pairs-list{margin-top:10px}
+.pair-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f1f5f9;border-radius:6px;margin-bottom:4px;font-size:.85em}
+.pair-row .remove{cursor:pointer;color:var(--danger);font-weight:700;margin-left:6px}
+.page-numbers {display:flex;gap:3px;flex-wrap:nowrap;justify-content:center;flex:1;overflow-x:auto;padding:0 3px;}
+.page-num {min-width:28px;height:26px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;font-size:.7em;display:flex;align-items:center;justify-content:center;padding:0 4px;white-space:nowrap;transition:all .15s;flex-shrink:0;}
+.page-num.page-num-e {background:#eff6ff;border-color:#93c5fd;color:#1e40af;}
+.page-num.page-num-t {background:#fffbeb;border-color:#fcd34d;color:#92400e;}
+.page-num.page-num-e:hover {background:#dbeafe;border-color:var(--primary);}
+.page-num.page-num-t:hover {background:#fef3c7;border-color:var(--secondary);}
+.page-num.page-num-e.active {background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600;}
+.page-num.page-num-t.active {background:var(--secondary);color:#fff;border-color:var(--secondary);font-weight:600;}
+.page-num:disabled {opacity:1;cursor:default;}
+@media(max-width:1100px){.main-container{grid-template-columns:180px 1fr}.content-area{padding:18px 20px}}
+@media(max-width:760px){.main-container{grid-template-columns:1fr}.sidebar{display:none}.content-area{padding:16px}header{font-size:.9em}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Math Tutoring by Deni</div>
+  <div class="topic">Topic: Coordinate Geometry: Plotting, sketching and drawing <span class="tr">Topik: Geometri Koordinat: Memplot, membuat sketsa, dan menggambar</span></div>
+  <button id="classRulesBtn">Class Rules <span class="tr">Aturan Kelas</span></button>
+</header>
+<div class="main-container">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content-area">
+    <div id="pageContent"></div>
+    <div class="pagination">
+      <button id="prevBtn">← Previous <span class="tr">Sebelumnya</span></button>
+      <div class="page-numbers" id="pageNums"></div>
+      <button id="nextBtn">Next <span class="tr">Berikutnya</span> →</button>
+    </div>
+  </main>
+</div>
+<div id="classRulesModal" class="modal">
+  <div class="modal-content">
+    <h3>Class Rules <span class="tr">Aturan Kelas</span></h3>
+    <ul>
+      <li>Speak in turn <span class="tr">Berbicara secara bergantian</span></li>
+      <li>Ask permission before leaving the class <span class="tr">Meminta izin jika ingin meninggalkan kelas</span></li>
+      <li>Turn on microphone and camera when needed <span class="tr">Menyalakan microphone dan camera jika diperlukan</span></li>
+    </ul>
+    <button class="modal-close">Close <span class="tr">Tutup</span></button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.renderMathInElement){setTimeout(arguments.callee,50);return;}
+  const sectionsData = {
+    a: {
+      title: 'Spiral Review Warm-up', titleEn: 'Spiral Review Warm-up', time: '00:00 - 00:10',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Cartesian Plane & Points', pageTitleEn:'Bidang Kartesius & Titik',
+          body:`<p>The <strong>Cartesian Plane</strong> is a 2D space formed by two perpendicular number lines: the horizontal $x$-axis and the vertical $y$-axis. <span class="tr"><strong>Bidang Kartesius</strong> adalah ruang 2D yang dibentuk oleh dua garis bilangan saling tegak lurus: sumbu-$x$ horizontal dan sumbu-$y$ vertikal.</span></p>
+          <div class="illustration"><svg width="280" height="200" viewBox="0 0 280 200"><line x1="20" y1="100" x2="260" y2="100" stroke="#333" stroke-width="2"/><polygon points="260,100 250,95 250,105" fill="#333"/><line x1="140" y1="20" x2="140" y2="180" stroke="#333" stroke-width="2"/><polygon points="140,20 135,30 145,30" fill="#333"/><text x="250" y="115" font-size="12">x</text><text x="125" y="30" font-size="12">y</text><text x="135" y="115" font-size="12">0</text><circle cx="180" cy="60" r="3" fill="#ef4444"/><text x="185" y="60" font-size="12">A(2, 1)</text><circle cx="100" cy="140" r="3" fill="#10b981"/><text x="60" y="140" font-size="12">B(-1, -2)</text></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Points are written as ordered pairs $(x, y)$. <span class="tr">Titik ditulis sebagai pasangan terurut $(x, y)$.</span></div></div>
+          <p>To plot a point $(x, y)$, start from the origin $(0,0)$, move $x$ units horizontally, then $y$ units vertically. <span class="tr">Untuk menggambar titik $(x, y)$, mulai dari origin $(0,0)$, geser $x$ unit horizontal, lalu $y$ unit vertikal.</span></p>`
+        },
+        { type:'task', pageTitle:'T1: Identify Coordinates', pageTitleEn:'Identifikasi Koordinat', taskType:'radio',
+          question:'Point $P$ is located 4 units to the right of the origin and 3 units down. What are its coordinates?', questionEn:'Titik $P$ berada 4 unit di kanan origin dan 3 unit ke bawah. Berapa koordinatnya?',
+          options:[{text:'$(4, 3)$', correct:false},{text:'$(3, -4)$', correct:false},{text:'$(4, -3)$', correct:true},{text:'$(-4, -3)$', correct:false}],
+          explanation:`<p>The $x$-coordinate (horizontal) is positive $4$. The $y$-coordinate (vertical) is negative $3$ because it moves down. So, the coordinate is $(4, -3)$. <span class="tr">Koordinat-$x$ positif $4$. Koordinat-$y$ negatif $3$ karena ke bawah.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Points on Axes', pageTitleEn:'Titik pada Sumbu', taskType:'checkbox',
+          question:'Select all points that lie ON the coordinate axes (not in any quadrant).', questionEn:'Pilih semua titik yang TERLETAK PADA sumbu koordinat (bukan di kuadran mana pun).',
+          options:[{text:'$(0, -5)$', correct:true},{text:'$(2, 0)$', correct:true},{text:'$(2, 5)$', correct:false},{text:'$(0, 0)$', correct:true}],
+          explanation:`<p>Points on an axis must have at least one coordinate as $0$. $(0, -5)$ is on the $y$-axis, $(2, 0)$ is on the $x$-axis, and $(0, 0)$ is the origin. <span class="tr">Titik pada sumbu harus memiliki minimal satu koordinat $0$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Distance from Origin', pageTitleEn:'Jarak dari Origin', taskType:'fill',
+          question:'Find the distance from origin $O(0,0)$ to point $P(6, 8)$. $d = \\dots$', questionEn:'Cari jarak dari origin $O(0,0)$ ke titik $P(6, 8)$. $d = \\dots$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<p>Using Pythagorean theorem: $d = \\sqrt{x^2 + y^2} = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$. <span class="tr">Gunakan teorema Pythagoras: $\\sqrt{6^2 + 8^2} = 10$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Gradient of a Line', pageTitleEn:'Gradien Garis',
+          body:`<p>The gradient (slope) $m$ of a straight line measures its steepness and direction. <span class="tr">Gradien $m$ dari suatu garis lurus mengukur kemiringan dan arahnya.</span></p>
+          <div class="math-block">$m = \\dfrac{y_2 - y_1}{x_2 - x_1} = \\dfrac{\\text{Rise (Change in } y)}{\\text{Run (Change in } x)}$</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Find the gradient of a line passing through $A(1, 2)$ and $B(4, 11)$. <span class="tr">Cari gradien garis yang melalui $A(1, 2)$ dan $B(4, 11)$.</span>
+          <ol><li>Identify coordinates: $x_1=1, y_1=2$ and $x_2=4, y_2=11$.</li><li>Substitute into formula: $m = \\dfrac{11 - 2}{4 - 1}$</li><li>Calculate: $m = \\dfrac{9}{3} = 3$.</li></ol></div>`
+        },
+        { type:'task', pageTitle:'T4: Calculate Gradient', pageTitleEn:'Hitung Gradien', taskType:'fill',
+          question:'Find the gradient of the line connecting $A(-2, 4)$ and $B(3, -6)$. $m = \\dots$', questionEn:'Cari gradien garis yang menghubungkan $A(-2, 4)$ dan $B(3, -6)$. $m = \\dots$',
+          correctAnswer:'-2', acceptableAnswers:['-2'],
+          explanation:`<p>$m = \\dfrac{y_2 - y_1}{x_2 - x_1} = \\dfrac{-6 - 4}{3 - (-2)} = \\dfrac{-10}{5} = -2$. <span class="tr">Perhatikan tanda negatif saat mengurangi bilangan negatif.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Match Gradients', pageTitleEn:'Pasangkan Gradien', taskType:'pairing',
+          question:'Match the point pairs to their correct gradient.', questionEn:'Pasangkan pasangan titik dengan gradiennya yang benar.',
+          pairs:[{left:'$(1,1)$ to $(2,4)$ <span class="tr">ke</span>', right:'$3$'},{left:'$(2,4)$ to $(4,4)$ <span class="tr">ke</span>', right:'$0$'},{left:'$(-1,2)$ to $(1,6)$ <span class="tr">ke</span>', right:'$2$'},{left:'$(0,5)$ to $(1,2)$ <span class="tr">ke</span>', right:'$-3$'}],
+          explanation:`<p>Apply $m = \\dfrac{y_2 - y_1}{x_2 - x_1}$ to each pair. A horizontal line has $m=0$. <span class="tr">Terapkan rumus gradien ke setiap pasangan.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Horizontal Line Gradient', pageTitleEn:'Gradien Garis Horizontal', taskType:'radio',
+          question:'What is the gradient of a line passing through $(5, -2)$ and $(9, -2)$?', questionEn:'Berapa gradien garis yang melalui $(5, -2)$ dan $(9, -2)$?',
+          options:[{text:'$0$', correct:true},{text:'$4$', correct:false},{text:'Undefined', correct:false},{text:'$-\\dfrac{1}{4}$', correct:false}],
+          explanation:`<p>Since the $y$-coordinates are the same, the line is horizontal. $m = \\dfrac{-2 - (-2)}{9 - 5} = \\dfrac{0}{4} = 0$. <span class="tr">Karena $y$ sama, garis horizontal, $m=0$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Equation of a Straight Line', pageTitleEn:'Persamaan Garis Lurus',
+          body:`<p>The equation of a straight line can be written in the form $y = mx + c$, where $m$ is the gradient and $c$ is the $y$-intercept (where the line crosses the $y$-axis). <span class="tr">Persamaan garis lurus dapat ditulis sebagai $y = mx + c$, di mana $m$ adalah gradien dan $c$ adalah perpotongan sumbu-$y$.</span></p>
+          <div class="math-block">Gradient-Intercept Form: $y = mx + c$ <br> Point-Gradient Form: $y - y_1 = m(x - x_1)$</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>A line has gradient $2$ and passes through $(0, -3)$. <span class="tr">Garis memiliki gradien $2$ dan melalui $(0, -3)$.</span>
+          <p>Since it passes through the $y$-axis at $(0, -3)$, the $y$-intercept $c = -3$. Equation: $y = 2x - 3$.</p></div>`
+        },
+        { type:'task', pageTitle:'T7: Form Equation', pageTitleEn:'Susun Persamaan', taskType:'radio',
+          question:'A line has gradient $-1$ and $y$-intercept $4$. What is its equation?', questionEn:'Garis memiliki gradien $-1$ dan perpotongan-y $4$. Berapa persamaannya?',
+          options:[{text:'$y = -x + 4$', correct:true},{text:'$y = x - 4$', correct:false},{text:'$y = 4x - 1$', correct:false},{text:'$y = -4x + 1$', correct:false}],
+          explanation:`<p>Substitute $m = -1$ and $c = 4$ into $y = mx + c$. Result: $y = -x + 4$. <span class="tr">Substitusi $m=-1$ dan $c=4$.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Find y-intercept', pageTitleEn:'Cari Perpotongan-y', taskType:'fill',
+          question:'Line $y = 3x + c$ passes through $(2, 10)$. Find the value of $c$. $c = \\dots$', questionEn:'Garis $y = 3x + c$ melalui $(2, 10)$. Cari nilai $c$. $c = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>Substitute $x=2, y=10$ into the equation: $10 = 3(2) + c \\Rightarrow 10 = 6 + c \\Rightarrow c = 4$. <span class="tr">Substitusi titik ke persamaan untuk mencari $c$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Equation Properties', pageTitleEn:'Sifat Persamaan', taskType:'truefalse',
+          question:'True or false: The line $2y = 6x - 4$ has a gradient of $6$.', questionEn:'Benar atau salah: Garis $2y = 6x - 4$ memiliki gradien $6$.',
+          correctAnswer:'false',
+          explanation:`<p>Divide the entire equation by $2$ to get $y = mx + c$ form: $y = 3x - 2$. The gradient is $3$, not $6$. <span class="tr">Bagi seluruh persamaan dengan $2$ agar menjadi $y = 3x - 2$. Gradiennya adalah $3$.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Order Equation Steps', pageTitleEn:'Urutkan Langkah Persamaan', taskType:'sorting',
+          question:'Order the steps to find the equation of a line given points $(2, 5)$ and $(4, 11)$.', questionEn:'Urutkan langkah mencari persamaan garis dari titik $(2, 5)$ dan $(4, 11)$.',
+          items:['Calculate gradient $m = \\dfrac{11-5}{4-2} = 3$ <span class="tr">Hitung gradien</span>','Substitute $m$ and point $(2,5)$ into $y - y_1 = m(x - x_1)$ <span class="tr">Substitusi ke rumus titik-gradien</span>','Simplify to find $c$: $5 = 3(2) + c \\Rightarrow c = -1$ <span class="tr">Sederhanakan untuk cari $c$</span>','Write final equation $y = 3x - 1$ <span class="tr">Tulis persamaan akhir</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Always find $m$ first, then solve for $c$ using a point. <span class="tr">Selalu cari $m$ dulu, lalu cari $c$.</span></p>`
+        }
+      ]
+    },
+    b: {
+      title: 'Introduction & Real-World Connection', titleEn: 'Introduction & Real-World Connection', time: '00:10 - 00:15',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Blueprint and Architecture', pageTitleEn:'Cetak Biru dan Arsitektur',
+          body:`<p>In real-world applications like architecture and engineering, <strong>plotting, sketching, and drawing</strong> are essential. A blueprint accurately plots coordinates for structural points, while a conceptual sketch gives a visual overview of the design. <span class="tr">Dalam aplikasi dunia nyata, <strong>memplot, membuat sketsa, dan menggambar</strong> sangat penting. Cetak biru memplot koordinat titik struktural secara akurat, sementara sketsa memberikan gambaran visual desain.</span></p>
+          <div class="illustration"><svg width="280" height="150" viewBox="0 0 280 150"><rect x="20" y="20" width="240" height="110" fill="#dbeafe" stroke="#2563eb" rx="8"/><line x1="20" y1="75" x2="260" y2="75" stroke="#93c5fd" stroke-dasharray="4"/><line x1="140" y1="20" x2="140" y2="130" stroke="#93c5fd" stroke-dasharray="4"/><circle cx="180" cy="60" r="6" fill="#ef4444"/><text x="190" y="60" font-size="12">Support Beam</text><text x="80" y="100" font-size="12">Wall Area</text></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Accurate coordinate plotting ensures structures are built correctly. <span class="tr">Plotting koordinat yang akurat memastikan struktur dibangun dengan benar.</span></div></div>`
+        },
+        { type:'task', pageTitle:'T1: Map to Coordinates', pageTitleEn:'Peta ke Koordinat', taskType:'radio',
+          question:'In a city grid, if the origin $(0,0)$ represents the city center, what does a point at $(5, 0)$ represent?', questionEn:'Pada kisi kota, jika origin $(0,0)$ mewakili pusat kota, apa yang diwakili titik $(5, 0)$?',
+          options:[{text:'5 km North of center <span class="tr">5 km di utara pusat</span>', correct:false},{text:'5 km East of center <span class="tr">5 km di timur pusat</span>', correct:true},{text:'5 km West of center <span class="tr">5 km di barat pusat</span>', correct:false},{text:'At the center <span class="tr">Di pusat</span>', correct:false}],
+          explanation:`<p>The $x$-axis represents East-West. Positive $x$ means East. So $(5,0)$ is 5 units East of the origin. <span class="tr">Sumbu-$x$ mewakili Timur-Barat. $x$ positif berarti Timur.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Grid Distance', pageTitleEn:'Jarak Kisi', taskType:'fill',
+          question:'On an architect\'s blueprint, $1$ unit $= 1$ meter. If a wire runs from $A(2, 3)$ straight to $B(2, 8)$, the length of wire needed is $\\dots$ meters.', questionEn:'Pada cetak biru arsitek, $1$ unit $= 1$ meter. Jika kabel membentang dari $A(2, 3)$ lurus ke $B(2, 8)$, panjang kabel yang dibutuhkan adalah $\\dots$ meter.',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Since $x$ is constant ($2$), it's a vertical line. $d = |y_2 - y_1| = |8 - 3| = 5$. <span class="tr">Karena $x$ sama, garis vertikal. $d = |8 - 3| = 5$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Screen Pixels', pageTitleEn:'Piksel Layar', taskType:'truefalse',
+          question:'True or false: Computer graphics use coordinate geometry to plot pixels on a screen.', questionEn:'Benar atau salah: Grafik komputer menggunakan geometri koordinat untuk memplot piksel di layar.',
+          correctAnswer:'true',
+          explanation:`<p>Yes, every pixel on a screen has an $(x, y)$ coordinate. <span class="tr">Ya, setiap piksel memiliki koordinat $(x, y)$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Navigation and Flight Paths', pageTitleEn:'Navigasi dan Jalur Penerbangan',
+          body:`<p>A flight path can be modeled as a straight line on a map. If we know the coordinates of the departure and arrival cities, we can calculate the distance and the trajectory (gradient). <span class="tr">Jalur penerbangan dapat dimodelkan sebagai garis lurus pada peta. Jika koordinat kota keberangkatan dan kedatangan diketahui, kita dapat menghitung jarak dan trayektori (gradien).</span></p>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Departure $A(0,0)$, Arrival $B(10, 4)$. Distance $d = \\sqrt{10^2 + 4^2} = \\sqrt{116} \\approx 10.77$ units. <span class="tr">Jarak $d = \\sqrt{10^2 + 4^2} = \\sqrt{116} \\approx 10.77$ unit.</span></div>`
+        },
+        { type:'task', pageTitle:'T4: Calculate Path Distance', pageTitleEn:'Hitung Jarak Jalur', taskType:'fill',
+          question:'Find the distance between $A(0,0)$ and $B(6, 8)$. $d = \\dots$', questionEn:'Cari jarak antara $A(0,0)$ dan $B(6, 8)$. $d = \\dots$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<p>$d = \\sqrt{(6-0)^2 + (8-0)^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$. <span class="tr">Substitusi langsung ke rumus jarak.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Flight Trajectory', pageTitleEn:'Trayektori Penerbangan', taskType:'radio',
+          question:'A plane flies from $(1, 2)$ to $(4, 11)$. What is the gradient of its path?', questionEn:'Pesawat terbang dari $(1, 2)$ ke $(4, 11)$. Berapa gradien jalurnya?',
+          options:[{text:'$3$', correct:true},{text:'$\\dfrac{1}{3}$', correct:false},{text:'$9$', correct:false},{text:'$-3$', correct:false}],
+          explanation:`<p>$m = \\dfrac{11 - 2}{4 - 1} = \\dfrac{9}{3} = 3$. <span class="tr">$m = \\dfrac{11 - 2}{4 - 1} = 3$.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Midpoint of Path', pageTitleEn:'Titik Tengah Jalur', taskType:'fill',
+          question:'A ship travels from $A(-3, 5)$ to $B(7, 5)$. The midpoint of the journey is at $x = \\dots$', questionEn:'Kapal berlayar dari $A(-3, 5)$ ke $B(7, 5)$. Titik tengah perjalanan berada di $x = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>$x_m = \\dfrac{-3 + 7}{2} = \\dfrac{4}{2} = 2$. <span class="tr">Jumlahkan $x$ lalu bagi 2.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Topography and Slopes', pageTitleEn:'Topografi dan Kemiringan',
+          body:`<p>In topography, the gradient represents the steepness of a hill. A larger absolute value of the gradient means a steeper slope. <span class="tr">Dalam topografi, gradien mewakili kemiringan bukit. Nilai absolut gradien yang lebih besar berarti lereng lebih curam.</span></p>
+          <div class="tip-box"><h4>Key Concept <span class="tr">Konsep Kunci</span></h4>If a path goes from $(0,0)$ to $(1, 3)$, the gradient is $3$. If it goes to $(1, 5)$, the gradient is $5$, meaning it is steeper. <span class="tr">Jika gradien $5$, lebih curam dari gradien $3$.</span></div>`
+        },
+        { type:'task', pageTitle:'T7: Steepest Slope', pageTitleEn:'Kemiringan Tercuram', taskType:'radio',
+          question:'Which line represents the steepest slope?', questionEn:'Garis mana yang mewakili kemiringan tercuram?',
+          options:[{text:'$y = 2x + 1$', correct:false},{text:'$y = -5x$', correct:true},{text:'$y = \\dfrac{1}{2}x - 3$', correct:false},{text:'$y = -x + 4$', correct:false}],
+          explanation:`<p>Steepness depends on the absolute value of the gradient $|m|$. $|-5| = 5$, which is larger than $2$, $0.5$, and $1$. <span class="tr">Kecuraman tergantung nilai absolut $|m|$.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Match Real-World Gradients', pageTitleEn:'Pasangkan Gradien Dunia Nyata', taskType:'pairing',
+          question:'Match the real-world scenario to its likely gradient property.', questionEn:'Pasangkan skenario dunia nyata dengan properti gradiennya.',
+          pairs:[{left:'Flat highway <span class="tr">Jalan raya datar</span>', right:'$m = 0$'},{left:'Vertical cliff <span class="tr">Tebing vertikal</span>', right:'Undefined'},{left:'Gentle hill uphill <span class="tr">Bukit landai ke atas</span>', right:'$m > 0$'},{left:'Downhill road <span class="tr">Jalan menurun</span>', right:'$m < 0$'}],
+          explanation:`<p>Flat is $0$. Vertical has $\\Delta x = 0$ (undefined). Uphill is positive $y$ change, downhill is negative. <span class="tr">Datar $0$. Vertikal tak terdefinisi. Naik positif, turun negatif.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Uphill vs Downhill', pageTitleEn:'Naik vs Turun', taskType:'truefalse',
+          question:'True or false: A line with a negative gradient always goes downhill from left to right.', questionEn:'Benar atau salah: Garis dengan gradien negatif selalu menurun dari kiri ke kanan.',
+          correctAnswer:'true',
+          explanation:`<p>Yes, as $x$ increases, $y$ decreases, meaning the line slopes downwards. <span class="tr">Ya, saat $x$ bertambah, $y$ berkurang.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Calculate Slope', pageTitleEn:'Hitung Kemiringan', taskType:'fill',
+          question:'A ramp rises $4$ units vertically for every $10$ units horizontally. The gradient is $m = \\dots$', questionEn:'Sebuah ramp naik $4$ unit vertikal untuk setiap $10$ unit horizontal. Gradiennya adalah $m = \\dots$',
+          correctAnswer:'0.4', acceptableAnswers:['0.4','2/5','0,4'],
+          explanation:`<p>$m = \\dfrac{\\text{Rise}}{\\text{Run}} = \\dfrac{4}{10} = 0.4$. <span class="tr">$m = \\dfrac{4}{10} = 0.4$.</span></p>`
+        }
+      ]
+    },
+    c: {
+      title: 'Review of Prior Knowledge', titleEn: 'Review of Prior Knowledge', time: '00:15 - 00:20',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Solving Simultaneous Equations', pageTitleEn:'Menyelesaikan Persamaan Simultan',
+          body:`<p>To find the intersection of two lines, we solve their equations simultaneously. <span class="tr">Untuk mencari titik potong dua garis, kita selesaikan persamaannya secara simultan.</span></p>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Line 1: $y = 2x + 1$. Line 2: $y = -x + 4$. <span class="tr">Cari titik potong.</span>
+          <ol><li>Set them equal: $2x + 1 = -x + 4$.</li><li>Solve for $x$: $3x = 3 \\Rightarrow x = 1$.</li><li>Substitute $x$ to find $y$: $y = 2(1) + 1 = 3$.</li><li>Intersection point: $(1, 3)$.</li></ol></div>`
+        },
+        { type:'task', pageTitle:'T1: Find Intersection x', pageTitleEn:'Cari x Perpotongan', taskType:'fill',
+          question:'Line 1: $y = 3x - 2$. Line 2: $y = x + 4$. Find the $x$-coordinate of the intersection. $x = \\dots$', questionEn:'Garis 1: $y = 3x - 2$. Garis 2: $y = x + 4$. Cari koordinat-$x$ perpotongan. $x = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$3x - 2 = x + 4 \\Rightarrow 2x = 6 \\Rightarrow x = 3$. <span class="tr">Samakan kedua persamaan lalu selesaikan untuk $x$.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Find Full Intersection', pageTitleEn:'Cari Perpotongan Penuh', taskType:'radio',
+          question:'What is the intersection point of $y = 2x$ and $y = -x + 6$?', questionEn:'Berapa titik potong dari $y = 2x$ dan $y = -x + 6$?',
+          options:[{text:'$(2, 4)$', correct:true},{text:'$(4, 2)$', correct:false},{text:'$(6, 0)$', correct:false},{text:'$(0, 6)$', correct:false}],
+          explanation:`<p>$2x = -x + 6 \\Rightarrow 3x = 6 \\Rightarrow x = 2$. Then $y = 2(2) = 4$. Point is $(2, 4)$. <span class="tr">Cari $x=2$, lalu substitusi ke $y=2x$ dapat $y=4$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: No Solution Case', pageTitleEn:'Kasus Tanpa Solusi', taskType:'truefalse',
+          question:'True or false: Parallel lines have exactly one intersection point.', questionEn:'Benar atau salah: Garis sejajar memiliki tepat satu titik potong.',
+          correctAnswer:'false',
+          explanation:`<p>Parallel lines have the same gradient and never intersect, so they have $0$ intersection points. <span class="tr">Garis sejajar tidak pernah berpotongan.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Factoring Quadratics', pageTitleEn:'Memfaktorkan Kuadrat',
+          body:`<p>To sketch a curve like $y = x^2 + bx + c$, we often need to find the $x$-intercepts by factoring. We set $y=0$ and solve for $x$. <span class="tr">Untuk membuat sketsa kurva, kita mencari perpotongan-$x$ dengan memfaktorkan. Set $y=0$ lalu selesaikan untuk $x$.</span></p>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Find roots of $y = x^2 - 5x + 6$. <span class="tr">Cari akar dari $y = x^2 - 5x + 6$.</span>
+          <p>Set $y=0$: $x^2 - 5x + 6 = 0$. <br> Factor: $(x - 2)(x - 3) = 0$. <br> Roots: $x = 2$ and $x = 3$.</p></div>`
+        },
+        { type:'task', pageTitle:'T4: Find Roots', pageTitleEn:'Cari Akar', taskType:'checkbox',
+          question:'Select all correct roots for $y = x^2 - 4x + 3$. (Set $y=0$)', questionEn:'Pilih semua akar yang benar untuk $y = x^2 - 4x + 3$. (Set $y=0$)',
+          options:[{text:'$x = 1$', correct:true},{text:'$x = -1$', correct:false},{text:'$x = 3$', correct:true},{text:'$x = -3$', correct:false}],
+          explanation:`<p>$x^2 - 4x + 3 = 0 \\Rightarrow (x - 1)(x - 3) = 0$. Thus $x = 1$ and $x = 3$. <span class="tr">Faktorkan menjadi $(x-1)(x-3)=0$.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Factor Equation', pageTitleEn:'Faktor Persamaan', taskType:'pairing',
+          question:'Match the quadratic equation to its factored form.', questionEn:'Pasangkan persamaan kuadrat dengan bentuk faktornya.',
+          pairs:[{left:'$x^2 - 5x + 6$', right:'$(x-2)(x-3)$'},{left:'$x^2 + 5x + 6$', right:'$(x+2)(x+3)$'},{left:'$x^2 - x - 6$', right:'$(x-3)(x+2)$'},{left:'$x^2 + x - 6$', right:'$(x+3)(x-2)$'}],
+          explanation:`<p>Find two numbers that multiply to the constant and add to the middle coefficient. <span class="tr">Cari dua angka yang dikali jadi konstanta, ditambah jadi koefisien tengah.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: y-intercept of Curve', pageTitleEn:'Perpotongan-y Kurva', taskType:'fill',
+          question:'What is the $y$-intercept of the curve $y = x^2 - 4x + 3$? $c = \\dots$', questionEn:'Berapa perpotongan-$y$ kurva $y = x^2 - 4x + 3$? $c = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>To find $y$-intercept, set $x=0$. $y = 0^2 - 4(0) + 3 = 3$. <span class="tr">Set $x=0$, maka $y = 3$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Completing the Square', pageTitleEn:'Melengkapkan Kuadrat',
+          body:`<p>Completing the square helps us find the vertex (turning point) of a parabola. The form is $y = a(x - h)^2 + k$, where vertex is $(h, k)$. <span class="tr">Melengkapkan kuadrat membantu mencari titik puncak parabola. Bentuknya $y = a(x - h)^2 + k$, titik puncak $(h, k)$.</span></p>
+          <div class="math-block">$ax^2 + bx + c = a\\left(x + \\dfrac{b}{2a}\\right)^2 - \\dfrac{b^2}{4a} + c$</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>$y = x^2 - 4x + 1$. <span class="tr">Ubah ke bentuk kuadrat sempurna.</span>
+          <p>$y = (x^2 - 4x + 4) - 4 + 1 = (x - 2)^2 - 3$. Vertex is $(2, -3)$.</p></div>`
+        },
+        { type:'task', pageTitle:'T7: Find Vertex x', pageTitleEn:'Cari x Titik Puncak', taskType:'fill',
+          question:'Find the $x$-coordinate of the vertex for $y = x^2 - 6x + 5$. $x = \\dots$', questionEn:'Cari koordinat-$x$ titik puncak untuk $y = x^2 - 6x + 5$. $x = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$x = -\\dfrac{b}{2a} = -\\dfrac{-6}{2(1)} = 3$. <span class="tr">$x = -\\dfrac{b}{2a}$.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Vertex Coordinates', pageTitleEn:'Koordinat Titik Puncak', taskType:'radio',
+          question:'What is the vertex of $y = (x - 2)^2 + 4$?', questionEn:'Berapa titik puncak dari $y = (x - 2)^2 + 4$?',
+          options:[{text:'$(2, 4)$', correct:true},{text:'$(-2, 4)$', correct:false},{text:'$(2, -4)$', correct:false},{text:'$(4, 2)$', correct:false}],
+          explanation:`<p>In $y = a(x - h)^2 + k$, vertex is $(h, k)$. Here $h=2, k=4$. <span class="tr">Titik puncak $(h,k)$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Direction of Opening', pageTitleEn:'Arah Pembukaan', taskType:'truefalse',
+          question:'True or false: The parabola $y = -2x^2 + 5x - 1$ opens upwards.', questionEn:'Benar atau salah: Parabola $y = -2x^2 + 5x - 1$ terbuka ke atas.',
+          correctAnswer:'false',
+          explanation:`<p>Since the coefficient of $x^2$ is negative ($-2$), the parabola opens downwards (has a maximum point). <span class="tr">Karena koefisien $x^2$ negatif, parabola terbuka ke bawah.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Order Complete the Square', pageTitleEn:'Urutkan Melengkapkan Kuadrat', taskType:'sorting',
+          question:'Order the steps to complete the square for $y = x^2 + 6x + 2$.', questionEn:'Urutkan langkah melengkapkan kuadrat untuk $y = x^2 + 6x + 2$.',
+          items:['Take half of $b$: $\\dfrac{6}{2} = 3$ <span class="tr">Setengah dari $b$</span>','Write perfect square: $(x + 3)^2$ <span class="tr">Tulis kuadrat sempurna</span>','Subtract square of 3: $(x + 3)^2 - 9$ <span class="tr">Kurangi kuadrat 3</span>','Add constant: $y = (x + 3)^2 - 7$ <span class="tr">Tambah konstanta</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Follow standard algebraic steps to complete the square. <span class="tr">Ikuti langkah aljabar standar.</span></p>`
+        }
+      ]
+    },
+    d: {
+      title: 'Problem Introduction', titleEn: 'Problem Introduction', time: '00:20 - 00:30',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Plotting vs Sketching vs Drawing', pageTitleEn:'Memplot vs Membuat Sketsa vs Menggambar',
+          body:`<p>In Cambridge curriculum, these terms have distinct meanings:<span class="tr">Dalam kurikulum Cambridge, istilah ini memiliki arti yang berbeda:</span></p>
+          <div class="math-block"><ul><li><strong>Plotting:</strong> Calculating specific points $(x, y)$ and marking them accurately on graph paper. <span class="tr">Menghitung titik spesifik dan menandainya secara akurat.</span></li><li><strong>Sketching:</strong> Drawing the general shape and key features (intercepts, asymptotes, vertex) without precise scaling. <span class="tr">Menggambar bentuk umum dan fitur kunci tanpa skala presisi.</span></li><li><strong>Drawing:</strong> Creating an accurate representation using a ruler and compass, usually requiring exact scale. <span class="tr">Membuat representasi akurat menggunakan penggaris dan jangka dengan skala eksak.</span></li></ul></div>
+          <div class="illustration"><svg width="280" height="100" viewBox="0 0 280 100"><circle cx="40" cy="50" r="20" fill="none" stroke="#10b981" stroke-width="2"/><circle cx="40" cy="50" r="2" fill="#10b981"/><text x="15" y="90" font-size="12">Sketch</text><line x1="100" y1="50" x2="140" y2="50" stroke="#ef4444" stroke-width="2"/><line x1="120" y1="30" x2="120" y2="70" stroke="#ef4444" stroke-width="2"/><text x="100" y="90" font-size="12">Draw</text><rect x="180" y="30" width="40" height="40" fill="none" stroke="#2563eb" stroke-width="2"/><text x="185" y="90" font-size="12">Plot</text></svg></div>`
+        },
+        { type:'task', pageTitle:'T1: Identify Method', pageTitleEn:'Identifikasi Metode', taskType:'radio',
+          question:'A student uses a ruler to accurately map out a triangle\'s vertices on a scaled grid. What is this called?', questionEn:'Siswa menggunakan penggaris untuk memetakan titik sudut segitiga pada kisi berskala. Apa ini disebut?',
+          options:[{text:'Sketching <span class="tr">Membuat sketsa</span>', correct:false},{text:'Plotting / Drawing <span class="tr">Memplot / Menggambar</span>', correct:true},{text:'Guessing <span class="tr">Menebak</span>', correct:false},{text:'Calculating <span class="tr">Menghitung</span>', correct:false}],
+          explanation:`<p>Using tools for accuracy on a scaled grid is Drawing or Plotting. <span class="tr">Menggunakan alat untuk akurasi pada kisi berskala adalah Menggambar/Memplot.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Features of a Sketch', pageTitleEn:'Fitur Sketsa', taskType:'checkbox',
+          question:'Which of the following are essential key features to show when sketching a line $y = mx + c$?', questionEn:'Manakah dari berikut ini yang merupakan fitur kunci penting untuk ditunjukkan saat membuat sketsa garis $y = mx + c$?',
+          options:[{text:'$y$-intercept <span class="tr">Perpotongan-$y$</span>', correct:true},{text:'$x$-intercept <span class="tr">Perpotongan-$x$</span>', correct:true},{text:'Exact pixel coordinates <span class="tr">Koordinat piksel eksak</span>', correct:false},{text:'General shape/direction <span class="tr">Bentuk umum/arah</span>', correct:true}],
+          explanation:`<p>A sketch needs key features like intercepts and general direction, not exact pixels. <span class="tr">Sketsa membutuhkan fitur kunci, bukan piksel eksak.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Purpose of Sketching', pageTitleEn:'Tujuan Membuat Sketsa', taskType:'truefalse',
+          question:'True or false: A sketch is primarily used to visualize the behavior of a function rather than to measure exact distances.', questionEn:'Benar atau salah: Sketsa terutama digunakan untuk memvisualisasikan perilaku fungsi daripada mengukur jarak eksak.',
+          correctAnswer:'true',
+          explanation:`<p>Yes, sketches show trends, intercepts, and shapes. <span class="tr">Sketsa menunjukkan tren, perpotongan, dan bentuk.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Sketching a Straight Line', pageTitleEn:'Membuat Sketsa Garis Lurus',
+          body:`<p>To sketch a straight line, find two points. The easiest points are the intercepts. <span class="tr">Untuk membuat sketsa garis lurus, cari dua titik. Titik termudah adalah perpotongan.</span></p>
+          <div class="math-block"><strong>To find $y$-intercept:</strong> Set $x = 0$. <br> <strong>To find $x$-intercept:</strong> Set $y = 0$.</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Sketch $y = 2x - 4$. <span class="tr">Buat sketsa $y = 2x - 4$.</span>
+          <ol><li>Set $x=0$: $y = 2(0) - 4 = -4$. Point $(0, -4)$.</li><li>Set $y=0$: $0 = 2x - 4 \\Rightarrow 2x = 4 \\Rightarrow x = 2$. Point $(2, 0)$.</li><li>Draw a line through $(0, -4)$ and $(2, 0)$.</li></ol></div>`
+        },
+        { type:'task', pageTitle:'T4: Find y-intercept', pageTitleEn:'Cari Perpotongan-y', taskType:'fill',
+          question:'For the line $y = -3x + 6$, find the $y$-intercept. $y = \\dots$', questionEn:'Untuk garis $y = -3x + 6$, cari perpotongan-$y$. $y = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<p>Set $x=0$. $y = -3(0) + 6 = 6$. <span class="tr">Set $x=0$.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Find x-intercept', pageTitleEn:'Cari Perpotongan-x', taskType:'fill',
+          question:'For the line $y = -3x + 6$, find the $x$-intercept. $x = \\dots$', questionEn:'Untuk garis $y = -3x + 6$, cari perpotongan-$x$. $x = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Set $y=0$. $0 = -3x + 6 \\Rightarrow 3x = 6 \\Rightarrow x = 2$. <span class="tr">Set $y=0$ lalu selesaikan untuk $x$.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Match Intercepts', pageTitleEn:'Pasangkan Perpotongan', taskType:'pairing',
+          question:'Match the line equation to its $x$-intercept.', questionEn:'Pasangkan persamaan garis dengan perpotongan-$x$-nya.',
+          pairs:[{left:'$y = x - 5$', right:'$(5, 0)$'},{left:'$y = 2x + 4$', right:'$(-2, 0)$'},{left:'$y = -x + 3$', right:'$(3, 0)$'},{left:'$y = \\dfrac{1}{2}x - 2$', right:'$(4, 0)$'}],
+          explanation:`<p>Set $y=0$ and solve for $x$ in each equation. <span class="tr">Set $y=0$ lalu cari $x$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Sketching a Quadratic Curve', pageTitleEn:'Membuat Sketsa Kurva Kuadrat',
+          body:`<p>To sketch a parabola $y = ax^2 + bx + c$, we need key features: <span class="tr">Untuk membuat sketsa parabola, kita butuh fitur kunci:</span></p>
+          <div class="math-block"><ol><li><strong>$y$-intercept:</strong> Set $x=0$. (Point is $(0, c)$).</li><li><strong>$x$-intercepts (Roots):</strong> Set $y=0$, factor or use quadratic formula.</li><li><strong>Vertex (Turning point):</strong> $x = -\\dfrac{b}{2a}$, then substitute to find $y$.</li><li><strong>Shape:</strong> $\\cup$ if $a>0$, $\\cap$ if $a<0$.</li></ol></div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Sketch $y = x^2 - 4x + 3$. <span class="tr">Buat sketsa $y = x^2 - 4x + 3$.</span>
+          <p>1. $y$-int: $(0, 3)$.<br>2. $x$-int: $(x-1)(x-3)=0 \\Rightarrow (1,0), (3,0)$.<br>3. Vertex: $x = -\\dfrac{-4}{2} = 2$. $y = 2^2 - 4(2) + 3 = -1$. Vertex $(2, -1)$.<br>4. Opens upwards ($a=1>0$).</p></div>`
+        },
+        { type:'task', pageTitle:'T7: Identify Parabola Shape', pageTitleEn:'Identifikasi Bentuk Parabola', taskType:'radio',
+          question:'What is the shape of the graph $y = -x^2 + 4$?', questionEn:'Bagaimana bentuk grafik $y = -x^2 + 4$?',
+          options:[{text:'U-shaped (Opens up) <span class="tr">Bentuk U (Terbuka ke atas)</span>', correct:false},{text:'n-shaped (Opens down) <span class="tr">Bentuk n (Terbuka ke bawah)</span>', correct:true},{text:'Straight line <span class="tr">Garis lurus</span>', correct:false},{text:'Circle <span class="tr">Lingkaran</span>', correct:false}],
+          explanation:`<p>Since $a = -1$ (negative), the parabola is $n$-shaped. <span class="tr">Karena $a$ negatif, parabola terbuka ke bawah.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Find Roots of Parabola', pageTitleEn:'Cari Akar Parabola', taskType:'checkbox',
+          question:'Select all correct $x$-intercepts for $y = x^2 - 5x + 6$.', questionEn:'Pilih semua perpotongan-$x$ yang benar untuk $y = x^2 - 5x + 6$.',
+          options:[{text:'$x = 1$', correct:false},{text:'$x = 2$', correct:true},{text:'$x = 3$', correct:true},{text:'$x = -2$', correct:false}],
+          explanation:`<p>Set $y=0$: $x^2 - 5x + 6 = (x-2)(x-3) = 0$. Roots are $2$ and $3$. <span class="tr">Akar adalah $2$ dan $3$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Find Vertex', pageTitleEn:'Cari Titik Puncak', taskType:'fill',
+          question:'Find the $x$-coordinate of the vertex of $y = x^2 - 4x + 1$. $x = \\dots$', questionEn:'Cari koordinat-$x$ titik puncak dari $y = x^2 - 4x + 1$. $x = \\dots$',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>$x = -\\dfrac{b}{2a} = -\\dfrac{-4}{2(1)} = 2$. <span class="tr">Gunakan rumus $x = -\\dfrac{b}{2a}$.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Order Sketching Steps', pageTitleEn:'Urutkan Langkah Sketsa', taskType:'sorting',
+          question:'Order the steps to sketch $y = x^2 - 2x - 3$.', questionEn:'Urutkan langkah membuat sketsa $y = x^2 - 2x - 3$.',
+          items:['Find $y$-intercept by setting $x=0$: $(0, -3)$ <span class="tr">Cari perpotongan-$y$</span>','Find $x$-intercepts by factoring: $(3,0)$ and $(-1,0)$ <span class="tr">Cari perpotongan-$x$</span>','Calculate vertex using $x = -b/2a$: $(1, -4)$ <span class="tr">Hitung titik puncak</span>','Draw smooth U-shaped curve through all points <span class="tr">Gambar kurva halus melalui semua titik</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Standard procedure for sketching quadratics: intercepts first, then vertex, then draw. <span class="tr">Prosedur standar: perpotongan dulu, lalu titik puncak, lalu gambar.</span></p>`
+        }
+      ]
+    },
+    e: {
+      title: 'Guided Practice', titleEn: 'Guided Practice', time: '00:30 - 00:45',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Sketching Cubic & Reciprocal Functions', pageTitleEn:'Membuat Sketsa Fungsi Kubik dan Resiprokal',
+          body:`<p>In Pure Mathematics 1, you need to know the basic shapes of cubic functions $y = ax^3 + bx^2 + cx + d$ and reciprocal functions $y = \\dfrac{a}{x}$. <span class="tr">Di Pure Mathematics 1, Anda perlu mengetahui bentuk dasar fungsi kubik dan fungsi resiprokal.</span></p>
+          <div class="illustration"><svg width="280" height="150" viewBox="0 0 280 150"><line x1="20" y1="75" x2="260" y2="75" stroke="#333" stroke-width="1"/><line x1="140" y1="20" x2="140" y2="130" stroke="#333" stroke-width="1"/><path d="M40 120 Q 140 -20 240 120" fill="none" stroke="#2563eb" stroke-width="2"/><text x="180" y="60" font-size="12">y = x³ (Cubic)</text></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Basic cubic shape <span class="tr">Bentuk kubik dasar</span></div></div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Sketch $y = \\dfrac{1}{x}$. <span class="tr">Buat sketsa $y = \\dfrac{1}{x}$.</span>
+          <p>Asymptotes are lines the curve approaches but never touches. Here, $x=0$ and $y=0$ are asymptotes. The curve exists in Quadrants I and III.</p></div>`
+        },
+        { type:'task', pageTitle:'T1: Shape of Cubic', pageTitleEn:'Bentuk Kubik', taskType:'radio',
+          question:'What is the general shape of the curve $y = -x^3 + 2$?', questionEn:'Apa bentuk umum dari kurva $y = -x^3 + 2$?',
+          options:[{text:'Starts top-left, goes down to bottom-right (Negative cubic) <span class="tr">Dari kiri atas, turun ke kanan bawah</span>', correct:true},{text:'Starts bottom-left, goes up to top-right (Positive cubic) <span class="tr">Dari kiri bawah, naik ke kanan atas</span>', correct:false},{text:'A straight line <span class="tr">Garis lurus</span>', correct:false},{text:'A U-shaped parabola <span class="tr">Parabola bentuk U</span>', correct:false}],
+          explanation:`<p>Since the coefficient of $x^3$ is negative ($-1$), the curve generally falls from left to right. <span class="tr">Karena koefisien $x^3$ negatif, kurva turun dari kiri ke kanan.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Asymptote of Reciprocal', pageTitleEn:'Asimptot Resiprokal', taskType:'fill',
+          question:'For the curve $y = \\dfrac{2}{x-3} + 4$, what is the equation of the horizontal asymptote? $y = \\dots$', questionEn:'Untuk kurva $y = \\dfrac{2}{x-3} + 4$, apa persamaan asimptot horizontalnya? $y = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>The horizontal asymptote occurs when $x \\to \\infty$, making $\\dfrac{2}{x-3} \\to 0$. Thus, $y$ approaches $4$. <span class="tr">Asimptot horizontal terjadi saat nilai $x$ sangat besar, sehingga $y$ mendekati $4$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Match Graph Shapes', pageTitleEn:'Pasangkan Bentuk Grafik', taskType:'pairing',
+          question:'Match the function to its general graph shape.', questionEn:'Pasangkan fungsi dengan bentuk grafiknya secara umum.',
+          pairs:[{left:'$y = x^2 - 4$', right:'Parabola (U-shaped)'},{left:'$y = \\dfrac{1}{x}$', right:'Hyperbola (Quadrants I & III)'},{left:'$y = -x^3$', right:'Falls left to right'},{left:'$y = 3x + 1$', right:'Straight line'}],
+          explanation:`<p>Recall the basic curve families: linear, quadratic, cubic, and reciprocal. <span class="tr">Ingat keluarga kurva dasar: linear, kuadrat, kubik, dan resiprokal.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Transformations of Graphs', pageTitleEn:'Transformasi Grafik',
+          body:`<p>We can shift or stretch graphs. If $y = f(x)$ is the original graph: <span class="tr">Kita bisa menggeser atau meregangkan grafik. Jika $y = f(x)$ adalah grafik asli:</span></p>
+          <div class="math-block"><ul><li><strong>Translation up/down:</strong> $y = f(x) + c$ (Shifts up by $c$ units) <span class="tr">Geser vertikal</span></li><li><strong>Translation left/right:</strong> $y = f(x - c)$ (Shifts right by $c$ units) <span class="tr">Geser horizontal</span></li><li><strong>Reflection:</strong> $y = -f(x)$ (Flips across $x$-axis) <span class="tr">Refleksi</span></li><li><strong>Stretch:</strong> $y = a \\cdot f(x)$ (Stretches vertically by factor $a$) <span class="tr">Regangan</span></li></ul></div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>The graph of $y = x^2$ has vertex $(0,0)$. The graph of $y = (x-2)^2 + 3$ is shifted right by $2$ and up by $3$. New vertex is $(2, 3)$. <span class="tr">Grafik $y = (x-2)^2 + 3$ bergeser kanan 2 dan naik 3. Titik puncak baru $(2, 3)$.</span></div>`
+        },
+        { type:'task', pageTitle:'T4: Identify Translation', pageTitleEn:'Identifikasi Translasi', taskType:'radio',
+          question:'How is the graph $y = f(x) + 5$ transformed from $y = f(x)$?', questionEn:'Bagaimana grafik $y = f(x) + 5$ ditransformasi dari $y = f(x)$?',
+          options:[{text:'Shifted up by 5 <span class="tr">Naik 5 unit</span>', correct:true},{text:'Shifted down by 5 <span class="tr">Turun 5 unit</span>', correct:false},{text:'Shifted right by 5 <span class="tr">Ke kanan 5 unit</span>', correct:false},{text:'Shifted left by 5 <span class="tr">Ke kiri 5 unit</span>', correct:false}],
+          explanation:`<p>Adding a constant outside the function shifts it vertically. <span class="tr">Menambah konstanta di luar fungsi menggesernya secara vertikal.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Identify Reflection', pageTitleEn:'Identifikasi Refleksi', taskType:'truefalse',
+          question:'True or false: The graph $y = -f(x)$ is a reflection of $y = f(x)$ across the $y$-axis.', questionEn:'Benar atau salah: Grafik $y = -f(x)$ adalah refleksi dari $y = f(x)$ terhadap sumbu-$y$.',
+          correctAnswer:'false',
+          explanation:`<p>$y = -f(x)$ is a reflection across the $x$-axis (flips vertically). Reflection across the $y$-axis is $y = f(-x)$. <span class="tr">$y = -f(x)$ adalah refleksi terhadap sumbu-$x$ (flip vertikal).</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Match Transformations', pageTitleEn:'Pasangkan Transformasi', taskType:'pairing',
+          question:'Match the transformed equation to its effect on $y = f(x)$.', questionEn:'Pasangkan persamaan tertransformasi dengan efeknya pada $y = f(x)$.',
+          pairs:[{left:'$y = f(x - 2)$', right:'Shift right 2'},{left:'$y = f(x) - 2$', right:'Shift down 2'},{left:'$y = -f(x)$', right:'Reflect across $x$-axis'},{left:'$y = f(-x)$', right:'Reflect across $y$-axis'}],
+          explanation:`<p>Inside the bracket affects $x$ (horizontal, reversed sign). Outside affects $y$ (vertical, normal sign). <span class="tr">Di dalam kurung memengaruhi $x$ (horizontal). Di luar memengaruhi $y$ (vertikal).</span></p>`
+        },
+        { type:'task', pageTitle:'T7: New Vertex', pageTitleEn:'Titik Puncak Baru', taskType:'fill',
+          question:'If $y = x^2$ has vertex $(0,0)$, what is the $x$-coordinate of the vertex of $y = (x - 4)^2 + 1$? $x = \\dots$', questionEn:'Jika $y = x^2$ memiliki titik puncak $(0,0)$, berapa koordinat-$x$ titik puncak dari $y = (x - 4)^2 + 1$? $x = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>Setting $x - 4 = 0$ gives $x = 4$. The graph shifted right by $4$. <span class="tr">Saat $x - 4 = 0$, maka $x = 4$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Intersection of Line and Curve', pageTitleEn:'Perpotongan Garis dan Kurva',
+          body:`<p>To find where a line and a curve intersect, set their $y$-values equal and solve for $x$. This often leads to a quadratic equation. <span class="tr">Untuk mencari titik potong garis dan kurva, samakan nilai $y$-nya dan selesaikan untuk $x$. Ini sering menghasilkan persamaan kuadrat.</span></p>
+          <div class="math-block">$y_{line} = y_{curve} \\Rightarrow mx + c = ax^2 + bx + d$</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Find intersection of $y = x + 2$ and $y = x^2$. <span class="tr">Cari titik potong $y = x + 2$ dan $y = x^2$.</span>
+          <ol><li>Set equal: $x^2 = x + 2$.</li><li>Rearrange to zero: $x^2 - x - 2 = 0$.</li><li>Factor: $(x - 2)(x + 1) = 0$.</li><li>Roots: $x = 2, x = -1$.</li><li>Find $y$: Substitute back into $y = x + 2$. Points are $(2, 4)$ and $(-1, 1)$.</li></ol></div>`
+        },
+        { type:'task', pageTitle:'T8: Form Quadratic Equation', pageTitleEn:'Susun Persamaan Kuadrat', taskType:'fill',
+          question:'To find the intersection of $y = 2x - 1$ and $y = x^2 - 4x + 1$, rearrange to form a quadratic equation $ax^2 + bx + c = 0$. What is $b$? $b = \\dots$', questionEn:'Untuk mencari perpotongan $y = 2x - 1$ dan $y = x^2 - 4x + 1$, susun ulang menjadi persamaan kuadrat $ax^2 + bx + c = 0$. Berapa nilai $b$? $b = \\dots$',
+          correctAnswer:'-6', acceptableAnswers:['-6'],
+          explanation:`<p>Set equal: $2x - 1 = x^2 - 4x + 1$. Rearrange to $0$: $x^2 - 4x - 2x + 1 + 1 = 0 \\Rightarrow x^2 - 6x + 2 = 0$. Thus, $b = -6$. <span class="tr">Pindahkan ruas: $x^2 - 6x + 2 = 0$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Number of Intersections', pageTitleEn:'Jumlah Perpotongan', taskType:'radio',
+          question:'If solving the intersection of a line and a parabola yields a discriminant $\\Delta < 0$ (negative), what does it mean?', questionEn:'Jika menyelesaikan perpotongan garis dan parabola menghasilkan diskriminan $\\Delta < 0$ (negatif), apa artinya?',
+          options:[{text:'The line intersects the curve at two distinct points. <span class="tr">Garis memotong kurva di dua titik berbeda.</span>', correct:false},{text:'The line is tangent to the curve (touches once). <span class="tr">Garis menyinggung kurva (satu titik).</span>', correct:false},{text:'The line does not intersect the curve. <span class="tr">Garis tidak memotong kurva.</span>', correct:true},{text:'The line is vertical. <span class="tr">Garis vertikal.</span>', correct:false}],
+          explanation:`<p>A negative discriminant means no real roots exist, so the graphs never touch. <span class="tr">Diskriminan negatif berarti tidak ada akar real, grafik tidak bersentuhan.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Order Intersection Steps', pageTitleEn:'Urutkan Langkah Perpotongan', taskType:'sorting',
+          question:'Order the steps to find the intersection points of $y = x$ and $y = x^2 - 2$.', questionEn:'Urutkan langkah mencari titik potong $y = x$ dan $y = x^2 - 2$.',
+          items:['Set equations equal: $x = x^2 - 2$ <span class="tr">Samakan persamaan</span>','Rearrange to zero: $x^2 - x - 2 = 0$ <span class="tr">Pindahkan ke nol</span>','Factor and solve for $x$: $(x-2)(x+1)=0 \\Rightarrow x=2, x=-1$ <span class="tr">Faktor dan cari $x$</span>','Substitute $x$ values into the linear equation $y=x$ to find $y$ <span class="tr">Substitusi $x$ ke persamaan linear</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Standard algebraic procedure for finding intersections. <span class="tr">Prosedur aljabar standar untuk mencari perpotongan.</span></p>`
+        }
+      ]
+    },
+    f: {
+      title: 'Independent Practice', titleEn: 'Independent Practice', time: '00:45 - 00:55',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Plotting Points and Drawing Curves', pageTitleEn:'Memplot Titik dan Menggambar Kurva',
+          body:`<p>Sometimes you must plot a curve by calculating a table of values. Choose $x$ values that reveal the curve's key behaviors (intercepts, turning points). <span class="tr">Terkadang Anda harus memplot kurva dengan menghitung tabel nilai. Pilih nilai $x$ yang mengungkapkan perilaku kunci kurva.</span></p>
+          <div class="math-block">For $y = x^2 - 3x$, pick $x$ from $-1$ to $4$ to capture the turning point and roots.</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Calculate points for $y = x^2 - 3x$ for $x = 0, 1, 2, 3$. <span class="tr">Hitung titik untuk $y = x^2 - 3x$.</span>
+          <p>For $x=0, y=0$. For $x=1, y=-2$. For $x=2, y=-2$. For $x=3, y=0$. Plot these points and draw a smooth parabola.</p></div>`
+        },
+        { type:'task', pageTitle:'T1: Calculate Table Value', pageTitleEn:'Hitung Nilai Tabel', taskType:'fill',
+          question:'For the curve $y = 2x^2 - 4x + 1$, what is the value of $y$ when $x = 2$? $y = \\dots$', questionEn:'Untuk kurva $y = 2x^2 - 4x + 1$, berapa nilai $y$ saat $x = 2$? $y = \\dots$',
+          correctAnswer:'1', acceptableAnswers:['1'],
+          explanation:`<p>Substitute $x=2$: $y = 2(2)^2 - 4(2) + 1 = 2(4) - 8 + 1 = 8 - 8 + 1 = 1$. <span class="tr">Substitusi $x=2$: $2(4) - 8 + 1 = 1$.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Identify Points to Plot', pageTitleEn:'Identifikasi Titik untuk Diplot', taskType:'checkbox',
+          question:'Which of the following $x$-values are good choices to plot for $y = x^2 - 4$ to show its key features?', questionEn:'Nilai $x$ mana yang merupakan pilihan baik untuk diplot pada $y = x^2 - 4$ agar menunjukkan fitur kuncinya?',
+          options:[{text:'$x = -2$ <span class="tr">Menunjukkan akar kiri</span>', correct:true},{text:'$x = 0$ <span class="tr">Menunjukkan perpotongan-y</span>', correct:true},{text:'$x = 2$ <span class="tr">Menunjukkan akar kanan</span>', correct:true},{text:'$x = 1.5$ <span class="tr">Titik acak kurang penting</span>', correct:false}],
+          explanation:`<p>Roots are at $x = \\pm 2$. $y$-intercept is at $x = 0$. These are the most critical points for a sketch. <span class="tr">Akar di $\\pm 2$, perpotongan-y di $0$. Ini titik paling kritis.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Plotting Purpose', pageTitleEn:'Tujuan Memplot', taskType:'truefalse',
+          question:'True or false: When asked to "draw" a graph, a rough sketch without accurate points is sufficient.', questionEn:'Benar atau salah: Saat diminta "menggambar" grafik, sketsa kasar tanpa titik akurat sudah cukup.',
+          correctAnswer:'false',
+          explanation:`<p>"Drawing" requires accuracy, plotting points to scale. "Sketching" is the rough version. <span class="tr">"Menggambar" butuh akurasi. "Membuat sketsa" versi kasarnya.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Tangents and Gradients', pageTitleEn:'Garis Singgung dan Gradien',
+          body:`<p>A tangent is a straight line that touches a curve at exactly one point. The gradient of the tangent at that point is equal to the gradient of the curve at that point. <span class="tr">Garis singgung adalah garis lurus yang menyentuh kurva di tepat satu titik. Gradien garis singgung sama dengan gradien kurva di titik tersebut.</span></p>
+          <div class="math-block">For $y = x^2$, the gradient at any point $x$ is given by $m = 2x$.</div>
+          <div class="example-box"><h4>Example <span class="tr">Contoh</span></h4>Find the gradient of the tangent to $y = x^2$ at $x = 3$. <span class="tr">Cari gradien garis singgung pada $y = x^2$ saat $x = 3$.</span>
+          <p>$m = 2(3) = 6$. The tangent has a gradient of $6$.</p></div>`
+        },
+        { type:'task', pageTitle:'T4: Find Tangent Gradient', pageTitleEn:'Cari Gradien Singgung', taskType:'fill',
+          question:'For the curve $y = 3x^2$, the gradient formula is $m = 6x$. What is the gradient of the tangent at $x = 2$? $m = \\dots$', questionEn:'Untuk kurva $y = 3x^2$, rumus gradiennya adalah $m = 6x$. Berapa gradien garis singgung saat $x = 2$? $m = \\dots$',
+          correctAnswer:'12', acceptableAnswers:['12'],
+          explanation:`<p>Substitute $x=2$ into the gradient formula: $m = 6(2) = 12$. <span class="tr">Substitusi $x=2$ ke rumus gradien: $m = 6(2) = 12$.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Equation of Tangent', pageTitleEn:'Persamaan Garis Singgung', taskType:'radio',
+          question:'A tangent to $y = x^2$ at $x = -1$ has a gradient of $-2$. What is its equation?', questionEn:'Garis singgung pada $y = x^2$ saat $x = -1$ memiliki gradien $-2$. Berapa persamaannya?',
+          options:[{text:'$y = -2x - 1$', correct:true},{text:'$y = -2x + 1$', correct:false},{text:'$y = 2x - 1$', correct:false},{text:'$y = -x - 2$', correct:false}],
+          explanation:`<p>Find $y$-coordinate on curve at $x=-1$: $y = (-1)^2 = 1$. Point is $(-1, 1)$. Use $y - y_1 = m(x - x_1) \\Rightarrow y - 1 = -2(x - (-1)) \\Rightarrow y - 1 = -2x - 2 \\Rightarrow y = -2x - 1$. <span class="tr">Cari titik dulu $(-1, 1)$, lalu substitusi ke rumus gradien-titik.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Match Curve to Gradient', pageTitleEn:'Pasangkan Kurva ke Gradien', taskType:'pairing',
+          question:'Match the curve equation to the gradient formula of its tangent.', questionEn:'Pasangkan persamaan kurva dengan rumus gradien garis singgungnya.',
+          pairs:[{left:'$y = x^2$', right:'$m = 2x$'},{left:'$y = x^3$', right:'$m = 3x^2$'},{left:'$y = 2x^2$', right:'$m = 4x$'},{left:'$y = 5$', right:'$m = 0$'}],
+          explanation:`<p>For polynomials, multiply by power and reduce power by 1. For a constant, gradient is $0$. <span class="tr">Untuk polinomial, kali pangkat turunkan pangkat 1. Untuk konstanta, gradien $0$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Real-World Curve Sketching', pageTitleEn:'Membuat Sketsa Kurva Dunia Nyata',
+          body:`<p>Suppose a ball is thrown. Its height $h$ (meters) after time $t$ (seconds) is given by $h = -5t^2 + 10t$. This is a parabola opening downwards. <span class="tr">Misalkan bola dilempar. Ketinggiannya $h$ setelah waktu $t$ adalah $h = -5t^2 + 10t$. Ini parabola terbuka ke bawah.</span></p>
+          <div class="math-block">Max height occurs at vertex $t = -\\dfrac{b}{2a} = -\\dfrac{10}{2(-5)} = 1$ second. Max height $h = -5(1)^2 + 10(1) = 5$ meters.</div>
+          <div class="tip-box"><h4>Insight <span class="tr">Wawasan</span></h4>Sketching this curve helps visualize when the ball hits the ground ($h=0$) and its peak. <span class="tr">Membuat sketsa kurva ini membantu memvisualisasikan kapan bola menyentuh tanah dan puncaknya.</span></div>`
+        },
+        { type:'task', pageTitle:'T7: Find Maximum Height', pageTitleEn:'Cari Ketinggian Maksimum', taskType:'fill',
+          question:'For $h = -5t^2 + 10t$, what is the maximum height reached? $h_{max} = \\dots$ meters.', questionEn:'Untuk $h = -5t^2 + 10t$, berapa ketinggian maksimum yang dicapai? $h_{max} = \\dots$ meter.',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Vertex occurs at $t=1$. Substitute $t=1$: $h = -5(1)^2 + 10(1) = 5$. <span class="tr">Substitusi $t=1$: $h = 5$ meter.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Time to Hit Ground', pageTitleEn:'Waktu Menyentuh Tanah', taskType:'radio',
+          question:'When does the ball hit the ground? (Set $h = 0$ and solve for $t$)', questionEn:'Kapan bola menyentuh tanah? (Set $h = 0$ dan cari $t$)',
+          options:[{text:'$t = 0$ seconds <span class="tr">Detik</span>', correct:false},{text:'$t = 2$ seconds <span class="tr">Detik</span>', correct:true},{text:'$t = 5$ seconds <span class="tr">Detik</span>', correct:false},{text:'$t = 10$ seconds <span class="tr">Detik</span>', correct:false}],
+          explanation:`<p>$-5t^2 + 10t = 0 \\Rightarrow -5t(t - 2) = 0$. Roots are $t = 0$ (start) and $t = 2$ (hits ground). So $t=2$ seconds. <span class="tr">Akar adalah $t=0$ dan $t=2$. Jadi menyentuh tanah di $t=2$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Sketch the Path', pageTitleEn:'Buat Sketsa Jalur', taskType:'truefalse',
+          question:'True or false: The sketch of the ball\'s height over time is a parabola that opens downwards.', questionEn:'Benar atau salah: Sketsa ketinggian bola dari waktu adalah parabola yang terbuka ke bawah.',
+          correctAnswer:'true',
+          explanation:`<p>Since the coefficient of $t^2$ is $-5$ (negative), the parabola has a maximum point and opens downwards. <span class="tr">Karena koefisien $t^2$ negatif, parabola membuka ke bawah.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Order Modeling Steps', pageTitleEn:'Urutkan Langkah Pemodelan', taskType:'sorting',
+          question:'Order the steps to model and sketch the path of a projectile.', questionEn:'Urutkan langkah memodelkan dan membuat sketsa jalur proyektil.',
+          items:['Identify the quadratic equation for height vs time <span class="tr">Identifikasi persamaan kuadrat</span>','Find the time of max height using vertex formula $t = -b/2a$ <span class="tr">Cari waktu ketinggian maks</span>','Find the time when it hits the ground by setting $h=0$ <span class="tr">Cari waktu menyentuh tanah</span>','Sketch the parabola with these key points <span class="tr">Buat sketsa parabola</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Standard procedure for solving real-world quadratic problems. <span class="tr">Prosedur standar menyelesaikan masalah kuadrat dunia nyata.</span></p>`
+        }
+      ]
+    },
+    g: {
+      title: 'Consolidation & Reflection', titleEn: 'Consolidation & Reflection', time: '00:55 - 01:00',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Key Takeaways', pageTitleEn:'Poin Penting',
+          body:`<div class="illustration"><svg width="240" height="80" viewBox="0 0 240 80"><circle cx="40" cy="40" r="28" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="40" y="48" text-anchor="middle" font-size="22" fill="#2563eb">△</text><text x="85" y="35" font-size="13" fill="#1e40af" font-weight="bold">Graphs & Curves</text><text x="85" y="52" font-size="10" fill="#64748b">Plot, Sketch, Draw</text></svg><div style="font-size:.82em;color:var(--muted);margin-top:4px">Graphical Representation <span class="tr">Representasi Grafik</span></div></div>
+          <p>Today we explored plotting, sketching, and drawing. Key points: <span class="tr">Hari ini kita mengeksplorasi memplot, membuat sketsa, dan menggambar. Poin penting:</span></p>
+          <div class="math-block"><ol><li><strong>Lines:</strong> Use $y = mx + c$. Find intercepts to sketch. <span class="tr">Garis: Cari perpotongan untuk sketsa.</span></li><li><strong>Parabolas:</strong> $y = ax^2 + bx + c$. Find vertex ($x = -b/2a$) and roots. <span class="tr">Parabola: Cari titik puncak dan akar.</span></li><li><strong>Transformations:</strong> $y = f(x - h) + k$ shifts the graph. <span class="tr">Transformasi: Menggeser grafik.</span></li><li><strong>Intersections:</strong> Set equations equal, solve for $x$. <span class="tr">Perpotongan: Samakan persamaan.</span></li></ol></div>`
+        },
+        { type:'task', pageTitle:'T1: Reflection Question', pageTitleEn:'Pertanyaan Refleksi', taskType:'truefalse',
+          question:'True or false: I understand the difference between sketching (general shape) and drawing (accurate to scale).', questionEn:'Benar atau salah: Saya mengerti perbedaan antara membuat sketsa (bentuk umum) dan menggambar (akurat sesuai skala).',
+          correctAnswer:'true',
+          explanation:`<p>Excellent! Recognizing the requirement of the question ("Sketch" vs "Draw") is crucial in exams. <span class="tr">Luar biasa! Mengenali syarat soal ("Sketsa" vs "Gambar") sangat penting dalam ujian.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Exit Ticket', pageTitleEn:'Exit Ticket', taskType:'fill',
+          question:'Find the $y$-intercept of the curve $y = x^2 - 5x + 4$. $c = \\dots$', questionEn:'Cari perpotongan-$y$ kurva $y = x^2 - 5x + 4$. $c = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>Set $x=0$. $y = 0^2 - 5(0) + 4 = 4$. <span class="tr">Set $x=0$, maka $y = 4$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Follow-up Practice', pageTitleEn:'Latihan Lanjutan',
+          body:`<p>Additional practice is available in <strong>Sections H–L (Tasks 1–5)</strong>. Each section contains 10 questions of various types. <span class="tr">Latihan tambahan tersedia di Bagian H–L. Setiap bagian berisi 10 soal dengan berbagai tipe.</span></p>
+          <div class="math-block"><ul><li><strong>Task 1 (H):</strong> Plotting & Intercepts <span class="tr">Memplot & Perpotongan</span></li><li><strong>Task 2 (I):</strong> Sketching Lines & Parabolas <span class="tr">Sketsa Garis & Parabola</span></li><li><strong>Task 3 (J):</strong> Transformations of Graphs <span class="tr">Transformasi Grafik</span></li><li><strong>Task 4 (K):</strong> Tangents & Intersections <span class="tr">Garis Singgung & Perpotongan</span></li><li><strong>Task 5 (L):</strong> Exam-style Mixed Questions <span class="tr">Soal Campuran Tipe Ujian</span></li></ul></div>`
+        }
+      ]
+    },
+    h: {
+      title: 'Task 1', titleEn: 'Task 1', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Find y-intercept', pageTitleEn:'Cari Perpotongan-y', taskType:'fill',
+          question:'What is the $y$-intercept of the line $y = 4x - 7$? $c = \\dots$', questionEn:'Berapa perpotongan-$y$ dari garis $y = 4x - 7$? $c = \\dots$',
+          correctAnswer:'-7', acceptableAnswers:['-7'],
+          explanation:`<p>In $y = mx + c$, $c$ is the $y$-intercept. Here $c = -7$. <span class="tr">Pada $y = mx + c$, $c$ adalah perpotongan-$y$.</span></p>`},
+        { type:'task', pageTitle:'T2: Find x-intercept', pageTitleEn:'Cari Perpotongan-x', taskType:'fill',
+          question:'Find the $x$-intercept of $y = 2x - 8$. $x = \\dots$', questionEn:'Cari perpotongan-$x$ dari $y = 2x - 8$. $x = \\dots$',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>Set $y=0$: $2x - 8 = 0 \\Rightarrow 2x = 8 \\Rightarrow x = 4$. <span class="tr">Set $y=0$, maka $x=4$.</span></p>`},
+        { type:'task', pageTitle:'T3: Plotting Coordinates', pageTitleEn:'Memplot Koordinat', taskType:'radio',
+          question:'Which point lies in the second quadrant (negative $x$, positive $y$)?', questionEn:'Titik mana yang terletak di kuadran kedua ($x$ negatif, $y$ positif)?',
+          options:[{text:'$(-3, 5)$', correct:true},{text:'$(4, -2)$', correct:false},{text:'$(-1, -4)$', correct:false},{text:'$(2, 6)$', correct:false}],
+          explanation:`<p>Quadrant II has $x < 0$ and $y > 0$. <span class="tr">Kuadran II memiliki $x < 0$ dan $y > 0$.</span></p>`},
+        { type:'task', pageTitle:'T4: Distance Calculation', pageTitleEn:'Perhitungan Jarak', taskType:'fill',
+          question:'Find the distance between $A(0,0)$ and $B(9, 12)$. $d = \\dots$', questionEn:'Cari jarak antara $A(0,0)$ dan $B(9, 12)$. $d = \\dots$',
+          correctAnswer:'15', acceptableAnswers:['15'],
+          explanation:`<p>$d = \\sqrt{9^2 + 12^2} = \\sqrt{81 + 144} = \\sqrt{225} = 15$. <span class="tr">$\\sqrt{81 + 144} = 15$.</span></p>`},
+        { type:'task', pageTitle:'T5: Match Intercepts', pageTitleEn:'Pasangkan Perpotongan', taskType:'pairing',
+          question:'Match the equation to its $y$-intercept.', questionEn:'Pasangkan persamaan dengan perpotongan-$y$-nya.',
+          pairs:[{left:'$y = 3x + 2$', right:'$(0, 2)$'},{left:'$y = -x - 4$', right:'$(0, -4)$'},{left:'$y = \\dfrac{1}{2}x$', right:'$(0, 0)$'},{left:'$y = 5$', right:'$(0, 5)$'}],
+          explanation:`<p>Set $x=0$ to find the $y$-intercept. <span class="tr">Set $x=0$ untuk mencari perpotongan-$y$.</span></p>`},
+        { type:'task', pageTitle:'T6: Midpoint of Line', pageTitleEn:'Titik Tengah Garis', taskType:'radio',
+          question:'What is the midpoint of $A(-2, 4)$ and $B(6, 8)$?', questionEn:'Berapa titik tengah dari $A(-2, 4)$ dan $B(6, 8)$?',
+          options:[{text:'$(2, 6)$', correct:true},{text:'$(4, 12)$', correct:false},{text:'$(8, 4)$', correct:false},{text:'$(2, 2)$', correct:false}],
+          explanation:`<p>$x_m = \\dfrac{-2+6}{2} = 2$. $y_m = \\dfrac{4+8}{2} = 6$. Midpoint is $(2, 6)$. <span class="tr">Rata-rata dari $x$ dan $y$.</span></p>`},
+        { type:'task', pageTitle:'T7: Gradient from Points', pageTitleEn:'Gradien dari Titik', taskType:'fill',
+          question:'Find the gradient of the line passing through $(2, 5)$ and $(4, 11)$. $m = \\dots$', questionEn:'Cari gradien garis yang melalui $(2, 5)$ dan $(4, 11)$. $m = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$m = \\dfrac{11 - 5}{4 - 2} = \\dfrac{6}{2} = 3$. <span class="tr">$m = \\dfrac{11 - 5}{4 - 2} = 3$.</span></p>`},
+        { type:'task', pageTitle:'T8: Equation of Line', pageTitleEn:'Persamaan Garis', taskType:'radio',
+          question:'A line has gradient $-2$ and passes through $(0, 5)$. What is its equation?', questionEn:'Garis memiliki gradien $-2$ dan melalui $(0, 5)$. Berapa persamaannya?',
+          options:[{text:'$y = -2x + 5$', correct:true},{text:'$y = 2x - 5$', correct:false},{text:'$y = -5x + 2$', correct:false},{text:'$y = -2x - 5$', correct:false}],
+          explanation:`<p>Substitute $m = -2$ and $c = 5$ into $y = mx + c$. <span class="tr">Substitusi $m=-2$ dan $c=5$.</span></p>`},
+        { type:'task', pageTitle:'T9: Parallel Lines', pageTitleEn:'Garis Sejajar', taskType:'truefalse',
+          question:'True or false: The line $y = 3x + 1$ is parallel to $2y = 6x - 4$.', questionEn:'Benar atau salah: Garis $y = 3x + 1$ sejajar dengan $2y = 6x - 4$.',
+          correctAnswer:'true',
+          explanation:`<p>Divide the second equation by $2$: $y = 3x - 2$. Both have gradient $m = 3$, so they are parallel. <span class="tr">Keduanya memiliki gradien $m=3$, jadi sejajar.</span></p>`},
+        { type:'task', pageTitle:'T10: Order Plotting Steps', pageTitleEn:'Urutkan Langkah Memplot', taskType:'sorting',
+          question:'Order the steps to plot the point $(-3, 4)$.', questionEn:'Urutkan langkah memplot titik $(-3, 4)$.',
+          items:['Start at the origin $(0,0)$ <span class="tr">Mulai di origin</span>','Move 3 units left along the $x$-axis <span class="tr">Geser 3 unit kiri</span>','Move 4 units up parallel to the $y$-axis <span class="tr">Geser 4 unit ke atas</span>','Mark the point <span class="tr">Tandai titik</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Follow standard Cartesian plotting rules. <span class="tr">Ikuti aturan memplot kartesius standar.</span></p>`}
+      ]
+    },
+    i: {
+      title: 'Task 2', titleEn: 'Task 2', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Shape of Parabola', pageTitleEn:'Bentuk Parabola', taskType:'radio',
+          question:'What is the shape of the graph $y = -2x^2 + 5x - 3$?', questionEn:'Bagaimana bentuk grafik $y = -2x^2 + 5x - 3$?',
+          options:[{text:'U-shaped (Opens up) <span class="tr">Bentuk U (Terbuka ke atas)</span>', correct:false},{text:'n-shaped (Opens down) <span class="tr">Bentuk n (Terbuka ke bawah)</span>', correct:true},{text:'Straight line <span class="tr">Garis lurus</span>', correct:false},{text:'Cubic curve <span class="tr">Kurva kubik</span>', correct:false}],
+          explanation:`<p>Since $a = -2$ (negative), the parabola opens downwards. <span class="tr">Karena $a$ negatif, parabola terbuka ke bawah.</span></p>`},
+        { type:'task', pageTitle:'T2: Find Vertex', pageTitleEn:'Cari Titik Puncak', taskType:'fill',
+          question:'Find the $x$-coordinate of the vertex of $y = x^2 - 6x + 4$. $x = \\dots$', questionEn:'Cari koordinat-$x$ titik puncak dari $y = x^2 - 6x + 4$. $x = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$x = -\\dfrac{b}{2a} = -\\dfrac{-6}{2(1)} = 3$. <span class="tr">$x = -\\dfrac{b}{2a}$.</span></p>`},
+        { type:'task', pageTitle:'T3: Find Roots', pageTitleEn:'Cari Akar', taskType:'checkbox',
+          question:'Select all correct $x$-intercepts for $y = x^2 - 2x - 8$.', questionEn:'Pilih semua perpotongan-$x$ yang benar untuk $y = x^2 - 2x - 8$.',
+          options:[{text:'$x = 4$', correct:true},{text:'$x = -2$', correct:true},{text:'$x = 2$', correct:false},{text:'$x = -4$', correct:false}],
+          explanation:`<p>Factor: $(x - 4)(x + 2) = 0$. Roots are $4$ and $-2$. <span class="tr">Faktor: $(x-4)(x+2)=0$.</span></p>`},
+        { type:'task', pageTitle:'T4: y-intercept of Curve', pageTitleEn:'Perpotongan-y Kurva', taskType:'fill',
+          question:'What is the $y$-intercept of $y = 3x^2 - 5x + 7$? $c = \\dots$', questionEn:'Berapa perpotongan-$y$ dari $y = 3x^2 - 5x + 7$? $c = \\dots$',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>Set $x=0$. $y = 0 - 0 + 7 = 7$. <span class="tr">Set $x=0$, maka $y = 7$.</span></p>`},
+        { type:'task', pageTitle:'T5: Match Curve Features', pageTitleEn:'Pasangkan Fitur Kurva', taskType:'pairing',
+          question:'Match the curve equation to its $y$-intercept.', questionEn:'Pasangkan persamaan kurva dengan perpotongan-$y$-nya.',
+          pairs:[{left:'$y = x^2 - 4x + 1$', right:'$(0, 1)$'},{left:'$y = 2x^2 + 3x - 5$', right:'$(0, -5)$'},{left:'$y = -x^2 + 2x$', right:'$(0, 0)$'},{left:'$y = \\dfrac{1}{2}x^2 - 4$', right:'$(0, -4)$'}],
+          explanation:`<p>Set $x=0$ to find the $y$-intercept (the constant term). <span class="tr">Set $x=0$ untuk mencari konstanta.</span></p>`},
+        { type:'task', pageTitle:'T6: Sketching Line', pageTitleEn:'Membuat Sketsa Garis', taskType:'radio',
+          question:'To sketch the line $3y - 6x = 12$, what are the easiest two points to find?', questionEn:'Untuk membuat sketsa garis $3y - 6x = 12$, apa dua titik termudah untuk dicari?',
+          options:[{text:'The two $x$-intercepts <span class="tr">Dua perpotongan-$x$</span>', correct:false},{text:'The $x$-intercept and $y$-intercept <span class="tr">Perpotongan-$x$ dan perpotongan-$y$</span>', correct:true},{text:'The vertex and origin <span class="tr">Titik puncak dan origin</span>', correct:false},{text:'Random points <span class="tr">Titik acak</span>', correct:false}],
+          explanation:`<p>Setting $x=0$ gives $y$-intercept, and setting $y=0$ gives $x$-intercept. These define the line. <span class="tr">Set $x=0$ dan $y=0$ untuk mendapat perpotongan.</span></p>`},
+        { type:'task', pageTitle:'T7: Minimum Value', pageTitleEn:'Nilai Minimum', taskType:'fill',
+          question:'For $y = (x - 3)^2 - 5$, what is the minimum $y$-value of this curve? $y_{min} = \\dots$', questionEn:'Untuk $y = (x - 3)^2 - 5$, berapa nilai $y$ minimum dari kurva ini? $y_{min} = \\dots$',
+          correctAnswer:'-5', acceptableAnswers:['-5'],
+          explanation:`<p>Since $(x-3)^2 \\ge 0$, the minimum value occurs when it equals $0$. Then $y = 0 - 5 = -5$. <span class="tr">Nilai minimum terjadi saat kuadrat sama dengan $0$.</span></p>`},
+        { type:'task', pageTitle:'T8: Direction of Parabola', pageTitleEn:'Arah Parabola', taskType:'truefalse',
+          question:'True or false: The curve $y = 4 - x^2$ has a maximum point.', questionEn:'Benar atau salah: Kurva $y = 4 - x^2$ memiliki titik maksimum.',
+          correctAnswer:'true',
+          explanation:`<p>The coefficient of $x^2$ is $-1$ (negative), so it is an n-shaped parabola with a maximum point. <span class="tr">Koefisien $x^2$ negatif, jadi parabola memiliki titik maksimum.</span></p>`},
+        { type:'task', pageTitle:'T9: Order Sketching Parabola', pageTitleEn:'Urutkan Sketsa Parabola', taskType:'sorting',
+          question:'Order the steps to sketch $y = x^2 - 4x + 3$.', questionEn:'Urutkan langkah membuat sketsa $y = x^2 - 4x + 3$.',
+          items:['Find $y$-intercept by setting $x=0$: $(0, 3)$ <span class="tr">Cari perpotongan-$y$</span>','Find $x$-intercepts by setting $y=0$: $(1, 0), (3, 0)$ <span class="tr">Cari perpotongan-$x$</span>','Find vertex using $x = -b/2a$: $(2, -1)$ <span class="tr">Cari titik puncak</span>','Draw a smooth U-shaped curve through points <span class="tr">Gambar kurva halus</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Standard procedure: intercepts, then vertex, then draw. <span class="tr">Prosedur standar.</span></p>`},
+        { type:'task', pageTitle:'T10: Identify Graph', pageTitleEn:'Identifikasi Grafik', taskType:'radio',
+          question:'Which equation matches a graph with roots at $x = 2$ and $x = -3$, and $y$-intercept at $-6$?', questionEn:'Persamaan mana yang cocok dengan grafik berakar di $x = 2$ dan $x = -3$, serta perpotongan-$y$ di $-6$?',
+          options:[{text:'$y = x^2 + x - 6$', correct:true},{text:'$y = x^2 - x - 6$', correct:false},{text:'$y = x^2 + 5x + 6$', correct:false},{text:'$y = 2x^2 + 2x - 12$', correct:false}],
+          explanation:`<p>Roots $2$ and $-3$ mean factors $(x-2)(x+3) = x^2 + x - 6$. Set $x=0$, $y = -6$. It matches perfectly. <span class="tr">Faktor $(x-2)(x+3) = x^2 + x - 6$.</span></p>`}
+      ]
+    },
+    j: {
+      title: 'Task 3', titleEn: 'Task 3', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Translation Up', pageTitleEn:'Translasi ke Atas', taskType:'radio',
+          question:'How does the graph $y = f(x) + 3$ compare to $y = f(x)$?', questionEn:'Bagaimana grafik $y = f(x) + 3$ dibandingkan dengan $y = f(x)$?',
+          options:[{text:'Shifted up by 3 <span class="tr">Naik 3 unit</span>', correct:true},{text:'Shifted down by 3 <span class="tr">Turun 3 unit</span>', correct:false},{text:'Shifted right by 3 <span class="tr">Ke kanan 3 unit</span>', correct:false},{text:'Shifted left by 3 <span class="tr">Ke kiri 3 unit</span>', correct:false}],
+          explanation:`<p>Adding a constant outside the function shifts the graph vertically upwards. <span class="tr">Menambah konstanta di luar fungsi menggeser grafik vertikal ke atas.</span></p>`},
+        { type:'task', pageTitle:'T2: Translation Right', pageTitleEn:'Translasi ke Kanan', taskType:'fill',
+          question:'To shift the graph of $y = x^2$ to the right by 4 units, the new equation is $y = (x - \\dots)^2$.', questionEn:'Untuk menggeser grafik $y = x^2$ ke kanan 4 unit, persamaan baru adalah $y = (x - \\dots)^2$.',
+          correctAnswer:'4', acceptableAnswers:['4'],
+          explanation:`<p>Replacing $x$ with $(x - c)$ shifts the graph right by $c$ units. <span class="tr">Mengganti $x$ dengan $(x - c)$ menggeser grafik ke kanan $c$ unit.</span></p>`},
+        { type:'task', pageTitle:'T3: Reflection', pageTitleEn:'Refleksi', taskType:'truefalse',
+          question:'True or false: The graph $y = -f(x)$ is a reflection of $y = f(x)$ across the $x$-axis.', questionEn:'Benar atau salah: Grafik $y = -f(x)$ adalah refleksi dari $y = f(x)$ terhadap sumbu-$x$.',
+          correctAnswer:'true',
+          explanation:`<p>Negating the entire $y$-value flips the graph vertically across the $x$-axis. <span class="tr">Membalik seluruh nilai $y$ akan membalik grafik vertikal terhadap sumbu-$x$.</span></p>`},
+        { type:'task', pageTitle:'T4: Stretch Factor', pageTitleEn:'Faktor Regangan', taskType:'checkbox',
+          question:'Select all correct statements about the graph $y = 3f(x)$ compared to $y = f(x)$.', questionEn:'Pilih semua pernyataan yang benar tentang grafik $y = 3f(x)$ dibandingkan dengan $y = f(x)$.',
+          options:[{text:'It is stretched vertically <span class="tr">Diregangkan secara vertikal</span>', correct:true},{text:'The $y$-values are multiplied by 3 <span class="tr">Nilai-$y$ dikali 3</span>', correct:true},{text:'The $x$-intercepts change <span class="tr">Perpotongan-$x$ berubah</span>', correct:false},{text:'It is a reflection <span class="tr">Ini adalah refleksi</span>', correct:false}],
+          explanation:`<p>Multiplying the function by 3 stretches it vertically. The $x$-intercepts remain the same because $y=0$ multiplied by 3 is still $0$. <span class="tr">Mengali fungsi dengan 3 meregangkannya vertikal. Perpotongan-$x$ tetap.</span></p>`},
+        { type:'task', pageTitle:'T5: Match Transformations', pageTitleEn:'Pasangkan Transformasi', taskType:'pairing',
+          question:'Match the transformed equation to its description relative to $y = f(x)$.', questionEn:'Pasangkan persamaan tertransformasi dengan deskripsinya relatif terhadap $y = f(x)$.',
+          pairs:[{left:'$y = f(x) + 2$', right:'Shift up 2'},{left:'$y = f(x - 2)$', right:'Shift right 2'},{left:'$y = -f(x)$', right:'Reflect across $x$-axis'},{left:'$y = 2f(x)$', right:'Vertical stretch by 2'}],
+          explanation:`<p>Outside the bracket affects $y$ (vertical). Inside the bracket affects $x$ (horizontal, reversed). <span class="tr">Di luar kurung memengaruhi $y$. Di dalam kurung memengaruhi $x$.</span></p>`},
+        { type:'task', pageTitle:'T6: New Vertex', pageTitleEn:'Titik Puncak Baru', taskType:'fill',
+          question:'If $y = x^2$ has vertex $(0,0)$, what is the $x$-coordinate of the vertex of $y = (x - 5)^2 + 4$? $x = \\dots$', questionEn:'Jika $y = x^2$ memiliki titik puncak $(0,0)$, berapa koordinat-$x$ titik puncak dari $y = (x - 5)^2 + 4$? $x = \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Setting $x - 5 = 0$ gives $x = 5$. The graph shifted right by $5$. <span class="tr">Saat $x - 5 = 0$, maka $x = 5$.</span></p>`},
+        { type:'task', pageTitle:'T7: Equation of Transformed Graph', pageTitleEn:'Persamaan Grafik Tertransformasi', taskType:'radio',
+          question:'The graph of $y = x^2$ is shifted down by 3 units. What is the new equation?', questionEn:'Grafik $y = x^2$ digeser turun 3 unit. Berapa persamaan barunya?',
+          options:[{text:'$y = x^2 - 3$', correct:true},{text:'$y = (x - 3)^2$', correct:false},{text:'$y = x^2 + 3$', correct:false},{text:'$y = -x^2 + 3$', correct:false}],
+          explanation:`<p>Shifting down by 3 means subtracting 3 from the entire function: $y = x^2 - 3$. <span class="tr">Geser turun berarti kurangi fungsi dengan 3.</span></p>`},
+        { type:'task', pageTitle:'T8: Reflection Across y-axis', pageTitleEn:'Refleksi Terhadap Sumbu-y', taskType:'truefalse',
+          question:'True or false: The graph $y = f(-x)$ is a reflection of $y = f(x)$ across the $y$-axis.', questionEn:'Benar atau salah: Grafik $y = f(-x)$ adalah refleksi dari $y = f(x)$ terhadap sumbu-$y$.',
+          correctAnswer:'true',
+          explanation:`<p>Negating the $x$ variable flips the graph horizontally across the $y$-axis. <span class="tr">Membalik variabel $x$ akan membalik grafik horizontal terhadap sumbu-$y$.</span></p>`},
+        { type:'task', pageTitle:'T9: Combined Transformation', pageTitleEn:'Transformasi Gabungan', taskType:'fill',
+          question:'A curve $y = f(x)$ is shifted left by 2 and up by 5. The new equation is $y = f(x + \\dots) + 5$. (Fill the first blank)', questionEn:'Kurva $y = f(x)$ digeser kiri 2 dan naik 5. Persamaan barunya $y = f(x + \\dots) + 5$. (Isi titik pertama)',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Shift left by 2 means replacing $x$ with $(x + 2)$. Shift up by 5 means adding $+5$ outside. <span class="tr">Geser kiri 2 berarti $x+2$.</span></p>`},
+        { type:'task', pageTitle:'T10: Order Transformations', pageTitleEn:'Urutkan Transformasi', taskType:'sorting',
+          question:'Order the steps to transform $y = x^2$ into $y = 2(x - 1)^2 - 3$.', questionEn:'Urutkan langkah mentransformasi $y = x^2$ menjadi $y = 2(x - 1)^2 - 3$.',
+          items:['Start with $y = x^2$ <span class="tr">Mulai dengan $y = x^2$</span>','Shift right by 1: $y = (x - 1)^2$ <span class="tr">Geser kanan 1</span>','Stretch vertically by 2: $y = 2(x - 1)^2$ <span class="tr">Regang vertikal 2</span>','Shift down by 3: $y = 2(x - 1)^2 - 3$ <span class="tr">Geser turun 3</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Apply horizontal shift, then vertical stretch, then vertical shift. <span class="tr">Terapkan geser horizontal, lalu regang vertikal, lalu geser vertikal.</span></p>`}
+      ]
+    },
+    k: {
+      title: 'Task 4', titleEn: 'Task 4', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Find Tangent Gradient', pageTitleEn:'Cari Gradien Singgung', taskType:'fill',
+          question:'For the curve $y = x^2 + 3x$, the gradient formula is $m = 2x + 3$. What is the gradient of the tangent at $x = 2$? $m = \\dots$', questionEn:'Untuk kurva $y = x^2 + 3x$, rumus gradiennya adalah $m = 2x + 3$. Berapa gradien garis singgung saat $x = 2$? $m = \\dots$',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>Substitute $x=2$ into $m = 2x + 3$: $m = 2(2) + 3 = 7$. <span class="tr">Substitusi $x=2$: $2(2) + 3 = 7$.</span></p>`},
+        { type:'task', pageTitle:'T2: Equation of Tangent', pageTitleEn:'Persamaan Garis Singgung', taskType:'radio',
+          question:'A tangent to $y = x^2$ at $x = 3$ has a gradient of $6$. What is the $y$-coordinate of the point of tangency?', questionEn:'Garis singgung pada $y = x^2$ saat $x = 3$ memiliki gradien $6$. Berapa koordinat-$y$ titik singgungnya?',
+          options:[{text:'$9$', correct:true},{text:'$6$', correct:false},{text:'$3$', correct:false},{text:'$12$', correct:false}],
+          explanation:`<p>Substitute $x=3$ into curve $y = x^2$: $y = 3^2 = 9$. Point is $(3, 9)$. <span class="tr">Substitusi $x=3$ ke kurva: $y = 9$.</span></p>`},
+        { type:'task', pageTitle:'T3: Tangent Definition', pageTitleEn:'Definisi Garis Singgung', taskType:'truefalse',
+          question:'True or false: A tangent to a curve touches the curve at exactly one point and has the same gradient as the curve at that point.', questionEn:'Benar atau salah: Garis singgung kurva menyentuh kurva di tepat satu titik dan memiliki gradien yang sama dengan kurva di titik tersebut.',
+          correctAnswer:'true',
+          explanation:`<p>This is the fundamental definition of a tangent in coordinate geometry. <span class="tr">Ini adalah definisi dasar garis singgung.</span></p>`},
+        { type:'task', pageTitle:'T4: Intersection Setup', pageTitleEn:'Penyiapan Perpotongan', taskType:'fill',
+          question:'To find the intersection of $y = 3x - 2$ and $y = x^2 - x - 2$, set them equal and rearrange to $ax^2 + bx + c = 0$. What is $b$? $b = \\dots$', questionEn:'Untuk mencari perpotongan $y = 3x - 2$ dan $y = x^2 - x - 2$, samakan dan pindahkan ke $ax^2 + bx + c = 0$. Berapa nilai $b$? $b = \\dots$',
+          correctAnswer:'-4', acceptableAnswers:['-4'],
+          explanation:`<p>$x^2 - x - 2 = 3x - 2 \\Rightarrow x^2 - 4x = 0$. Here $b = -4$. <span class="tr">Pindahkan ruas: $x^2 - 4x = 0$. Maka $b = -4$.</span></p>`},
+        { type:'task', pageTitle:'T5: Match Intersections to Discriminant', pageTitleEn:'Pasangkan Perpotongan ke Diskriminan', taskType:'pairing',
+          question:'Match the discriminant result of a line and curve intersection to the number of intersection points.', questionEn:'Pasangkan hasil diskriminan perpotongan garis dan kurva ke jumlah titik potong.',
+          pairs:[{left:'$\\Delta > 0$', right:'2 points'},{left:'$\\Delta = 0$', right:'1 point (tangent)'},{left:'$\\Delta < 0$', right:'0 points'},{left:'Line is horizontal', right:'Depends on curve'}],
+          explanation:`<p>Positive discriminant means 2 roots, zero means 1 root (tangent), negative means no real roots. <span class="tr">Diskriminan positif 2 akar, nol 1 akar, negatif tidak ada akar real.</span></p>`},
+        { type:'task', pageTitle:'T6: Find Roots of Intersection', pageTitleEn:'Cari Akar Perpotongan', taskType:'checkbox',
+          question:'The intersection of $y = x$ and $y = x^2 - 2$ yields $x^2 - x - 2 = 0$. Select all correct $x$-values.', questionEn:'Perpotongan $y = x$ dan $y = x^2 - 2$ menghasilkan $x^2 - x - 2 = 0$. Pilih semua nilai $x$ yang benar.',
+          options:[{text:'$x = 2$', correct:true},{text:'$x = -1$', correct:true},{text:'$x = 1$', correct:false},{text:'$x = -2$', correct:false}],
+          explanation:`<p>Factor: $(x - 2)(x + 1) = 0$. Roots are $x = 2$ and $x = -1$. <span class="tr">Faktor: $(x-2)(x+1)=0$.</span></p>`},
+        { type:'task', pageTitle:'T7: Tangent Line Equation', pageTitleEn:'Persamaan Garis Singgung', taskType:'radio',
+          question:'A tangent has gradient $4$ and touches the curve at $(1, 5)$. What is its equation?', questionEn:'Garis singgung memiliki gradien $4$ dan menyentuh kurva di $(1, 5)$. Berapa persamaannya?',
+          options:[{text:'$y = 4x + 1$', correct:true},{text:'$y = 4x + 5$', correct:false},{text:'$y = x + 4$', correct:false},{text:'$y = -4x + 9$', correct:false}],
+          explanation:`<p>Using $y - y_1 = m(x - x_1)$: $y - 5 = 4(x - 1) \\Rightarrow y = 4x - 4 + 5 \\Rightarrow y = 4x + 1$. <span class="tr">$y - 5 = 4(x - 1) \\Rightarrow y = 4x + 1$.</span></p>`},
+        { type:'task', pageTitle:'T8: Parallel Tangent', pageTitleEn:'Garis Singgung Sejajar', taskType:'fill',
+          question:'For $y = x^2$, the gradient formula is $m = 2x$. At what $x$-coordinate is the tangent parallel to the line $y = 6x + 1$? $x = \\dots$', questionEn:'Untuk $y = x^2$, rumus gradiennya $m = 2x$. Pada koordinat-$x$ mana garis singgung sejajar dengan garis $y = 6x + 1$? $x = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>Parallel lines have the same gradient. Set $2x = 6 \\Rightarrow x = 3$. <span class="tr">Samakan gradien: $2x = 6 \\Rightarrow x = 3$.</span></p>`},
+        { type:'task', pageTitle:'T9: No Intersection Logic', pageTitleEn:'Logika Tanpa Perpotongan', taskType:'truefalse',
+          question:'True or false: If a line lies completely above a downward-opening parabola and never touches it, their intersection equation has a negative discriminant.', questionEn:'Benar atau salah: Jika garis berada sepenuhnya di atas parabola terbuka ke bawah dan tidak pernah menyentuhnya, persamaan perpotongannya memiliki diskriminan negatif.',
+          correctAnswer:'true',
+          explanation:`<p>No real intersection means setting them equal yields a quadratic with no real roots ($\\Delta < 0$). <span class="tr">Tidak ada perpotongan berarti $\\Delta < 0$.</span></p>`},
+        { type:'task', pageTitle:'T10: Order Tangent Finding Steps', pageTitleEn:'Urutkan Langkah Cari Garis Singgung', taskType:'sorting',
+          question:'Order the steps to find the equation of a tangent to $y = x^2$ at $x = -2$.', questionEn:'Urutkan langkah mencari persamaan garis singgung $y = x^2$ di $x = -2$.',
+          items:['Find $y$-coordinate on curve at $x=-2$: $y = (-2)^2 = 4$ <span class="tr">Cari koordinat-$y$ di kurva</span>','Calculate gradient using $m = 2x$: $m = 2(-2) = -4$ <span class="tr">Hitung gradien</span>','Use point-gradient form with point $(-2, 4)$ and $m = -4$ <span class="tr">Gunakan bentuk titik-gradien</span>','Simplify to get $y = -4x - 4$ <span class="tr">Sederhanakan</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Find point on curve, find gradient, then form the line equation. <span class="tr">Cari titik di kurva, cari gradien, lalu buat persamaan garis.</span></p>`}
+      ]
+    },
+    l: {
+      title: 'Task 5', titleEn: 'Task 5', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Distance Formula', pageTitleEn:'Rumus Jarak', taskType:'fill',
+          question:'Find the distance between $A(1, 2)$ and $B(4, 6)$. $d = \\dots$', questionEn:'Cari jarak antara $A(1, 2)$ dan $B(4, 6)$. $d = \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>$d = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = 5$. <span class="tr">$d = \\sqrt{3^2 + 4^2} = 5$.</span></p>`},
+        { type:'task', pageTitle:'T2: Gradient of Line', pageTitleEn:'Gradien Garis', taskType:'radio',
+          question:'What is the gradient of the line passing through $(1, -1)$ and $(3, 3)$?', questionEn:'Berapa gradien garis yang melalui $(1, -1)$ dan $(3, 3)$?',
+          options:[{text:'$2$', correct:true},{text:'$\\dfrac{1}{2}$', correct:false},{text:'$-2$', correct:false},{text:'$4$', correct:false}],
+          explanation:`<p>$m = \\dfrac{3 - (-1)}{3 - 1} = \\dfrac{4}{2} = 2$. <span class="tr">$m = \\dfrac{4}{2} = 2$.</span></p>`},
+        { type:'task', pageTitle:'T3: Midpoint Formula', pageTitleEn:'Rumus Titik Tengah', taskType:'truefalse',
+          question:'True or false: The midpoint of $(0,0)$ and $(8, 4)$ is $(4, 2)$.', questionEn:'Benar atau salah: Titik tengah $(0,0)$ dan $(8, 4)$ adalah $(4, 2)$.',
+          correctAnswer:'true',
+          explanation:`<p>$M = \\left( \\dfrac{0+8}{2}, \\dfrac{0+4}{2} \\right) = (4, 2)$. <span class="tr">Rata-rata dari $x$ dan $y$.</span></p>`},
+        { type:'task', pageTitle:'T4: Parabola Features', pageTitleEn:'Fitur Parabola', taskType:'checkbox',
+          question:'To sketch $y = x^2 - 4x - 5$, which features must you calculate?', questionEn:'Untuk membuat sketsa $y = x^2 - 4x - 5$, fitur apa yang harus dihitung?',
+          options:[{text:'$y$-intercept <span class="tr">Perpotongan-$y$</span>', correct:true},{text:'$x$-intercepts <span class="tr">Perpotongan-$x$</span>', correct:true},{text:'Vertex <span class="tr">Titik puncak</span>', correct:true},{text:'Asymptotes <span class="tr">Asimptot</span>', correct:false}],
+          explanation:`<p>Parabolas do not have asymptotes. You need intercepts and vertex. <span class="tr">Parabola tidak punya asimptot. Butuh perpotongan dan titik puncak.</span></p>`},
+        { type:'task', pageTitle:'T5: Match Equation to Shape', pageTitleEn:'Pasangkan Persamaan ke Bentuk', taskType:'pairing',
+          question:'Match the equation to its graph type.', questionEn:'Pasangkan persamaan dengan jenis grafiknya.',
+          pairs:[{left:'$y = 3x - 1$', right:'Straight line'},{left:'$y = x^2 + 2x$', right:'Parabola'},{left:'$y = \\dfrac{1}{x}$', right:'Hyperbola'},{left:'$y = x^3$', right:'Cubic curve'}],
+          explanation:`<p>Linear, quadratic, reciprocal, and cubic functions have distinct shapes. <span class="tr">Fungsi linear, kuadrat, resiprokal, dan kubik memiliki bentuk berbeda.</span></p>`},
+        { type:'task', pageTitle:'T6: Find y-intercept', pageTitleEn:'Cari Perpotongan-y', taskType:'fill',
+          question:'Find the $y$-intercept of $y = 2x^2 - 5x + 3$. $c = \\dots$', questionEn:'Cari perpotongan-$y$ dari $y = 2x^2 - 5x + 3$. $c = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>Set $x=0$. $y = 0 - 0 + 3 = 3$. <span class="tr">Set $x=0$.</span></p>`},
+        { type:'task', pageTitle:'T7: Equation from Two Points', pageTitleEn:'Persamaan dari Dua Titik', taskType:'radio',
+          question:'A line passes through $(2, 5)$ and $(4, 11)$. What is its equation?', questionEn:'Garis melalui $(2, 5)$ dan $(4, 11)$. Berapa persamaannya?',
+          options:[{text:'$y = 3x - 1$', correct:true},{text:'$y = 2x + 1$', correct:false},{text:'$y = 3x + 1$', correct:false},{text:'$y = \\dfrac{1}{3}x + 4$', correct:false}],
+          explanation:`<p>$m = \\dfrac{11-5}{4-2} = 3$. Using $(2,5)$: $5 = 3(2) + c \\Rightarrow c = -1$. Equation: $y = 3x - 1$. <span class="tr">$m=3$, $c=-1$.</span></p>`},
+        { type:'task', pageTitle:'T8: Find Vertex', pageTitleEn:'Cari Titik Puncak', taskType:'fill',
+          question:'Find the $x$-coordinate of the vertex of $y = x^2 + 6x + 4$. $x = \\dots$', questionEn:'Cari koordinat-$x$ titik puncak dari $y = x^2 + 6x + 4$. $x = \\dots$',
+          correctAnswer:'-3', acceptableAnswers:['-3'],
+          explanation:`<p>$x = -\\dfrac{b}{2a} = -\\dfrac{6}{2} = -3$. <span class="tr">$x = -\\dfrac{b}{2a}$.</span></p>`},
+        { type:'task', pageTitle:'T9: Minimum Value', pageTitleEn:'Nilai Minimum', taskType:'truefalse',
+          question:'True or false: The curve $y = 2x^2 - 4x + 1$ has a minimum point because the coefficient of $x^2$ is positive.', questionEn:'Benar atau salah: Kurva $y = 2x^2 - 4x + 1$ memiliki titik minimum karena koefisien $x^2$ positif.',
+          correctAnswer:'true',
+          explanation:`<p>Positive coefficient means U-shaped parabola, indicating a minimum. <span class="tr">Koefisien positif berarti parabola bentuk U, memiliki titik minimum.</span></p>`},
+        { type:'task', pageTitle:'T10: Order Full Problem', pageTitleEn:'Urutkan Soal Lengkap', taskType:'sorting',
+          question:'Order the steps to solve an exam problem asking to find the intersection of a line and a curve.', questionEn:'Urutkan langkah menyelesaikan soal ujian yang meminta titik potong garis dan kurva.',
+          items:['Set the equations equal to each other <span class="tr">Samakan persamaan</span>','Rearrange to form a quadratic equation equal to 0 <span class="tr">Susun jadi persamaan kuadrat = 0</span>','Factor the quadratic or use quadratic formula <span class="tr">Faktorkan atau pakai rumus kuadrat</span>','Substitute $x$-values back into the linear equation to find $y$ <span class="tr">Substitusi $x$ ke persamaan linear</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Standard algebraic procedure for finding intersections algebraically. <span class="tr">Prosedur aljabar standar.</span></p>`}
+      ]
+    }
+  };
+
+  // ================= STATE =================
+  let currentSection = 'a';
+  let currentPage = 0;
+  let userAnswers = {};
+
+  // ================= UTILITIES =================
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function renderMath(el){
+    if(window.renderMathInElement){
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$', right:'$$', display:true},
+          {left:'$', right:'$', display:false}
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  // ================= SIDEBAR =================
+  function renderSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const sectionKeys = ['a','b','c','d','e','f','g','h','i','j','k','l'];
+    const meta = {
+      a:{t:'Spiral Review', e:'Spiral Review', time:'00:00-00:10'},
+      b:{t:'Intro & Real-World', e:'Pengantar & Dunia Nyata', time:'00:10-00:15'},
+      c:{t:'Prior Knowledge', e:'Pengetahuan Awal', time:'00:15-00:20'},
+      d:{t:'Problem Intro', e:'Pengantar Masalah', time:'00:20-00:30'},
+      e:{t:'Guided Practice', e:'Latihan Terbimbing', time:'00:30-00:45'},
+      f:{t:'Independent Prac', e:'Latihan Mandiri', time:'00:45-00:55'},
+      g:{t:'Consolidation', e:'Konsolidasi', time:'00:55-01:00'},
+      h:{t:'Task 1', e:'Tugas 1', time:'Printable'},
+      i:{t:'Task 2', e:'Tugas 2', time:'Printable'},
+      j:{t:'Task 3', e:'Tugas 3', time:'Printable'},
+      k:{t:'Task 4', e:'Tugas 4', time:'Printable'},
+      l:{t:'Task 5', e:'Tugas 5', time:'Printable'}
+    };
+    let html = '<h3>Sections <span class="tr">Bagian</span></h3>';
+    sectionKeys.forEach(key => {
+      const section = sectionsData[key];
+      const isActive = currentSection === key;
+      if(section){
+        html += `<div class="nav-link ${isActive?'active':''}" data-section="${key}">
+          <span class="nl-title">${key.toUpperCase()}. ${meta[key].t}</span>
+          <span class="tr">${meta[key].e}</span>
+          <span class="time">${meta[key].time}</span>
+        </div>`;
+      } else {
+        html += `<div class="nav-link disabled">${key.toUpperCase()}. ${meta[key].t}<br><span class="tr">${meta[key].e}</span><br><span class="time">${meta[key].time} (segera)</span></div>`;
+      }
+    });
+    sidebar.innerHTML = html;
+    sidebar.querySelectorAll('.nav-link[data-section]').forEach(el => {
+      el.addEventListener('click', () => {
+        currentSection = el.dataset.section;
+        currentPage = 0;
+        renderSidebar();
+        renderPage();
+      });
+    });
+  }
+
+  // ================= PAGE RENDER =================
+  function renderPage(){
+    const section = sectionsData[currentSection];
+    if(!section) return;
+    const page = section.pages[currentPage];
+    const contentEl = document.getElementById('pageContent');
+
+    let printBtnHtml = '';
+    if(['h','i','j','k','l'].includes(currentSection)){
+      printBtnHtml = '<button id="printBtnTop" style="background:var(--success);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap">🖨 Print to PDF <span class="tr">Cetak ke PDF</span></button>';
+    }
+
+    let html = '<div class="page-header"><h2>' + section.title + ' <span class="tr">' + section.titleEn + '</span></h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + printBtnHtml + '<span class="badge">' + page.pageTitle.split(':')[0] + '</span></div></div>';
+
+    if(page.type === 'explanation'){
+      html += '<div class="card explain"><h3>' + page.pageTitle + ' <span class="tr">' + page.pageTitleEn + '</span></h3>' + page.body + '</div>';
+    } else if(page.type === 'task'){
+      html += renderTask(page);
+    }
+    contentEl.innerHTML = html;
+    renderMath(contentEl);
+
+    const total = section.pages.length;
+    const pageNumsEl = document.getElementById('pageNums');
+    let pageNumHtml = '';
+    section.pages.forEach(function(p, i){
+      var raw = p.pageTitle.split(':')[0].trim();
+      var type = raw.charAt(0);
+      var num = parseInt(raw.substring(1));
+      var label = type + '-' + String(num).padStart(2, '0');
+      var typeClass = (type === 'E') ? 'page-num-e' : 'page-num-t';
+      var isActive = (i === currentPage);
+      pageNumHtml += '<button class="page-num ' + typeClass + ' ' + (isActive ? 'active' : '') + '" data-page="' + i + '"' + (isActive ? ' disabled' : '') + '>' + label + '</button>';
+    });
+    pageNumsEl.innerHTML = pageNumHtml;
+
+    pageNumsEl.querySelectorAll('.page-num').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        currentPage = parseInt(btn.dataset.page);
+        renderPage();
+      });
+    });
+
+    document.getElementById('prevBtn').disabled = (currentPage === 0);
+    document.getElementById('nextBtn').disabled = (currentPage === total - 1);
+
+    var printBtnTop = document.getElementById('printBtnTop');
+    if(printBtnTop){
+      printBtnTop.addEventListener('click', function(){ printTask(currentSection); });
+    }
+
+    if(page.type === 'task'){
+      attachTaskHandlers(page);
+    }
+  }
+
+  function renderTask(page){
+    let html = `<div class="card task"><h3>${page.pageTitle} <span class="tr">${page.pageTitleEn}</span></h3>`;
+    html += `<div class="q-text">${page.question} <span class="tr">${page.questionEn || ''}</span></div>`;
+
+    if(page.taskType === 'radio' || page.taskType === 'checkbox'){
+      const options = shuffle(page.options);
+      page._shuffledOptions = options;
+      html += '<div class="options">';
+      options.forEach((opt, i) => {
+        const cls = page.taskType === 'checkbox' ? 'option checkbox' : 'option radio';
+        html += `<div class="${cls}" data-idx="${i}">
+          <div class="marker"></div>
+          <div class="opt-text">${opt.text}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'fill'){
+      html += `<input type="text" class="fill-input" id="fillInput" placeholder="...">`;
+    } else if(page.taskType === 'truefalse'){
+      const opts = shuffle([
+        {text:'True <span class="tr">Benar</span>', val:'true'},
+        {text:'False <span class="tr">Salah</span>', val:'false'}
+      ]);
+      page._shuffledTF = opts;
+      html += '<div class="options">';
+      opts.forEach((o, i) => {
+        html += `<div class="option radio" data-val="${o.val}" data-idx="${i}"><div class="marker"></div><div class="opt-text">${o.text}</div></div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'sorting'){
+      const shuffled = shuffle(page.items.map((item, idx) => ({text:item, originalIdx:idx})));
+      page._shuffledItems = shuffled;
+      html += '<div class="sort-list">';
+      shuffled.forEach((it, i) => {
+        html += `<div class="sort-item" data-pos="${i}" data-orig="${it.originalIdx}">
+          <span class="pos">${i+1}</span>
+          <span class="sort-text">${it.text}</span>
+        </div>`;
+      });
+      html += '</div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Click two items to swap. <span class="tr">Klik dua item untuk menukar.</span></p>';
+    } else if(page.taskType === 'pairing'){
+      const lefts = shuffle(page.pairs.map((p, idx) => ({text:p.left, originalIdx:idx})));
+      const rights = shuffle(page.pairs.map((p, idx) => ({text:p.right, originalIdx:idx})));
+      page._shuffledPairs = {lefts, rights};
+      html += '<div class="pair-grid">';
+      html += '<div class="pair-col"><h4>Left <span class="tr">Kiri</span></h4>';
+      lefts.forEach((l, i) => {
+        html += `<div class="pair-item" data-side="left" data-idx="${i}">${l.text}</div>`;
+      });
+      html += '</div>';
+      html += '<div class="pair-col"><h4>Right <span class="tr">Kanan</span></h4>';
+      rights.forEach((r, i) => {
+        html += `<div class="pair-item" data-side="right" data-idx="${i}">${r.text}</div>`;
+      });
+      html += '</div></div>';
+      html += '<div class="pairs-list" id="pairsList"></div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Click left then right to pair. <span class="tr">Klik kiri lalu kanan untuk memasangkan.</span></p>';
+    }
+    html += `<button class="btn-submit" id="submitBtn">Check Answer <span class="tr">Periksa Jawaban</span></button>`;
+    html += `<div class="feedback" id="feedback"></div></div>`;
+    return html;
+  }
+
+  function attachTaskHandlers(page){
+    const taskType = page.taskType;
+
+    if(taskType === 'radio' || taskType === 'truefalse'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    } else if(taskType === 'checkbox'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => opt.classList.toggle('selected'));
+      });
+    } else if(taskType === 'sorting'){
+      let firstClick = null;
+      document.querySelectorAll('.sort-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if(firstClick === null){
+            firstClick = item;
+            item.classList.add('selected');
+          } else if(firstClick === item){
+            item.classList.remove('selected');
+            firstClick = null;
+          } else {
+            const fText = firstClick.querySelector('.sort-text').innerHTML;
+            const sText = item.querySelector('.sort-text').innerHTML;
+            firstClick.querySelector('.sort-text').innerHTML = sText;
+            item.querySelector('.sort-text').innerHTML = fText;
+            const fOrig = firstClick.dataset.orig;
+            firstClick.dataset.orig = item.dataset.orig;
+            item.dataset.orig = fOrig;
+            firstClick.classList.remove('selected');
+            firstClick = null;
+          }
+        });
+      });
+    } else if(taskType === 'pairing'){
+      let selectedLeft = null;
+      document.querySelectorAll('.pair-item[data-side="left"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired')) return;
+          document.querySelectorAll('.pair-item[data-side="left"]').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedLeft = item;
+        });
+      });
+      document.querySelectorAll('.pair-item[data-side="right"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired') || !selectedLeft) return;
+          const leftIdx = selectedLeft.dataset.idx;
+          const rightIdx = item.dataset.idx;
+          const pairList = document.getElementById('pairsList');
+          const pairRow = document.createElement('div');
+          pairRow.className = 'pair-row';
+          pairRow.dataset.leftIdx = leftIdx;
+          pairRow.dataset.rightIdx = rightIdx;
+          pairRow.innerHTML = `<span>${selectedLeft.innerHTML}</span> <span>↔</span> <span>${item.innerHTML}</span> <span class="remove" title="Remove">×</span>`;
+          pairRow.querySelector('.remove').addEventListener('click', function() {
+            const lIdx = pairRow.dataset.leftIdx;
+            const rIdx = pairRow.dataset.rightIdx;
+            const lItem = document.querySelector(`.pair-item[data-side="left"][data-idx="${lIdx}"]`);
+            const rItem = document.querySelector(`.pair-item[data-side="right"][data-idx="${rIdx}"]`);
+            if(lItem) lItem.classList.remove('paired');
+            if(rItem) rItem.classList.remove('paired');
+            pairRow.remove();
+          });
+          pairList.appendChild(pairRow);
+          selectedLeft.classList.remove('selected');
+          selectedLeft.classList.add('paired');
+          item.classList.add('paired');
+          selectedLeft = null;
+        });
+      });
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', () => checkAnswer(page));
+  }
+
+  function checkAnswer(page){
+    const taskType = page.taskType;
+    let isCorrect = false;
+    let userAnswerStr = '';
+
+    if(taskType === 'radio'){
+      let selected = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selected = page._shuffledOptions[i];
+          selectedIdx = i;
+        }
+      });
+      if(!selected){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      isCorrect = selected.correct;
+      userAnswerStr = selected.text;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(i === selectedIdx && !selected.correct) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'checkbox'){
+      const selectedIdxs = [];
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')) selectedIdxs.push(i);
+      });
+      if(selectedIdxs.length === 0){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      const correctSet = new Set();
+      page._shuffledOptions.forEach((opt, i) => { if(opt.correct) correctSet.add(i); });
+      const selectedSet = new Set(selectedIdxs);
+      isCorrect = correctSet.size === selectedSet.size && [...correctSet].every(i => selectedSet.has(i));
+      userAnswerStr = selectedIdxs.map(i => page._shuffledOptions[i].text).join(', ');
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(selectedSet.has(i)) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'fill'){
+      const val = document.getElementById('fillInput').value.trim();
+      const acceptable = page.acceptableAnswers || [page.correctAnswer];
+      const norm = s => s.toLowerCase().replace(/\s+/g, '').trim();
+      isCorrect = acceptable.some(a => norm(a) === norm(val));
+      userAnswerStr = val;
+    } else if(taskType === 'truefalse'){
+      let selectedVal = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selectedVal = opt.dataset.val;
+          selectedIdx = i;
+        }
+      });
+      if(!selectedVal){
+        showFeedback(false, 'Please select an answer. <span class="tr">Silakan pilih jawaban.</span>', false);
+        return;
+      }
+      isCorrect = selectedVal === page.correctAnswer;
+      userAnswerStr = selectedVal === 'true' ? 'True' : 'False';
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(opt.dataset.val === page.correctAnswer) opt.classList.add('correct');
+        else if(i === selectedIdx) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'sorting'){
+      const currentOrder = [];
+      document.querySelectorAll('.sort-item').forEach(item => {
+        currentOrder.push(parseInt(item.dataset.orig));
+      });
+      isCorrect = currentOrder.every((idx, i) => idx === page.correctOrder[i]);
+      userAnswerStr = currentOrder.map((idx, i) => `${i+1}. ${page.items[idx] || '?'}`).join('  |  ');
+      document.querySelectorAll('.sort-item').forEach((item, i) => {
+        if(currentOrder[i] === page.correctOrder[i]) item.style.borderColor = 'var(--success)';
+        else item.style.borderColor = 'var(--danger)';
+      });
+    } else if(taskType === 'pairing'){
+      const pairRows = document.querySelectorAll('.pair-row');
+      if(pairRows.length === 0){
+        showFeedback(false, 'Please make pairs. <span class="tr">Silakan buat pasangan.</span>', false);
+        return;
+      }
+      const userPairs = [];
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        userPairs.push({
+          leftText: page._shuffledPairs.lefts[lIdx].text,
+          rightText: page._shuffledPairs.rights[rIdx].text
+        });
+      });
+      const correctPairs = page.pairs.map(p => ({left:p.left, right:p.right}));
+      const correctCount = userPairs.filter(up =>
+        correctPairs.some(cp => cp.left === up.leftText && cp.right === up.rightText)
+      ).length;
+      isCorrect = correctCount === correctPairs.length && userPairs.length === correctPairs.length;
+      userAnswerStr = userPairs.map(p => `${p.leftText}↔${p.rightText}`).join('  |  ');
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        const lText = page._shuffledPairs.lefts[lIdx].text;
+        const rText = page._shuffledPairs.rights[rIdx].text;
+        const ok = correctPairs.some(cp => cp.left === lText && cp.right === rText);
+        row.style.background = ok ? '#d1fae5' : '#fee2e2';
+      });
+    }
+
+    const pageKey = `${currentSection}-${currentPage}`;
+    userAnswers[pageKey] = {userAnswer:userAnswerStr, correct:isCorrect, pageTitle:page.pageTitle};
+    showFeedback(isCorrect, page.explanation, true);
+  }
+
+  function showFeedback(isCorrect, explanation, showAnswer){
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback show ${isCorrect?'correct':'incorrect'}`;
+    if(showAnswer){
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Correct!':'✗ Incorrect'} <span class="tr">${isCorrect?'Benar!':'Salah'}</span></h4>${explanation}`;
+    } else {
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Correct!':'✗ Incorrect'}</h4>`;
+    }
+    renderMath(feedback);
+  }
+
+  // ================= EVENT LISTENERS =================
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if(currentPage > 0){ currentPage--; renderPage(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const total = sectionsData[currentSection].pages.length;
+    if(currentPage < total - 1){ currentPage++; renderPage(); }
+  });
+
+  const modal = document.getElementById('classRulesModal');
+  document.getElementById('classRulesBtn').addEventListener('click', () => modal.classList.add('active'));
+  document.querySelector('.modal-close').addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+
+  // ================= PRINT TO PDF =================
+  function getCorrectAnswer(task){
+    if(task.taskType === 'radio'){
+      const c = task.options.find(o => o.correct);
+      return c ? c.text : '';
+    }
+    if(task.taskType === 'checkbox'){
+      return task.options.filter(o => o.correct).map(o => o.text).join(', ');
+    }
+    if(task.taskType === 'fill'){
+      return task.correctAnswer || '';
+    }
+    if(task.taskType === 'truefalse'){
+      return task.correctAnswer === 'true' ? 'True' : 'False';
+    }
+    if(task.taskType === 'sorting'){
+      return task.correctOrder.map(i => task.items[i]).join(' → ');
+    }
+    if(task.taskType === 'pairing'){
+      return task.pairs.map(p => p.left + ' ↔ ' + p.right).join('; ');
+    }
+    return '';
+  }
+
+  function printTask(sectionKey){
+    const section = sectionsData[sectionKey];
+    if(!section) return;
+    const tasks = section.pages;
+    let correctCount = 0;
+
+    const rows = tasks.map((task, idx) => {
+      const pageKey = sectionKey + '-' + idx;
+      const ua = userAnswers[pageKey];
+      const isCorrect = ua ? ua.correct : false;
+      const userAns = ua ? ua.userAnswer : '(not answered)';
+      const correctAns = getCorrectAnswer(task);
+      if(ua && ua.correct) correctCount++;
+      return '<tr><td>' + (idx+1) + '</td><td>' + task.question + '<br><span class="tr">' + (task.questionEn || '') + '</span></td><td>' + userAns + '</td><td>' + correctAns + '</td><td style="text-align:center;font-size:1.1em">' + (isCorrect ? '✓' : '✗') + '</td></tr>';
+    }).join('');
+
+    const score = correctCount + ' / ' + tasks.length;
+    const today = new Date().toLocaleDateString('en-US', {day:'numeric',month:'long',year:'numeric'});
+
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Print - ' + section.title + '</title>' +
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>' +
+      '<style>' +
+      'body{font-family:Segoe UI,sans-serif;padding:30px;color:#1e293b;line-height:1.5}' +
+      'h1{font-size:1.2em;margin-bottom:5px}' +
+      '.info{margin-bottom:15px;font-size:.88em}' +
+      '.info div{margin:3px 0}' +
+      'table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.82em}' +
+      'th,td{border:1px solid #cbd5e1;padding:6px 8px;text-align:left;vertical-align:top}' +
+      'th{background:#f1f5f9;font-weight:600}' +
+      '.checked-by{margin-top:30px;text-align:right;font-style:italic}' +
+      '.tr{font-style:italic;font-size:.85em;color:#64748b;display:block;margin-top:2px}' +
+      '@media print{body{padding:15px}}' +
+      '</style></head><body>' +
+      '<h1>Math Tutoring by Deni</h1>' +
+      '<div class="info">' +
+      '<div>Name: ____________________________ <span class="tr">Nama</span></div>' +
+      '<div>Date: ' + today + ' <span class="tr">Tanggal</span></div>' +
+      '<div>Topic: Coordinate Geometry: Plotting, sketching and drawing <span class="tr">Topik: Geometri Koordinat</span></div>' +
+      '<div>Task Group: ' + section.title + ' <span class="tr">Grup Task</span></div>' +
+      '<div>Score: <strong>' + score + '</strong> <span class="tr">Skor</span></div>' +
+      '</div>' +
+      '<table><thead><tr>' +
+      '<th style="width:30px">No.</th>' +
+      '<th>Question <span class="tr">Pertanyaan</span></th>' +
+      '<th>Student Answer <span class="tr">Jawaban Siswa</span></th>' +
+      '<th>Correct Answer <span class="tr">Jawaban Benar</span></th>' +
+      '<th style="width:50px">Note <span class="tr">Ket.</span></th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="checked-by">Checked by, <span class="tr">Diperiksa oleh,</span><br>Deni</div>' +
+      '<script>document.addEventListener("DOMContentLoaded",function(){' +
+      'if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}' +
+      'setTimeout(function(){window.print();},500);});<\/script>' +
+      '</body></html>';
+
+    const w = window.open('', '_blank');
+    if(w){
+      w.document.write(html);
+      w.document.close();
+    } else {
+      alert('Please allow pop-ups to print. (Mohon izinkan pop-up untuk mencetak)');
+    }
+  }
+
+  // ================= INIT =================
+  renderSidebar();
+  renderPage();
+});
+</script>
+</body>
+</html>
