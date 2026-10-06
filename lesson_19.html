@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; line-height: 1.5; }
+  .layout { display: grid; grid-template-columns: 1fr 3fr; gap: 20px; padding: 20px; max-width: 1920px; margin: 0 auto; }
+  .sidebar { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 20px; }
+  .sidebar h2 { color: #2c3e50; margin-bottom: 10px; font-size: 1.5rem; }
+  .main { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .header-right { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+  .trans { display: block; font-style: italic; font-size: 0.85rem; color: #666; margin-top: 2px; }
+  .section { margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+  .section h3 { color: #34495e; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .section p { margin-bottom: 10px; }
+  .btn { background: #3498db; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-size: 0.9rem; margin: 5px 5px 5px 0; transition: 0.2s; }
+  .btn:hover { background: #2980b9; }
+  .btn-sec { background: #2ecc71; }
+  .btn-sec:hover { background: #27ae60; }
+  .btn-small { padding: 5px 10px; font-size: 0.8rem; }
+  .practice-q { margin-bottom: 15px; padding: 10px; background: #f9f9f9; border-radius: 5px; border-left: 3px solid #3498db; }
+  .solution-box { margin-top: 10px; padding: 10px; background: #e8f8f5; border-radius: 5px; border-left: 3px solid #2ecc71; display: none; }
+  .task-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 10px; background: #f9f9f9; border-radius: 5px; flex-wrap: wrap; gap: 10px; }
+  .options label { display: block; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+  .options label:hover { background: #eef2f5; }
+  .feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; }
+  .correct { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .wrong { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+  .modal-content { background: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+  .close { float: right; font-size: 1.5rem; cursor: pointer; color: #aaa; }
+  .pair-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .pair-left { flex: 1; padding: 10px; background: #eef; border-radius: 5px; }
+  .pair-select { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+  .sort-container { display: flex; flex-direction: column; gap: 10px; }
+  .sort-item { padding: 10px; background: #eef; border: 1px solid #ccd; border-radius: 5px; cursor: grab; }
+  .sort-item:active { cursor: grabbing; }
+  .fill-blank { padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 100px; margin: 0 5px; }
+  svg { max-width: 100%; height: auto; }
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <h2>Math Tutoring by Deni</h2>
+    <p><strong>Topic:</strong> Intersection of Line and Parabola</p>
+    <p class="trans">Topik: Perpotongan Garis dan Parabola</p>
+    <hr><br>
+    <p><strong>Curriculum:</strong> Cambridge Grade 10</p>
+    <p class="trans">Kurikulum: Cambridge Kelas 10</p>
+    <p><strong>Duration:</strong> 60 Minutes</p>
+    <p class="trans">Durasi: 60 Menit</p>
+  </div>
+  
+  <div class="main">
+    <div class="header-right">
+      <button class="btn" onclick="document.getElementById('classModal').style.display='block'">Class Rules</button>
+    </div>
+
+    <div class="section">
+      <h3>a. Spiral Review Warm-up (00:00-00:10) 🔄</h3>
+      <p>Review of expanding brackets and solving linear equations.</p>
+      <p class="trans">Tinjauan ekspansi tanda kurung dan penyelesaian persamaan linear.</p>
+      <p>Let's recall how to expand $(x+a)(x+b) = x^2 + (a+b)x + ab$. Example: $(x+2)(x-2) = x^2 - 4$.</p>
+      <p class="trans">Mari kita ingat cara ekspansi $(x+a)(x+b) = x^2 + (a+b)x + ab$. Contoh: $(x+2)(x-2) = x^2 - 4$.</p>
+      <p>Also, solving linear equations like $3x + 5 = 0 \implies x = -\frac{5}{3}$.</p>
+      <p class="trans">Juga, menyelesaikan persamaan linear seperti $3x + 5 = 0 \implies x = -\frac{5}{3}$.</p>
+    </div>
+
+    <div class="section">
+      <h3>b. Introduction & Real-World Connection (00:10-00:15) 🌍</h3>
+      <p>Parabolas are everywhere!</p>
+      <p class="trans">Parabola ada di mana-mana!</p>
+      <p>Imagine throwing a ball; its path is a parabola ($y = ax^2 + bx + c$). A laser beam is a straight line ($y = mx + c$). If the laser hits the ball, the point of contact is the intersection.</p>
+      <p class="trans">Bayangkan melempar bola; jalurnya adalah parabola ($y = ax^2 + bx + c$). Sinar laser adalah garis lurus ($y = mx + c$). Jika laser mengenai bola, titik kontaknya adalah perpotongan.</p>
+      <svg width="300" height="150" viewBox="0 0 300 150">
+        <path d="M 30 120 Q 150 -30 270 120" fill="none" stroke="#e74c3c" stroke-width="3" />
+        <line x1="0" y1="150" x2="300" y2="50" stroke="#3498db" stroke-width="3" />
+        <circle cx="100" cy="53" r="5" fill="black" />
+      </svg>
+    </div>
+
+    <div class="section">
+      <h3>c. Review of Prior Knowledge (00:15-00:20) 📚</h3>
+      <p>Key concepts you must know:</p>
+      <p class="trans">Konsep kunci yang harus Anda ketahui:</p>
+      <ul>
+        <li>$y = mx + c$ is a straight line where $m$ is gradient, $c$ is y-intercept.<span class="trans">$y = mx + c$ adalah garis lurus di mana $m$ gradien, $c$ perpotongan y.</span></li>
+        <li>$y = ax^2 + bx + c$ is a parabola. If $a>0$, it opens upwards.<span class="trans">$y = ax^2 + bx + c$ adalah parabola. Jika $a>0$, terbuka ke atas.</span></li>
+        <li>To find x-intercepts, set $y=0$. To find y-intercept, set $x=0$.<span class="trans">Untuk mencari perpotongan x, set $y=0$. Untuk perpotongan y, set $x=0$.</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>d. Problem Introduction (00:20-00:25) 📝</h3>
+      <p>Cambridge Problem:</p>
+      <p class="trans">Soal Cambridge:</p>
+      <p>The curve $C$ has equation $y = x^2 - 4$ and the straight line $l$ has equation $y + 3x = 0$.</p>
+      <p class="trans">Kurva $C$ memiliki persamaan $y = x^2 - 4$ dan garis lurus $l$ memiliki persamaan $y + 3x = 0$.</p>
+      <ul>
+        <li>(a) Sketch $C$ and $l$ on the same axes.<span class="trans">Sketsa $C$ dan $l$ pada sumbu yang sama.</span></li>
+        <li>(b) Write down coordinates where $C$ meets axes.<span class="trans">Tuliskan koordinat di mana $C$ memotong sumbu.</span></li>
+        <li>(c) Find coordinates where $l$ intersects $C$.<span class="trans">Cari koordinat di mana $l$ memotong $C$.</span></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>e. Guided Practice (00:25-00:40) 🧑‍🏫</h3>
+      <p>Step-by-step solution:</p>
+      <p class="trans">Pembahasan langkah demi langkah:</p>
+      <p>(b) Intercepts: For $C: y=x^2-4$. Set $x=0 \implies y=-4$. Point is $(0,-4)$. Set $y=0 \implies x^2=4 \implies x=\pm 2$. Points are $(-2,0)$ and $(2,0)$.</p>
+      <p class="trans">(b) Perpotongan: Untuk $C: y=x^2-4$. Set $x=0 \implies y=-4$. Titiknya $(0,-4)$. Set $y=0 \implies x^2=4 \implies x=\pm 2$. Titiknya $(-2,0)$ dan $(2,0)$.</p>
+      <p>(c) Intersection: Equate equations: $y = -3x$ and $y = x^2 - 4$. So, $x^2 - 4 = -3x \implies x^2 + 3x - 4 = 0$.</p>
+      <p class="trans">(c) Perpotongan: Samakan persamaan: $y = -3x$ dan $y = x^2 - 4$. Maka, $x^2 - 4 = -3x \implies x^2 + 3x - 4 = 0$.</p>
+      <p>Factor: $(x - 1)(x + 4) = 0 \implies x = 1$ or $x = -4$.</p>
+      <p class="trans">Faktorkan: $(x - 1)(x + 4) = 0 \implies x = 1$ atau $x = -4$.</p>
+      <p>Find $y$: If $x=1, y=-3(1)=-3$. Point is $(1, -3)$. If $x=-4, y=-3(-4)=12$. Point is $(-4, 12)$.</p>
+      <p class="trans">Cari $y$: Jika $x=1, y=-3(1)=-3$. Titiknya $(1, -3)$. Jika $x=-4, y=-3(-4)=12$. Titiknya $(-4, 12)$.</p>
+      
+      <hr style="margin: 15px 0;">
+      <p><strong>Additional Guided Practice Questions:</strong> <span class="trans">Latihan Soal Tambahan Terbimbing:</span></p>
+      
+      <div class="practice-q">
+        <p><strong>Q1:</strong> Find the x-intercepts of $y = x^2 - 9$. <span class="trans">Temukan perpotongan sumbu x dari $y = x^2 - 9$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>Set $y=0$: $x^2 - 9 = 0 \implies x^2 = 9 \implies x = \pm 3$. <span class="trans">Set $y=0$: $x^2 - 9 = 0 \implies x^2 = 9 \implies x = \pm 3$.</span></p>
+          <p>Points: $(-3, 0)$ and $(3, 0)$. <span class="trans">Titik: $(-3, 0)$ dan $(3, 0)$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q2:</strong> Find the y-intercept of $y = 2x^2 - 5x + 3$. <span class="trans">Temukan perpotongan sumbu y dari $y = 2x^2 - 5x + 3$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>Set $x=0$: $y = 2(0)^2 - 5(0) + 3 = 3$. <span class="trans">Set $x=0$: $y = 2(0)^2 - 5(0) + 3 = 3$.</span></p>
+          <p>Point: $(0, 3)$. <span class="trans">Titik: $(0, 3)$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q3:</strong> Rearrange $2y - 4x = 6$ into $y = mx + c$ form. <span class="trans">Susun ulang $2y - 4x = 6$ ke bentuk $y = mx + c$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>$2y = 4x + 6 \implies y = 2x + 3$. <span class="trans">$2y = 4x + 6 \implies y = 2x + 3$.</span></p>
+          <p>Gradient $m=2$, y-intercept $c=3$. <span class="trans">Gradien $m=2$, perpotongan y $c=3$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q4:</strong> Find the intersection of $y = x + 2$ and $y = x^2 - 4$. <span class="trans">Cari perpotongan dari $y = x + 2$ dan $y = x^2 - 4$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>$x^2 - 4 = x + 2 \implies x^2 - x - 6 = 0 \implies (x-3)(x+2)=0$. <span class="trans">$x^2 - 4 = x + 2 \implies x^2 - x - 6 = 0 \implies (x-3)(x+2)=0$.</span></p>
+          <p>$x=3$ or $x=-2$. If $x=3, y=5$. If $x=-2, y=0$. <span class="trans">$x=3$ atau $x=-2$. Jika $x=3, y=5$. Jika $x=-2, y=0$.</span></p>
+          <p>Intersections: $(3,5)$ and $(-2,0)$. <span class="trans">Perpotongan: $(3,5)$ dan $(-2,0)$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q5:</strong> Find the intersection of $y = -x$ and $y = x^2 - 2x$. <span class="trans">Cari perpotongan dari $y = -x$ dan $y = x^2 - 2x$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>$x^2 - 2x = -x \implies x^2 - x = 0 \implies x(x-1)=0$. <span class="trans">$x^2 - 2x = -x \implies x^2 - x = 0 \implies x(x-1)=0$.</span></p>
+          <p>$x=0$ or $x=1$. If $x=0, y=0$. If $x=1, y=-1$. <span class="trans">$x=0$ atau $x=1$. Jika $x=0, y=0$. Jika $x=1, y=-1$.</span></p>
+          <p>Intersections: $(0,0)$ and $(1,-1)$. <span class="trans">Perpotongan: $(0,0)$ dan $(1,-1)$.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>f. Independent Practice (00:40-00:55) ✍️</h3>
+      <p>Try this similar problem:</p>
+      <p class="trans">Coba soal serupa ini:</p>
+      <p>Find the intersection of $y = x^2 - 4x$ and $y = -3x$.</p>
+      <p class="trans">Cari perpotongan dari $y = x^2 - 4x$ dan $y = -3x$.</p>
+      <p>Solution Hint: $x^2 - 4x = -3x \implies x^2 - x = 0 \implies x(x-1)=0$.</p>
+      <p class="trans">Petunjuk Jawaban: $x^2 - 4x = -3x \implies x^2 - x = 0 \implies x(x-1)=0$.</p>
+      
+      <hr style="margin: 15px 0;">
+      <p><strong>Additional Independent Practice Questions:</strong> <span class="trans">Latihan Soal Tambahan Mandiri:</span></p>
+
+      <div class="practice-q">
+        <p><strong>Q1:</strong> Find the x-intercepts of $y = 2x^2 - 8$. <span class="trans">Temukan perpotongan sumbu x dari $y = 2x^2 - 8$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>Set $y=0$: $2x^2 - 8 = 0 \implies 2x^2 = 8 \implies x^2 = 4 \implies x = \pm 2$. <span class="trans">Set $y=0$: $2x^2 - 8 = 0 \implies 2x^2 = 8 \implies x^2 = 4 \implies x = \pm 2$.</span></p>
+          <p>Points: $(-2, 0)$ and $(2, 0)$. <span class="trans">Titik: $(-2, 0)$ dan $(2, 0)$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q2:</strong> Find the y-intercept of $y = -x^2 + 3x - 4$. <span class="trans">Temukan perpotongan sumbu y dari $y = -x^2 + 3x - 4$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>Set $x=0$: $y = -(0)^2 + 3(0) - 4 = -4$. <span class="trans">Set $x=0$: $y = -(0)^2 + 3(0) - 4 = -4$.</span></p>
+          <p>Point: $(0, -4)$. <span class="trans">Titik: $(0, -4)$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q3:</strong> Rearrange $3y + 6x = 9$ into $y = mx + c$ form. <span class="trans">Susun ulang $3y + 6x = 9$ ke bentuk $y = mx + c$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>$3y = -6x + 9 \implies y = -2x + 3$. <span class="trans">$3y = -6x + 9 \implies y = -2x + 3$.</span></p>
+          <p>Gradient $m=-2$, y-intercept $c=3$. <span class="trans">Gradien $m=-2$, perpotongan y $c=3$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q4:</strong> Find the intersection of $y = 2x - 3$ and $y = x^2 - 9$. <span class="trans">Cari perpotongan dari $y = 2x - 3$ dan $y = x^2 - 9$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>$x^2 - 9 = 2x - 3 \implies x^2 - 2x - 6 = 0$. <span class="trans">$x^2 - 9 = 2x - 3 \implies x^2 - 2x - 6 = 0$.</span></p>
+          <p>Use quadratic formula: $x = \frac{2 \pm \sqrt{4 + 24}}{2} = \frac{2 \pm \sqrt{28}}{2} = 1 \pm \sqrt{7}$. <span class="trans">Gunakan rumus kuadratik: $x = \frac{2 \pm \sqrt{4 + 24}}{2} = \frac{2 \pm \sqrt{28}}{2} = 1 \pm \sqrt{7}$.</span></p>
+        </div>
+      </div>
+
+      <div class="practice-q">
+        <p><strong>Q5:</strong> Find the intersection of $y = 3x$ and $y = x^2 - 4x + 4$. <span class="trans">Cari perpotongan dari $y = 3x$ dan $y = x^2 - 4x + 4$.</span></p>
+        <button class="btn btn-sec btn-small" onclick="toggleSol(this)">Show Solution</button>
+        <div class="solution-box">
+          <p>$x^2 - 4x + 4 = 3x \implies x^2 - 7x + 4 = 0$. <span class="trans">$x^2 - 4x + 4 = 3x \implies x^2 - 7x + 4 = 0$.</span></p>
+          <p>Use quadratic formula: $x = \frac{7 \pm \sqrt{49 - 16}}{2} = \frac{7 \pm \sqrt{33}}{2}$. <span class="trans">Gunakan rumus kuadratik: $x = \frac{7 \pm \sqrt{49 - 16}}{2} = \frac{7 \pm \sqrt{33}}{2}$.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>g. Consolidation & Reflection (00:55-01:00) 🧠</h3>
+      <div><strong>g.1 Poin Penting:</strong> Always equate the line and parabola to form a quadratic equation. Factor to find $x$, then substitute back to find $y$.<span class="trans">Selalu samakan garis dan parabola untuk membentuk persamaan kuadrat. Faktorkan untuk mencari $x$, lalu substitusikan kembali untuk mencari $y$.</span></div><br>
+      <div><strong>g.2 Pertanyaan Refleksi:</strong> What happens if the quadratic equation has no real roots?<span class="trans">Apa yang terjadi jika persamaan kuadrat tidak memiliki akar real?</span></div><br>
+      <div><strong>g.3 Exit Ticket:</strong> Find the intersection of $y=x^2$ and $y=2x$. (Answer: $(0,0)$ and $(2,4)$).<span class="trans">Cari perpotongan $y=x^2$ dan $y=2x$. (Jawaban: $(0,0)$ dan $(2,4)$).</span></div><br>
+      <div><strong>g.4 Follow-up Practice:</strong> Read textbook page 45 on Discriminant.<span class="trans">Latihan Lanjutan: Baca halaman 45 buku teks tentang Diskriminan.</span></div>
+    </div>
+
+    <div class="section">
+      <h3>Tasks 1 - 5 📝</h3>
+      <p>Complete the 50 tasks below. Use pagination to navigate. Click "Submit" before moving to the next task.</p>
+      <p class="trans">Selesaikan 50 soal di bawah. Gunakan pagination untuk berpindah. Klik "Submit" sebelum pindah ke soal berikutnya.</p>
+      <div id="taskContent"></div>
+      <div class="task-nav">
+        <button class="btn" onclick="prevTask()">Prev</button>
+        <span id="taskNum">Task 1 of 50</span>
+        <button class="btn" onclick="nextTask()">Next</button>
+        <button class="btn btn-sec" onclick="printPDF()">Print to PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="classModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('classModal').style.display='none'">&times;</span>
+    <h3>Class Rules <span class="trans">Aturan Kelas</span></h3>
+    <ul>
+      <li>Berbicara secara bergantian <span class="trans">Speak in turns</span></li>
+      <li>Meminta izin jika ingin meninggalkan kelas <span class="trans">Ask for permission if you need to leave</span></li>
+      <li>Menyalakan microphone dan camera jika diperlukan <span class="trans">Turn on microphone and camera if needed</span></li>
+    </ul>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+<script>
+const tasks = [
+  [`radio`, `Find the roots of $x^2 - 4 = 0$`, `Temukan akar dari $x^2 - 4 = 0$`, [[`$x=2, x=-2$`, `$x=2, x=-2$`], [`$x=4, x=-4$`, `$x=4, x=-4$`], [`$x=0$`, `$x=0$`]], 0, `Set $y=0$: $x^2 - 4 = 0 \implies x^2 = 4 \implies x = \pm 2$.`, `Set $y=0$: $x^2 - 4 = 0 \implies x^2 = 4 \implies x = \pm 2$.`],
+  [`radio`, `What is the y-intercept of $y = x^2 - 4$?`, `Apa perpotongan sumbu y dari $y = x^2 - 4$?`, [[`$(0, -4)$`, `$(0, -4)$`], [`$(0, 4)$`, `$(0, 4)$`], [`$(4, 0)$`, `$(4, 0)$`]], 0, `Set $x=0$: $y = 0^2 - 4 = -4$. Point is $(0, -4)$.`, `Set $x=0$: $y = 0^2 - 4 = -4$. Titiknya $(0, -4)$.`],
+  [`radio`, `What is the gradient of $y = -3x$?`, `Berapa gradien dari $y = -3x$?`, [[`$-3$`, `$-3$`], [`$3$`, `$3$`], [`$0$`, `$0$`]], 0, `The equation $y = mx + c$ has gradient $m$. Here $m = -3$.`, `Persamaan $y = mx + c$ memiliki gradien $m$. Di sini $m = -3$.`],
+  [`radio`, `What is the x-intercept of $y = -3x$?`, `Apa perpotongan sumbu x dari $y = -3x$?`, [[`$(0, 0)$`, `$(0, 0)$`], [`$(3, 0)$`, `$(3, 0)$`], [`$(-3, 0)$`, `$(-3, 0)$`]], 0, `Set $y=0$: $0 = -3x \implies x = 0$. Point is $(0,0)$.`, `Set $y=0$: $0 = -3x \implies x = 0$. Titiknya $(0,0)$.`],
+  [`radio`, `What shape is the graph of $y = x^2 - 4$?`, `Apa bentuk grafik dari $y = x^2 - 4$?`, [[`Parabola`, `Parabola`], [`Straight Line`, `Garis Lurus`], [`Circle`, `Lingkaran`]], 0, `Any equation of the form $y = ax^2 + bx + c$ ($a \neq 0$) is a parabola.`, `Persamaan bentuk $y = ax^2 + bx + c$ ($a \neq 0$) adalah parabola.`],
+  [`radio`, `Find $y$ when $x=1$ on the curve $y = x^2 - 4$.`, `Cari $y$ saat $x=1$ pada kurva $y = x^2 - 4$.`, [[`$-3$`, `$-3$`], [`$3$`, `$3$`], [`$-4$`, `$-4$`]], 0, `Substitute $x=1$: $y = (1)^2 - 4 = 1 - 4 = -3$.`, `Substitusi $x=1$: $y = (1)^2 - 4 = 1 - 4 = -3$.`],
+  [`radio`, `Find $y$ when $x=-4$ on the line $y = -3x$.`, `Cari $y$ saat $x=-4$ pada garis $y = -3x$.`, [[`$12$`, `$12$`], [`$-12$`, `$-12$`], [`$1$`, `$1$`]], 0, `Substitute $x=-4$: $y = -3(-4) = 12$.`, `Substitusi $x=-4$: $y = -3(-4) = 12$.`],
+  [`radio`, `Which equation finds the intersection of $y = x^2 - 4$ and $y = -3x$?`, `Persamaan mana yang mencari perpotongan $y = x^2 - 4$ dan $y = -3x$?`, [[`$x^2 - 4 = -3x$`, `$x^2 - 4 = -3x$`], [`$x^2 + 4 = -3x$`, `$x^2 + 4 = -3x$`], [`$x^2 - 4 = 3x$`, `$x^2 - 4 = 3x$`]], 0, `Equate the two $y$ expressions: $x^2 - 4 = -3x$.`, `Samakan kedua ekspresi $y$: $x^2 - 4 = -3x$.`],
+  [`radio`, `What is the factored form of $x^2 + 3x - 4 = 0$?`, `Apa bentuk faktor dari $x^2 + 3x - 4 = 0$?`, [[`$(x - 1)(x + 4)$`, `$(x - 1)(x + 4)$`], [`$(x + 1)(x - 4)$`, `$(x + 1)(x - 4)$`], [`$(x - 2)(x + 2)$`, `$(x - 2)(x + 2)$`]], 0, `Find factors of $-4$ that add to $3$. $4$ and $-1$ work. So $(x - 1)(x + 4) = 0$.`, `Cari faktor dari $-4$ yang jika dijumlahkan menghasilkan $3$. $4$ dan $-1$ cocok. Maka $(x - 1)(x + 4) = 0$.`],
+  [`radio`, `What are the coordinates of intersection?`, `Apa koordinat perpotongannya?`, [[`$(1, -3)$ and $(-4, 12)$`, `$(1, -3)$ dan $(-4, 12)$`], [`$(1, 3)$ and $(-4, -12)$`, `$(1, 3)$ dan $(-4, -12)$`], [`$(-1, 3)$ and $(4, -12)$`, `$(-1, 3)$ dan $(4, -12)$`]], 0, `Roots are $x=1$ and $x=-4$. For $x=1, y=-3(1)=-3$. For $x=-4, y=-3(-4)=12$.`, `Akar-akarnya $x=1$ dan $x=-4$. Untuk $x=1, y=-3(1)=-3$. Untuk $x=-4, y=-3(-4)=12$.`],
+  
+  [`tf`, `The parabola $y = x^2 - 4$ opens downwards.`, `Parabola $y = x^2 - 4$ terbuka ke bawah.`, null, 0, `Since the coefficient of $x^2$ is positive ($+1$), it opens upwards.`, `Karena koefisien $x^2$ positif ($+1$), parabola terbuka ke atas.`],
+  [`tf`, `The line $y = -3x$ has a positive gradient.`, `Garis $y = -3x$ memiliki gradien positif.`, null, 0, `The gradient is $-3$, which is negative.`, `Gradiennya adalah $-3$, yang merupakan bilangan negatif.`],
+  [`tf`, `The roots of $x^2 - 4 = 0$ are $x = 2$ and $x = -2$.`, `Akar dari $x^2 - 4 = 0$ adalah $x = 2$ dan $x = -2$.`, null, 1, `$x^2 = 4 \implies x = \pm 2$. This is true.`, `$x^2 = 4 \implies x = \pm 2$. Pernyataan ini benar.`],
+  [`tf`, `The line $y = -3x$ passes through $(1, 3)$.`, `Garis $y = -3x$ melalui $(1, 3)$.`, null, 0, `Substitute $x=1$: $y = -3(1) = -3$. The point is $(1, -3)$, not $(1, 3)$.`, `Substitusi $x=1$: $y = -3(1) = -3$. Titiknya $(1, -3)$, bukan $(1, 3)$.`],
+  [`tf`, `The vertex of $y = x^2 - 4$ is at $(0, -4)$.`, `Titik puncak dari $y = x^2 - 4$ berada di $(0, -4)$.`, null, 1, `The minimum value of $x^2$ is $0$ at $x=0$. Thus $y = 0 - 4 = -4$. True.`, `Nilai minimum dari $x^2$ adalah $0$ saat $x=0$. Maka $y = 0 - 4 = -4$. Benar.`],
+  [`tf`, `The roots of $x^2 + 3x - 4 = 0$ are $1$ and $-4$.`, `Akar dari $x^2 + 3x - 4 = 0$ adalah $1$ dan $-4$.`, null, 1, `$(1)^2 + 3(1) - 4 = 0$ and $(-4)^2 + 3(-4) - 4 = 16 - 12 - 4 = 0$. True.`, `$(1)^2 + 3(1) - 4 = 0$ dan $(-4)^2 + 3(-4) - 4 = 16 - 12 - 4 = 0$. Benar.`],
+  [`tf`, `The line and the parabola intersect at 3 points.`, `Garis dan parabola berpotongan di 3 titik.`, null, 0, `The quadratic equation $x^2 + 3x - 4 = 0$ has 2 distinct real roots, so they intersect at 2 points.`, `Persamaan kuadrat $x^2 + 3x - 4 = 0$ memiliki 2 akar real berbeda, sehingga mereka berpotongan di 2 titik.`],
+  [`tf`, `For $y = -3x$, as $x$ increases, $y$ decreases.`, `Untuk $y = -3x$, saat $x$ bertambah, $y$ berkurang.`, null, 1, `Because the gradient is negative, $y$ decreases as $x$ increases. True.`, `Karena gradiennya negatif, $y$ berkurang saat $x$ bertambah. Benar.`],
+  [`tf`, `The point $(0, 0)$ is on the parabola $y = x^2 - 4$.`, `Titik $(0, 0)$ berada pada parabola $y = x^2 - 4$.`, null, 0, `Substitute $x=0$: $y = -4$. The point is $(0, -4)$, not $(0, 0)$.`, `Substitusi $x=0$: $y = -4$. Titiknya $(0, -4)$, bukan $(0, 0)$.`],
+  [`tf`, `To find the intersection, you set the two $y$ equations equal to each other.`, `Untuk mencari perpotongan, Anda menyamakan kedua persamaan $y$.`, null, 1, `Yes, $y = x^2 - 4$ and $y = -3x$ implies $x^2 - 4 = -3x$. True.`, `Ya, $y = x^2 - 4$ dan $y = -3x$ mengimplikasikan $x^2 - 4 = -3x$. Benar.`],
+  
+  [`fill`, `The gradient of $y = -3x$ is __.`, `Gradien dari $y = -3x$ adalah __.`, null, [`-3`], `In $y = mx + c$, $m$ is the gradient. Here $m = -3$.`, `Pada $y = mx + c$, $m$ adalah gradien. Di sini $m = -3$.`],
+  [`fill`, `The y-intercept of $y = x^2 - 4$ is __.`, `Perpotongan sumbu y dari $y = x^2 - 4$ adalah __.`, null, [`-4`], `Set $x=0$: $y = 0^2 - 4 = -4$.`, `Set $x=0$: $y = 0^2 - 4 = -4$.`],
+  [`fill`, `The roots of $x^2 - 4 = 0$ are $x = \_$ and $x = \_$.`, `Akar dari $x^2 - 4 = 0$ adalah $x = \_$ dan $x = \_$.`, null, [`2`, `-2`], `$x^2 = 4 \implies x = 2$ or $x = -2$.`, `$x^2 = 4 \implies x = 2$ atau $x = -2$.`],
+  [`fill`, `Substituting $y = -3x$ into $y = x^2 - 4$ gives $x^2 + \_ x - 4 = 0$.`, `Substitusi $y = -3x$ ke $y = x^2 - 4$ menghasilkan $x^2 + \_ x - 4 = 0$.`, null, [`3`], `Equating gives $x^2 - 4 = -3x$. Moving $-3x$ to the left gives $x^2 + 3x - 4 = 0$.`, `Dengan menyamakan, kita dapat $x^2 - 4 = -3x$. Memindahkan $-3x$ ke ruas kiri menghasilkan $x^2 + 3x - 4 = 0$.`],
+  [`fill`, `The factored form of $x^2 + 3x - 4 = 0$ is $(x - 1)(x + \_) = 0$.`, `Bentuk faktor dari $x^2 + 3x - 4 = 0$ adalah $(x - 1)(x + \_) = 0$.`, null, [`4`], `Factors of $-4$ that add to $3$ are $4$ and $-1$. So $(x - 1)(x + 4) = 0$.`, `Faktor dari $-4$ yang dijumlahkan menghasilkan $3$ adalah $4$ dan $-1$. Maka $(x - 1)(x + 4) = 0$.`],
+  [`fill`, `When $x = 1$, $y$ on the parabola is __.`, `Saat $x = 1$, $y$ pada parabola adalah __.`, null, [`-3`], `Substitute $x=1$ into $y = x^2 - 4$: $y = 1 - 4 = -3$.`, `Substitusi $x=1$ ke $y = x^2 - 4$: $y = 1 - 4 = -3$.`],
+  [`fill`, `When $x = -4$, $y$ on the line is __.`, `Saat $x = -4$, $y$ pada garis adalah __.`, null, [`12`], `Substitute $x=-4$ into $y = -3x$: $y = -3(-4) = 12$.`, `Substitusi $x=-4$ ke $y = -3x$: $y = -3(-4) = 12$.`],
+  [`fill`, `The axis of symmetry of the parabola is $x = \_$.`, `Sumbu simetri dari parabola adalah $x = \_$.`, null, [`0`], `For $y = x^2 - 4$, the axis of symmetry is the y-axis, so $x = 0$.`, `Untuk $y = x^2 - 4$, sumbu simetrinya adalah sumbu y, sehingga $x = 0$.`],
+  [`fill`, `The solutions to $x^2 + 3x - 4 = 0$ are $x = 1$ and $x = \_$.`, `Solusi dari $x^2 + 3x - 4 = 0$ adalah $x = 1$ dan $x = \_$.`, null, [`-4`], `From $(x - 1)(x + 4) = 0$, the roots are $1$ and $-4$.`, `Dari $(x - 1)(x + 4) = 0$, akar-akarnya adalah $1$ dan $-4$.`],
+  [`fill`, `The intersection points are $(1, \_)$ and $(-4, \_)$.`, `Titik perpotongannya adalah $(1, \_)$ dan $(-4, \_)$.`, null, [`-3`, `12`], `For $x=1, y=-3(1)=-3$. For $x=-4, y=-3(-4)=12$.`, `Untuk $x=1, y=-3(1)=-3$. Untuk $x=-4, y=-3(-4)=12$.`],
+  
+  [`checkbox`, `Which points are on the parabola $y = x^2 - 4$?`, `Titik mana yang berada pada parabola $y = x^2 - 4$?`, [[`$(2, 0)$`, `$(2, 0)$`], [`$(0, -4)$`, `$(0, -4)$`], [`$(1, -3)$`, `$(1, -3)$`], [`$(3, 5)$`, `$(3, 5)$`]], [0, 1, 2, 3], `Check each point. $(2,0): 2^2-4=0$. $(0,-4): 0-4=-4$. $(1,-3): 1-4=-3$. $(3,5): 9-4=5$. All are valid!`, `Periksa tiap titik. $(2,0): 2^2-4=0$. $(0,-4): 0-4=-4$. $(1,-3): 1-4=-3$. $(3,5): 9-4=5$. Semuanya valid!`],
+  [`checkbox`, `Which points are on the line $y = -3x$?`, `Titik mana yang berada pada garis $y = -3x$?`, [[`$(0, 0)$`, `$(0, 0)$`], [`$(1, -3)$`, `$(1, -3)$`], [`$(-4, 12)$`, `$(-4, 12)$`], [`$(2, 4)$`, `$(2, 4)$`]], [0, 1, 2], `Check each point. $(0,0): 0=0$. $(1,-3): -3=-3$. $(-4,12): 12=12$. $(2,4): 4 \neq -6$. The first three are correct.`, `Periksa tiap titik. $(0,0): 0=0$. $(1,-3): -3=-3$. $(-4,12): 12=12$. $(2,4): 4 \neq -6$. Tiga titik pertama benar.`],
+  [`checkbox`, `Which are properties of $y = x^2 - 4$?`, `Mana yang merupakan sifat dari $y = x^2 - 4$?`, [[`U-shaped`, `Berbentuk U`], [`Minimum at $(0, -4)$`, `Minimum di $(0, -4)$`], [`Roots at $2$ and $-2$`, `Akar di $2$ dan $-2$`], [`Constant gradient`, `Gradien konstan`]], [0, 1, 2], `It is a parabola opening upwards (U-shaped). The vertex is the minimum. The roots are where $y=0$. Its gradient is not constant.`, `Ini adalah parabola terbuka ke atas (berbentuk U). Puncaknya adalah minimum. Akarnya saat $y=0$. Gradiennya tidak konstan.`],
+  [`checkbox`, `Which steps are used to find the intersection?`, `Langkah mana yang digunakan untuk mencari perpotongan?`, [[`Equate the two equations`, `Samakan kedua persamaan`], [`Factor the quadratic`, `Faktorkan kuadrat`], [`Solve for $x$`, `Selesaikan untuk $x$`], [`Integrate the function`, `Integrasikan fungsi`]], [0, 1, 2], `Set equations equal, rearrange to $x^2+3x-4=0$, factor, and solve for $x$. Integration is not used here.`, `Samakan persamaan, ubah ke $x^2+3x-4=0$, faktorkan, dan selesaikan untuk $x$. Integrasi tidak digunakan di sini.`],
+  [`checkbox`, `Which solutions solve $x^2 + 3x - 4 = 0$?`, `Solusi mana yang menyelesaikan $x^2 + 3x - 4 = 0$?`, [[`$1$`, `$1$`], [`$-4$`, `$-4$`], [`$2$`, `$2$`], [`$-1$`, `$-1$`]], [0, 1], `Substituting $1$ gives $0$. Substituting $-4$ gives $0$. The others do not.`, `Substitusi $1$ menghasilkan $0$. Substitusi $-4$ menghasilkan $0$. Lainnya tidak.`],
+  [`checkbox`, `Which points represent the intersection of $C$ and $l$?`, `Titik mana yang merepresentasikan perpotongan $C$ dan $l$?`, [[`$(1, -3)$`, `$(1, -3)$`], [`$(-4, 12)$`, `$(-4, 12)$`], [`$(0, -4)$`, `$(0, -4)$`], [`$(2, 0)$`, `$(2, 0)$`]], [0, 1], `Solving the simultaneous equations yields the coordinates $(1, -3)$ and $(-4, 12)$.`, `Menyelesaikan persamaan simultan menghasilkan koordinat $(1, -3)$ dan $(-4, 12)$.`],
+  [`checkbox`, `Which lines are parallel to $y = -3x$?`, `Garis mana yang sejajar dengan $y = -3x$?`, [[`$y = -3x + 5$`, `$y = -3x + 5$`], [`$2y = -6x + 4$`, `$2y = -6x + 4$`], [`$y = 3x - 1$`, `$y = 3x - 1$`], [`$y = -2x$`, `$y = -2x$`]], [0, 1], `Parallel lines have the same gradient ($-3$). $y=-3x+5$ has gradient $-3$. $2y=-6x+4 \implies y=-3x+2$ also has gradient $-3$.`, `Garis sejajar memiliki gradien yang sama ($-3$). $y=-3x+5$ gradiennya $-3$. $2y=-6x+4 \implies y=-3x+2$ juga gradiennya $-3$.`],
+  [`checkbox`, `Which statements about $y = -3x$ are true?`, `Pernyataan mana tentang $y = -3x$ yang benar?`, [[`Negative gradient`, `Gradien negatif`], [`Passes through origin`, `Melalui titik origin`], [`Curved graph`, `Grafik melengkung`], [`Positive y-intercept`, `Perpotongan y positif`]], [0, 1], `Gradient is $-3$ (negative). When $x=0, y=0$, so it passes through origin. It is a straight line with y-intercept $0$.`, `Gradiennya $-3$ (negatif). Saat $x=0, y=0$, jadi melalui origin. Ini adalah garis lurus dengan perpotongan y $0$.`],
+  [`checkbox`, `Which equations represent a parabola?`, `Persamaan mana yang merepresentasikan parabola?`, [[`$y = x^2$`, `$y = x^2$`], [`$y = -2x^2 + 1$`, `$y = -2x^2 + 1$`], [`$x = y^2$`, `$x = y^2$`], [`$y = 2x + 1$`, `$y = 2x + 1$`]], [0, 1, 2], `Any equation with a squared variable (but not both squared like a circle) represents a parabola. The last one is a line.`, `Persamaan dengan variabel kuadrat (tapi bukan keduanya kuadrat seperti lingkaran) adalah parabola. Yang terakhir adalah garis.`],
+  [`checkbox`, `Which are true about the intersection of $C$ and $l$?`, `Mana yang benar tentang perpotongan $C$ dan $l$?`, [[`Two intersection points`, `Dua titik perpotongan`], [`Found by solving simultaneous equations`, `Ditemukan dengan persamaan simultan`], [`Line is tangent to the curve`, `Garis menyinggung kurva`], [`Intersection points are in quadrants 1 and 4`, `Titik potong berada di kuadran 1 dan 4`]], [0, 1], `There are 2 points. They are found via simultaneous equations. The points are $(1, -3)$ and $(-4, 12)$, which are in Quadrant 4 and Quadrant 2.`, `Ada 2 titik. Ditemukan melalui persamaan simultan. Titiknya $(1, -3)$ dan $(-4, 12)$, berada di Kuadran 4 dan Kuadran 2.`],
+  
+  [`sort`, `Sort the steps to solve $x^2 - 4 = 0$`, `Urutkan langkah menyelesaikan $x^2 - 4 = 0$`, [[`Set $y=0$: $x^2 - 4 = 0$`, `Set $y=0$: $x^2 - 4 = 0$`], [`Move 4 to right: $x^2 = 4$`, `Pindahkan 4 ke kanan: $x^2 = 4$`], [`Square root both sides: $x = \pm 2$`, `Akar kuadrat kedua sisi: $x = \pm 2$`]], null, `First isolate $x^2$, then take the square root.`, `Pertama isolasi $x^2$, lalu ambil akar kuadratnya.`],
+  [`sort`, `Sort the steps to solve $x^2 + 3x - 4 = 0$`, `Urutkan langkah menyelesaikan $x^2 + 3x - 4 = 0$`, [[`Write in standard form: $x^2 + 3x - 4 = 0$`, `Tulis dalam bentuk standar: $x^2 + 3x - 4 = 0$`], [`Factor: $(x - 1)(x + 4) = 0$`, `Faktorkan: $(x - 1)(x + 4) = 0$`], [`Set each factor to 0: $x-1=0$ or $x+4=0$`, `Setiap faktor dijadikan 0: $x-1=0$ atau $x+4=0$`], [`Solve for $x$: $x=1$ or $x=-4$`, `Selesaikan untuk $x$: $x=1$ atau $x=-4$`]], null, `Standard form, factor, zero product property, solve.`, `Bentuk standar, faktorkan, sifat hasil kali nol, selesaikan.`],
+  [`pair`, `Match the equation to its graph shape`, `Cocokkan persamaan dengan bentuk grafiknya`, [[[`$y = x^2 - 4$`, `$y = x^2 - 4$`], [`$y = -3x$`, `$y = -3x$`], [`$x^2 + y^2 = 1$`, `$x^2 + y^2 = 1$`]], [[`Parabola`, `Parabola`], [`Straight Line`, `Garis Lurus`], [`Circle`, `Lingkaran`]]], null, `Quadratic gives parabola, linear gives line, sum of squared terms gives circle.`, `Kuadrat menghasilkan parabola, linear menghasilkan garis, jumlah kuadrat menghasilkan lingkaran.`],
+  [`pair`, `Match the point to its feature`, `Cocokkan titik dengan fiturnya`, [[[`$(0, -4)$`, `$(0, -4)$`], [`$(0, 0)$`, `$(0, 0)$`], [`$(1, -3)$`, `$(1, -3)$`]], [[`y-intercept of parabola`, `Perpotongan y parabola`], [`y-intercept of line`, `Perpotongan y garis`], [`Intersection point`, `Titik perpotongan`]]], null, `Match each coordinate to the specific geometric feature it represents.`, `Cocokkan setiap koordinat dengan fitur geometris yang spesifik.`],
+  [`sort`, `Sort the values of $y = x^2 - 4$ for $x = -1, 0, 1$`, `Urutkan nilai $y = x^2 - 4$ untuk $x = -1, 0, 1$`, [[`For $x=-1$: $y = -3$`, `Untuk $x=-1$: $y = -3$`], [`For $x=0$: $y = -4$`, `Untuk $x=0$: $y = -4$`], [`For $x=1$: $y = -3$`, `Untuk $x=1$: $y = -3$`]], null, `Substitute each $x$ value into the equation to find $y$.`, `Substitusi setiap nilai $x$ ke persamaan untuk mencari $y$.`],
+  [`sort`, `Sort the y-coordinates of the intersection points`, `Urutkan koordinat y dari titik perpotongan`, [[`For $x=1$: $y = -3$`, `Untuk $x=1$: $y = -3$`], [`For $x=-4$: $y = 12$`, `Untuk $x=-4$: $y = 12$`]], null, `Calculate $y$ for each corresponding $x$ intersection value.`, `Hitung $y$ untuk setiap nilai $x$ perpotongan yang sesuai.`],
+  [`pair`, `Match the algebraic step with its description`, `Cocokkan langkah aljabar dengan deskripsinya`, [[[`$x^2 - 4 = -3x$`, `$x^2 - 4 = -3x$`], [`$x^2 + 3x - 4 = 0$`, `$x^2 + 3x - 4 = 0$`], [`$(x - 1)(x + 4) = 0$`, `$(x - 1)(x + 4) = 0$`]], [[`Equate equations`, `Samakan persamaan`], [`Standard form`, `Bentuk standar`], [`Factored form`, `Bentuk faktor`]]], null, `Match the equation form to its mathematical name.`, `Cocokkan bentuk persamaan dengan namanya secara matematis.`],
+  [`sort`, `Sort the x-coordinates of the intersection points`, `Urutkan koordinat x dari titik perpotongan`, [[`$x = -4$`, `$x = -4$`], [`$x = 1$`, `$x = 1$`]], null, `Order the x-values from smallest to largest.`, `Urutkan nilai x dari terkecil ke terbesar.`],
+  [`pair`, `Match the term with its value`, `Cocokkan istilah dengan nilainya`, [[[`Gradient of line`, `Gradien garis`], [`y-intercept of parabola`, `Perpotongan y parabola`], [`Sum of roots of $x^2+3x-4=0$`, `Jumlah akar dari $x^2+3x-4=0$`]], [[`$-3$`, `$-3$`], [`$-4$`, `$-4$`], [`$-3$`, `$-3$`]]], null, `Gradient is $-3$. y-intercept is $-4$. Sum of roots is $1 + (-4) = -3$.`, `Gradiennya $-3$. Perpotongan y $-4$. Jumlah akar $1 + (-4) = -3$.`],
+  [`sort`, `Sort the steps to sketch the line $y = -3x$`, `Urutkan langkah membuat sketsa garis $y = -3x$`, [[`Identify gradient $m = -3$`, `Identifikasi gradien $m = -3$`], [`Identify y-intercept $c = 0$`, `Identifikasi perpotongan y $c = 0$`], [`Plot the point $(0,0)$`, `Plot titik $(0,0)$`], [`Draw line through origin with negative slope`, `Gambar garis melalui origin dengan kemiringan negatif`]], null, `Identify parameters, plot the intercept, and draw the line.`, `Identifikasi parameter, plot perpotongan, dan gambar garisnya.`]
+];
+
+let currentTask = 0;
+let userAnswers = new Array(50).fill(null);
+let dragSrcEl = null;
+
+function renderMath(element) {
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(element, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+      ],
+      throwOnError: false
+    });
+  } else {
+    setTimeout(() => renderMath(element), 100);
+  }
+}
+
+function toggleSol(btn) {
+  let box = btn.nextElementSibling;
+  if (box.style.display === 'none' || box.style.display === '') {
+    box.style.display = 'block';
+    btn.innerText = 'Hide Solution';
+  } else {
+    box.style.display = 'none';
+    btn.innerText = 'Show Solution';
+  }
+}
+
+function renderTask(idx) {
+  let t = tasks[idx];
+  let type = t[0];
+  let html = `<h3>Task ${idx+1} <span style="font-size:0.8rem; text-transform:uppercase; background:#eee; padding:3px 8px; border-radius:4px;">${type}</span></h3>`;
+  html += `<div class="q" style="margin-bottom:15px; font-size:1.1rem;">${t[1]}<div class="trans">${t[2]}</div></div>`;
+  
+  if (type === 'radio' || type === 'checkbox' || type === 'tf') {
+    let opts = type === 'tf' ? [['True', 'Benar'], ['False', 'Salah']] : t[3];
+    let shuffled = opts.map((o, i) => ({val: o, idx: i})).sort(() => Math.random() - 0.5);
+    html += '<div class="options">';
+    shuffled.forEach(o => {
+      html += `<label><input type="${type === 'checkbox' ? 'checkbox' : 'radio'}" name="q${idx}" value="${o.idx}"> ${o.val[0]}<div class="trans">${o.val[1]}</div></label>`;
+    });
+    html += '</div>';
+  } else if (type === 'fill') {
+    let blanks = '';
+    for (let i = 0; i < t[4].length; i++) blanks += `<input type="text" class="fill-blank" name="q${idx}" placeholder="..."> `;
+    html += `<div class="options">${blanks}</div>`;
+  } else if (type === 'sort') {
+    let opts = t[3];
+    let shuffled = opts.map((o, i) => ({val: o, idx: i})).sort(() => Math.random() - 0.5);
+    html += '<div class="sort-container">';
+    shuffled.forEach(o => {
+      html += `<div class="sort-item" draggable="true" data-idx="${o.idx}">${o.val[0]}<div class="trans">${o.val[1]}</div></div>`;
+    });
+    html += '</div>';
+  } else if (type === 'pair') {
+    let left = t[3][0];
+    let right = t[3][1].map((o, i) => ({val: o, idx: i})).sort(() => Math.random() - 0.5);
+    html += '<div class="pair-container">';
+    left.forEach((l, i) => {
+      html += `<div class="pair-row"><div class="pair-left">${l[0]}<div class="trans">${l[1]}</div></div><select class="pair-select" data-row="${i}"><option value="-1">Select...</option>`;
+      right.forEach(r => {
+        html += `<option value="${r.idx}">${r.val[0]}</option>`;
+      });
+      html += `</select></div>`;
+    });
+    html += '</div>';
+  }
+  
+  html += `<button onclick="submitTask(${idx})" class="btn btn-sec">Submit Answer</button>`;
+  html += `<div id="feedback${idx}" class="feedback"></div>`;
+  
+  let taskContent = document.getElementById('taskContent');
+  taskContent.innerHTML = html;
+  document.getElementById('taskNum').innerText = `Task ${idx+1} of 50`;
+  attachDragEvents();
+  renderMath(taskContent);
+}
+
+function attachDragEvents() {
+  let items = document.querySelectorAll('.sort-item');
+  items.forEach(item => {
+    item.addEventListener('dragstart', handleDragStart);
+    item.addEventListener('dragover', handleDragOver);
+    item.addEventListener('drop', handleDrop);
+    item.addEventListener('dragend', handleDragEnd);
+  });
+}
+
+function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/html', this.innerHTML); this.style.opacity = '0.5'; }
+function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; return false; }
+function handleDrop(e) {
+  e.preventDefault();
+  if (dragSrcEl != this) {
+    let dragSrcIdx = dragSrcEl.getAttribute('data-idx');
+    let dragTgtIdx = this.getAttribute('data-idx');
+    let dragSrcHTML = dragSrcEl.innerHTML;
+    dragSrcEl.innerHTML = this.innerHTML;
+    this.innerHTML = dragSrcHTML;
+    dragSrcEl.setAttribute('data-idx', dragTgtIdx);
+    this.setAttribute('data-idx', dragSrcIdx);
+  }
+  return false;
+}
+function handleDragEnd(e) { this.style.opacity = '1'; }
+
+function submitTask(idx) {
+  let t = tasks[idx];
+  let type = t[0];
+  let userAns = 'No Answer';
+  let isCorrect = false;
+  let correctAnsText = '';
+  
+  if (type === 'radio' || type === 'tf') {
+    let checked = document.querySelector(`input[name="q${idx}"]:checked`);
+    if (checked) {
+      let idxVal = parseInt(checked.value);
+      let opts = type === 'tf' ? [['True', 'Benar'], ['False', 'Salah']] : t[3];
+      userAns = opts[idxVal][0];
+      correctAnsText = opts[t[4]][0];
+      isCorrect = idxVal === t[4];
+    }
+  } else if (type === 'checkbox') {
+    let checked = document.querySelectorAll(`input[name="q${idx}"]:checked`);
+    userAns = Array.from(checked).map(c => t[3][parseInt(c.value)][0]).join(', ');
+    correctAnsText = t[4].map(i => t[3][i][0]).join(', ');
+    let selected = Array.from(checked).map(c => parseInt(c.value)).sort();
+    let correct = t[4].sort();
+    isCorrect = selected.length === correct.length && selected.every((v, i) => v === correct[i]);
+  } else if (type === 'fill') {
+    let inputs = document.querySelectorAll(`input[name="q${idx}"]`);
+    userAns = Array.from(inputs).map(i => i.value || 'N/A').join(', ');
+    correctAnsText = t[4].join(', ');
+    isCorrect = t[4].every((ans, i) => inputs[i].value.trim() === ans);
+  } else if (type === 'sort') {
+    let items = document.querySelectorAll(`.sort-item`);
+    userAns = Array.from(items).map(i => i.innerText.replace(i.querySelector('.trans').innerText, '').trim()).join(' -> ');
+    correctAnsText = t[3].map(o => o[0]).join(' -> ');
+    let order = Array.from(items).map(i => parseInt(i.getAttribute('data-idx')));
+    isCorrect = order.every((v, i) => v === i);
+  } else if (type === 'pair') {
+    let selects = document.querySelectorAll(`.pair-select`);
+    userAns = Array.from(selects).map(s => s.options[s.selectedIndex].text).join(' | ');
+    correctAnsText = t[3][1].map(r => r[0]).join(' | ');
+    isCorrect = true;
+    selects.forEach((s, i) => {
+      if (parseInt(s.value) !== i) isCorrect = false;
+    });
+  }
+  
+  userAnswers[idx] = {answer: userAns, correct: isCorrect};
+  
+  let feedbackDiv = document.getElementById(`feedback${idx}`);
+  feedbackDiv.style.display = 'block';
+  feedbackDiv.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+  feedbackDiv.innerHTML = `
+    <strong>${isCorrect ? 'Correct!' : 'Wrong!'} <span class="trans">${isCorrect ? 'Benar!' : 'Salah!'}</span></strong>
+    <div style="margin-top:5px;"><strong>Your Answer:</strong> ${userAns} <span class="trans">Jawaban Anda</span></div>
+    <div><strong>Correct Answer:</strong> ${correctAnsText} <span class="trans">Jawaban Benar</span></div>
+    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #999;"><strong>Explanation:</strong> ${t[5]} <div class="trans">Penjelasan: ${t[6]}</div></div>
+  `;
+  renderMath(feedbackDiv);
+}
+
+function getCorrectText(idx) {
+  let t = tasks[idx];
+  if (t[0] === 'radio' || t[0] === 'checkbox') return t[4].map(i => t[3][i][0]).join(', ');
+  if (t[0] === 'tf') return t[4] === 1 ? 'True' : 'False';
+  if (t[0] === 'fill') return t[4].join(', ');
+  if (t[0] === 'sort') return t[3].map(o => o[0]).join(' -> ');
+  if (t[0] === 'pair') return t[3][1].map(r => r[0]).join(' | ');
+  return '';
+}
+
+function prevTask() { if (currentTask > 0) { currentTask--; renderTask(currentTask); } }
+function nextTask() { if (currentTask < 49) { currentTask++; renderTask(currentTask); } }
+
+function printPDF() {
+  let score = userAnswers.filter(a => a && a.correct).length;
+  let html = `<html><head><title>Print</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"><\/script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"><\/script><style>body{font-family:Arial;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #000; padding:8px; text-align:left;} .trans{font-style:italic; color:#555; font-size:0.9em; display:block;}</style></head><body>`;
+  html += `<h1>Math Tutoring by Deni</h1>`;
+  html += `<p>Nama: ...<br>Tanggal: ...<br>Topic: Intersection of Line and Parabola<br>Grup task: Task 1-5<br>Skor: ${score}/50</p>`;
+  html += `<table><tr><th>No.</th><th>Pertanyaan</th><th>Jawaban Siswa</th><th>Jawaban Benar</th><th>Keterangan</th></tr>`;
+  for (let i = 0; i < 50; i++) {
+    let t = tasks[i];
+    let q = t[1] + `<span class="trans">${t[2]}</span>`;
+    let uAns = userAnswers[i] ? userAnswers[i].answer : 'N/A';
+    let cAns = getCorrectText(i);
+    let status = userAnswers[i] && userAnswers[i].correct ? '✓' : '✗';
+    html += `<tr><td>${i+1}</td><td>${q}</td><td>${uAns}</td><td>${cAns}</td><td style="text-align:center">${status}</td></tr>`;
+  }
+  html += `</table><br><br>Checked by,<br><br>Deni`;
+  html += `<script>renderMathInElement(document.body, {delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}]});<\/script></body></html>`;
+  
+  let win = window.open('', '', 'height=800,width=800');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); }, 500);
+}
+
+window.onload = () => {
+  renderMath(document.body);
+  renderTask(0);
+};
+</script>
+</body>
+</html>
