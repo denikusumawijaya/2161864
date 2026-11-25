@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 10 Final Test Prep – Straight-Line Graphs</title>
+<style>
+:root{
+  --ink:#1d2433; --muted:#5b6478; --line:#e3e7ef; --bg:#f6f8fc; --card:#fff;
+  --pri:#2f5bea; --pri-dark:#2343c0; --pri-soft:#e9efff; --ok:#16a34a; --ok-soft:#e8f7ee;
+  --warn:#d97706; --warn-soft:#fff5e5; --bad:#dc2626; --bad-soft:#fdecec;
+  --c1:#2f5bea; --c2:#e0457b; --c3:#0e9f8e;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+header{background:linear-gradient(135deg,#1e3a8a,#2f5bea 55%,#0e7c86);color:#fff;padding:28px 20px 70px}
+.wrap{max-width:960px;margin:0 auto;padding:0 18px}
+.brand{font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{margin:.3em 0 .15em;font-size:1.9rem;line-height:1.2}
+header p{margin:.2em 0;opacity:.92}
+.pill{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 12px;font-size:.8rem;margin:10px 6px 0 0}
+nav{position:sticky;top:0;z-index:5;background:rgba(246,248,252,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:99px;font-size:.9rem;font-weight:600}
+nav a:hover{border-color:var(--pri);color:var(--pri)}
+main{margin-top:-48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:0 0 22px;box-shadow:0 4px 18px rgba(30,40,80,.06)}
+h2{margin:0 0 .4em;font-size:1.35rem}
+h3{margin:1.2em 0 .4em;font-size:1.08rem}
+.id{display:block;font-style:italic;font-size:.86em;color:var(--muted);margin-top:1px}
+.id-inline{font-style:italic;font-size:.86em;color:var(--muted)}
+.m{font-family:"Cambria Math","Times New Roman",serif;font-size:1.08em;white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.9em;margin:0 2px;line-height:1.1}
+.fr>span:first-child{border-bottom:1.3px solid currentColor;padding:0 3px}
+.fr>span:last-child{padding:0 3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fbfcff}
+.box b.t{display:block;color:var(--pri);margin-bottom:4px}
+.formula{background:var(--pri-soft);border-radius:10px;padding:10px 12px;margin:8px 0;text-align:center;font-size:1.1em}
+.q{border-left:5px solid var(--pri);background:#f7f9ff;border-radius:10px;padding:12px 16px;margin:10px 0 14px;position:relative}
+.q .num{font-weight:700;color:var(--pri);margin-right:6px}
+.marks{float:right;background:var(--ink);color:#fff;border-radius:8px;padding:1px 9px;font-size:.8rem;font-weight:700;margin-left:10px}
+.steps{counter-reset:st;margin:8px 0}
+.step{display:none;border:1px solid var(--line);border-radius:10px;padding:10px 14px 10px 46px;margin:8px 0;position:relative;background:#fff;animation:pop .3s ease}
+.step.show{display:block}
+.step::before{counter-increment:st;content:counter(st);position:absolute;left:12px;top:10px;width:24px;height:24px;border-radius:50%;background:var(--pri);color:#fff;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step.final{border-color:var(--ok);background:var(--ok-soft)}
+.step.final::before{background:var(--ok);content:"✓"}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:8px 14px;cursor:pointer;background:var(--pri);color:#fff}
+button.ghost{background:#fff;color:var(--pri);border:1.5px solid var(--pri)}
+button:disabled{opacity:.45;cursor:default}
+.tip{background:var(--warn-soft);border:1px solid #f6d7a5;border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.95em}
+.tip b{color:var(--warn)}
+.alert{background:var(--bad-soft);border:1px solid #f5bcbc;border-radius:10px;padding:12px 16px;margin:10px 0}
+.alert b{color:var(--bad)}
+.graph{width:100%;max-width:440px;display:block;margin:10px auto;background:#fff;border:1px solid var(--line);border-radius:12px}
+.gwrap{display:none}
+.gwrap.show{display:block}
+.legend{text-align:center;font-size:.88em;color:var(--muted)}
+.legend span{display:inline-block;margin:0 8px}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.explorer{display:grid;grid-template-columns:minmax(220px,1fr) minmax(260px,440px);gap:18px;align-items:center}
+@media(max-width:700px){.explorer{grid-template-columns:1fr}}
+label{display:block;font-weight:600;margin:10px 0 2px}
+input[type=range]{width:100%}
+.eqbig{font-size:1.35em;text-align:center;background:var(--pri-soft);border-radius:10px;padding:10px;margin:8px 0}
+table.sum{border-collapse:collapse;width:100%;font-size:.95em}
+table.sum td,table.sum th{border:1px solid var(--line);padding:7px 10px;text-align:left}
+table.sum th{background:var(--pri-soft)}
+footer{text-align:center;color:var(--muted);font-size:.85em;padding:20px 0 40px}
+
+button:hover{background:var(--pri-dark)}
+button.ghost:hover{background:var(--pri-soft)}
+#lat,#subLat{--pri:#0e7c86;--pri-dark:#0b5f67;--pri-soft:#e4f5f6}
+#lat .q{border-left-color:var(--pri)}
+.score{font-weight:800;font-size:1.05rem}
+.prog{flex:1;min-width:140px;height:10px;background:#e6eaf1;border-radius:99px;overflow:hidden}
+.prog>div{height:100%;width:0;background:linear-gradient(90deg,#22a3a0,#16a34a);transition:width .4s}
+#lat .q{border-left:5px solid var(--pri);background:#f4fbfb;border-radius:10px;padding:12px 16px;margin:6px 0 12px}
+#lat .num{font-weight:800;color:var(--pri);margin-right:6px}
+#lat .part{border-top:1px dashed var(--line);padding-top:14px;margin-top:16px}
+#lat .part:first-of-type{border-top:0;margin-top:4px;padding-top:0}
+#lat .ans{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0;font-family:"Cambria Math","Times New Roman",serif;font-size:1.12em}
+#lat .ans input,#lat .ans select{font:inherit;font-family:"Segoe UI",system-ui,sans-serif;font-size:.95rem;width:92px;padding:6px 8px;border:1.5px solid #cdd4e0;border-radius:8px;text-align:center}
+#lat .ans select{width:auto}
+#lat .ans input.good{border-color:var(--ok);background:var(--ok-soft)}
+#lat .ans input.badv{border-color:var(--bad);background:var(--bad-soft)}
+#lat .ans input:disabled,#lat .ans select:disabled{color:#333;opacity:1}
+#lat button:hover{background:var(--pri-dark)}
+#lat button.ghost:hover{background:var(--pri-soft)}
+#lat .fb{display:none;border-radius:10px;padding:9px 13px;margin:8px 0;font-size:.95em}
+#lat .fb.show{display:block}
+#lat .fb.ok{background:var(--ok-soft);border:1px solid #b6e3c6}
+#lat .fb.half{background:var(--warn-soft);border:1px solid #f6d7a5}
+#lat .fb.no{background:var(--bad-soft);border:1px solid #f5bcbc}
+#lat .hint{display:none;background:var(--warn-soft);border:1px solid #f6d7a5;border-radius:10px;padding:9px 13px;margin:8px 0;font-size:.95em}
+#lat .hint.show{display:block}
+#lat .sol{display:none;background:#fbfcff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:8px 0}
+#lat .sol.show{display:block;animation:pop .3s ease}
+#lat .sol ol{margin:4px 0 4px 18px;padding:0}
+#lat .sol li{margin:5px 0}
+#lat .sol .final{background:var(--ok-soft);border-radius:8px;padding:6px 10px;margin-top:6px;font-weight:700}
+#lat .howto{font-size:.93em}
+#lat .howto code{background:var(--pri-soft);padding:1px 6px;border-radius:5px}
+#lat .result{display:none;text-align:center}
+#lat .result.show{display:block}
+#lat .big{font-size:2.6rem;font-weight:800;color:var(--pri);margin:4px 0}
+#lat .sol{display:block!important}
+.card{scroll-margin-top:120px}
+/* tabs */
+.topbar{position:sticky;top:0;z-index:6;background:rgba(246,248,252,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:8px;padding:10px 18px 0}
+.tab{flex:1;max-width:260px;background:#fff;color:var(--ink);border:1.5px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;padding:10px 14px;font-size:1rem}
+.tab:hover{background:#f0f3fa}
+.tab.on{background:#2f5bea;color:#fff;border-color:#2f5bea}
+.tab.on[data-t="lat"]{background:#0e7c86;border-color:#0e7c86}
+.sub{display:none;gap:6px;overflow-x:auto;padding:10px 18px;align-items:center;flex-wrap:nowrap}
+.sub.on{display:flex}
+.sub a{white-space:nowrap;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:99px;font-size:.9rem;font-weight:600}
+.sub a:hover{border-color:#2f5bea;color:#2f5bea}
+#subLat{flex-wrap:wrap;gap:12px}
+.panel{display:none}
+.panel.on{display:block}
+@media print{.topbar,button{display:none}.step,.gwrap,.sol{display:block!important}header{padding-bottom:20px}main{margin-top:0}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">Math Tutoring by Deni · Cambridge Grade 10</div>
+    <h1>Final Test Prep: Straight-Line Graphs</h1>
+    <p>Worked solutions to Practice Paper 1 plus unlimited practice sets. <span style="font-style:italic;opacity:.85">Pembahasan Practice Paper 1 dan latihan soal tanpa batas.</span></p>
+    <span class="pill">📘 Pembahasan</span><span class="pill">✏️ Latihan</span><span class="pill">🧮 27 marks</span>
+  </div>
+</header>
+
+<div class="topbar">
+  <div class="wrap" style="padding:0">
+    <div class="tabs">
+      <button class="tab on" data-t="pemb">📘 Pembahasan</button>
+      <button class="tab" data-t="lat">✏️ Latihan</button>
+    </div>
+    <div class="sub on" id="subPemb">
+  <a href="#recap">Key Ideas</a><a href="#explorer">Line Explorer</a><a href="#q1">Question 1</a><a href="#q2">Question 2</a><a href="#q3">Question 3</a><a href="#summary">Answer Summary</a>
+</div>
+    <div class="sub" id="subLat">
+  <span class="score">Score: <span id="sc">0</span> / 27</span>
+  <div class="prog"><div id="pg"></div></div>
+  <span>Set #<b id="setNo">1</b></span>
+  <button class="ghost" id="prevSet">◀</button>
+  <button id="newSet">🔁 New set</button>
+  <button class="ghost" id="finish">Finish</button>
+</div>
+  </div>
+</div>
+
+<main class="wrap">
+<div class="panel on" id="pemb">
+
+
+<!-- ============ RECAP ============ -->
+<section class="card" id="recap">
+  <h2>🔑 Key Ideas You Must Know</h2>
+  <span class="id">Konsep penting yang wajib dikuasai</span>
+  <div class="grid" style="margin-top:12px">
+    <div class="box"><b class="t">1. Gradient (m)</b>
+      <div class="formula m">m = <span class="fr"><span>y₂ − y₁</span><span>x₂ − x₁</span></span></div>
+      How steep the line is: change in y ÷ change in x.<span class="id">Kemiringan garis: perubahan y ÷ perubahan x.</span></div>
+    <div class="box"><b class="t">2. Gradient–intercept form</b>
+      <div class="formula m">y = mx + c</div>
+      <span class="m">m</span> = gradient, <span class="m">c</span> = where the line crosses the y-axis.<span class="id">m = gradien, c = titik potong dengan sumbu-y.</span></div>
+    <div class="box"><b class="t">3. Point–gradient form</b>
+      <div class="formula m">y − y₁ = m(x − x₁)</div>
+      Use it when you know the gradient and <b>one point</b>.<span class="id">Dipakai jika diketahui gradien dan satu titik.</span></div>
+    <div class="box"><b class="t">4. Parallel lines</b>
+      <div class="formula m">m₁ = m₂</div>
+      Parallel lines have the <b>same gradient</b>.<span class="id">Garis sejajar memiliki gradien yang sama.</span></div>
+    <div class="box"><b class="t">5. Perpendicular lines</b>
+      <div class="formula m">m₁ × m₂ = −1 &nbsp;⇔&nbsp; m₂ = −<span class="fr"><span>1</span><span>m₁</span></span></div>
+      Flip the fraction and change the sign.<span class="id">Balik pecahannya dan ubah tandanya.</span></div>
+    <div class="box"><b class="t">6. Intersection point</b>
+      <div class="formula">Solve the two equations simultaneously</div>
+      Where two lines meet, both equations are true.<span class="id">Titik potong = penyelesaian SPLDV kedua persamaan.</span></div>
+  </div>
+  <div class="tip"><b>⚠ Before finding a gradient:</b> always rearrange the equation into <span class="m">y = mx + c</span> first. For example, <span class="m">−3y = 2x + 5</span> has gradient <span class="m">−{2|3}</span>, not 2.<span class="id">Selalu ubah persamaan ke bentuk y = mx + c dulu sebelum membaca gradiennya.</span></div>
+</section>
+
+<!-- ============ EXPLORER ============ -->
+<section class="card" id="explorer">
+  <h2>🎛 Line Explorer</h2>
+  <span class="id">Geser slider untuk melihat pengaruh m dan c terhadap garis</span>
+  <div class="explorer" style="margin-top:10px">
+    <div>
+      <label>Gradient m = <span id="mv"></span></label>
+      <input type="range" id="ms" min="-4" max="4" step="0.5" value="1.5">
+      <label>y-intercept c = <span id="cv"></span></label>
+      <input type="range" id="cs" min="-6" max="6" step="1" value="-2">
+      <label style="font-weight:500"><input type="checkbox" id="showPar"> Show a parallel line <span class="id-inline">(garis sejajar)</span></label>
+      <label style="font-weight:500"><input type="checkbox" id="showPerp"> Show a perpendicular line <span class="id-inline">(garis tegak lurus)</span></label>
+      <div class="eqbig m" id="eqOut"></div>
+      <div id="eqNote" style="font-size:.92em;color:var(--muted)"></div>
+    </div>
+    <svg class="graph" id="gExp" viewBox="0 0 400 400"></svg>
+  </div>
+</section>
+
+<!-- ============ Q1 ============ -->
+<section class="card" id="q1">
+  <h2>Question 1 – Find the equations of the lines</h2>
+  <span class="id">Tentukan persamaan garis-garis berikut</span>
+
+  <!-- 1a -->
+  <div class="q"><span class="marks">[2]</span><span class="num">1(a)</span>A line with gradient <span class="m">−{1|2}</span> that crosses the y-axis at <span class="m">y = 3</span>.<span class="id">Garis dengan gradien −½ dan memotong sumbu-y di y = 3.</span></div>
+  <div class="steps" data-q="1a">
+    <div class="step">Gradient <span class="m">m = −{1|2}</span>. The line crosses the y-axis at 3, so <span class="m">c = 3</span>.<span class="id">Gradien m = −½ dan titik potong sumbu-y memberi c = 3.</span></div>
+    <div class="step">Substitute into <span class="m">y = mx + c</span>.<span class="id">Substitusi ke y = mx + c.</span></div>
+    <div class="step final"><span class="m"><b>y = −{1|2}x + 3</b></span> &nbsp;(or <span class="m">x + 2y − 6 = 0</span>)</div>
+  </div>
+  <div class="btns" data-for="1a"></div>
+  <div class="gwrap" id="g1a-w"><svg class="graph" id="g1a" viewBox="0 0 400 400"></svg></div>
+
+  <!-- 1b -->
+  <div class="q"><span class="marks">[3]</span><span class="num">1(b)</span>A line that passes through the points <span class="m">(2, −5)</span> and <span class="m">(0, 8)</span>.<span class="id">Garis yang melalui titik (2, −5) dan (0, 8).</span></div>
+  <div class="steps">
+    <div class="step">Find the gradient:<br><span class="m">m = <span class="fr"><span>8 − (−5)</span><span>0 − 2</span></span> = <span class="fr"><span>13</span><span>−2</span></span> = −{13|2}</span><span class="id">Hitung gradien dengan rumus (y₂ − y₁)/(x₂ − x₁).</span></div>
+    <div class="step">The point <span class="m">(0, 8)</span> is on the y-axis (x = 0), so <span class="m">c = 8</span>.<span class="id">Titik (0, 8) berada di sumbu-y, jadi c = 8 langsung.</span></div>
+    <div class="step">Check with <span class="m">(2, −5)</span>: <span class="m">−{13|2}(2) + 8 = −13 + 8 = −5</span> ✓<span class="id">Cek dengan titik yang lain.</span></div>
+    <div class="step final"><span class="m"><b>y = −{13|2}x + 8</b></span> &nbsp;(or <span class="m">2y = −13x + 16</span>)</div>
+  </div>
+  <div class="btns"></div>
+  <div class="tip"><b>Common mistake:</b> mixing up the order, e.g. <span class="m">(8 − (−5)) / (2 − 0)</span>. Take the top and the bottom in the <b>same order</b>.<span class="id">Urutan pengurangan di pembilang dan penyebut harus sama.</span></div>
+  <div class="gwrap"><svg class="graph" id="g1b" viewBox="0 0 400 400"></svg></div>
+
+  <!-- 1c -->
+  <div class="q"><span class="marks">[3]</span><span class="num">1(c)</span>A line which has gradient <span class="m">5</span> and passes through the point <span class="m">(4, −1)</span>.<span class="id">Garis dengan gradien 5 yang melalui titik (4, −1).</span></div>
+  <div class="steps">
+    <div class="step">Use <span class="m">y − y₁ = m(x − x₁)</span> with <span class="m">m = 5</span>, <span class="m">(x₁, y₁) = (4, −1)</span>:<br><span class="m">y − (−1) = 5(x − 4)</span><span class="id">Gunakan rumus y − y₁ = m(x − x₁).</span></div>
+    <div class="step">Expand: <span class="m">y + 1 = 5x − 20</span><span class="id">Jabarkan kurungnya.</span></div>
+    <div class="step">Subtract 1 from both sides: <span class="m">y = 5x − 21</span><span class="id">Kurangi kedua ruas dengan 1.</span></div>
+    <div class="step final"><span class="m"><b>y = 5x − 21</b></span> &nbsp;Check: <span class="m">5(4) − 21 = −1</span> ✓</div>
+  </div>
+  <div class="btns"></div>
+  <div class="gwrap"><svg class="graph" id="g1c" viewBox="0 0 400 400"></svg></div>
+
+  <!-- 1d -->
+  <div class="q"><span class="marks">[3]</span><span class="num">1(d)</span>A line that is perpendicular to <span class="m">−3y = 2x + 5</span> and passes through <span class="m">(5, 2)</span>.<span class="id">Garis yang tegak lurus −3y = 2x + 5 dan melalui titik (5, 2).</span></div>
+  <div class="steps">
+    <div class="step">Rearrange into <span class="m">y = mx + c</span> by dividing everything by −3:<br><span class="m">y = −{2|3}x − {5|3}</span> &nbsp;so &nbsp;<span class="m">m₁ = −{2|3}</span><span class="id">Bagi semua suku dengan −3 agar terlihat gradiennya.</span></div>
+    <div class="step">Perpendicular gradient: flip and change the sign:<br><span class="m">m₂ = −<span class="fr"><span>1</span><span>−2/3</span></span> = {3|2}</span> &nbsp;Check: <span class="m">−{2|3} × {3|2} = −1</span> ✓<span class="id">Gradien tegak lurus: dibalik dan diubah tandanya.</span></div>
+    <div class="step">Use the point <span class="m">(5, 2)</span>: <span class="m">y − 2 = {3|2}(x − 5)</span> → <span class="m">y − 2 = {3|2}x − {15|2}</span><span class="id">Substitusi titik (5, 2) ke rumus y − y₁ = m(x − x₁).</span></div>
+    <div class="step">Add 2: <span class="m">y = {3|2}x − {15|2} + {4|2} = {3|2}x − {11|2}</span><span class="id">Tambahkan 2 (= 4/2) ke kedua ruas.</span></div>
+    <div class="step final"><span class="m"><b>y = {3|2}x − {11|2}</b></span> &nbsp;(or <span class="m">2y = 3x − 11</span>)</div>
+  </div>
+  <div class="btns"></div>
+  <div class="tip"><b>Common mistake:</b> reading the gradient as 2 straight from <span class="m">−3y = 2x + 5</span>. You must divide by −3 first.<span class="id">Kesalahan umum: langsung menganggap gradiennya 2.</span></div>
+  <div class="gwrap"><svg class="graph" id="g1d" viewBox="0 0 400 400"></svg><div class="legend"><span><i style="background:var(--c2)"></i>−3y = 2x + 5</span><span><i style="background:var(--c1)"></i>answer</span></div></div>
+
+  <!-- 1e -->
+  <div class="q"><span class="marks">[3]</span><span class="num">1(e)</span>A line that is parallel to <span class="m">y = −3x − 2</span> and passes through the point <span class="m">(−6, −3)</span>.<span class="id">Garis yang sejajar y = −3x − 2 dan melalui titik (−6, −3).</span></div>
+  <div class="steps">
+    <div class="step">Parallel → same gradient: <span class="m">m = −3</span><span class="id">Sejajar → gradien sama.</span></div>
+    <div class="step"><span class="m">y − (−3) = −3(x − (−6))</span> → <span class="m">y + 3 = −3(x + 6)</span><span class="id">Hati-hati dengan tanda negatif ganda.</span></div>
+    <div class="step">Expand: <span class="m">y + 3 = −3x − 18</span> → <span class="m">y = −3x − 21</span><span class="id">Jabarkan lalu kurangi 3.</span></div>
+    <div class="step final"><span class="m"><b>y = −3x − 21</b></span> &nbsp;Check: <span class="m">−3(−6) − 21 = 18 − 21 = −3</span> ✓</div>
+  </div>
+  <div class="btns"></div>
+  <div class="gwrap"><svg class="graph" id="g1e" viewBox="0 0 400 400"></svg><div class="legend"><span><i style="background:var(--c2)"></i>y = −3x − 2</span><span><i style="background:var(--c1)"></i>answer</span></div></div>
+</section>
+
+<!-- ============ Q2 ============ -->
+<section class="card" id="q2">
+  <h2>Question 2 – Points on a line</h2>
+  <span class="id">Titik-titik pada sebuah garis</span>
+  <div class="q">The line <span class="m">y = {3|2}x − 4</span> passes through the points <span class="m">P</span> and <span class="m">Q</span>. The point <span class="m">P</span> has coordinates <span class="m">(a, 11)</span>. The point <span class="m">Q</span> has coordinates <span class="m">(−2, b)</span>.<span class="id">Garis y = 3/2 x − 4 melalui P(a, 11) dan Q(−2, b).</span></div>
+  <div class="tip"><b>Key idea:</b> if a point is <i>on</i> a line, its coordinates make the equation true, so substitute them in.<span class="id">Titik yang terletak pada garis memenuhi persamaan garis itu, jadi substitusikan koordinatnya.</span></div>
+
+  <div class="q"><span class="marks">[2]</span><span class="num">2(a)</span>Find <span class="m">a</span>.<span class="id">Tentukan nilai a.</span></div>
+  <div class="steps">
+    <div class="step">Substitute <span class="m">x = a</span>, <span class="m">y = 11</span>: <span class="m">11 = {3|2}a − 4</span><span class="id">Substitusi x = a dan y = 11.</span></div>
+    <div class="step">Add 4: <span class="m">15 = {3|2}a</span> → multiply by <span class="m">{2|3}</span>: <span class="m">a = 15 × {2|3} = 10</span><span class="id">Tambah 4, lalu kalikan dengan 2/3.</span></div>
+    <div class="step final"><span class="m"><b>a = 10</b></span> &nbsp;→ P(10, 11)</div>
+  </div>
+  <div class="btns"></div>
+
+  <div class="q"><span class="marks">[2]</span><span class="num">2(b)</span>Find <span class="m">b</span>.<span class="id">Tentukan nilai b.</span></div>
+  <div class="steps">
+    <div class="step">Substitute <span class="m">x = −2</span>: <span class="m">b = {3|2}(−2) − 4</span><span class="id">Substitusi x = −2.</span></div>
+    <div class="step"><span class="m">b = −3 − 4</span><span class="id">Hitung: (3/2) × (−2) = −3.</span></div>
+    <div class="step final"><span class="m"><b>b = −7</b></span> &nbsp;→ Q(−2, −7)</div>
+  </div>
+  <div class="btns"></div>
+  <div class="gwrap"><svg class="graph" id="g2" viewBox="0 0 400 400"></svg></div>
+</section>
+
+<!-- ============ Q3 ============ -->
+<section class="card" id="q3">
+  <h2>Question 3 – Triangle from three lines</h2>
+  <span class="id">Segitiga yang dibentuk oleh tiga garis</span>
+
+  <div class="alert"><b>⚠ Note about the question paper.</b> As printed, <span class="m">AB: 3x − 3y = 5</span> and <span class="m">AC: x − y = −1</span> both have gradient <b>1</b>:
+    <span class="m">y = x − {5|3}</span> and <span class="m">y = x + 1</span>. They are <b>parallel</b>, so they never meet and there is no vertex A. This must be a typo.
+    The worked solution below uses <span class="m"><b>AB: 3x − 2y = 5</b></span>, which gives a right-angled triangle as the question intends.
+    <span class="id">Catatan: pada soal tercetak, AB dan AC sejajar (gradien sama-sama 1) sehingga tidak bisa membentuk segitiga. Pembahasan memakai AB: 3x − 2y = 5.</span>
+    <div class="btns" style="margin-top:8px"><button class="ghost" id="btnPrinted">Show the lines as printed</button></div>
+    <div class="gwrap" id="gPrinted-w"><svg class="graph" id="gPrinted" viewBox="0 0 400 400"></svg><div class="legend"><span><i style="background:var(--c1)"></i>3x − 3y = 5</span><span><i style="background:var(--c2)"></i>2x + 3y = 19</span><span><i style="background:var(--c3)"></i>x − y = −1</span></div></div>
+  </div>
+
+  <div class="q"><span class="marks">[6]</span><span class="num">3(a)</span>Find the vertices of the triangle <span class="m">ABC</span> whose sides are given by the lines:<br>
+   <span class="m">AB: 3x − 2y = 5</span> &nbsp;&nbsp; <span class="m">BC: 2x + 3y = 19</span> &nbsp;&nbsp; <span class="m">AC: x − y = −1</span>
+   <span class="id">Tentukan titik-titik sudut segitiga ABC.</span></div>
+  <div class="tip"><b>Strategy:</b> each vertex lies on <b>two</b> sides. A is on AB and AC, B is on AB and BC, C is on BC and AC. Solve each pair simultaneously.<span class="id">Setiap titik sudut adalah perpotongan dua sisi, jadi selesaikan setiap pasangan persamaan.</span></div>
+  <div class="steps">
+    <div class="step"><b>Vertex A</b> = AB ∩ AC. From AC: <span class="m">x = y − 1</span>.<br>Substitute into AB: <span class="m">3(y − 1) − 2y = 5</span> → <span class="m">y − 3 = 5</span> → <span class="m">y = 8</span>, <span class="m">x = 7</span>.<span class="id">Metode substitusi.</span></div>
+    <div class="step"><b>A = (7, 8)</b>. Check in AB: <span class="m">21 − 16 = 5</span> ✓; in AC: <span class="m">7 − 8 = −1</span> ✓</div>
+    <div class="step"><b>Vertex B</b> = AB ∩ BC. Eliminate y:<br>
+      <span class="m">(3x − 2y = 5) × 3 → 9x − 6y = 15</span><br>
+      <span class="m">(2x + 3y = 19) × 2 → 4x + 6y = 38</span><br>
+      Add: <span class="m">13x = 53</span> → <span class="m">x = {53|13}</span><span class="id">Metode eliminasi: samakan koefisien y lalu jumlahkan.</span></div>
+    <div class="step">Then <span class="m">y = <span class="fr"><span>3x − 5</span><span>2</span></span> = <span class="fr"><span>159/13 − 65/13</span><span>2</span></span> = {94|26} = {47|13}</span>.<br><b>B = ({53|13}, {47|13}) ≈ (4.08, 3.62)</b></div>
+    <div class="step"><b>Vertex C</b> = BC ∩ AC. From AC: <span class="m">x = y − 1</span>.<br>Substitute into BC: <span class="m">2(y − 1) + 3y = 19</span> → <span class="m">5y = 21</span> → <span class="m">y = {21|5}</span>, <span class="m">x = {16|5}</span>.<br><b>C = ({16|5}, {21|5}) = (3.2, 4.2)</b></div>
+    <div class="step final"><b>A(7, 8), &nbsp;B({53|13}, {47|13}) ≈ (4.08, 3.62), &nbsp;C(3.2, 4.2)</b></div>
+  </div>
+  <div class="btns"></div>
+
+  <div class="q"><span class="marks">[3]</span><span class="num">3(b)</span>Show that the triangle is a right-angled triangle.<span class="id">Tunjukkan bahwa segitiga tersebut siku-siku.</span></div>
+  <div class="steps">
+    <div class="step">Write each side as <span class="m">y = mx + c</span>:<br>
+      <span class="m">AB: y = {3|2}x − {5|2}</span> → <span class="m">m<sub>AB</sub> = {3|2}</span><br>
+      <span class="m">BC: y = −{2|3}x + {19|3}</span> → <span class="m">m<sub>BC</sub> = −{2|3}</span><br>
+      <span class="m">AC: y = x + 1</span> → <span class="m">m<sub>AC</sub> = 1</span><span class="id">Cari gradien ketiga sisi.</span></div>
+    <div class="step">Test the pairs: <span class="m">m<sub>AB</sub> × m<sub>BC</sub> = {3|2} × (−{2|3}) = −1</span><span class="id">Hasil kali gradien = −1 berarti kedua garis tegak lurus.</span></div>
+    <div class="step final">So <b>AB ⊥ BC</b>, and the angle at B is <b>90°</b>. Triangle ABC is right-angled at B. ∎</div>
+  </div>
+  <div class="btns"></div>
+  <div class="tip"><b>Alternative (Pythagoras):</b> <span class="m">AB² = {4693|169}</span>, <span class="m">BC² = {4693|4225}</span>, <span class="m">AC² = 3.8² + 3.8² = 28.88</span>, and <span class="m">AB² + BC² = 28.88 = AC²</span> ✓. The gradient method is much quicker.<span class="id">Cara lain dengan Pythagoras, tetapi metode gradien jauh lebih cepat.</span></div>
+  <div class="gwrap"><svg class="graph" id="g3" viewBox="0 0 400 400"></svg><div class="legend"><span><i style="background:var(--c1)"></i>AB</span><span><i style="background:var(--c2)"></i>BC</span><span><i style="background:var(--c3)"></i>AC</span></div></div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section class="card" id="summary">
+  <h2>✅ Answer Summary</h2>
+  <span class="id">Ringkasan jawaban</span>
+  <table class="sum" style="margin-top:10px">
+    <tr><th>Q</th><th>Answer</th><th>Marks</th></tr>
+    <tr><td>1(a)</td><td class="m">y = −{1|2}x + 3</td><td>2</td></tr>
+    <tr><td>1(b)</td><td class="m">y = −{13|2}x + 8</td><td>3</td></tr>
+    <tr><td>1(c)</td><td class="m">y = 5x − 21</td><td>3</td></tr>
+    <tr><td>1(d)</td><td class="m">y = {3|2}x − {11|2}</td><td>3</td></tr>
+    <tr><td>1(e)</td><td class="m">y = −3x − 21</td><td>3</td></tr>
+    <tr><td>2(a)</td><td class="m">a = 10</td><td>2</td></tr>
+    <tr><td>2(b)</td><td class="m">b = −7</td><td>2</td></tr>
+    <tr><td>3(a)</td><td class="m">A(7, 8), B({53|13}, {47|13}), C(3.2, 4.2)</td><td>6</td></tr>
+    <tr><td>3(b)</td><td><span class="m">m<sub>AB</sub> × m<sub>BC</sub> = −1</span> ⇒ right angle at B</td><td>3</td></tr>
+    <tr><th></th><th>Total</th><th>27</th></tr>
+  </table>
+  <div class="btns" style="margin-top:14px"><button id="revealAll">Reveal every step</button><button class="ghost" id="hideAll">Hide every step</button><button class="ghost" onclick="window.print()">Print</button></div>
+</section>
+
+
+
+</div>
+<div class="panel" id="lat">
+
+  <section class="card howto">
+    <h2>📋 How to answer</h2>
+    <span class="id">Cara menjawab</span>
+    <ul style="margin:8px 0 0 18px;padding:0">
+      <li>Work it out on paper first, then type your answer and press <b>Check</b>. <span class="id">Kerjakan dulu di kertas, lalu ketik jawaban dan tekan Check.</span></li>
+      <li>Fractions: <code>3/2</code>, <code>-13/2</code>. Negatives: <code>-21</code>. Decimals to 3 s.f. are accepted too (<code>4.08</code>). <span class="id">Pecahan ditulis 3/2; desimal 3 angka penting juga diterima.</span></li>
+      <li>For a line, fill in <span class="m">y = <b>m</b>x + <b>c</b></span>. If there is no constant, type <code>0</code>. <span class="id">Untuk persamaan garis, isi nilai m dan c.</span></li>
+      <li>💡 <b>Hint</b> is free. 📖 <b>Show solution</b> locks that part, so try first! <span class="id">Hint gratis, tetapi setelah melihat pembahasan jawaban dikunci.</span></li>
+      <li>Same set number = same questions, so the whole class can work on the same set. <span class="id">Nomor set yang sama = soal yang sama, cocok untuk dikerjakan satu kelas.</span></li>
+    </ul>
+  </section>
+
+  <div id="qs"></div>
+
+  <section class="card result" id="result">
+    <h2>🏁 Your result for Set #<span id="rSet"></span></h2>
+    <div class="big"><span id="rScore"></span> / 27</div>
+    <div id="rMsg"></div>
+    <div class="btns" style="justify-content:center;margin-top:12px"><button id="again">Try a new set</button><button class="ghost" onclick="window.print()">Print</button></div>
+  </section>
+  
+
+</div>
+<footer>Math Tutoring by Deni · Cambridge Grade 10 · Straight-Line Graphs</footer>
+</main>
+
+<script>
+
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function drawGraph(svg,opt){
+  svg.innerHTML='';
+  const W=400,H=400,P=28;
+  const [x0,x1]=opt.x||[-10,10],[y0,y1]=opt.y||[-10,10];
+  const sx=x=>P+(x-x0)/(x1-x0)*(W-2*P), sy=y=>H-P-(y-y0)/(y1-y0)*(H-2*P);
+  const span=Math.max(x1-x0,y1-y0);const step=opt.step||(span>40?10:span>20?5:span>12?2:1);
+  const g=el('g',{},svg);
+  for(let x=Math.ceil(x0/step)*step;x<=x1;x+=step){el('line',{x1:sx(x),y1:sy(y0),x2:sx(x),y2:sy(y1),stroke:'#eef1f6'},g); if(x!==0)el('text',{x:sx(x),y:Math.min(Math.max(sy(0)+13,P+10),H-P+14),'font-size':10,'text-anchor':'middle',fill:'#8a93a6'},g).textContent=x;}
+  for(let y=Math.ceil(y0/step)*step;y<=y1;y+=step){el('line',{x1:sx(x0),y1:sy(y),x2:sx(x1),y2:sy(y),stroke:'#eef1f6'},g); if(y!==0)el('text',{x:Math.min(Math.max(sx(0)-5,P+12),W-P),y:sy(y)+3,'font-size':10,'text-anchor':'end',fill:'#8a93a6'},g).textContent=y;}
+  if(y0<=0&&y1>=0)el('line',{x1:sx(x0),y1:sy(0),x2:sx(x1),y2:sy(0),stroke:'#5b6478','stroke-width':1.3},g);
+  if(x0<=0&&x1>=0)el('line',{x1:sx(0),y1:sy(y0),x2:sx(0),y2:sy(y1),stroke:'#5b6478','stroke-width':1.3},g);
+  el('text',{x:W-P+4,y:sy(Math.max(y0,Math.min(0,y1)))-5,'font-size':12,fill:'#5b6478','font-style':'italic'},g).textContent='x';
+  el('text',{x:sx(Math.max(x0,Math.min(0,x1)))+6,y:P-8,'font-size':12,fill:'#5b6478','font-style':'italic'},g).textContent='y';
+  const clip='c'+Math.random().toString(36).slice(2);
+  const d=el('defs',{},svg);const cp=el('clipPath',{id:clip},d);el('rect',{x:P,y:P,width:W-2*P,height:H-2*P},cp);
+  const lg=el('g',{'clip-path':`url(#${clip})`},svg);
+  if(opt.poly){el('polygon',{points:opt.poly.map(p=>sx(p[0])+','+sy(p[1])).join(' '),fill:'rgba(47,91,234,.10)',stroke:'none'},lg);}
+  (opt.lines||[]).forEach(L=>{ // ax+by=c
+    let a=L.a,b=L.b,c=L.c; if(L.m!==undefined){a=-L.m;b=1;c=L.k;}
+    let pts;
+    if(Math.abs(b)<1e-12){const x=c/a;pts=[[x,y0-1],[x,y1+1]];}
+    else pts=[[x0-1,(c-a*(x0-1))/b],[x1+1,(c-a*(x1+1))/b]];
+    el('line',{x1:sx(pts[0][0]),y1:sy(pts[0][1]),x2:sx(pts[1][0]),y2:sy(pts[1][1]),stroke:L.color||'#2f5bea','stroke-width':L.w||2.6,'stroke-dasharray':L.dash||'','stroke-linecap':'round'},lg);
+  });
+  (opt.points||[]).forEach(p=>{
+    el('circle',{cx:sx(p.x),cy:sy(p.y),r:5,fill:p.color||'#1d2433',stroke:'#fff','stroke-width':1.5},svg);
+    const t=el('text',{x:sx(p.x)+(p.dx||8),y:sy(p.y)+(p.dy||-8),'font-size':12,'font-weight':700,fill:p.color||'#1d2433'},svg);t.textContent=p.label||'';
+  });
+  if(opt.rightAngle){const [vx,vy,ux,uy,wx,wy]=opt.rightAngle; // vertex, unit dirs in px space
+    const V=[sx(vx),sy(vy)];const s=12;
+    const p1=[V[0]+ux*s,V[1]+uy*s],p3=[V[0]+wx*s,V[1]+wy*s],p2=[p1[0]+wx*s,p1[1]+wy*s];
+    el('polyline',{points:[p1,p2,p3].map(p=>p.join(',')).join(' '),fill:'none',stroke:'#16a34a','stroke-width':2},svg);}
+}
+const C1='#2f5bea',C2='#e0457b',C3='#0e9f8e';
+
+
+</script>
+<script>
+
+/* ---------- fraction markup {a|b} ---------- */
+function fracify(root){
+  root.querySelectorAll('.m, td.m, .step, .q, .tip, .alert').forEach(el=>{
+    if(el.dataset.fx) return; el.dataset.fx=1;
+    el.innerHTML = el.innerHTML.replace(/\{([^{}|<>]+)\|([^{}|<>]+)\}/g,'<span class="fr"><span>$1</span><span>$2</span></span>');
+  });
+}
+fracify(document.getElementById('pemb'));
+
+
+/* ---------- step reveal controls ---------- */
+document.querySelectorAll('.steps').forEach(steps=>{
+  const btns=steps.nextElementSibling; if(!btns||!btns.classList.contains('btns'))return;
+  const list=[...steps.querySelectorAll('.step')];
+  // graph = next .gwrap sibling after btns (skipping tips) within section, before next .q
+  let g=btns.nextElementSibling; while(g && !g.classList.contains('gwrap') && !g.classList.contains('q') && !g.classList.contains('steps')) g=g.nextElementSibling;
+  if(g && !g.classList.contains('gwrap')) g=null;
+  const next=document.createElement('button');next.textContent='▶ Next step';
+  const all=document.createElement('button');all.className='ghost';all.textContent='Show full solution';
+  const reset=document.createElement('button');reset.className='ghost';reset.textContent='↺ Reset';
+  btns.append(next,all,reset);
+  const upd=()=>{const n=list.filter(s=>s.classList.contains('show')).length;next.disabled=n===list.length;next.textContent=n===0?'▶ Start solution':'▶ Next step ('+n+'/'+list.length+')';if(g)g.classList.toggle('show',n===list.length);};
+  next.onclick=()=>{const s=list.find(s=>!s.classList.contains('show'));if(s)s.classList.add('show');upd();};
+  all.onclick=()=>{list.forEach(s=>s.classList.add('show'));upd();};
+  reset.onclick=()=>{list.forEach(s=>s.classList.remove('show'));upd();};
+  steps._upd=upd; upd();
+});
+document.getElementById('revealAll').onclick=()=>{document.querySelectorAll('.step').forEach(s=>s.classList.add('show'));document.querySelectorAll('.steps').forEach(s=>s._upd&&s._upd());};
+document.getElementById('hideAll').onclick=()=>{document.querySelectorAll('.step').forEach(s=>s.classList.remove('show'));document.querySelectorAll('.steps').forEach(s=>s._upd&&s._upd());};
+
+/* ---------- graphs for each question ---------- */
+drawGraph(document.getElementById('g1a'),{x:[-4,10],y:[-4,6],lines:[{m:-0.5,k:3,color:C1}],points:[{x:0,y:3,label:'(0, 3)'}]});
+drawGraph(document.getElementById('g1b'),{x:[-4,6],y:[-8,10],lines:[{m:-6.5,k:8,color:C1}],points:[{x:2,y:-5,label:'(2, −5)'},{x:0,y:8,label:'(0, 8)'}]});
+drawGraph(document.getElementById('g1c'),{x:[-2,8],y:[-22,10],step:2,lines:[{m:5,k:-21,color:C1}],points:[{x:4,y:-1,label:'(4, −1)',dx:-58},{x:0,y:-21,label:'(0, −21)'}]});
+drawGraph(document.getElementById('g1d'),{x:[-6,10],y:[-8,8],lines:[{m:-2/3,k:-5/3,color:C2},{m:1.5,k:-5.5,color:C1}],points:[{x:5,y:2,label:'(5, 2)',dx:-48}]});
+drawGraph(document.getElementById('g1e'),{x:[-10,4],y:[-12,10],step:2,lines:[{m:-3,k:-2,color:C2},{m:-3,k:-21,color:C1}],points:[{x:-6,y:-3,label:'(−6, −3)'}]});
+drawGraph(document.getElementById('g2'),{x:[-4,12],y:[-9,13],step:2,lines:[{m:1.5,k:-4,color:C1}],points:[{x:10,y:11,label:'P(10, 11)',dx:-70},{x:-2,y:-7,label:'Q(−2, −7)'}]});
+drawGraph(document.getElementById('g3'),{x:[0,9],y:[0,9],
+  lines:[{a:3,b:-2,c:5,color:C1},{a:2,b:3,c:19,color:C2},{a:1,b:-1,c:-1,color:C3}],
+  poly:[[7,8],[53/13,47/13],[3.2,4.2]],
+  points:[{x:7,y:8,label:'A(7, 8)',dx:8,dy:4},{x:53/13,y:47/13,label:'B',dx:6,dy:16},{x:3.2,y:4.2,label:'C',dx:-16,dy:-6}]});
+document.getElementById('btnPrinted').onclick=function(){
+  const w=document.getElementById('gPrinted-w');w.classList.toggle('show');
+  this.textContent=w.classList.contains('show')?'Hide graph':'Show the lines as printed';
+  drawGraph(document.getElementById('gPrinted'),{x:[-2,10],y:[-4,10],lines:[{a:3,b:-3,c:5,color:C1},{a:2,b:3,c:19,color:C2},{a:1,b:-1,c:-1,color:C3}]});
+};
+
+/* ---------- explorer ---------- */
+function fmtNum(v){const s=(Math.abs(v)%1===0)?Math.abs(v):Math.abs(v).toString();return s;}
+function eqStr(m,c){
+  let s='y = ';
+  if(m===0) s+= (c<0?'−':'')+fmtNum(c);
+  else{ s+=(m<0?'−':'')+(Math.abs(m)===1?'':fmtNum(m))+'x'; if(c>0)s+=' + '+c; else if(c<0)s+=' − '+Math.abs(c);}
+  return s;
+}
+function explorer(){
+  const m=+ms.value,c=+cs.value; mv.textContent=m; cv.textContent=c;
+  const lines=[{m:m,k:c,color:C1,w:3}]; let note='';
+  if(showPar.checked){lines.push({m:m,k:c+3,color:C3,dash:'7 5'});note+='Parallel: '+eqStr(m,c+3)+' (same m). ';}
+  if(showPerp.checked){ if(m===0){lines.push({a:1,b:0,c:0,color:C2,dash:'7 5'});note+='Perpendicular to a horizontal line: x = 0 (vertical).';}
+    else{const pm=-1/m;lines.push({m:pm,k:c,color:C2,dash:'7 5'});note+='Perpendicular gradient = −1/'+m+' = '+(+pm.toFixed(3))+' (product = −1).';}}
+  eqOut.textContent=eqStr(m,c); eqNote.textContent=note;
+  drawGraph(gExp,{lines:lines,points:[{x:0,y:c,label:'(0, '+c+')'}]});
+}
+['ms','cs','showPar','showPerp'].forEach(id=>document.getElementById(id).addEventListener('input',explorer));
+explorer();
+
+</script>
+<script>
+
+/* ================= Rational numbers ================= */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+class Q{
+  constructor(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);this.n=n/g;this.d=d/g;}
+  static of(x){return x instanceof Q?x:new Q(x,1);}
+  add(o){o=Q.of(o);return new Q(this.n*o.d+o.n*this.d,this.d*o.d);}
+  sub(o){o=Q.of(o);return new Q(this.n*o.d-o.n*this.d,this.d*o.d);}
+  mul(o){o=Q.of(o);return new Q(this.n*o.n,this.d*o.d);}
+  div(o){o=Q.of(o);return new Q(this.n*o.d,this.d*o.n);}
+  neg(){return new Q(-this.n,this.d);}
+  abs(){return new Q(Math.abs(this.n),this.d);}
+  inv(){return new Q(this.d,this.n);}
+  get v(){return this.n/this.d;}
+  isInt(){return this.d===1;}
+  eq(o){o=Q.of(o);return this.n===o.n&&this.d===o.d;}
+  sign(){return Math.sign(this.n);}
+}
+const MINUS='−';
+function fr(n,d){return `<span class="fr"><span>${n}</span><span>${d}</span></span>`;}
+function fq(q){q=Q.of(q);const s=q.n<0?MINUS:'';const a=Math.abs(q.n);return q.d===1?s+a:s+fr(a,q.d);}
+function fp(q){q=Q.of(q);return q.n<0?'('+fq(q)+')':fq(q);}
+function dec(q){const v=Q.of(q).v;return Number.isInteger(v)?String(v).replace('-',MINUS):(+v.toPrecision(3)).toString().replace('-',MINUS);}
+function mTerm(m,v='x'){m=Q.of(m);if(m.n===0)return '';if(m.eq(1))return v;if(m.eq(-1))return MINUS+v;return fq(m)+v;}
+function lineHTML(m,c){m=Q.of(m);c=Q.of(c);let s='y = ';if(m.n===0)return s+fq(c);s+=mTerm(m);if(c.n>0)s+=' + '+fq(c);else if(c.n<0)s+=' '+MINUS+' '+fq(c.abs());return s;}
+function stdHTML(a,b,c){ // ax + by = c
+  let s='';
+  if(a!==0)s+=(a<0?MINUS:'')+(Math.abs(a)===1?'':Math.abs(a))+'x';
+  if(b!==0){if(s)s+=b<0?' '+MINUS+' ':' + ';else if(b<0)s+=MINUS;s+=(Math.abs(b)===1?'':Math.abs(b))+'y';}
+  return s+' = '+(c<0?MINUS:'')+Math.abs(c);
+}
+function pt(x,y){return `(${fq(x)}, ${fq(y)})`;}
+function M(h){return `<span class="m">${h}</span>`;}
+
+/* ================= seeded random ================= */
+function rng(seed){let a=seed*2654435761>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let R;
+const ri=(a,b)=>a+Math.floor(R()*(b-a+1));
+const pick=arr=>arr[Math.floor(R()*arr.length)];
+const nz=(a,b)=>{let v;do v=ri(a,b);while(v===0);return v;};
+
+function autoRange(pts,minSpan=8){
+  let xs=pts.map(p=>p[0]).concat([0]),ys=pts.map(p=>p[1]).concat([0]);
+  let x0=Math.floor(Math.min(...xs))-2,x1=Math.ceil(Math.max(...xs))+2,y0=Math.floor(Math.min(...ys))-2,y1=Math.ceil(Math.max(...ys))+2;
+  const span=Math.max(x1-x0,y1-y0,minSpan);
+  const cx=(x0+x1)/2,cy=(y0+y1)/2;
+  return {x:[Math.floor(cx-span/2),Math.ceil(cx+span/2)],y:[Math.floor(cy-span/2),Math.ceil(cy+span/2)]};
+}
+const L1='#0e7c86',L2='#e0457b',L3='#6d5bd0';
+/* ================= input parsing ================= */
+function parseVal(s){
+  if(s==null)return NaN;s=String(s).replace(/[−–]/g,'-').replace(/\s+/g,'').replace(/,/g,'.');
+  if(s==='')return NaN;
+  const num='[-+]?\\d*\\.?\\d+';
+  let m=s.match(new RegExp('^('+num+')/('+num+')$'));
+  if(m){const d=parseFloat(m[2]);return d===0?NaN:parseFloat(m[1])/d;}
+  if(new RegExp('^'+num+'$').test(s))return parseFloat(s);
+  return NaN;
+}
+function close(v,target){target=Q.of(target).v;return isFinite(v)&&Math.abs(v-target)<=Math.max(0.006,Math.abs(target)*0.005);}
+
+/* ================= question generators ================= */
+const FRACS=[[1,2],[-1,2],[2,3],[-2,3],[3,4],[-3,4],[1,3],[-1,3],[5,2],[-5,2],[3,2],[-3,2]];
+function genSet(seed){
+  R=rng(seed);const Qs=[];
+
+  /* 1(a) gradient + y-intercept */
+  {const f=pick(FRACS),m=new Q(f[0],f[1]),c=nz(-7,7);
+   Qs.push({id:'1a',marks:2,type:'line',
+    text:`A line with gradient ${M(fq(m))} that crosses the ${M('y')}-axis at ${M('y = '+fq(c))}.`,
+    idt:`Garis dengan gradien ${fq(m)} yang memotong sumbu-y di y = ${fq(c)}.`,
+    ans:{m:m,c:Q.of(c)},
+    hint:`In ${M('y = mx + c')}, ${M('m')} is the gradient and ${M('c')} is the y-intercept. <span class="id">m = gradien, c = titik potong sumbu-y.</span>`,
+    sol:[`${M('m = '+fq(m))}, and the line crosses the y-axis at ${fq(c)}, so ${M('c = '+fq(c))}.`,`Substitute into ${M('y = mx + c')}.`],
+    final:lineHTML(m,c), graph:{lines:[{m:m.v,k:c,color:L1}],points:[{x:0,y:c,label:pt(0,c).replace(/<[^>]+>/g,'')}]}});}
+
+  /* 1(b) two points */
+  {let x1,y1,x2,y2;do{x1=ri(-5,5);x2=ri(-5,5);y1=ri(-8,8);y2=ri(-8,8);}while(x1===x2||y1===y2||(x1!==0&&x2!==0&&R()<0.4));
+   const m=new Q(y2-y1,x2-x1),c=Q.of(y1).sub(m.mul(x1));
+   const s=[`Gradient: ${M('m = '+fr(fq(y2)+' '+MINUS+' '+fp(y1),fq(x2)+' '+MINUS+' '+fp(x1))+' = '+fr(fq(y2-y1),fq(x2-x1))+' = '+fq(m))}`];
+   if(x1===0||x2===0){const yi=x1===0?y1:y2;s.push(`One point has ${M('x = 0')}, so it is the y-intercept: ${M('c = '+fq(yi))}.`);}
+   else{s.push(`Substitute ${M(pt(x1,y1))} into ${M('y = '+mTerm(m)+' + c')}: ${M(fq(y1)+' = '+fp(m)+' × '+fp(x1)+' + c')} → ${M('c = '+fq(c))}.`);}
+   Qs.push({id:'1b',marks:3,type:'line',
+    text:`A line that passes through the points ${M(pt(x1,y1))} and ${M(pt(x2,y2))}.`,
+    idt:`Garis yang melalui titik (${x1}, ${y1}) dan (${x2}, ${y2}).`,
+    ans:{m:m,c:c},
+    hint:`Find the gradient first: ${M('m = '+fr('y₂ − y₁','x₂ − x₁'))}. Then find ${M('c')}. <span class="id">Cari gradien dulu, lalu cari c.</span>`,
+    sol:s,final:lineHTML(m,c),graph:{lines:[{m:m.v,k:c.v,color:L1}],points:[{x:x1,y:y1,label:`(${x1}, ${y1})`},{x:x2,y:y2,label:`(${x2}, ${y2})`}]}});}
+
+  /* 1(c) gradient + point */
+  {const m=nz(-6,6),x1=nz(-6,6),y1=ri(-7,7),c=y1-m*x1;
+   Qs.push({id:'1c',marks:3,type:'line',
+    text:`A line which has gradient ${M(fq(m))} and passes through the point ${M(pt(x1,y1))}.`,
+    idt:`Garis dengan gradien ${m} yang melalui titik (${x1}, ${y1}).`,
+    ans:{m:Q.of(m),c:Q.of(c)},
+    hint:`Use ${M('y − y₁ = m(x − x₁)')}. <span class="id">Gunakan rumus y − y₁ = m(x − x₁).</span>`,
+    sol:[`${M('y − '+fp(y1)+' = '+fq(m)+'(x − '+fp(x1)+')')}`,
+         `Expand: ${M((y1===0?'y':'y '+(y1<0?'+ '+(-y1):MINUS+' '+y1))+' = '+mTerm(m)+(-m*x1>=0?' + ':' '+MINUS+' ')+Math.abs(m*x1))}`,
+         `Make ${M('y')} the subject: ${M(lineHTML(m,c))}`],
+    final:lineHTML(m,c),graph:{lines:[{m:m,k:c,color:L1}],points:[{x:x1,y:y1,label:`(${x1}, ${y1})`}]}});}
+
+  /* 1(d) perpendicular to  k y = a x + r */
+  {let k,a;do{k=pick([-4,-3,-2,2,3,4,-1]);a=nz(-5,5);}while(Math.abs(a)===Math.abs(k)||gcd(a,k)!==1);
+   const r=nz(-9,9),m1=new Q(a,k),m2=new Q(-k,a),x1=nz(-6,6),y1=ri(-6,6),c=Q.of(y1).sub(m2.mul(x1));
+   const orig=`${k===1?'':k===-1?MINUS:fq(k)}y = ${mTerm(a)} ${r<0?MINUS+' '+(-r):'+ '+r}`;
+   Qs.push({id:'1d',marks:3,type:'line',
+    text:`A line that is perpendicular to ${M(orig)} and passes through ${M(pt(x1,y1))}.`,
+    idt:`Garis yang tegak lurus ${orig.replace(/<[^>]+>/g,'')} dan melalui titik (${x1}, ${y1}).`,
+    ans:{m:m2,c:c},
+    hint:`Divide by ${fq(k)} first to get ${M('y = mx + c')}. Perpendicular gradient: ${M('m₂ = −'+fr('1','m₁'))}. <span class="id">Ubah dulu ke bentuk y = mx + c. Gradien tegak lurus = −1/m₁.</span>`,
+    sol:[`Divide by ${fp(k)}: ${M(lineHTML(m1,new Q(r,k)))}, so ${M('m₁ = '+fq(m1))}.`,
+         `Perpendicular: ${M('m₂ = −1 ÷ '+fp(m1)+' = '+fq(m2))}. Check: ${M(fp(m1)+' × '+fp(m2)+' = −1')} ✓`,
+         `${M('y − '+fp(y1)+' = '+fp(m2)+'(x − '+fp(x1)+')')}, then make ${M('y')} the subject.`],
+    final:lineHTML(m2,c),graph:{lines:[{a:-a,b:k,c:r,color:L2},{m:m2.v,k:c.v,color:L1}],points:[{x:x1,y:y1,label:`(${x1}, ${y1})`}]},legend:[[L2,orig.replace(/<[^>]+>/g,'')],[L1,'answer']]});}
+
+  /* 1(e) parallel */
+  {const m=nz(-5,5),k=nz(-8,8),x1=nz(-7,7),y1=ri(-7,7),c=y1-m*x1;
+   const orig=lineHTML(m,k);
+   Qs.push({id:'1e',marks:3,type:'line',
+    text:`A line that is parallel to ${M(orig)} and passes through the point ${M(pt(x1,y1))}.`,
+    idt:`Garis yang sejajar ${orig.replace(/<[^>]+>/g,'')} dan melalui titik (${x1}, ${y1}).`,
+    ans:{m:Q.of(m),c:Q.of(c)},
+    hint:`Parallel lines have the same gradient. <span class="id">Garis sejajar memiliki gradien yang sama.</span>`,
+    sol:[`Parallel → same gradient: ${M('m = '+fq(m))}.`,
+         `${M('y − '+fp(y1)+' = '+fq(m)+'(x − '+fp(x1)+')')}`,
+         `Expand and make ${M('y')} the subject.`],
+    final:lineHTML(m,c),graph:{lines:[{m:m,k:k,color:L2},{m:m,k:c,color:L1}],points:[{x:x1,y:y1,label:`(${x1}, ${y1})`}]},legend:[[L2,orig.replace(/<[^>]+>/g,'')],[L1,'answer']]});}
+
+  /* 2 points on a line */
+  {let p,q;do{q=pick([2,3,4]);p=nz(-5,5);}while(gcd(p,q)!==1);
+   const m=new Q(p,q),r=nz(-6,6);
+   let a,X;do{a=q*nz(-3,3);X=q*nz(-3,3);}while(a===X);
+   const Y=m.mul(a).add(r).v, b=m.mul(X).add(r).v;
+   const L=lineHTML(m,r);
+   const pref=`The line ${M(L)} passes through the points ${M('P')} and ${M('Q')}. ${M('P')} has coordinates ${M('(a, '+fq(Y)+')')}. ${M('Q')} has coordinates ${M('('+fq(X)+', b)')}.`;
+   const gr={lines:[{m:m.v,k:r,color:L1}],points:[{x:a,y:Y,label:`P(${a}, ${Y})`},{x:X,y:b,label:`Q(${X}, ${b})`}]};
+   Qs.push({id:'2a',marks:2,type:'val',pre:pref,preId:`Garis ${L.replace(/<[^>]+>/g,'')} melalui P(a, ${Y}) dan Q(${X}, b).`,
+    text:`Find ${M('a')}.`,idt:'Tentukan nilai a.',fields:[['a','a =']],ans:{a:Q.of(a)},
+    hint:`Substitute ${M('y = '+fq(Y))} into the equation and solve for ${M('x')}. <span class="id">Substitusi y lalu selesaikan untuk x.</span>`,
+    sol:[`${M(fq(Y)+' = '+mTerm(m,'a')+(r<0?' − '+(-r):' + '+r))}`,
+         `${M(fq(Y-r)+' = '+mTerm(m,'a'))} → ${M('a = '+fp(Y-r)+' × '+fp(m.inv()))}`],
+    final:'a = '+fq(a),graph:gr});
+   Qs.push({id:'2b',marks:2,type:'val',
+    text:`Find ${M('b')}.`,idt:'Tentukan nilai b.',fields:[['b','b =']],ans:{b:Q.of(b)},
+    hint:`Substitute ${M('x = '+fq(X))} into the equation. <span class="id">Substitusi x ke persamaan garis.</span>`,
+    sol:[`${M('b = '+fq(m)+' × '+fp(X)+(r<0?' − '+(-r):' + '+r))}`,`${M('b = '+fq(m.mul(X))+(r<0?' − '+(-r):' + '+r))}`],
+    final:'b = '+fq(b),graph:gr});}
+
+  /* 3 right-angled triangle */
+  {let Rv,P1,P2,u,v;
+   for(;;){const p=ri(1,3),q=nz(-3,3);if(gcd(p,q)!==1)continue;u=[p,q];v=[-q,p];
+     const s=ri(1,3),t=ri(1,2);Rv=[ri(-3,4),ri(-3,4)];P1=[Rv[0]+s*u[0],Rv[1]+s*u[1]];P2=[Rv[0]+t*v[0],Rv[1]+t*v[1]];
+     const dx=P1[0]-P2[0],dy=P1[1]-P2[1];
+     if(dx!==0&&dy!==0&&[Rv,P1,P2].every(P=>Math.abs(P[0])<=10&&Math.abs(P[1])<=10))break;}
+   const labels=['A','B','C'];for(let i=2;i>0;i--){const j=ri(0,i);[labels[i],labels[j]]=[labels[j],labels[i]];}
+   const V={};V[labels[0]]=Rv;V[labels[1]]=P1;V[labels[2]]=P2;const right=labels[0];
+   function lineThrough(P,Qp){let a=Qp[1]-P[1],b=P[0]-Qp[0],c=a*P[0]+b*P[1];let g=gcd(gcd(a,b),c);a/=g;b/=g;c/=g;if(a<0||(a===0&&b<0)){a=-a;b=-b;c=-c;}return [a,b,c];}
+   const sides={AB:lineThrough(V.A,V.B),BC:lineThrough(V.B,V.C),AC:lineThrough(V.A,V.C)};
+   const sideTxt=k=>stdHTML(...sides[k]);
+   const grad=k=>new Q(-sides[k][0],sides[k][1]);
+   function solveStep(k1,k2,name){const[a1,b1,c1]=sides[k1],[a2,b2,c2]=sides[k2];const D=a1*b2-a2*b1;const x=new Q(c1*b2-c2*b1,D),y=new Q(a1*c2-a2*c1,D);
+     return `<b>${name}</b> = ${k1} ∩ ${k2}: solve ${M(stdHTML(a1,b1,c1))} and ${M(stdHTML(a2,b2,c2))} simultaneously (eliminate ${M('y')}: multiply the first equation by ${fp(b2)} and the second by ${fp(b1)}, then subtract) → ${M('x = '+fq(x)+', y = '+fq(y))}. So <b>${name}${pt(x,y)}</b>.`;}
+   const gTri={lines:[{a:sides.AB[0],b:sides.AB[1],c:sides.AB[2],color:L1},{a:sides.BC[0],b:sides.BC[1],c:sides.BC[2],color:L2},{a:sides.AC[0],b:sides.AC[1],c:sides.AC[2],color:L3}],
+     poly:[V.A,V.B,V.C],points:['A','B','C'].map(L=>({x:V[L][0],y:V[L][1],label:`${L}(${V[L][0]}, ${V[L][1]})`}))};
+   const legend=[[L1,'AB'],[L2,'BC'],[L3,'AC']];
+   const pre=`The sides of triangle ${M('ABC')} lie on the lines<br>${M('AB: '+sideTxt('AB'))} &nbsp;&nbsp; ${M('BC: '+sideTxt('BC'))} &nbsp;&nbsp; ${M('AC: '+sideTxt('AC'))}`;
+   Qs.push({id:'3a',marks:6,type:'tri',pre:pre,preId:'Sisi-sisi segitiga ABC terletak pada garis-garis tersebut.',
+    text:`Find the coordinates of the vertices ${M('A')}, ${M('B')} and ${M('C')}.`,idt:'Tentukan koordinat titik sudut A, B, dan C.',
+    fields:[['Ax','A = (',''],['Ay',',',')'],['Bx','B = (',''],['By',',',')'],['Cx','C = (',''],['Cy',',',')']],
+    ans:{Ax:V.A[0],Ay:V.A[1],Bx:V.B[0],By:V.B[1],Cx:V.C[0],Cy:V.C[1]},
+    hint:`A lies on AB and AC, B lies on AB and BC, C lies on BC and AC. Solve each pair simultaneously. <span class="id">Setiap titik sudut = perpotongan dua sisi; selesaikan dengan SPLDV.</span>`,
+    sol:[solveStep('AB','AC','A'),solveStep('AB','BC','B'),solveStep('BC','AC','C')],
+    final:`A${pt(...V.A)}, B${pt(...V.B)}, C${pt(...V.C)}`,graph:gTri,legend:legend});
+   const gs={AB:grad('AB'),BC:grad('BC'),AC:grad('AC')};
+   const pairs=[['AB','BC','B'],['AB','AC','A'],['BC','AC','C']];
+   Qs.push({id:'3b',marks:3,type:'ra',
+    text:`Show that triangle ${M('ABC')} is right-angled. At which vertex is the right angle?`,idt:'Tunjukkan bahwa segitiga ABC siku-siku. Di titik sudut mana sudut sikunya?',
+    ans:{v:right,p:-1},
+    hint:`Find the gradient of each side (${M('m = −'+fr('a','b'))} for ${M('ax + by = c')}). Two sides are perpendicular if ${M('m₁ × m₂ = −1')}. <span class="id">Cari gradien tiap sisi; dua sisi tegak lurus jika hasil kali gradiennya −1.</span>`,
+    sol:[`Gradients: ${M('m<sub>AB</sub> = '+fq(gs.AB))}, ${M('m<sub>BC</sub> = '+fq(gs.BC))}, ${M('m<sub>AC</sub> = '+fq(gs.AC))}.`,
+      ...pairs.map(([s1,s2,vx])=>`${M('m<sub>'+s1+'</sub> × m<sub>'+s2+'</sub> = '+fp(gs[s1])+' × '+fp(gs[s2])+' = '+fq(gs[s1].mul(gs[s2])))} ${gs[s1].mul(gs[s2]).eq(-1)?'✓ perpendicular':''}`)],
+    final:`The two sides that meet at ${right} are perpendicular, so the right angle is at <b>${right}</b>. ∎`,graph:gTri,legend:legend});}
+  return Qs;
+}
+
+/* ================= rendering ================= */
+let seed=1,state={};
+function render(){
+  const Qs=genSet(seed);state={};
+  document.getElementById('setNo').textContent=seed;
+  document.getElementById('result').classList.remove('show');
+  const host=document.getElementById('qs');host.innerHTML='';
+  const groups=[['Question 1 – Find the equations of the lines','Tentukan persamaan garis-garis berikut',['1a','1b','1c','1d','1e']],
+                ['Question 2 – Points on a line','Titik-titik pada sebuah garis',['2a','2b']],
+                ['Question 3 – Triangle from three lines','Segitiga dari tiga garis',['3a','3b']]];
+  groups.forEach(([t,ti,ids])=>{
+    const card=document.createElement('section');card.className='card';
+    card.innerHTML=`<h2>${t}</h2><span class="id">${ti}</span>`;
+    ids.forEach(id=>{const q=Qs.find(x=>x.id===id);card.appendChild(renderQ(q));});
+    host.appendChild(card);
+  });
+  updScore();
+}
+function renderQ(q){
+  const d=document.createElement('div');d.className='part';
+  state[q.id]={got:0,locked:false,marks:q.marks};
+  let h='';
+  if(q.pre)h+=`<div class="q" style="border-left-color:#9aa6b8">${q.pre}<span class="id">${q.preId||''}</span></div>`;
+  h+=`<div class="q"><span class="marks">[${q.marks}]</span><span class="num">${q.id.replace(/(\d)([a-z])/,'$1($2)')}</span>${q.text}<span class="id">${q.idt}</span></div>`;
+  h+='<div class="ans">';
+  if(q.type==='line')h+=`y = <input data-k="m" placeholder="m"> x + <input data-k="c" placeholder="c">`;
+  else if(q.type==='val')h+=q.fields.map(f=>`${f[1]} <input data-k="${f[0]}">`).join(' ');
+  else if(q.type==='tri')h+=q.fields.map((f,i)=>`${f[1]}<input data-k="${f[0]}" style="width:72px">${f[2]}${i%2?'<span style="width:14px"></span>':''}`).join('');
+  else if(q.type==='ra')h+=`Right angle at <select data-k="v"><option value="">–</option><option>A</option><option>B</option><option>C</option></select> &nbsp; because m₁ × m₂ = <input data-k="p">`;
+  h+='</div>';
+  h+=`<div class="btns"><button class="chk">Check</button><button class="ghost hb">💡 Hint</button><button class="ghost sb">📖 Show solution</button></div>`;
+  h+=`<div class="fb"></div><div class="hint">${q.hint}</div>`;
+  h+=`<div class="sol"><b>Worked solution</b> <span class="id">Pembahasan</span><ol>${q.sol.map(s=>'<li>'+s+'</li>').join('')}</ol><div class="final">${M(q.final)}</div><svg class="graph" viewBox="0 0 400 400"></svg>${q.legend?'<div class="legend">'+q.legend.map(([c,t])=>`<span><i style="background:${c}"></i>${t}</span>`).join('')+'</div>':''}</div>`;
+  d.innerHTML=h;
+  const fb=d.querySelector('.fb'),st=state[q.id];
+  d.querySelector('.hb').onclick=()=>d.querySelector('.hint').classList.toggle('show');
+  d.querySelector('.sb').onclick=()=>{
+    const sol=d.querySelector('.sol');sol.classList.add('show');st.locked=true;
+    d.querySelectorAll('input,select').forEach(i=>i.disabled=true);d.querySelector('.chk').disabled=true;
+    const g=q.graph;const pts=(g.points||[]).map(p=>[p.x,p.y]);const rg=autoRange(pts.length?pts:[[0,0]]);
+    drawGraph(sol.querySelector('svg'),Object.assign({},rg,g));
+  };
+  d.querySelector('.chk').onclick=()=>{
+    if(st.locked)return;
+    const val=k=>{const e=d.querySelector(`[data-k="${k}"]`);return e.tagName==='SELECT'?e.value:parseVal(e.value);};
+    const mark=(k,ok)=>{const e=d.querySelector(`[data-k="${k}"]`);e.classList.toggle('good',ok);e.classList.toggle('badv',!ok);};
+    let got=0,msg='';
+    if(q.type==='line'){const okm=close(val('m'),q.ans.m),okc=close(val('c'),q.ans.c);mark('m',okm);mark('c',okc);
+      got=okm&&okc?q.marks:okm?1:0;
+      msg=okm&&okc?'Correct! ✅ <span class="id">Benar!</span>':okm?'Gradient correct, check your c. <span class="id">Gradien benar, periksa lagi nilai c.</span>':okc?'c is correct but the gradient is not. <span class="id">Nilai c benar, tetapi gradien belum tepat.</span>':'Not yet, try again or use a hint. <span class="id">Belum tepat, coba lagi atau lihat hint.</span>';}
+    else if(q.type==='val'){const k=q.fields[0][0];const ok=close(val(k),q.ans[k]);mark(k,ok);got=ok?q.marks:0;
+      msg=ok?'Correct! ✅ <span class="id">Benar!</span>':'Not yet, check your substitution. <span class="id">Belum tepat, periksa substitusinya.</span>';}
+    else if(q.type==='tri'){let n=0;['A','B','C'].forEach(L=>{const ox=close(val(L+'x'),q.ans[L+'x']),oy=close(val(L+'y'),q.ans[L+'y']);mark(L+'x',ox);mark(L+'y',oy);if(ox&&oy)n++;});
+      got=n*2;msg=n===3?'All three vertices correct! ✅ <span class="id">Ketiga titik benar!</span>':`${n} of 3 vertices correct. <span class="id">${n} dari 3 titik benar.</span>`;}
+    else if(q.type==='ra'){const ov=val('v')===q.ans.v,op=close(val('p'),-1);d.querySelector('[data-k="v"]').style.borderColor=ov?'var(--ok)':'var(--bad)';mark('p',op);
+      got=(ov?2:0)+(op?1:0);msg=ov&&op?'Correct! ✅ <span class="id">Benar!</span>':ov?'Right vertex. What is the product of perpendicular gradients? <span class="id">Titiknya benar; berapa hasil kali gradien dua garis yang tegak lurus?</span>':'Not yet: compare the gradients of each pair of sides. <span class="id">Belum tepat, bandingkan gradien setiap pasang sisi.</span>';}
+    st.got=got;fb.className='fb show '+(got===q.marks?'ok':got>0?'half':'no');
+    fb.innerHTML=`<b>${got} / ${q.marks} marks.</b> ${msg}`;updScore();
+  };
+  d.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')d.querySelector('.chk').click();}));
+  return d;
+}
+function updScore(){const tot=Object.values(state).reduce((s,x)=>s+x.got,0);document.getElementById('sc').textContent=tot;document.getElementById('pg').style.width=(tot/27*100)+'%';return tot;}
+document.getElementById('newSet').onclick=()=>{seed++;render();document.getElementById('lat').scrollIntoView({behavior:'smooth'});};
+document.getElementById('prevSet').onclick=()=>{if(seed>1){seed--;render();}};
+document.getElementById('again').onclick=()=>document.getElementById('newSet').click();
+document.getElementById('finish').onclick=()=>{
+  const t=updScore();const r=document.getElementById('result');r.classList.add('show');
+  document.getElementById('rSet').textContent=seed;document.getElementById('rScore').textContent=t;
+  const pct=t/27;document.getElementById('rMsg').innerHTML=pct>=.85?'Excellent, you are ready for the final test! 🌟<span class="id">Luar biasa, kamu siap menghadapi final test!</span>':pct>=.6?'Good work. Review the parts you missed, then try a new set. 👍<span class="id">Bagus! Pelajari bagian yang salah, lalu coba set baru.</span>':'Keep practising: open the solutions, then try a new set. 💪<span class="id">Terus berlatih: pelajari pembahasannya, lalu coba set baru.</span>';
+  r.scrollIntoView({behavior:'smooth'});
+};
+render();
+
+</script>
+<script>
+/* ---------- tabs ---------- */
+function showTab(t){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  document.getElementById('pemb').classList.toggle('on',t==='pemb');
+  document.getElementById('lat').classList.toggle('on',t==='lat');
+  document.getElementById('subPemb').classList.toggle('on',t==='pemb');
+  document.getElementById('subLat').classList.toggle('on',t==='lat');
+  try{history.replaceState(null,'','#'+t);}catch(e){}
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{showTab(b.dataset.t);window.scrollTo({top:document.querySelector('header').offsetHeight-10,behavior:'smooth'});});
+if(location.hash==='#lat')showTab('lat');
+</script>
+</body>
+</html>
